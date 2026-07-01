@@ -23,12 +23,12 @@ export const characterDefinitions = {
         fps: 6,
         loop: true,
         directions: {
-          south: "idle_south",
-          east: "idle_east",
-          west: { slot: "idle_east", mirrored: true },
-          north: "idle_north"
+          south: externalAnimationV1.walkParts?.east?.start,
+          east: externalAnimationV1.walkParts?.east?.start,
+          west: externalAnimationV1.walkParts?.west?.start,
+          north: externalAnimationV1.walkParts?.east?.start
         },
-        fallback: "idle"
+        fallback: "walkStartFrame0"
       },
       walk: {
         type: "phasedStrip",
@@ -43,16 +43,7 @@ export const characterDefinitions = {
           west: externalAnimationV1.walkParts?.west?.loop
         },
         fallback: "directionalIdle"
-      },
-      talk: {
-        type: "frames",
-        fps: 8,
-        loop: true,
-        frames: ["bai_mitko/talk_000", "bai_mitko/talk_001", "bai_mitko/talk_002", "bai_mitko/talk_003"]
-      },
-      look: { type: "frames", fps: 8, loop: false, frames: ["bai_mitko/look_000", "bai_mitko/look_001"] },
-      use: { type: "frames", fps: 8, loop: false, frames: ["bai_mitko/use_000", "bai_mitko/use_001"] },
-      take: { type: "frames", fps: 8, loop: false, frames: ["bai_mitko/take_000", "bai_mitko/take_001"] }
+      }
     },
     animationSource: "external_animation_v1"
   }

@@ -7,7 +7,7 @@ import { DEFAULT_SAVE } from "../src/engine/ids.js";
 import { characterHeight } from "../src/engine/CharacterRenderMath.js";
 import { facingFromDelta, MovementSystem, requestWalkStop, eastWestFallbackFacing, walkMotionMultiplierForFrame } from "../src/engine/MovementSystem.js";
 import { AnimationPlayer } from "../src/engine/AnimationPlayer.js";
-import { Renderer, stopRenderOffsetX } from "../src/engine/Renderer.js";
+import { Renderer, stableExternalVisualBounds, stopRenderOffsetX } from "../src/engine/Renderer.js";
 import { strings } from "../src/content/localization/index.js";
 import { chapter1 } from "../src/content/chapter1/index.js";
 import { assetManifest } from "../src/content/art/assetManifest.js";
@@ -82,10 +82,24 @@ test("Bai Mitko render height is canonical across idle and walk assets", () => {
   assert.ok(Math.abs(idleHeight - walkNorthHeight) < 2);
 });
 
-test("Bai Mitko west idle mirrors east instead of using a separate west image", () => {
+test("Bai Mitko external renderer uses stable visual bounds across walk phases", () => {
+  const definition = characterDefinitions["npc.bai_mitko"];
+  const bounds = stableExternalVisualBounds(definition);
+  assert.equal(bounds.h, 884);
+  assert.equal(bounds.w, 427);
+  assert.equal(bounds.baselineY, 990);
+});
+
+test("Bai Mitko idle directions use walk-start animation frames instead of static images", () => {
   const idle = characterDefinitions["npc.bai_mitko"].animations.idle.directions;
-  assert.deepEqual(idle.west, { slot: "idle_east", mirrored: true });
-  assert.equal(assetManifest.characters["npc.bai_mitko"].idle_west, undefined);
+  const baiMitkoAssets = assetManifest.characters["npc.bai_mitko"];
+  assert.equal(idle.east.slot, "external_walk_east_start");
+  assert.equal(idle.south.slot, "external_walk_east_start");
+  assert.equal(idle.north.slot, "external_walk_east_start");
+  assert.equal(idle.west.slot, "external_walk_east_start");
+  assert.equal(idle.west.mirrored, true);
+  assert.equal(baiMitkoAssets.type, "externalAnimation");
+  assert.equal(Object.values(baiMitkoAssets).some((value) => typeof value === "string" && value.startsWith("assets/")), false);
 });
 
 test("character cutouts use the shared 15 percent source margin", () => {
@@ -101,15 +115,15 @@ test("east movement exposes start loop stop walk parts without mirroring metadat
   assert.equal(east.start.slot, "external_walk_east_start");
   assert.equal(east.loop.slot, "external_walk_east_loop");
   assert.equal(east.stop.slot, "external_walk_east_stop");
-  assert.equal(east.start.frameCount, 13);
+  assert.equal(east.start.frameCount, 15);
   assert.equal(east.loop.frameCount, 16);
-  assert.equal(east.stop.frameCount, 8);
+  assert.equal(east.stop.frameCount, 14);
   assert.equal(east.start.initialFrame, 1);
   assert.equal(east.loop.initialFrame, 1);
   assert.equal(east.stop.initialFrame, 1);
-  assert.equal(east.start.fps, 16);
-  assert.equal(east.loop.fps, 16);
-  assert.equal(east.stop.fps, 16);
+  assert.equal(east.start.fps, 20);
+  assert.equal(east.loop.fps, 20);
+  assert.equal(east.stop.fps, 20);
   assert.equal(east.start.sourceFrameRects[0].sourceFrameIndex, 0);
   assert.equal(east.loop.stopExitFrame, 0);
   assert.equal(east.start.loop, false);
@@ -275,7 +289,7 @@ test("non-looping walk parts report finished for start and stop phases", () => {
   player.frameCountOverride = 9;
   player.fpsOverride = 8;
   player.loopOverride = false;
-  player.update(8 / 8);
+  player.update(7 / 8);
   assert.equal(player.isFinished(), false);
   player.update(1 / 8);
   assert.equal(player.isFinished(), true);
@@ -365,6 +379,35 @@ test("new walk from idle uses start part when available", () => {
   assert.equal(player.walkPart, "start");
 });
 
+test("clicking current idle position does not start walk or stop animation", () => {
+  const player = {
+    position: { x: 100, y: 80 },
+    target: null,
+    speed: 100,
+    animation: "idle",
+    facing: "east",
+    walkPart: null,
+    pendingStop: false,
+    stopAnimationStarted: false,
+    stopAnimationFinished: true,
+    movementStopping: false,
+    walkPartsByFacing: {
+      east: {
+        start: { frameCount: 3, fps: 3, loop: false },
+        loop: { frameCount: 4, fps: 4, loop: true },
+        stop: { frameCount: 3, fps: 3, loop: false }
+      }
+    }
+  };
+  const movement = new MovementSystem(player);
+  movement.walkTo({ x: 102, y: 81 });
+
+  assert.equal(player.animation, "idle");
+  assert.equal(player.target, null);
+  assert.equal(player.walkPart, null);
+  assert.equal(player.stopAnimationStarted, false);
+});
+
 test("external idle pose uses walk start frame zero instead of stale walk frame", () => {
   const definition = characterDefinitions["npc.bai_mitko"];
   const player = {
@@ -378,7 +421,94 @@ test("external idle pose uses walk start frame zero instead of stale walk frame"
   const idle = Renderer.resolveIdleWalkFrameForDefinition(player, definition, "east");
   assert.equal(idle.slot, "external_walk_east_start");
   assert.equal(idle.frameIndex, 0);
-  assert.equal(idle.frame.role, "start");
+  assert.equal(idle.frame.role, "hold");
+  assert.deepEqual(idle.frame.frameRects[0], definition.animations.walk.parts.east.start.sourceFrameRects[0]);
+});
+
+test("external Bai Mitko idle only requests animation slots", () => {
+  const definition = characterDefinitions["npc.bai_mitko"];
+  const renderer = Object.create(Renderer.prototype);
+  renderer.game = {
+    assets: {
+      getCharacterImage(_characterId, slot) {
+        assert.equal(slot.startsWith("external_walk_"), true);
+        return null;
+      },
+      isLoaded(image) {
+        return image?.dataset?.loaded === "true";
+      }
+    }
+  };
+  const sprite = renderer.resolveCharacterSprite({
+    id: "npc.bai_mitko",
+    animation: "idle",
+    facing: "east",
+    walkPartsByFacing: definition.animations.walk.parts
+  }, definition);
+
+  assert.equal(sprite.image, null);
+  assert.equal(sprite.slot, "external_walk_east_start");
+});
+
+test("external Bai Mitko non-walk states use walk-start frame zero when no animation strip exists", () => {
+  const definition = characterDefinitions["npc.bai_mitko"];
+  const renderer = Object.create(Renderer.prototype);
+  const loadedStart = { dataset: { loaded: "true" } };
+  renderer.validateStrip = () => true;
+  renderer.game = {
+    assets: {
+      getCharacterImage(_characterId, slot) {
+        if (slot === "external_walk_east_start") return loadedStart;
+        return null;
+      },
+      isLoaded(image) {
+        return image?.dataset?.loaded === "true";
+      }
+    }
+  };
+  const sprite = renderer.resolveCharacterSprite({
+    id: "npc.bai_mitko",
+    animation: "talk",
+    facing: "west",
+    walkPartsByFacing: definition.animations.walk.parts
+  }, definition);
+
+  assert.equal(sprite.image, loadedStart);
+  assert.equal(sprite.slot, "external_walk_east_start");
+  assert.equal(sprite.frame.role, "hold");
+  assert.equal(sprite.staticFrameIndex, 0);
+  assert.equal(sprite.mirrored, true);
+});
+
+test("external Bai Mitko idle ignores stale stop walk part", () => {
+  const definition = characterDefinitions["npc.bai_mitko"];
+  const renderer = Object.create(Renderer.prototype);
+  const requestedSlots = [];
+  const loadedStart = { dataset: { loaded: "true" } };
+  renderer.validateStrip = () => true;
+  renderer.game = {
+    assets: {
+      getCharacterImage(_characterId, slot) {
+        requestedSlots.push(slot);
+        if (slot === "external_walk_east_start") return loadedStart;
+        return null;
+      },
+      isLoaded(image) {
+        return image?.dataset?.loaded === "true";
+      }
+    }
+  };
+  const sprite = renderer.resolveCharacterSprite({
+    id: "npc.bai_mitko",
+    animation: "idle",
+    facing: "east",
+    walkPart: "stop",
+    walkPartsByFacing: definition.animations.walk.parts
+  }, definition);
+
+  assert.equal(sprite.slot, "external_walk_east_start");
+  assert.equal(sprite.staticFrameIndex, 0);
+  assert.equal(requestedSlots.includes("external_walk_east_stop"), false);
 });
 
 test("movement stop phase plays once and can finish into idle", () => {
@@ -429,12 +559,12 @@ test("movement stop phase plays once and can finish into idle", () => {
   assert.equal(player.stopAnimationFinished, true);
 });
 
-test("stop render offset fades from initial frame to final frame", () => {
-  const frame = { role: "stop", frameCount: 8, initialFrame: 1, stopRenderOffsetXStart: -30 };
-  assert.equal(stopRenderOffsetX(frame, 1), -30);
-  assert.equal(stopRenderOffsetX(frame, 4), -15);
-  assert.equal(stopRenderOffsetX(frame, 7), 0);
-  assert.equal(stopRenderOffsetX(frame, 1, true), 30);
+test("stop render offset fades from configured value to zero", () => {
+  const frame = { role: "stop", frameCount: 15, initialFrame: 1, stopRenderOffsetXStart: -10 };
+  assert.equal(stopRenderOffsetX(frame, 1), -10);
+  assert.ok(Math.abs(stopRenderOffsetX(frame, 7) - -5.385) < 0.001);
+  assert.equal(stopRenderOffsetX(frame, 14), 0);
+  assert.equal(stopRenderOffsetX(frame, 1, true), 10);
 });
 
 test("external animation chroma key converts green amount into soft alpha", () => {

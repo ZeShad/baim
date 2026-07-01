@@ -22,15 +22,8 @@ export const assetManifest = {
   },
   characters: {
     "npc.bai_mitko": {
-      type: "spriteAtlas",
-      atlas: "assets/chapter1/characters/bai_mitko/bai_mitko.atlas.json",
-      image: "assets/chapter1/characters/bai_mitko/bai_mitko.webp",
-      idle: "assets/chapter1/characters/bai_mitko/idle.png",
-      idle_south: "assets/chapter1/characters/bai_mitko/idle_south.png",
-      idle_east: "assets/chapter1/characters/bai_mitko/idle_east.png",
-      idle_north: "assets/chapter1/characters/bai_mitko/idle_north.png",
-      ...externalAnimationV1.characterAssets,
-      fallback: "debug.bai_mitko"
+      type: "externalAnimation",
+      ...externalAnimationV1.characterAssets
     }
   },
   items: {

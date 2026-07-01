@@ -716,7 +716,7 @@ export function resolveConfiguredFps(config, metadata) {
   return Number(config?.fps) || metadata?.fps || 8;
 }
 
-export const EXTERNAL_WALK_DEFAULT_FPS = 16;
+export const EXTERNAL_WALK_DEFAULT_FPS = 20;
 export const EXTERNAL_WALK_STATIC_MOTION_MULTIPLIER = 1.25;
 export const EXTERNAL_WALK_FRAME_MOTION_WEIGHT = 0.49;
 export const EXTERNAL_WALK_LOOP_MOTION_MIN = 1;

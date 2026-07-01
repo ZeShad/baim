@@ -1,7 +1,6 @@
 import { dirname, join } from "node:path";
-import { existsSync, writeFileSync } from "node:fs";
+import { copyFileSync, writeFileSync } from "node:fs";
 import {
-  CLEANED_DIR,
   REPORTS_DIR,
   RUNTIME_DIR,
   SELECTION_PATH,
@@ -14,9 +13,7 @@ import {
   inspectAnimationFolder,
   readJson,
   readPng,
-  robustChromaKeyGreenToAlpha,
-  writeJson,
-  writePng
+  writeJson
 } from "./external-animation-utils.mjs";
 
 const GENERATED_MODULE = "src/content/art/externalAnimationV1.generated.js";
@@ -52,14 +49,9 @@ for (const [key, config] of Object.entries(selection.animations || {})) {
     continue;
   }
 
-  const cleanedSheet = join(CLEANED_DIR, `${key}.png`);
-  const usingCleanedSheet = existsSync(cleanedSheet);
-  const sourceSheet = readPng(usingCleanedSheet ? cleanedSheet : info.sheetImage);
-  const keyed = usingCleanedSheet
-    ? { png: sourceSheet, stats: { precleanedSheet: true, cleanedSheet } }
-    : robustChromaKeyGreenToAlpha(sourceSheet, config.chromaKey || {});
   const runtimeOutput = join(RUNTIME_DIR, `${key}.png`);
-  writePng(runtimeOutput, keyed.png);
+  copyFileSync(info.sheetImage, runtimeOutput);
+  const sourceSheet = readPng(info.sheetImage);
 
   const frameStart = Math.max(0, Number(config.frameStart || 0));
   const frameEndTrim = Math.max(0, Number(config.frameEndTrim || 0));
@@ -69,8 +61,8 @@ for (const [key, config] of Object.entries(selection.animations || {})) {
     : info.frames.slice(frameStart, frameEndTrim ? -frameEndTrim : undefined);
   const sourceFrameRects = info.frames.map(({ x, y, w, h, name, duration, index }) => ({ x, y, w, h, name, duration, sourceFrameIndex: index }));
   const frameRects = selectedFrames.map(({ x, y, w, h, name, duration, index }) => ({ x, y, w, h, name, duration, sourceFrameIndex: index }));
-  const sourceFrameContentBounds = sourceFrameRects.map((rect) => alphaBoundsRect(keyed.png, rect) || { x: 0, y: 0, w: rect.w, h: rect.h });
-  const frameContentBounds = frameRects.map((rect) => alphaBoundsRect(keyed.png, rect) || { x: 0, y: 0, w: rect.w, h: rect.h });
+  const sourceFrameContentBounds = sourceFrameRects.map((rect) => alphaBoundsRect(sourceSheet, rect) || { x: 0, y: 0, w: rect.w, h: rect.h });
+  const frameContentBounds = frameRects.map((rect) => alphaBoundsRect(sourceSheet, rect) || { x: 0, y: 0, w: rect.w, h: rect.h });
   const contentBounds = unionBounds(frameContentBounds) || { x: 0, y: 0, w: info.frameWidth, h: info.frameHeight };
   const role = roleFromKey(key);
   const movementSpeedMultipliers = externalWalkMotionCurve(role, frameRects.length, frameStart);
@@ -84,17 +76,14 @@ for (const [key, config] of Object.entries(selection.animations || {})) {
   const metadata = {
     src: `target/external_animation_v1/runtime/${key}.png`,
     sourceSheet: info.sheetImage,
-    cleanedSheet: usingCleanedSheet ? cleanedSheet : null,
     metadataFile: info.metadataFile,
     usesOriginalLudoLayout: true,
     sourcePreserved: true,
-    chromaKeyedFromOriginalLudoSheet: !usingCleanedSheet,
-    usesCleanedDerivedSheet: usingCleanedSheet,
-    chromaKeyStats: keyed.stats,
+    runtimeSource: "unpacked-alpha-sheet",
     frameWidth: info.frameWidth,
     frameHeight: info.frameHeight,
-    sheetWidth: keyed.png.width,
-    sheetHeight: keyed.png.height,
+    sheetWidth: sourceSheet.width,
+    sheetHeight: sourceSheet.height,
     frameCount: frameRects.length,
     sourceFrameCount: info.frames.length,
     frameStart,
@@ -130,8 +119,7 @@ for (const [key, config] of Object.entries(selection.animations || {})) {
     staged: true,
     output: runtimeOutput,
     sourceSheet: info.sheetImage,
-    cleanedSheet: usingCleanedSheet ? cleanedSheet : null,
-    usesCleanedDerivedSheet: usingCleanedSheet,
+    runtimeSource: "unpacked-alpha-sheet",
     metadataFile: info.metadataFile,
     metadataMode: info.parseMode,
     frameCount: metadata.frameCount,
@@ -150,8 +138,7 @@ for (const [key, config] of Object.entries(selection.animations || {})) {
     frameHeight: metadata.frameHeight,
     sheetWidth: metadata.sheetWidth,
     sheetHeight: metadata.sheetHeight,
-    contentBounds,
-    chromaKeyStats: keyed.stats
+    contentBounds
   });
 }
 

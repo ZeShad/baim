@@ -1,5 +1,7 @@
 import { moveToward } from "./geometry.js";
 
+const WALK_TARGET_EPSILON = 4;
+
 export class MovementSystem {
   constructor(player) {
     this.player = player;
@@ -9,6 +11,15 @@ export class MovementSystem {
     const wasWalking = this.player.animation === "walk" && (this.player.target || this.player.walkPart === "start" || this.player.walkPart === "loop");
     const dx = point.x - this.player.position.x;
     const dy = point.y - this.player.position.y;
+    if (!wasWalking && Math.hypot(dx, dy) <= WALK_TARGET_EPSILON) {
+      this.player.target = null;
+      this.player.animation = this.player.speaking ? "talk" : "idle";
+      this.player.walkPart = null;
+      this.player.pendingStop = false;
+      this.player.movementStopping = false;
+      this.player.stopAnimationStarted = false;
+      return;
+    }
     this.player.facing = facingFromDelta(dx, dy, this.player);
     this.player.target = { ...point };
     this.player.animation = "walk";
@@ -30,6 +41,9 @@ export class MovementSystem {
         this.player.stopAnimationFinished = true;
         this.player.movementStopping = false;
         this.player.pendingStop = false;
+        this.player.animation = this.player.speaking ? "talk" : "idle";
+        this.player.walkPart = null;
+        return;
       }
       if (this.player.pendingStop) {
         this.player.animation = "walk";

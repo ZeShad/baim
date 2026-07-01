@@ -56,9 +56,9 @@ for (const [key, config] of Object.entries(selection.animations || {})) {
     ? info.frames.slice(frameStart, frameStart + explicitFrameCount)
     : info.frames.slice(frameStart, frameEndTrim ? -frameEndTrim : undefined);
   if (key === "walk_east_start" && info.frames[0]) {
-    const idleFrame = join(tempDir, "source_frame_000_idle.png");
-    writePng(idleFrame, cropFrame(keyed.png, info.frames[0]));
-    idleFrameByKey.set(key, idleFrame);
+    const holdFrame = join(tempDir, "source_frame_000_hold.png");
+    writePng(holdFrame, cropFrame(keyed.png, info.frames[0]));
+    idleFrameByKey.set(key, holdFrame);
   }
   const frameFiles = selectedFrames.map((frame, index) => {
     const output = join(tempDir, `frame_${String(index).padStart(3, "0")}.png`);

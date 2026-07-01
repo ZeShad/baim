@@ -30,7 +30,9 @@ The current village square stays as a runtime proof and layout reference, not fi
 
 - `assets/chapter1/scenes/apartment/background.png`
 - `assets/chapter1/scenes/village_square/background.png`
-- `assets/chapter1/characters/bai_mitko/idle.png`
+- `target/external_animation_v1/runtime/walk_east_start.png`
+- `target/external_animation_v1/runtime/walk_east_loop.png`
+- `target/external_animation_v1/runtime/walk_east_stop.png`
 - `assets/chapter1/items/accordion.png`
 - `assets/chapter1/items/unpaid_bills.png`
 - `assets/chapter1/items/empty_envelope.png`

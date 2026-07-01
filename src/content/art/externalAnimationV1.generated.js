@@ -20,26 +20,20 @@ export const externalAnimationV1 = {
       "start": {
         "src": "target/external_animation_v1/runtime/walk_east_start.png",
         "sourceSheet": "target\\external_animation_v1\\unpacked\\walk_east_start\\sprite--9px-frames-16-rows-4-cols-4.png",
-        "cleanedSheet": "target\\external_animation_v1\\cleaned\\walk_east_start.png",
         "metadataFile": "target\\external_animation_v1\\unpacked\\walk_east_start\\sprite--9px-frames-16-rows-4-cols-4.json",
         "usesOriginalLudoLayout": true,
         "sourcePreserved": true,
-        "chromaKeyedFromOriginalLudoSheet": false,
-        "usesCleanedDerivedSheet": true,
-        "chromaKeyStats": {
-          "precleanedSheet": true,
-          "cleanedSheet": "target\\external_animation_v1\\cleaned\\walk_east_start.png"
-        },
+        "runtimeSource": "unpacked-alpha-sheet",
         "frameWidth": 798,
         "frameHeight": 1198,
         "sheetWidth": 3192,
         "sheetHeight": 4792,
-        "frameCount": 13,
+        "frameCount": 15,
         "sourceFrameCount": 16,
-        "frameStart": 2,
-        "frameEndTrim": 1,
+        "frameStart": 1,
+        "frameEndTrim": 0,
         "configuredFrameCount": null,
-        "fps": 16,
+        "fps": 20,
         "loop": false,
         "role": "start",
         "initialFrame": 1,
@@ -51,113 +45,113 @@ export const externalAnimationV1 = {
         },
         "baselineY": 1198,
         "contentBounds": {
-          "x": 180,
-          "y": 142,
-          "w": 402,
-          "h": 880
+          "x": 179,
+          "y": 139,
+          "w": 427,
+          "h": 884
         },
         "sourceContentBounds": {
-          "x": 180,
-          "y": 142,
-          "w": 424,
-          "h": 880
+          "x": 179,
+          "y": 139,
+          "w": 427,
+          "h": 884
         },
         "sourceFrameContentBounds": [
           {
-            "x": 229,
-            "y": 160,
-            "w": 310,
-            "h": 854
+            "x": 227,
+            "y": 158,
+            "w": 313,
+            "h": 858
           },
           {
-            "x": 223,
-            "y": 159,
-            "w": 314,
-            "h": 855
-          },
-          {
-            "x": 216,
-            "y": 157,
-            "w": 321,
-            "h": 857
-          },
-          {
-            "x": 206,
-            "y": 153,
-            "w": 331,
-            "h": 861
-          },
-          {
-            "x": 200,
-            "y": 150,
-            "w": 337,
-            "h": 865
-          },
-          {
-            "x": 190,
-            "y": 148,
-            "w": 329,
-            "h": 867
-          },
-          {
-            "x": 186,
-            "y": 148,
-            "w": 332,
-            "h": 867
-          },
-          {
-            "x": 180,
-            "y": 154,
-            "w": 338,
-            "h": 862
-          },
-          {
-            "x": 181,
-            "y": 160,
-            "w": 340,
-            "h": 856
-          },
-          {
-            "x": 185,
-            "y": 161,
-            "w": 338,
-            "h": 856
-          },
-          {
-            "x": 194,
-            "y": 156,
-            "w": 334,
-            "h": 866
-          },
-          {
-            "x": 201,
-            "y": 147,
-            "w": 330,
-            "h": 873
-          },
-          {
-            "x": 202,
-            "y": 142,
-            "w": 331,
-            "h": 870
-          },
-          {
-            "x": 204,
-            "y": 143,
-            "w": 343,
-            "h": 867
+            "x": 221,
+            "y": 158,
+            "w": 318,
+            "h": 858
           },
           {
             "x": 215,
-            "y": 150,
-            "w": 367,
-            "h": 855
+            "y": 156,
+            "w": 324,
+            "h": 860
           },
           {
-            "x": 216,
-            "y": 158,
-            "w": 388,
-            "h": 853
+            "x": 204,
+            "y": 152,
+            "w": 335,
+            "h": 864
+          },
+          {
+            "x": 198,
+            "y": 149,
+            "w": 341,
+            "h": 867
+          },
+          {
+            "x": 188,
+            "y": 147,
+            "w": 333,
+            "h": 870
+          },
+          {
+            "x": 184,
+            "y": 147,
+            "w": 336,
+            "h": 870
+          },
+          {
+            "x": 179,
+            "y": 152,
+            "w": 341,
+            "h": 866
+          },
+          {
+            "x": 179,
+            "y": 159,
+            "w": 343,
+            "h": 859
+          },
+          {
+            "x": 183,
+            "y": 159,
+            "w": 342,
+            "h": 859
+          },
+          {
+            "x": 192,
+            "y": 154,
+            "w": 337,
+            "h": 869
+          },
+          {
+            "x": 199,
+            "y": 146,
+            "w": 333,
+            "h": 875
+          },
+          {
+            "x": 201,
+            "y": 139,
+            "w": 334,
+            "h": 873
+          },
+          {
+            "x": 203,
+            "y": 141,
+            "w": 346,
+            "h": 870
+          },
+          {
+            "x": 213,
+            "y": 148,
+            "w": 371,
+            "h": 859
+          },
+          {
+            "x": 215,
+            "y": 157,
+            "w": 391,
+            "h": 855
           }
         ],
         "sourceFrameRects": [
@@ -308,85 +302,106 @@ export const externalAnimationV1 = {
         ],
         "frameContentBounds": [
           {
-            "x": 216,
-            "y": 157,
-            "w": 321,
-            "h": 857
-          },
-          {
-            "x": 206,
-            "y": 153,
-            "w": 331,
-            "h": 861
-          },
-          {
-            "x": 200,
-            "y": 150,
-            "w": 337,
-            "h": 865
-          },
-          {
-            "x": 190,
-            "y": 148,
-            "w": 329,
-            "h": 867
-          },
-          {
-            "x": 186,
-            "y": 148,
-            "w": 332,
-            "h": 867
-          },
-          {
-            "x": 180,
-            "y": 154,
-            "w": 338,
-            "h": 862
-          },
-          {
-            "x": 181,
-            "y": 160,
-            "w": 340,
-            "h": 856
-          },
-          {
-            "x": 185,
-            "y": 161,
-            "w": 338,
-            "h": 856
-          },
-          {
-            "x": 194,
-            "y": 156,
-            "w": 334,
-            "h": 866
-          },
-          {
-            "x": 201,
-            "y": 147,
-            "w": 330,
-            "h": 873
-          },
-          {
-            "x": 202,
-            "y": 142,
-            "w": 331,
-            "h": 870
-          },
-          {
-            "x": 204,
-            "y": 143,
-            "w": 343,
-            "h": 867
+            "x": 221,
+            "y": 158,
+            "w": 318,
+            "h": 858
           },
           {
             "x": 215,
-            "y": 150,
-            "w": 367,
+            "y": 156,
+            "w": 324,
+            "h": 860
+          },
+          {
+            "x": 204,
+            "y": 152,
+            "w": 335,
+            "h": 864
+          },
+          {
+            "x": 198,
+            "y": 149,
+            "w": 341,
+            "h": 867
+          },
+          {
+            "x": 188,
+            "y": 147,
+            "w": 333,
+            "h": 870
+          },
+          {
+            "x": 184,
+            "y": 147,
+            "w": 336,
+            "h": 870
+          },
+          {
+            "x": 179,
+            "y": 152,
+            "w": 341,
+            "h": 866
+          },
+          {
+            "x": 179,
+            "y": 159,
+            "w": 343,
+            "h": 859
+          },
+          {
+            "x": 183,
+            "y": 159,
+            "w": 342,
+            "h": 859
+          },
+          {
+            "x": 192,
+            "y": 154,
+            "w": 337,
+            "h": 869
+          },
+          {
+            "x": 199,
+            "y": 146,
+            "w": 333,
+            "h": 875
+          },
+          {
+            "x": 201,
+            "y": 139,
+            "w": 334,
+            "h": 873
+          },
+          {
+            "x": 203,
+            "y": 141,
+            "w": 346,
+            "h": 870
+          },
+          {
+            "x": 213,
+            "y": 148,
+            "w": 371,
+            "h": 859
+          },
+          {
+            "x": 215,
+            "y": 157,
+            "w": 391,
             "h": 855
           }
         ],
         "frameRects": [
+          {
+            "x": 798,
+            "y": 0,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_001",
+            "duration": 65,
+            "sourceFrameIndex": 1
+          },
           {
             "x": 1596,
             "y": 0,
@@ -503,21 +518,32 @@ export const externalAnimationV1 = {
             "name": "frame_014",
             "duration": 65,
             "sourceFrameIndex": 14
+          },
+          {
+            "x": 2394,
+            "y": 3594,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_015",
+            "duration": 65,
+            "sourceFrameIndex": 15
           }
         ],
         "movementSpeedMultipliers": [
           0,
           0,
           0,
-          0.386,
-          0.391,
-          0.398,
+          0.384,
+          0.388,
+          0.392,
+          0.399,
           0.406,
-          0.417,
-          0.506,
-          0.578,
-          0.662,
-          0.84,
+          0.415,
+          0.478,
+          0.551,
+          0.613,
+          0.711,
+          0.89,
           1.2
         ],
         "mirroredWest": true,
@@ -526,16 +552,10 @@ export const externalAnimationV1 = {
       "loop": {
         "src": "target/external_animation_v1/runtime/walk_east_loop.png",
         "sourceSheet": "target\\external_animation_v1\\unpacked\\walk_east_loop\\sprite--9px-frames-16-rows-4-cols-4.png",
-        "cleanedSheet": "target\\external_animation_v1\\cleaned\\walk_east_loop.png",
         "metadataFile": "target\\external_animation_v1\\unpacked\\walk_east_loop\\sprite--9px-frames-16-rows-4-cols-4.json",
         "usesOriginalLudoLayout": true,
         "sourcePreserved": true,
-        "chromaKeyedFromOriginalLudoSheet": false,
-        "usesCleanedDerivedSheet": true,
-        "chromaKeyStats": {
-          "precleanedSheet": true,
-          "cleanedSheet": "target\\external_animation_v1\\cleaned\\walk_east_loop.png"
-        },
+        "runtimeSource": "unpacked-alpha-sheet",
         "frameWidth": 798,
         "frameHeight": 1198,
         "sheetWidth": 3192,
@@ -545,7 +565,7 @@ export const externalAnimationV1 = {
         "frameStart": 0,
         "frameEndTrim": 0,
         "configuredFrameCount": null,
-        "fps": 16,
+        "fps": 20,
         "loop": true,
         "role": "loop",
         "stopExitFrame": 0,
@@ -558,113 +578,113 @@ export const externalAnimationV1 = {
         },
         "baselineY": 1198,
         "contentBounds": {
-          "x": 195,
-          "y": 141,
-          "w": 443,
-          "h": 872
+          "x": 193,
+          "y": 139,
+          "w": 447,
+          "h": 875
         },
         "sourceContentBounds": {
-          "x": 195,
-          "y": 141,
-          "w": 443,
-          "h": 872
+          "x": 193,
+          "y": 139,
+          "w": 447,
+          "h": 875
         },
         "sourceFrameContentBounds": [
           {
-            "x": 217,
-            "y": 159,
-            "w": 389,
-            "h": 854
-          },
-          {
-            "x": 220,
-            "y": 160,
-            "w": 379,
-            "h": 851
-          },
-          {
-            "x": 251,
-            "y": 155,
-            "w": 324,
-            "h": 858
-          },
-          {
-            "x": 259,
-            "y": 146,
-            "w": 284,
-            "h": 866
-          },
-          {
-            "x": 262,
-            "y": 141,
-            "w": 276,
-            "h": 870
-          },
-          {
-            "x": 262,
-            "y": 141,
-            "w": 276,
-            "h": 870
-          },
-          {
-            "x": 240,
-            "y": 146,
-            "w": 384,
-            "h": 862
-          },
-          {
-            "x": 210,
-            "y": 153,
-            "w": 428,
-            "h": 852
-          },
-          {
-            "x": 197,
-            "y": 157,
-            "w": 433,
-            "h": 850
-          },
-          {
-            "x": 195,
-            "y": 159,
-            "w": 422,
-            "h": 848
-          },
-          {
-            "x": 232,
-            "y": 157,
-            "w": 344,
-            "h": 850
-          },
-          {
-            "x": 262,
-            "y": 150,
-            "w": 280,
+            "x": 215,
+            "y": 158,
+            "w": 392,
             "h": 856
           },
           {
-            "x": 254,
-            "y": 145,
-            "w": 286,
-            "h": 858
+            "x": 218,
+            "y": 159,
+            "w": 383,
+            "h": 853
           },
           {
-            "x": 248,
+            "x": 249,
+            "y": 154,
+            "w": 327,
+            "h": 860
+          },
+          {
+            "x": 257,
             "y": 144,
-            "w": 306,
-            "h": 858
+            "w": 287,
+            "h": 868
+          },
+          {
+            "x": 260,
+            "y": 139,
+            "w": 280,
+            "h": 873
+          },
+          {
+            "x": 261,
+            "y": 140,
+            "w": 279,
+            "h": 872
           },
           {
             "x": 238,
-            "y": 148,
-            "w": 355,
-            "h": 859
+            "y": 144,
+            "w": 388,
+            "h": 866
           },
           {
-            "x": 233,
-            "y": 155,
-            "w": 374,
+            "x": 208,
+            "y": 152,
+            "w": 432,
             "h": 855
+          },
+          {
+            "x": 195,
+            "y": 156,
+            "w": 436,
+            "h": 852
+          },
+          {
+            "x": 193,
+            "y": 158,
+            "w": 425,
+            "h": 850
+          },
+          {
+            "x": 230,
+            "y": 156,
+            "w": 348,
+            "h": 852
+          },
+          {
+            "x": 260,
+            "y": 148,
+            "w": 284,
+            "h": 858
+          },
+          {
+            "x": 252,
+            "y": 143,
+            "w": 290,
+            "h": 862
+          },
+          {
+            "x": 246,
+            "y": 143,
+            "w": 310,
+            "h": 861
+          },
+          {
+            "x": 238,
+            "y": 147,
+            "w": 357,
+            "h": 861
+          },
+          {
+            "x": 232,
+            "y": 153,
+            "w": 376,
+            "h": 858
           }
         ],
         "sourceFrameRects": [
@@ -815,100 +835,100 @@ export const externalAnimationV1 = {
         ],
         "frameContentBounds": [
           {
-            "x": 217,
-            "y": 159,
-            "w": 389,
-            "h": 854
-          },
-          {
-            "x": 220,
-            "y": 160,
-            "w": 379,
-            "h": 851
-          },
-          {
-            "x": 251,
-            "y": 155,
-            "w": 324,
-            "h": 858
-          },
-          {
-            "x": 259,
-            "y": 146,
-            "w": 284,
-            "h": 866
-          },
-          {
-            "x": 262,
-            "y": 141,
-            "w": 276,
-            "h": 870
-          },
-          {
-            "x": 262,
-            "y": 141,
-            "w": 276,
-            "h": 870
-          },
-          {
-            "x": 240,
-            "y": 146,
-            "w": 384,
-            "h": 862
-          },
-          {
-            "x": 210,
-            "y": 153,
-            "w": 428,
-            "h": 852
-          },
-          {
-            "x": 197,
-            "y": 157,
-            "w": 433,
-            "h": 850
-          },
-          {
-            "x": 195,
-            "y": 159,
-            "w": 422,
-            "h": 848
-          },
-          {
-            "x": 232,
-            "y": 157,
-            "w": 344,
-            "h": 850
-          },
-          {
-            "x": 262,
-            "y": 150,
-            "w": 280,
+            "x": 215,
+            "y": 158,
+            "w": 392,
             "h": 856
           },
           {
-            "x": 254,
-            "y": 145,
-            "w": 286,
-            "h": 858
+            "x": 218,
+            "y": 159,
+            "w": 383,
+            "h": 853
           },
           {
-            "x": 248,
+            "x": 249,
+            "y": 154,
+            "w": 327,
+            "h": 860
+          },
+          {
+            "x": 257,
             "y": 144,
-            "w": 306,
-            "h": 858
+            "w": 287,
+            "h": 868
+          },
+          {
+            "x": 260,
+            "y": 139,
+            "w": 280,
+            "h": 873
+          },
+          {
+            "x": 261,
+            "y": 140,
+            "w": 279,
+            "h": 872
           },
           {
             "x": 238,
-            "y": 148,
-            "w": 355,
-            "h": 859
+            "y": 144,
+            "w": 388,
+            "h": 866
           },
           {
-            "x": 233,
-            "y": 155,
-            "w": 374,
+            "x": 208,
+            "y": 152,
+            "w": 432,
             "h": 855
+          },
+          {
+            "x": 195,
+            "y": 156,
+            "w": 436,
+            "h": 852
+          },
+          {
+            "x": 193,
+            "y": 158,
+            "w": 425,
+            "h": 850
+          },
+          {
+            "x": 230,
+            "y": 156,
+            "w": 348,
+            "h": 852
+          },
+          {
+            "x": 260,
+            "y": 148,
+            "w": 284,
+            "h": 858
+          },
+          {
+            "x": 252,
+            "y": 143,
+            "w": 290,
+            "h": 862
+          },
+          {
+            "x": 246,
+            "y": 143,
+            "w": 310,
+            "h": 861
+          },
+          {
+            "x": 238,
+            "y": 147,
+            "w": 357,
+            "h": 861
+          },
+          {
+            "x": 232,
+            "y": 153,
+            "w": 376,
+            "h": 858
           }
         ],
         "frameRects": [
@@ -1080,30 +1100,24 @@ export const externalAnimationV1 = {
       },
       "stop": {
         "src": "target/external_animation_v1/runtime/walk_east_stop.png",
-        "sourceSheet": "target\\external_animation_v1\\unpacked\\walk_east_stop\\sprite--9px-frames-9-rows-3-cols-3.png",
-        "cleanedSheet": "target\\external_animation_v1\\cleaned\\walk_east_stop.png",
-        "metadataFile": "target\\external_animation_v1\\unpacked\\walk_east_stop\\sprite--9px-frames-9-rows-3-cols-3.json",
+        "sourceSheet": "target\\external_animation_v1\\unpacked\\walk_east_stop\\sprite--9px-frames-16-rows-4-cols-4.png",
+        "metadataFile": "target\\external_animation_v1\\unpacked\\walk_east_stop\\sprite--9px-frames-16-rows-4-cols-4.json",
         "usesOriginalLudoLayout": true,
         "sourcePreserved": true,
-        "chromaKeyedFromOriginalLudoSheet": false,
-        "usesCleanedDerivedSheet": true,
-        "chromaKeyStats": {
-          "precleanedSheet": true,
-          "cleanedSheet": "target\\external_animation_v1\\cleaned\\walk_east_stop.png"
-        },
+        "runtimeSource": "unpacked-alpha-sheet",
         "frameWidth": 798,
         "frameHeight": 1198,
-        "sheetWidth": 2394,
-        "sheetHeight": 3594,
-        "frameCount": 8,
-        "sourceFrameCount": 9,
-        "frameStart": 1,
+        "sheetWidth": 3192,
+        "sheetHeight": 4792,
+        "frameCount": 14,
+        "sourceFrameCount": 16,
+        "frameStart": 2,
         "frameEndTrim": 0,
         "configuredFrameCount": null,
-        "fps": 16,
+        "fps": 20,
         "loop": false,
         "role": "stop",
-        "stopRenderOffsetXStart": -30,
+        "stopRenderOffsetXStart": -10,
         "initialFrame": 1,
         "anchorX": 0.5,
         "anchorY": 1,
@@ -1113,71 +1127,113 @@ export const externalAnimationV1 = {
         },
         "baselineY": 1198,
         "contentBounds": {
-          "x": 225,
-          "y": 147,
-          "w": 384,
-          "h": 879
+          "x": 223,
+          "y": 148,
+          "w": 374,
+          "h": 882
         },
         "sourceContentBounds": {
-          "x": 222,
-          "y": 147,
-          "w": 387,
-          "h": 879
+          "x": 220,
+          "y": 148,
+          "w": 388,
+          "h": 882
         },
         "sourceFrameContentBounds": [
           {
-            "x": 222,
-            "y": 161,
-            "w": 384,
-            "h": 850
+            "x": 220,
+            "y": 159,
+            "w": 388,
+            "h": 853
           },
           {
-            "x": 227,
-            "y": 166,
-            "w": 382,
-            "h": 848
-          },
-          {
-            "x": 303,
-            "y": 148,
-            "w": 295,
-            "h": 878
-          },
-          {
-            "x": 293,
-            "y": 147,
-            "w": 304,
-            "h": 872
-          },
-          {
-            "x": 284,
-            "y": 147,
-            "w": 312,
-            "h": 868
-          },
-          {
-            "x": 250,
-            "y": 150,
-            "w": 334,
-            "h": 866
+            "x": 220,
+            "y": 162,
+            "w": 386,
+            "h": 852
           },
           {
             "x": 234,
-            "y": 155,
-            "w": 341,
+            "y": 165,
+            "w": 363,
+            "h": 852
+          },
+          {
+            "x": 256,
+            "y": 163,
+            "w": 320,
+            "h": 867
+          },
+          {
+            "x": 269,
+            "y": 152,
+            "w": 278,
+            "h": 876
+          },
+          {
+            "x": 267,
+            "y": 150,
+            "w": 278,
+            "h": 877
+          },
+          {
+            "x": 262,
+            "y": 148,
+            "w": 278,
+            "h": 876
+          },
+          {
+            "x": 257,
+            "y": 150,
+            "w": 283,
+            "h": 868
+          },
+          {
+            "x": 256,
+            "y": 154,
+            "w": 284,
+            "h": 863
+          },
+          {
+            "x": 252,
+            "y": 160,
+            "w": 286,
+            "h": 854
+          },
+          {
+            "x": 246,
+            "y": 160,
+            "w": 292,
+            "h": 854
+          },
+          {
+            "x": 231,
+            "y": 157,
+            "w": 308,
+            "h": 857
+          },
+          {
+            "x": 223,
+            "y": 154,
+            "w": 317,
             "h": 860
           },
           {
-            "x": 225,
-            "y": 159,
-            "w": 327,
-            "h": 856
+            "x": 223,
+            "y": 155,
+            "w": 317,
+            "h": 859
           },
           {
-            "x": 229,
-            "y": 160,
-            "w": 310,
-            "h": 855
+            "x": 226,
+            "y": 156,
+            "w": 314,
+            "h": 858
+          },
+          {
+            "x": 226,
+            "y": 158,
+            "w": 314,
+            "h": 856
           }
         ],
         "sourceFrameRects": [
@@ -1187,7 +1243,7 @@ export const externalAnimationV1 = {
             "w": 798,
             "h": 1198,
             "name": "frame_000",
-            "duration": 111,
+            "duration": 68,
             "sourceFrameIndex": 0
           },
           {
@@ -1196,7 +1252,7 @@ export const externalAnimationV1 = {
             "w": 798,
             "h": 1198,
             "name": "frame_001",
-            "duration": 111,
+            "duration": 68,
             "sourceFrameIndex": 1
           },
           {
@@ -1205,186 +1261,339 @@ export const externalAnimationV1 = {
             "w": 798,
             "h": 1198,
             "name": "frame_002",
-            "duration": 111,
+            "duration": 68,
             "sourceFrameIndex": 2
           },
           {
-            "x": 0,
-            "y": 1198,
+            "x": 2394,
+            "y": 0,
             "w": 798,
             "h": 1198,
             "name": "frame_003",
-            "duration": 111,
+            "duration": 68,
             "sourceFrameIndex": 3
           },
           {
-            "x": 798,
+            "x": 0,
             "y": 1198,
             "w": 798,
             "h": 1198,
             "name": "frame_004",
-            "duration": 111,
+            "duration": 68,
             "sourceFrameIndex": 4
+          },
+          {
+            "x": 798,
+            "y": 1198,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_005",
+            "duration": 68,
+            "sourceFrameIndex": 5
           },
           {
             "x": 1596,
             "y": 1198,
             "w": 798,
             "h": 1198,
-            "name": "frame_005",
-            "duration": 111,
-            "sourceFrameIndex": 5
+            "name": "frame_006",
+            "duration": 68,
+            "sourceFrameIndex": 6
+          },
+          {
+            "x": 2394,
+            "y": 1198,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_007",
+            "duration": 68,
+            "sourceFrameIndex": 7
           },
           {
             "x": 0,
             "y": 2396,
             "w": 798,
             "h": 1198,
-            "name": "frame_006",
-            "duration": 111,
-            "sourceFrameIndex": 6
+            "name": "frame_008",
+            "duration": 68,
+            "sourceFrameIndex": 8
           },
           {
             "x": 798,
             "y": 2396,
             "w": 798,
             "h": 1198,
-            "name": "frame_007",
-            "duration": 111,
-            "sourceFrameIndex": 7
+            "name": "frame_009",
+            "duration": 68,
+            "sourceFrameIndex": 9
           },
           {
             "x": 1596,
             "y": 2396,
             "w": 798,
             "h": 1198,
-            "name": "frame_008",
-            "duration": 111,
-            "sourceFrameIndex": 8
+            "name": "frame_010",
+            "duration": 68,
+            "sourceFrameIndex": 10
+          },
+          {
+            "x": 2394,
+            "y": 2396,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_011",
+            "duration": 68,
+            "sourceFrameIndex": 11
+          },
+          {
+            "x": 0,
+            "y": 3594,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_012",
+            "duration": 68,
+            "sourceFrameIndex": 12
+          },
+          {
+            "x": 798,
+            "y": 3594,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_013",
+            "duration": 68,
+            "sourceFrameIndex": 13
+          },
+          {
+            "x": 1596,
+            "y": 3594,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_014",
+            "duration": 68,
+            "sourceFrameIndex": 14
+          },
+          {
+            "x": 2394,
+            "y": 3594,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_015",
+            "duration": 68,
+            "sourceFrameIndex": 15
           }
         ],
         "frameContentBounds": [
           {
-            "x": 227,
-            "y": 166,
-            "w": 382,
-            "h": 848
+            "x": 234,
+            "y": 165,
+            "w": 363,
+            "h": 852
           },
           {
-            "x": 303,
+            "x": 256,
+            "y": 163,
+            "w": 320,
+            "h": 867
+          },
+          {
+            "x": 269,
+            "y": 152,
+            "w": 278,
+            "h": 876
+          },
+          {
+            "x": 267,
+            "y": 150,
+            "w": 278,
+            "h": 877
+          },
+          {
+            "x": 262,
             "y": 148,
-            "w": 295,
-            "h": 878
+            "w": 278,
+            "h": 876
           },
           {
-            "x": 293,
-            "y": 147,
-            "w": 304,
-            "h": 872
-          },
-          {
-            "x": 284,
-            "y": 147,
-            "w": 312,
+            "x": 257,
+            "y": 150,
+            "w": 283,
             "h": 868
           },
           {
-            "x": 250,
-            "y": 150,
-            "w": 334,
-            "h": 866
+            "x": 256,
+            "y": 154,
+            "w": 284,
+            "h": 863
           },
           {
-            "x": 234,
-            "y": 155,
-            "w": 341,
+            "x": 252,
+            "y": 160,
+            "w": 286,
+            "h": 854
+          },
+          {
+            "x": 246,
+            "y": 160,
+            "w": 292,
+            "h": 854
+          },
+          {
+            "x": 231,
+            "y": 157,
+            "w": 308,
+            "h": 857
+          },
+          {
+            "x": 223,
+            "y": 154,
+            "w": 317,
             "h": 860
           },
           {
-            "x": 225,
-            "y": 159,
-            "w": 327,
-            "h": 856
+            "x": 223,
+            "y": 155,
+            "w": 317,
+            "h": 859
           },
           {
-            "x": 229,
-            "y": 160,
-            "w": 310,
-            "h": 855
+            "x": 226,
+            "y": 156,
+            "w": 314,
+            "h": 858
+          },
+          {
+            "x": 226,
+            "y": 158,
+            "w": 314,
+            "h": 856
           }
         ],
         "frameRects": [
-          {
-            "x": 798,
-            "y": 0,
-            "w": 798,
-            "h": 1198,
-            "name": "frame_001",
-            "duration": 111,
-            "sourceFrameIndex": 1
-          },
           {
             "x": 1596,
             "y": 0,
             "w": 798,
             "h": 1198,
             "name": "frame_002",
-            "duration": 111,
+            "duration": 68,
             "sourceFrameIndex": 2
           },
           {
-            "x": 0,
-            "y": 1198,
+            "x": 2394,
+            "y": 0,
             "w": 798,
             "h": 1198,
             "name": "frame_003",
-            "duration": 111,
+            "duration": 68,
             "sourceFrameIndex": 3
           },
           {
-            "x": 798,
+            "x": 0,
             "y": 1198,
             "w": 798,
             "h": 1198,
             "name": "frame_004",
-            "duration": 111,
+            "duration": 68,
             "sourceFrameIndex": 4
+          },
+          {
+            "x": 798,
+            "y": 1198,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_005",
+            "duration": 68,
+            "sourceFrameIndex": 5
           },
           {
             "x": 1596,
             "y": 1198,
             "w": 798,
             "h": 1198,
-            "name": "frame_005",
-            "duration": 111,
-            "sourceFrameIndex": 5
+            "name": "frame_006",
+            "duration": 68,
+            "sourceFrameIndex": 6
+          },
+          {
+            "x": 2394,
+            "y": 1198,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_007",
+            "duration": 68,
+            "sourceFrameIndex": 7
           },
           {
             "x": 0,
             "y": 2396,
             "w": 798,
             "h": 1198,
-            "name": "frame_006",
-            "duration": 111,
-            "sourceFrameIndex": 6
+            "name": "frame_008",
+            "duration": 68,
+            "sourceFrameIndex": 8
           },
           {
             "x": 798,
             "y": 2396,
             "w": 798,
             "h": 1198,
-            "name": "frame_007",
-            "duration": 111,
-            "sourceFrameIndex": 7
+            "name": "frame_009",
+            "duration": 68,
+            "sourceFrameIndex": 9
           },
           {
             "x": 1596,
             "y": 2396,
             "w": 798,
             "h": 1198,
-            "name": "frame_008",
-            "duration": 111,
-            "sourceFrameIndex": 8
+            "name": "frame_010",
+            "duration": 68,
+            "sourceFrameIndex": 10
+          },
+          {
+            "x": 2394,
+            "y": 2396,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_011",
+            "duration": 68,
+            "sourceFrameIndex": 11
+          },
+          {
+            "x": 0,
+            "y": 3594,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_012",
+            "duration": 68,
+            "sourceFrameIndex": 12
+          },
+          {
+            "x": 798,
+            "y": 3594,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_013",
+            "duration": 68,
+            "sourceFrameIndex": 13
+          },
+          {
+            "x": 1596,
+            "y": 3594,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_014",
+            "duration": 68,
+            "sourceFrameIndex": 14
+          },
+          {
+            "x": 2394,
+            "y": 3594,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_015",
+            "duration": 68,
+            "sourceFrameIndex": 15
           }
         ],
         "movementSpeedMultipliers": [
@@ -1395,7 +1604,13 @@ export const externalAnimationV1 = {
           0.802,
           0.782,
           0.77,
-          0.762
+          0.762,
+          0.76,
+          0.76,
+          0.76,
+          0.76,
+          0.76,
+          0.76
         ],
         "mirroredWest": true,
         "slot": "external_walk_east_stop"
@@ -1405,26 +1620,20 @@ export const externalAnimationV1 = {
       "start": {
         "src": "target/external_animation_v1/runtime/walk_east_start.png",
         "sourceSheet": "target\\external_animation_v1\\unpacked\\walk_east_start\\sprite--9px-frames-16-rows-4-cols-4.png",
-        "cleanedSheet": "target\\external_animation_v1\\cleaned\\walk_east_start.png",
         "metadataFile": "target\\external_animation_v1\\unpacked\\walk_east_start\\sprite--9px-frames-16-rows-4-cols-4.json",
         "usesOriginalLudoLayout": true,
         "sourcePreserved": true,
-        "chromaKeyedFromOriginalLudoSheet": false,
-        "usesCleanedDerivedSheet": true,
-        "chromaKeyStats": {
-          "precleanedSheet": true,
-          "cleanedSheet": "target\\external_animation_v1\\cleaned\\walk_east_start.png"
-        },
+        "runtimeSource": "unpacked-alpha-sheet",
         "frameWidth": 798,
         "frameHeight": 1198,
         "sheetWidth": 3192,
         "sheetHeight": 4792,
-        "frameCount": 13,
+        "frameCount": 15,
         "sourceFrameCount": 16,
-        "frameStart": 2,
-        "frameEndTrim": 1,
+        "frameStart": 1,
+        "frameEndTrim": 0,
         "configuredFrameCount": null,
-        "fps": 16,
+        "fps": 20,
         "loop": false,
         "role": "start",
         "initialFrame": 1,
@@ -1436,113 +1645,113 @@ export const externalAnimationV1 = {
         },
         "baselineY": 1198,
         "contentBounds": {
-          "x": 180,
-          "y": 142,
-          "w": 402,
-          "h": 880
+          "x": 179,
+          "y": 139,
+          "w": 427,
+          "h": 884
         },
         "sourceContentBounds": {
-          "x": 180,
-          "y": 142,
-          "w": 424,
-          "h": 880
+          "x": 179,
+          "y": 139,
+          "w": 427,
+          "h": 884
         },
         "sourceFrameContentBounds": [
           {
-            "x": 229,
-            "y": 160,
-            "w": 310,
-            "h": 854
+            "x": 227,
+            "y": 158,
+            "w": 313,
+            "h": 858
           },
           {
-            "x": 223,
-            "y": 159,
-            "w": 314,
-            "h": 855
-          },
-          {
-            "x": 216,
-            "y": 157,
-            "w": 321,
-            "h": 857
-          },
-          {
-            "x": 206,
-            "y": 153,
-            "w": 331,
-            "h": 861
-          },
-          {
-            "x": 200,
-            "y": 150,
-            "w": 337,
-            "h": 865
-          },
-          {
-            "x": 190,
-            "y": 148,
-            "w": 329,
-            "h": 867
-          },
-          {
-            "x": 186,
-            "y": 148,
-            "w": 332,
-            "h": 867
-          },
-          {
-            "x": 180,
-            "y": 154,
-            "w": 338,
-            "h": 862
-          },
-          {
-            "x": 181,
-            "y": 160,
-            "w": 340,
-            "h": 856
-          },
-          {
-            "x": 185,
-            "y": 161,
-            "w": 338,
-            "h": 856
-          },
-          {
-            "x": 194,
-            "y": 156,
-            "w": 334,
-            "h": 866
-          },
-          {
-            "x": 201,
-            "y": 147,
-            "w": 330,
-            "h": 873
-          },
-          {
-            "x": 202,
-            "y": 142,
-            "w": 331,
-            "h": 870
-          },
-          {
-            "x": 204,
-            "y": 143,
-            "w": 343,
-            "h": 867
+            "x": 221,
+            "y": 158,
+            "w": 318,
+            "h": 858
           },
           {
             "x": 215,
-            "y": 150,
-            "w": 367,
-            "h": 855
+            "y": 156,
+            "w": 324,
+            "h": 860
           },
           {
-            "x": 216,
-            "y": 158,
-            "w": 388,
-            "h": 853
+            "x": 204,
+            "y": 152,
+            "w": 335,
+            "h": 864
+          },
+          {
+            "x": 198,
+            "y": 149,
+            "w": 341,
+            "h": 867
+          },
+          {
+            "x": 188,
+            "y": 147,
+            "w": 333,
+            "h": 870
+          },
+          {
+            "x": 184,
+            "y": 147,
+            "w": 336,
+            "h": 870
+          },
+          {
+            "x": 179,
+            "y": 152,
+            "w": 341,
+            "h": 866
+          },
+          {
+            "x": 179,
+            "y": 159,
+            "w": 343,
+            "h": 859
+          },
+          {
+            "x": 183,
+            "y": 159,
+            "w": 342,
+            "h": 859
+          },
+          {
+            "x": 192,
+            "y": 154,
+            "w": 337,
+            "h": 869
+          },
+          {
+            "x": 199,
+            "y": 146,
+            "w": 333,
+            "h": 875
+          },
+          {
+            "x": 201,
+            "y": 139,
+            "w": 334,
+            "h": 873
+          },
+          {
+            "x": 203,
+            "y": 141,
+            "w": 346,
+            "h": 870
+          },
+          {
+            "x": 213,
+            "y": 148,
+            "w": 371,
+            "h": 859
+          },
+          {
+            "x": 215,
+            "y": 157,
+            "w": 391,
+            "h": 855
           }
         ],
         "sourceFrameRects": [
@@ -1693,85 +1902,106 @@ export const externalAnimationV1 = {
         ],
         "frameContentBounds": [
           {
-            "x": 216,
-            "y": 157,
-            "w": 321,
-            "h": 857
-          },
-          {
-            "x": 206,
-            "y": 153,
-            "w": 331,
-            "h": 861
-          },
-          {
-            "x": 200,
-            "y": 150,
-            "w": 337,
-            "h": 865
-          },
-          {
-            "x": 190,
-            "y": 148,
-            "w": 329,
-            "h": 867
-          },
-          {
-            "x": 186,
-            "y": 148,
-            "w": 332,
-            "h": 867
-          },
-          {
-            "x": 180,
-            "y": 154,
-            "w": 338,
-            "h": 862
-          },
-          {
-            "x": 181,
-            "y": 160,
-            "w": 340,
-            "h": 856
-          },
-          {
-            "x": 185,
-            "y": 161,
-            "w": 338,
-            "h": 856
-          },
-          {
-            "x": 194,
-            "y": 156,
-            "w": 334,
-            "h": 866
-          },
-          {
-            "x": 201,
-            "y": 147,
-            "w": 330,
-            "h": 873
-          },
-          {
-            "x": 202,
-            "y": 142,
-            "w": 331,
-            "h": 870
-          },
-          {
-            "x": 204,
-            "y": 143,
-            "w": 343,
-            "h": 867
+            "x": 221,
+            "y": 158,
+            "w": 318,
+            "h": 858
           },
           {
             "x": 215,
-            "y": 150,
-            "w": 367,
+            "y": 156,
+            "w": 324,
+            "h": 860
+          },
+          {
+            "x": 204,
+            "y": 152,
+            "w": 335,
+            "h": 864
+          },
+          {
+            "x": 198,
+            "y": 149,
+            "w": 341,
+            "h": 867
+          },
+          {
+            "x": 188,
+            "y": 147,
+            "w": 333,
+            "h": 870
+          },
+          {
+            "x": 184,
+            "y": 147,
+            "w": 336,
+            "h": 870
+          },
+          {
+            "x": 179,
+            "y": 152,
+            "w": 341,
+            "h": 866
+          },
+          {
+            "x": 179,
+            "y": 159,
+            "w": 343,
+            "h": 859
+          },
+          {
+            "x": 183,
+            "y": 159,
+            "w": 342,
+            "h": 859
+          },
+          {
+            "x": 192,
+            "y": 154,
+            "w": 337,
+            "h": 869
+          },
+          {
+            "x": 199,
+            "y": 146,
+            "w": 333,
+            "h": 875
+          },
+          {
+            "x": 201,
+            "y": 139,
+            "w": 334,
+            "h": 873
+          },
+          {
+            "x": 203,
+            "y": 141,
+            "w": 346,
+            "h": 870
+          },
+          {
+            "x": 213,
+            "y": 148,
+            "w": 371,
+            "h": 859
+          },
+          {
+            "x": 215,
+            "y": 157,
+            "w": 391,
             "h": 855
           }
         ],
         "frameRects": [
+          {
+            "x": 798,
+            "y": 0,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_001",
+            "duration": 65,
+            "sourceFrameIndex": 1
+          },
           {
             "x": 1596,
             "y": 0,
@@ -1888,21 +2118,32 @@ export const externalAnimationV1 = {
             "name": "frame_014",
             "duration": 65,
             "sourceFrameIndex": 14
+          },
+          {
+            "x": 2394,
+            "y": 3594,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_015",
+            "duration": 65,
+            "sourceFrameIndex": 15
           }
         ],
         "movementSpeedMultipliers": [
           0,
           0,
           0,
-          0.386,
-          0.391,
-          0.398,
+          0.384,
+          0.388,
+          0.392,
+          0.399,
           0.406,
-          0.417,
-          0.506,
-          0.578,
-          0.662,
-          0.84,
+          0.415,
+          0.478,
+          0.551,
+          0.613,
+          0.711,
+          0.89,
           1.2
         ],
         "mirroredWest": true,
@@ -1913,16 +2154,10 @@ export const externalAnimationV1 = {
       "loop": {
         "src": "target/external_animation_v1/runtime/walk_east_loop.png",
         "sourceSheet": "target\\external_animation_v1\\unpacked\\walk_east_loop\\sprite--9px-frames-16-rows-4-cols-4.png",
-        "cleanedSheet": "target\\external_animation_v1\\cleaned\\walk_east_loop.png",
         "metadataFile": "target\\external_animation_v1\\unpacked\\walk_east_loop\\sprite--9px-frames-16-rows-4-cols-4.json",
         "usesOriginalLudoLayout": true,
         "sourcePreserved": true,
-        "chromaKeyedFromOriginalLudoSheet": false,
-        "usesCleanedDerivedSheet": true,
-        "chromaKeyStats": {
-          "precleanedSheet": true,
-          "cleanedSheet": "target\\external_animation_v1\\cleaned\\walk_east_loop.png"
-        },
+        "runtimeSource": "unpacked-alpha-sheet",
         "frameWidth": 798,
         "frameHeight": 1198,
         "sheetWidth": 3192,
@@ -1932,7 +2167,7 @@ export const externalAnimationV1 = {
         "frameStart": 0,
         "frameEndTrim": 0,
         "configuredFrameCount": null,
-        "fps": 16,
+        "fps": 20,
         "loop": true,
         "role": "loop",
         "stopExitFrame": 0,
@@ -1945,113 +2180,113 @@ export const externalAnimationV1 = {
         },
         "baselineY": 1198,
         "contentBounds": {
-          "x": 195,
-          "y": 141,
-          "w": 443,
-          "h": 872
+          "x": 193,
+          "y": 139,
+          "w": 447,
+          "h": 875
         },
         "sourceContentBounds": {
-          "x": 195,
-          "y": 141,
-          "w": 443,
-          "h": 872
+          "x": 193,
+          "y": 139,
+          "w": 447,
+          "h": 875
         },
         "sourceFrameContentBounds": [
           {
-            "x": 217,
-            "y": 159,
-            "w": 389,
-            "h": 854
-          },
-          {
-            "x": 220,
-            "y": 160,
-            "w": 379,
-            "h": 851
-          },
-          {
-            "x": 251,
-            "y": 155,
-            "w": 324,
-            "h": 858
-          },
-          {
-            "x": 259,
-            "y": 146,
-            "w": 284,
-            "h": 866
-          },
-          {
-            "x": 262,
-            "y": 141,
-            "w": 276,
-            "h": 870
-          },
-          {
-            "x": 262,
-            "y": 141,
-            "w": 276,
-            "h": 870
-          },
-          {
-            "x": 240,
-            "y": 146,
-            "w": 384,
-            "h": 862
-          },
-          {
-            "x": 210,
-            "y": 153,
-            "w": 428,
-            "h": 852
-          },
-          {
-            "x": 197,
-            "y": 157,
-            "w": 433,
-            "h": 850
-          },
-          {
-            "x": 195,
-            "y": 159,
-            "w": 422,
-            "h": 848
-          },
-          {
-            "x": 232,
-            "y": 157,
-            "w": 344,
-            "h": 850
-          },
-          {
-            "x": 262,
-            "y": 150,
-            "w": 280,
+            "x": 215,
+            "y": 158,
+            "w": 392,
             "h": 856
           },
           {
-            "x": 254,
-            "y": 145,
-            "w": 286,
-            "h": 858
+            "x": 218,
+            "y": 159,
+            "w": 383,
+            "h": 853
           },
           {
-            "x": 248,
+            "x": 249,
+            "y": 154,
+            "w": 327,
+            "h": 860
+          },
+          {
+            "x": 257,
             "y": 144,
-            "w": 306,
-            "h": 858
+            "w": 287,
+            "h": 868
+          },
+          {
+            "x": 260,
+            "y": 139,
+            "w": 280,
+            "h": 873
+          },
+          {
+            "x": 261,
+            "y": 140,
+            "w": 279,
+            "h": 872
           },
           {
             "x": 238,
-            "y": 148,
-            "w": 355,
-            "h": 859
+            "y": 144,
+            "w": 388,
+            "h": 866
           },
           {
-            "x": 233,
-            "y": 155,
-            "w": 374,
+            "x": 208,
+            "y": 152,
+            "w": 432,
             "h": 855
+          },
+          {
+            "x": 195,
+            "y": 156,
+            "w": 436,
+            "h": 852
+          },
+          {
+            "x": 193,
+            "y": 158,
+            "w": 425,
+            "h": 850
+          },
+          {
+            "x": 230,
+            "y": 156,
+            "w": 348,
+            "h": 852
+          },
+          {
+            "x": 260,
+            "y": 148,
+            "w": 284,
+            "h": 858
+          },
+          {
+            "x": 252,
+            "y": 143,
+            "w": 290,
+            "h": 862
+          },
+          {
+            "x": 246,
+            "y": 143,
+            "w": 310,
+            "h": 861
+          },
+          {
+            "x": 238,
+            "y": 147,
+            "w": 357,
+            "h": 861
+          },
+          {
+            "x": 232,
+            "y": 153,
+            "w": 376,
+            "h": 858
           }
         ],
         "sourceFrameRects": [
@@ -2202,100 +2437,100 @@ export const externalAnimationV1 = {
         ],
         "frameContentBounds": [
           {
-            "x": 217,
-            "y": 159,
-            "w": 389,
-            "h": 854
-          },
-          {
-            "x": 220,
-            "y": 160,
-            "w": 379,
-            "h": 851
-          },
-          {
-            "x": 251,
-            "y": 155,
-            "w": 324,
-            "h": 858
-          },
-          {
-            "x": 259,
-            "y": 146,
-            "w": 284,
-            "h": 866
-          },
-          {
-            "x": 262,
-            "y": 141,
-            "w": 276,
-            "h": 870
-          },
-          {
-            "x": 262,
-            "y": 141,
-            "w": 276,
-            "h": 870
-          },
-          {
-            "x": 240,
-            "y": 146,
-            "w": 384,
-            "h": 862
-          },
-          {
-            "x": 210,
-            "y": 153,
-            "w": 428,
-            "h": 852
-          },
-          {
-            "x": 197,
-            "y": 157,
-            "w": 433,
-            "h": 850
-          },
-          {
-            "x": 195,
-            "y": 159,
-            "w": 422,
-            "h": 848
-          },
-          {
-            "x": 232,
-            "y": 157,
-            "w": 344,
-            "h": 850
-          },
-          {
-            "x": 262,
-            "y": 150,
-            "w": 280,
+            "x": 215,
+            "y": 158,
+            "w": 392,
             "h": 856
           },
           {
-            "x": 254,
-            "y": 145,
-            "w": 286,
-            "h": 858
+            "x": 218,
+            "y": 159,
+            "w": 383,
+            "h": 853
           },
           {
-            "x": 248,
+            "x": 249,
+            "y": 154,
+            "w": 327,
+            "h": 860
+          },
+          {
+            "x": 257,
             "y": 144,
-            "w": 306,
-            "h": 858
+            "w": 287,
+            "h": 868
+          },
+          {
+            "x": 260,
+            "y": 139,
+            "w": 280,
+            "h": 873
+          },
+          {
+            "x": 261,
+            "y": 140,
+            "w": 279,
+            "h": 872
           },
           {
             "x": 238,
-            "y": 148,
-            "w": 355,
-            "h": 859
+            "y": 144,
+            "w": 388,
+            "h": 866
           },
           {
-            "x": 233,
-            "y": 155,
-            "w": 374,
+            "x": 208,
+            "y": 152,
+            "w": 432,
             "h": 855
+          },
+          {
+            "x": 195,
+            "y": 156,
+            "w": 436,
+            "h": 852
+          },
+          {
+            "x": 193,
+            "y": 158,
+            "w": 425,
+            "h": 850
+          },
+          {
+            "x": 230,
+            "y": 156,
+            "w": 348,
+            "h": 852
+          },
+          {
+            "x": 260,
+            "y": 148,
+            "w": 284,
+            "h": 858
+          },
+          {
+            "x": 252,
+            "y": 143,
+            "w": 290,
+            "h": 862
+          },
+          {
+            "x": 246,
+            "y": 143,
+            "w": 310,
+            "h": 861
+          },
+          {
+            "x": 238,
+            "y": 147,
+            "w": 357,
+            "h": 861
+          },
+          {
+            "x": 232,
+            "y": 153,
+            "w": 376,
+            "h": 858
           }
         ],
         "frameRects": [
@@ -2469,30 +2704,24 @@ export const externalAnimationV1 = {
       },
       "stop": {
         "src": "target/external_animation_v1/runtime/walk_east_stop.png",
-        "sourceSheet": "target\\external_animation_v1\\unpacked\\walk_east_stop\\sprite--9px-frames-9-rows-3-cols-3.png",
-        "cleanedSheet": "target\\external_animation_v1\\cleaned\\walk_east_stop.png",
-        "metadataFile": "target\\external_animation_v1\\unpacked\\walk_east_stop\\sprite--9px-frames-9-rows-3-cols-3.json",
+        "sourceSheet": "target\\external_animation_v1\\unpacked\\walk_east_stop\\sprite--9px-frames-16-rows-4-cols-4.png",
+        "metadataFile": "target\\external_animation_v1\\unpacked\\walk_east_stop\\sprite--9px-frames-16-rows-4-cols-4.json",
         "usesOriginalLudoLayout": true,
         "sourcePreserved": true,
-        "chromaKeyedFromOriginalLudoSheet": false,
-        "usesCleanedDerivedSheet": true,
-        "chromaKeyStats": {
-          "precleanedSheet": true,
-          "cleanedSheet": "target\\external_animation_v1\\cleaned\\walk_east_stop.png"
-        },
+        "runtimeSource": "unpacked-alpha-sheet",
         "frameWidth": 798,
         "frameHeight": 1198,
-        "sheetWidth": 2394,
-        "sheetHeight": 3594,
-        "frameCount": 8,
-        "sourceFrameCount": 9,
-        "frameStart": 1,
+        "sheetWidth": 3192,
+        "sheetHeight": 4792,
+        "frameCount": 14,
+        "sourceFrameCount": 16,
+        "frameStart": 2,
         "frameEndTrim": 0,
         "configuredFrameCount": null,
-        "fps": 16,
+        "fps": 20,
         "loop": false,
         "role": "stop",
-        "stopRenderOffsetXStart": -30,
+        "stopRenderOffsetXStart": -10,
         "initialFrame": 1,
         "anchorX": 0.5,
         "anchorY": 1,
@@ -2502,71 +2731,113 @@ export const externalAnimationV1 = {
         },
         "baselineY": 1198,
         "contentBounds": {
-          "x": 225,
-          "y": 147,
-          "w": 384,
-          "h": 879
+          "x": 223,
+          "y": 148,
+          "w": 374,
+          "h": 882
         },
         "sourceContentBounds": {
-          "x": 222,
-          "y": 147,
-          "w": 387,
-          "h": 879
+          "x": 220,
+          "y": 148,
+          "w": 388,
+          "h": 882
         },
         "sourceFrameContentBounds": [
           {
-            "x": 222,
-            "y": 161,
-            "w": 384,
-            "h": 850
+            "x": 220,
+            "y": 159,
+            "w": 388,
+            "h": 853
           },
           {
-            "x": 227,
-            "y": 166,
-            "w": 382,
-            "h": 848
-          },
-          {
-            "x": 303,
-            "y": 148,
-            "w": 295,
-            "h": 878
-          },
-          {
-            "x": 293,
-            "y": 147,
-            "w": 304,
-            "h": 872
-          },
-          {
-            "x": 284,
-            "y": 147,
-            "w": 312,
-            "h": 868
-          },
-          {
-            "x": 250,
-            "y": 150,
-            "w": 334,
-            "h": 866
+            "x": 220,
+            "y": 162,
+            "w": 386,
+            "h": 852
           },
           {
             "x": 234,
-            "y": 155,
-            "w": 341,
+            "y": 165,
+            "w": 363,
+            "h": 852
+          },
+          {
+            "x": 256,
+            "y": 163,
+            "w": 320,
+            "h": 867
+          },
+          {
+            "x": 269,
+            "y": 152,
+            "w": 278,
+            "h": 876
+          },
+          {
+            "x": 267,
+            "y": 150,
+            "w": 278,
+            "h": 877
+          },
+          {
+            "x": 262,
+            "y": 148,
+            "w": 278,
+            "h": 876
+          },
+          {
+            "x": 257,
+            "y": 150,
+            "w": 283,
+            "h": 868
+          },
+          {
+            "x": 256,
+            "y": 154,
+            "w": 284,
+            "h": 863
+          },
+          {
+            "x": 252,
+            "y": 160,
+            "w": 286,
+            "h": 854
+          },
+          {
+            "x": 246,
+            "y": 160,
+            "w": 292,
+            "h": 854
+          },
+          {
+            "x": 231,
+            "y": 157,
+            "w": 308,
+            "h": 857
+          },
+          {
+            "x": 223,
+            "y": 154,
+            "w": 317,
             "h": 860
           },
           {
-            "x": 225,
-            "y": 159,
-            "w": 327,
-            "h": 856
+            "x": 223,
+            "y": 155,
+            "w": 317,
+            "h": 859
           },
           {
-            "x": 229,
-            "y": 160,
-            "w": 310,
-            "h": 855
+            "x": 226,
+            "y": 156,
+            "w": 314,
+            "h": 858
+          },
+          {
+            "x": 226,
+            "y": 158,
+            "w": 314,
+            "h": 856
           }
         ],
         "sourceFrameRects": [
@@ -2576,7 +2847,7 @@ export const externalAnimationV1 = {
             "w": 798,
             "h": 1198,
             "name": "frame_000",
-            "duration": 111,
+            "duration": 68,
             "sourceFrameIndex": 0
           },
           {
@@ -2585,7 +2856,7 @@ export const externalAnimationV1 = {
             "w": 798,
             "h": 1198,
             "name": "frame_001",
-            "duration": 111,
+            "duration": 68,
             "sourceFrameIndex": 1
           },
           {
@@ -2594,186 +2865,339 @@ export const externalAnimationV1 = {
             "w": 798,
             "h": 1198,
             "name": "frame_002",
-            "duration": 111,
+            "duration": 68,
             "sourceFrameIndex": 2
           },
           {
-            "x": 0,
-            "y": 1198,
+            "x": 2394,
+            "y": 0,
             "w": 798,
             "h": 1198,
             "name": "frame_003",
-            "duration": 111,
+            "duration": 68,
             "sourceFrameIndex": 3
           },
           {
-            "x": 798,
+            "x": 0,
             "y": 1198,
             "w": 798,
             "h": 1198,
             "name": "frame_004",
-            "duration": 111,
+            "duration": 68,
             "sourceFrameIndex": 4
+          },
+          {
+            "x": 798,
+            "y": 1198,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_005",
+            "duration": 68,
+            "sourceFrameIndex": 5
           },
           {
             "x": 1596,
             "y": 1198,
             "w": 798,
             "h": 1198,
-            "name": "frame_005",
-            "duration": 111,
-            "sourceFrameIndex": 5
+            "name": "frame_006",
+            "duration": 68,
+            "sourceFrameIndex": 6
+          },
+          {
+            "x": 2394,
+            "y": 1198,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_007",
+            "duration": 68,
+            "sourceFrameIndex": 7
           },
           {
             "x": 0,
             "y": 2396,
             "w": 798,
             "h": 1198,
-            "name": "frame_006",
-            "duration": 111,
-            "sourceFrameIndex": 6
+            "name": "frame_008",
+            "duration": 68,
+            "sourceFrameIndex": 8
           },
           {
             "x": 798,
             "y": 2396,
             "w": 798,
             "h": 1198,
-            "name": "frame_007",
-            "duration": 111,
-            "sourceFrameIndex": 7
+            "name": "frame_009",
+            "duration": 68,
+            "sourceFrameIndex": 9
           },
           {
             "x": 1596,
             "y": 2396,
             "w": 798,
             "h": 1198,
-            "name": "frame_008",
-            "duration": 111,
-            "sourceFrameIndex": 8
+            "name": "frame_010",
+            "duration": 68,
+            "sourceFrameIndex": 10
+          },
+          {
+            "x": 2394,
+            "y": 2396,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_011",
+            "duration": 68,
+            "sourceFrameIndex": 11
+          },
+          {
+            "x": 0,
+            "y": 3594,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_012",
+            "duration": 68,
+            "sourceFrameIndex": 12
+          },
+          {
+            "x": 798,
+            "y": 3594,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_013",
+            "duration": 68,
+            "sourceFrameIndex": 13
+          },
+          {
+            "x": 1596,
+            "y": 3594,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_014",
+            "duration": 68,
+            "sourceFrameIndex": 14
+          },
+          {
+            "x": 2394,
+            "y": 3594,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_015",
+            "duration": 68,
+            "sourceFrameIndex": 15
           }
         ],
         "frameContentBounds": [
           {
-            "x": 227,
-            "y": 166,
-            "w": 382,
-            "h": 848
+            "x": 234,
+            "y": 165,
+            "w": 363,
+            "h": 852
           },
           {
-            "x": 303,
+            "x": 256,
+            "y": 163,
+            "w": 320,
+            "h": 867
+          },
+          {
+            "x": 269,
+            "y": 152,
+            "w": 278,
+            "h": 876
+          },
+          {
+            "x": 267,
+            "y": 150,
+            "w": 278,
+            "h": 877
+          },
+          {
+            "x": 262,
             "y": 148,
-            "w": 295,
-            "h": 878
+            "w": 278,
+            "h": 876
           },
           {
-            "x": 293,
-            "y": 147,
-            "w": 304,
-            "h": 872
-          },
-          {
-            "x": 284,
-            "y": 147,
-            "w": 312,
+            "x": 257,
+            "y": 150,
+            "w": 283,
             "h": 868
           },
           {
-            "x": 250,
-            "y": 150,
-            "w": 334,
-            "h": 866
+            "x": 256,
+            "y": 154,
+            "w": 284,
+            "h": 863
           },
           {
-            "x": 234,
-            "y": 155,
-            "w": 341,
+            "x": 252,
+            "y": 160,
+            "w": 286,
+            "h": 854
+          },
+          {
+            "x": 246,
+            "y": 160,
+            "w": 292,
+            "h": 854
+          },
+          {
+            "x": 231,
+            "y": 157,
+            "w": 308,
+            "h": 857
+          },
+          {
+            "x": 223,
+            "y": 154,
+            "w": 317,
             "h": 860
           },
           {
-            "x": 225,
-            "y": 159,
-            "w": 327,
-            "h": 856
+            "x": 223,
+            "y": 155,
+            "w": 317,
+            "h": 859
           },
           {
-            "x": 229,
-            "y": 160,
-            "w": 310,
-            "h": 855
+            "x": 226,
+            "y": 156,
+            "w": 314,
+            "h": 858
+          },
+          {
+            "x": 226,
+            "y": 158,
+            "w": 314,
+            "h": 856
           }
         ],
         "frameRects": [
-          {
-            "x": 798,
-            "y": 0,
-            "w": 798,
-            "h": 1198,
-            "name": "frame_001",
-            "duration": 111,
-            "sourceFrameIndex": 1
-          },
           {
             "x": 1596,
             "y": 0,
             "w": 798,
             "h": 1198,
             "name": "frame_002",
-            "duration": 111,
+            "duration": 68,
             "sourceFrameIndex": 2
           },
           {
-            "x": 0,
-            "y": 1198,
+            "x": 2394,
+            "y": 0,
             "w": 798,
             "h": 1198,
             "name": "frame_003",
-            "duration": 111,
+            "duration": 68,
             "sourceFrameIndex": 3
           },
           {
-            "x": 798,
+            "x": 0,
             "y": 1198,
             "w": 798,
             "h": 1198,
             "name": "frame_004",
-            "duration": 111,
+            "duration": 68,
             "sourceFrameIndex": 4
+          },
+          {
+            "x": 798,
+            "y": 1198,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_005",
+            "duration": 68,
+            "sourceFrameIndex": 5
           },
           {
             "x": 1596,
             "y": 1198,
             "w": 798,
             "h": 1198,
-            "name": "frame_005",
-            "duration": 111,
-            "sourceFrameIndex": 5
+            "name": "frame_006",
+            "duration": 68,
+            "sourceFrameIndex": 6
+          },
+          {
+            "x": 2394,
+            "y": 1198,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_007",
+            "duration": 68,
+            "sourceFrameIndex": 7
           },
           {
             "x": 0,
             "y": 2396,
             "w": 798,
             "h": 1198,
-            "name": "frame_006",
-            "duration": 111,
-            "sourceFrameIndex": 6
+            "name": "frame_008",
+            "duration": 68,
+            "sourceFrameIndex": 8
           },
           {
             "x": 798,
             "y": 2396,
             "w": 798,
             "h": 1198,
-            "name": "frame_007",
-            "duration": 111,
-            "sourceFrameIndex": 7
+            "name": "frame_009",
+            "duration": 68,
+            "sourceFrameIndex": 9
           },
           {
             "x": 1596,
             "y": 2396,
             "w": 798,
             "h": 1198,
-            "name": "frame_008",
-            "duration": 111,
-            "sourceFrameIndex": 8
+            "name": "frame_010",
+            "duration": 68,
+            "sourceFrameIndex": 10
+          },
+          {
+            "x": 2394,
+            "y": 2396,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_011",
+            "duration": 68,
+            "sourceFrameIndex": 11
+          },
+          {
+            "x": 0,
+            "y": 3594,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_012",
+            "duration": 68,
+            "sourceFrameIndex": 12
+          },
+          {
+            "x": 798,
+            "y": 3594,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_013",
+            "duration": 68,
+            "sourceFrameIndex": 13
+          },
+          {
+            "x": 1596,
+            "y": 3594,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_014",
+            "duration": 68,
+            "sourceFrameIndex": 14
+          },
+          {
+            "x": 2394,
+            "y": 3594,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_015",
+            "duration": 68,
+            "sourceFrameIndex": 15
           }
         ],
         "movementSpeedMultipliers": [
@@ -2784,7 +3208,13 @@ export const externalAnimationV1 = {
           0.802,
           0.782,
           0.77,
-          0.762
+          0.762,
+          0.76,
+          0.76,
+          0.76,
+          0.76,
+          0.76,
+          0.76
         ],
         "mirroredWest": true,
         "slot": "external_walk_east_stop",
@@ -2797,26 +3227,20 @@ export const externalAnimationV1 = {
     "walk_east_start": {
       "src": "target/external_animation_v1/runtime/walk_east_start.png",
       "sourceSheet": "target\\external_animation_v1\\unpacked\\walk_east_start\\sprite--9px-frames-16-rows-4-cols-4.png",
-      "cleanedSheet": "target\\external_animation_v1\\cleaned\\walk_east_start.png",
       "metadataFile": "target\\external_animation_v1\\unpacked\\walk_east_start\\sprite--9px-frames-16-rows-4-cols-4.json",
       "usesOriginalLudoLayout": true,
       "sourcePreserved": true,
-      "chromaKeyedFromOriginalLudoSheet": false,
-      "usesCleanedDerivedSheet": true,
-      "chromaKeyStats": {
-        "precleanedSheet": true,
-        "cleanedSheet": "target\\external_animation_v1\\cleaned\\walk_east_start.png"
-      },
+      "runtimeSource": "unpacked-alpha-sheet",
       "frameWidth": 798,
       "frameHeight": 1198,
       "sheetWidth": 3192,
       "sheetHeight": 4792,
-      "frameCount": 13,
+      "frameCount": 15,
       "sourceFrameCount": 16,
-      "frameStart": 2,
-      "frameEndTrim": 1,
+      "frameStart": 1,
+      "frameEndTrim": 0,
       "configuredFrameCount": null,
-      "fps": 16,
+      "fps": 20,
       "loop": false,
       "role": "start",
       "initialFrame": 1,
@@ -2828,113 +3252,113 @@ export const externalAnimationV1 = {
       },
       "baselineY": 1198,
       "contentBounds": {
-        "x": 180,
-        "y": 142,
-        "w": 402,
-        "h": 880
+        "x": 179,
+        "y": 139,
+        "w": 427,
+        "h": 884
       },
       "sourceContentBounds": {
-        "x": 180,
-        "y": 142,
-        "w": 424,
-        "h": 880
+        "x": 179,
+        "y": 139,
+        "w": 427,
+        "h": 884
       },
       "sourceFrameContentBounds": [
         {
-          "x": 229,
-          "y": 160,
-          "w": 310,
-          "h": 854
+          "x": 227,
+          "y": 158,
+          "w": 313,
+          "h": 858
         },
         {
-          "x": 223,
-          "y": 159,
-          "w": 314,
-          "h": 855
-        },
-        {
-          "x": 216,
-          "y": 157,
-          "w": 321,
-          "h": 857
-        },
-        {
-          "x": 206,
-          "y": 153,
-          "w": 331,
-          "h": 861
-        },
-        {
-          "x": 200,
-          "y": 150,
-          "w": 337,
-          "h": 865
-        },
-        {
-          "x": 190,
-          "y": 148,
-          "w": 329,
-          "h": 867
-        },
-        {
-          "x": 186,
-          "y": 148,
-          "w": 332,
-          "h": 867
-        },
-        {
-          "x": 180,
-          "y": 154,
-          "w": 338,
-          "h": 862
-        },
-        {
-          "x": 181,
-          "y": 160,
-          "w": 340,
-          "h": 856
-        },
-        {
-          "x": 185,
-          "y": 161,
-          "w": 338,
-          "h": 856
-        },
-        {
-          "x": 194,
-          "y": 156,
-          "w": 334,
-          "h": 866
-        },
-        {
-          "x": 201,
-          "y": 147,
-          "w": 330,
-          "h": 873
-        },
-        {
-          "x": 202,
-          "y": 142,
-          "w": 331,
-          "h": 870
-        },
-        {
-          "x": 204,
-          "y": 143,
-          "w": 343,
-          "h": 867
+          "x": 221,
+          "y": 158,
+          "w": 318,
+          "h": 858
         },
         {
           "x": 215,
-          "y": 150,
-          "w": 367,
-          "h": 855
+          "y": 156,
+          "w": 324,
+          "h": 860
         },
         {
-          "x": 216,
-          "y": 158,
-          "w": 388,
-          "h": 853
+          "x": 204,
+          "y": 152,
+          "w": 335,
+          "h": 864
+        },
+        {
+          "x": 198,
+          "y": 149,
+          "w": 341,
+          "h": 867
+        },
+        {
+          "x": 188,
+          "y": 147,
+          "w": 333,
+          "h": 870
+        },
+        {
+          "x": 184,
+          "y": 147,
+          "w": 336,
+          "h": 870
+        },
+        {
+          "x": 179,
+          "y": 152,
+          "w": 341,
+          "h": 866
+        },
+        {
+          "x": 179,
+          "y": 159,
+          "w": 343,
+          "h": 859
+        },
+        {
+          "x": 183,
+          "y": 159,
+          "w": 342,
+          "h": 859
+        },
+        {
+          "x": 192,
+          "y": 154,
+          "w": 337,
+          "h": 869
+        },
+        {
+          "x": 199,
+          "y": 146,
+          "w": 333,
+          "h": 875
+        },
+        {
+          "x": 201,
+          "y": 139,
+          "w": 334,
+          "h": 873
+        },
+        {
+          "x": 203,
+          "y": 141,
+          "w": 346,
+          "h": 870
+        },
+        {
+          "x": 213,
+          "y": 148,
+          "w": 371,
+          "h": 859
+        },
+        {
+          "x": 215,
+          "y": 157,
+          "w": 391,
+          "h": 855
         }
       ],
       "sourceFrameRects": [
@@ -3085,85 +3509,106 @@ export const externalAnimationV1 = {
       ],
       "frameContentBounds": [
         {
-          "x": 216,
-          "y": 157,
-          "w": 321,
-          "h": 857
-        },
-        {
-          "x": 206,
-          "y": 153,
-          "w": 331,
-          "h": 861
-        },
-        {
-          "x": 200,
-          "y": 150,
-          "w": 337,
-          "h": 865
-        },
-        {
-          "x": 190,
-          "y": 148,
-          "w": 329,
-          "h": 867
-        },
-        {
-          "x": 186,
-          "y": 148,
-          "w": 332,
-          "h": 867
-        },
-        {
-          "x": 180,
-          "y": 154,
-          "w": 338,
-          "h": 862
-        },
-        {
-          "x": 181,
-          "y": 160,
-          "w": 340,
-          "h": 856
-        },
-        {
-          "x": 185,
-          "y": 161,
-          "w": 338,
-          "h": 856
-        },
-        {
-          "x": 194,
-          "y": 156,
-          "w": 334,
-          "h": 866
-        },
-        {
-          "x": 201,
-          "y": 147,
-          "w": 330,
-          "h": 873
-        },
-        {
-          "x": 202,
-          "y": 142,
-          "w": 331,
-          "h": 870
-        },
-        {
-          "x": 204,
-          "y": 143,
-          "w": 343,
-          "h": 867
+          "x": 221,
+          "y": 158,
+          "w": 318,
+          "h": 858
         },
         {
           "x": 215,
-          "y": 150,
-          "w": 367,
+          "y": 156,
+          "w": 324,
+          "h": 860
+        },
+        {
+          "x": 204,
+          "y": 152,
+          "w": 335,
+          "h": 864
+        },
+        {
+          "x": 198,
+          "y": 149,
+          "w": 341,
+          "h": 867
+        },
+        {
+          "x": 188,
+          "y": 147,
+          "w": 333,
+          "h": 870
+        },
+        {
+          "x": 184,
+          "y": 147,
+          "w": 336,
+          "h": 870
+        },
+        {
+          "x": 179,
+          "y": 152,
+          "w": 341,
+          "h": 866
+        },
+        {
+          "x": 179,
+          "y": 159,
+          "w": 343,
+          "h": 859
+        },
+        {
+          "x": 183,
+          "y": 159,
+          "w": 342,
+          "h": 859
+        },
+        {
+          "x": 192,
+          "y": 154,
+          "w": 337,
+          "h": 869
+        },
+        {
+          "x": 199,
+          "y": 146,
+          "w": 333,
+          "h": 875
+        },
+        {
+          "x": 201,
+          "y": 139,
+          "w": 334,
+          "h": 873
+        },
+        {
+          "x": 203,
+          "y": 141,
+          "w": 346,
+          "h": 870
+        },
+        {
+          "x": 213,
+          "y": 148,
+          "w": 371,
+          "h": 859
+        },
+        {
+          "x": 215,
+          "y": 157,
+          "w": 391,
           "h": 855
         }
       ],
       "frameRects": [
+        {
+          "x": 798,
+          "y": 0,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_001",
+          "duration": 65,
+          "sourceFrameIndex": 1
+        },
         {
           "x": 1596,
           "y": 0,
@@ -3280,21 +3725,32 @@ export const externalAnimationV1 = {
           "name": "frame_014",
           "duration": 65,
           "sourceFrameIndex": 14
+        },
+        {
+          "x": 2394,
+          "y": 3594,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_015",
+          "duration": 65,
+          "sourceFrameIndex": 15
         }
       ],
       "movementSpeedMultipliers": [
         0,
         0,
         0,
-        0.386,
-        0.391,
-        0.398,
+        0.384,
+        0.388,
+        0.392,
+        0.399,
         0.406,
-        0.417,
-        0.506,
-        0.578,
-        0.662,
-        0.84,
+        0.415,
+        0.478,
+        0.551,
+        0.613,
+        0.711,
+        0.89,
         1.2
       ],
       "mirroredWest": true
@@ -3302,16 +3758,10 @@ export const externalAnimationV1 = {
     "walk_east_loop": {
       "src": "target/external_animation_v1/runtime/walk_east_loop.png",
       "sourceSheet": "target\\external_animation_v1\\unpacked\\walk_east_loop\\sprite--9px-frames-16-rows-4-cols-4.png",
-      "cleanedSheet": "target\\external_animation_v1\\cleaned\\walk_east_loop.png",
       "metadataFile": "target\\external_animation_v1\\unpacked\\walk_east_loop\\sprite--9px-frames-16-rows-4-cols-4.json",
       "usesOriginalLudoLayout": true,
       "sourcePreserved": true,
-      "chromaKeyedFromOriginalLudoSheet": false,
-      "usesCleanedDerivedSheet": true,
-      "chromaKeyStats": {
-        "precleanedSheet": true,
-        "cleanedSheet": "target\\external_animation_v1\\cleaned\\walk_east_loop.png"
-      },
+      "runtimeSource": "unpacked-alpha-sheet",
       "frameWidth": 798,
       "frameHeight": 1198,
       "sheetWidth": 3192,
@@ -3321,7 +3771,7 @@ export const externalAnimationV1 = {
       "frameStart": 0,
       "frameEndTrim": 0,
       "configuredFrameCount": null,
-      "fps": 16,
+      "fps": 20,
       "loop": true,
       "role": "loop",
       "stopExitFrame": 0,
@@ -3334,113 +3784,113 @@ export const externalAnimationV1 = {
       },
       "baselineY": 1198,
       "contentBounds": {
-        "x": 195,
-        "y": 141,
-        "w": 443,
-        "h": 872
+        "x": 193,
+        "y": 139,
+        "w": 447,
+        "h": 875
       },
       "sourceContentBounds": {
-        "x": 195,
-        "y": 141,
-        "w": 443,
-        "h": 872
+        "x": 193,
+        "y": 139,
+        "w": 447,
+        "h": 875
       },
       "sourceFrameContentBounds": [
         {
-          "x": 217,
-          "y": 159,
-          "w": 389,
-          "h": 854
-        },
-        {
-          "x": 220,
-          "y": 160,
-          "w": 379,
-          "h": 851
-        },
-        {
-          "x": 251,
-          "y": 155,
-          "w": 324,
-          "h": 858
-        },
-        {
-          "x": 259,
-          "y": 146,
-          "w": 284,
-          "h": 866
-        },
-        {
-          "x": 262,
-          "y": 141,
-          "w": 276,
-          "h": 870
-        },
-        {
-          "x": 262,
-          "y": 141,
-          "w": 276,
-          "h": 870
-        },
-        {
-          "x": 240,
-          "y": 146,
-          "w": 384,
-          "h": 862
-        },
-        {
-          "x": 210,
-          "y": 153,
-          "w": 428,
-          "h": 852
-        },
-        {
-          "x": 197,
-          "y": 157,
-          "w": 433,
-          "h": 850
-        },
-        {
-          "x": 195,
-          "y": 159,
-          "w": 422,
-          "h": 848
-        },
-        {
-          "x": 232,
-          "y": 157,
-          "w": 344,
-          "h": 850
-        },
-        {
-          "x": 262,
-          "y": 150,
-          "w": 280,
+          "x": 215,
+          "y": 158,
+          "w": 392,
           "h": 856
         },
         {
-          "x": 254,
-          "y": 145,
-          "w": 286,
-          "h": 858
+          "x": 218,
+          "y": 159,
+          "w": 383,
+          "h": 853
         },
         {
-          "x": 248,
+          "x": 249,
+          "y": 154,
+          "w": 327,
+          "h": 860
+        },
+        {
+          "x": 257,
           "y": 144,
-          "w": 306,
-          "h": 858
+          "w": 287,
+          "h": 868
+        },
+        {
+          "x": 260,
+          "y": 139,
+          "w": 280,
+          "h": 873
+        },
+        {
+          "x": 261,
+          "y": 140,
+          "w": 279,
+          "h": 872
         },
         {
           "x": 238,
-          "y": 148,
-          "w": 355,
-          "h": 859
+          "y": 144,
+          "w": 388,
+          "h": 866
         },
         {
-          "x": 233,
-          "y": 155,
-          "w": 374,
+          "x": 208,
+          "y": 152,
+          "w": 432,
           "h": 855
+        },
+        {
+          "x": 195,
+          "y": 156,
+          "w": 436,
+          "h": 852
+        },
+        {
+          "x": 193,
+          "y": 158,
+          "w": 425,
+          "h": 850
+        },
+        {
+          "x": 230,
+          "y": 156,
+          "w": 348,
+          "h": 852
+        },
+        {
+          "x": 260,
+          "y": 148,
+          "w": 284,
+          "h": 858
+        },
+        {
+          "x": 252,
+          "y": 143,
+          "w": 290,
+          "h": 862
+        },
+        {
+          "x": 246,
+          "y": 143,
+          "w": 310,
+          "h": 861
+        },
+        {
+          "x": 238,
+          "y": 147,
+          "w": 357,
+          "h": 861
+        },
+        {
+          "x": 232,
+          "y": 153,
+          "w": 376,
+          "h": 858
         }
       ],
       "sourceFrameRects": [
@@ -3591,100 +4041,100 @@ export const externalAnimationV1 = {
       ],
       "frameContentBounds": [
         {
-          "x": 217,
-          "y": 159,
-          "w": 389,
-          "h": 854
-        },
-        {
-          "x": 220,
-          "y": 160,
-          "w": 379,
-          "h": 851
-        },
-        {
-          "x": 251,
-          "y": 155,
-          "w": 324,
-          "h": 858
-        },
-        {
-          "x": 259,
-          "y": 146,
-          "w": 284,
-          "h": 866
-        },
-        {
-          "x": 262,
-          "y": 141,
-          "w": 276,
-          "h": 870
-        },
-        {
-          "x": 262,
-          "y": 141,
-          "w": 276,
-          "h": 870
-        },
-        {
-          "x": 240,
-          "y": 146,
-          "w": 384,
-          "h": 862
-        },
-        {
-          "x": 210,
-          "y": 153,
-          "w": 428,
-          "h": 852
-        },
-        {
-          "x": 197,
-          "y": 157,
-          "w": 433,
-          "h": 850
-        },
-        {
-          "x": 195,
-          "y": 159,
-          "w": 422,
-          "h": 848
-        },
-        {
-          "x": 232,
-          "y": 157,
-          "w": 344,
-          "h": 850
-        },
-        {
-          "x": 262,
-          "y": 150,
-          "w": 280,
+          "x": 215,
+          "y": 158,
+          "w": 392,
           "h": 856
         },
         {
-          "x": 254,
-          "y": 145,
-          "w": 286,
-          "h": 858
+          "x": 218,
+          "y": 159,
+          "w": 383,
+          "h": 853
         },
         {
-          "x": 248,
+          "x": 249,
+          "y": 154,
+          "w": 327,
+          "h": 860
+        },
+        {
+          "x": 257,
           "y": 144,
-          "w": 306,
-          "h": 858
+          "w": 287,
+          "h": 868
+        },
+        {
+          "x": 260,
+          "y": 139,
+          "w": 280,
+          "h": 873
+        },
+        {
+          "x": 261,
+          "y": 140,
+          "w": 279,
+          "h": 872
         },
         {
           "x": 238,
-          "y": 148,
-          "w": 355,
-          "h": 859
+          "y": 144,
+          "w": 388,
+          "h": 866
         },
         {
-          "x": 233,
-          "y": 155,
-          "w": 374,
+          "x": 208,
+          "y": 152,
+          "w": 432,
           "h": 855
+        },
+        {
+          "x": 195,
+          "y": 156,
+          "w": 436,
+          "h": 852
+        },
+        {
+          "x": 193,
+          "y": 158,
+          "w": 425,
+          "h": 850
+        },
+        {
+          "x": 230,
+          "y": 156,
+          "w": 348,
+          "h": 852
+        },
+        {
+          "x": 260,
+          "y": 148,
+          "w": 284,
+          "h": 858
+        },
+        {
+          "x": 252,
+          "y": 143,
+          "w": 290,
+          "h": 862
+        },
+        {
+          "x": 246,
+          "y": 143,
+          "w": 310,
+          "h": 861
+        },
+        {
+          "x": 238,
+          "y": 147,
+          "w": 357,
+          "h": 861
+        },
+        {
+          "x": 232,
+          "y": 153,
+          "w": 376,
+          "h": 858
         }
       ],
       "frameRects": [
@@ -3855,30 +4305,24 @@ export const externalAnimationV1 = {
     },
     "walk_east_stop": {
       "src": "target/external_animation_v1/runtime/walk_east_stop.png",
-      "sourceSheet": "target\\external_animation_v1\\unpacked\\walk_east_stop\\sprite--9px-frames-9-rows-3-cols-3.png",
-      "cleanedSheet": "target\\external_animation_v1\\cleaned\\walk_east_stop.png",
-      "metadataFile": "target\\external_animation_v1\\unpacked\\walk_east_stop\\sprite--9px-frames-9-rows-3-cols-3.json",
+      "sourceSheet": "target\\external_animation_v1\\unpacked\\walk_east_stop\\sprite--9px-frames-16-rows-4-cols-4.png",
+      "metadataFile": "target\\external_animation_v1\\unpacked\\walk_east_stop\\sprite--9px-frames-16-rows-4-cols-4.json",
       "usesOriginalLudoLayout": true,
       "sourcePreserved": true,
-      "chromaKeyedFromOriginalLudoSheet": false,
-      "usesCleanedDerivedSheet": true,
-      "chromaKeyStats": {
-        "precleanedSheet": true,
-        "cleanedSheet": "target\\external_animation_v1\\cleaned\\walk_east_stop.png"
-      },
+      "runtimeSource": "unpacked-alpha-sheet",
       "frameWidth": 798,
       "frameHeight": 1198,
-      "sheetWidth": 2394,
-      "sheetHeight": 3594,
-      "frameCount": 8,
-      "sourceFrameCount": 9,
-      "frameStart": 1,
+      "sheetWidth": 3192,
+      "sheetHeight": 4792,
+      "frameCount": 14,
+      "sourceFrameCount": 16,
+      "frameStart": 2,
       "frameEndTrim": 0,
       "configuredFrameCount": null,
-      "fps": 16,
+      "fps": 20,
       "loop": false,
       "role": "stop",
-      "stopRenderOffsetXStart": -30,
+      "stopRenderOffsetXStart": -10,
       "initialFrame": 1,
       "anchorX": 0.5,
       "anchorY": 1,
@@ -3888,71 +4332,113 @@ export const externalAnimationV1 = {
       },
       "baselineY": 1198,
       "contentBounds": {
-        "x": 225,
-        "y": 147,
-        "w": 384,
-        "h": 879
+        "x": 223,
+        "y": 148,
+        "w": 374,
+        "h": 882
       },
       "sourceContentBounds": {
-        "x": 222,
-        "y": 147,
-        "w": 387,
-        "h": 879
+        "x": 220,
+        "y": 148,
+        "w": 388,
+        "h": 882
       },
       "sourceFrameContentBounds": [
         {
-          "x": 222,
-          "y": 161,
-          "w": 384,
-          "h": 850
+          "x": 220,
+          "y": 159,
+          "w": 388,
+          "h": 853
         },
         {
-          "x": 227,
-          "y": 166,
-          "w": 382,
-          "h": 848
-        },
-        {
-          "x": 303,
-          "y": 148,
-          "w": 295,
-          "h": 878
-        },
-        {
-          "x": 293,
-          "y": 147,
-          "w": 304,
-          "h": 872
-        },
-        {
-          "x": 284,
-          "y": 147,
-          "w": 312,
-          "h": 868
-        },
-        {
-          "x": 250,
-          "y": 150,
-          "w": 334,
-          "h": 866
+          "x": 220,
+          "y": 162,
+          "w": 386,
+          "h": 852
         },
         {
           "x": 234,
-          "y": 155,
-          "w": 341,
+          "y": 165,
+          "w": 363,
+          "h": 852
+        },
+        {
+          "x": 256,
+          "y": 163,
+          "w": 320,
+          "h": 867
+        },
+        {
+          "x": 269,
+          "y": 152,
+          "w": 278,
+          "h": 876
+        },
+        {
+          "x": 267,
+          "y": 150,
+          "w": 278,
+          "h": 877
+        },
+        {
+          "x": 262,
+          "y": 148,
+          "w": 278,
+          "h": 876
+        },
+        {
+          "x": 257,
+          "y": 150,
+          "w": 283,
+          "h": 868
+        },
+        {
+          "x": 256,
+          "y": 154,
+          "w": 284,
+          "h": 863
+        },
+        {
+          "x": 252,
+          "y": 160,
+          "w": 286,
+          "h": 854
+        },
+        {
+          "x": 246,
+          "y": 160,
+          "w": 292,
+          "h": 854
+        },
+        {
+          "x": 231,
+          "y": 157,
+          "w": 308,
+          "h": 857
+        },
+        {
+          "x": 223,
+          "y": 154,
+          "w": 317,
           "h": 860
         },
         {
-          "x": 225,
-          "y": 159,
-          "w": 327,
-          "h": 856
+          "x": 223,
+          "y": 155,
+          "w": 317,
+          "h": 859
         },
         {
-          "x": 229,
-          "y": 160,
-          "w": 310,
-          "h": 855
+          "x": 226,
+          "y": 156,
+          "w": 314,
+          "h": 858
+        },
+        {
+          "x": 226,
+          "y": 158,
+          "w": 314,
+          "h": 856
         }
       ],
       "sourceFrameRects": [
@@ -3962,7 +4448,7 @@ export const externalAnimationV1 = {
           "w": 798,
           "h": 1198,
           "name": "frame_000",
-          "duration": 111,
+          "duration": 68,
           "sourceFrameIndex": 0
         },
         {
@@ -3971,7 +4457,7 @@ export const externalAnimationV1 = {
           "w": 798,
           "h": 1198,
           "name": "frame_001",
-          "duration": 111,
+          "duration": 68,
           "sourceFrameIndex": 1
         },
         {
@@ -3980,186 +4466,339 @@ export const externalAnimationV1 = {
           "w": 798,
           "h": 1198,
           "name": "frame_002",
-          "duration": 111,
+          "duration": 68,
           "sourceFrameIndex": 2
         },
         {
-          "x": 0,
-          "y": 1198,
+          "x": 2394,
+          "y": 0,
           "w": 798,
           "h": 1198,
           "name": "frame_003",
-          "duration": 111,
+          "duration": 68,
           "sourceFrameIndex": 3
         },
         {
-          "x": 798,
+          "x": 0,
           "y": 1198,
           "w": 798,
           "h": 1198,
           "name": "frame_004",
-          "duration": 111,
+          "duration": 68,
           "sourceFrameIndex": 4
+        },
+        {
+          "x": 798,
+          "y": 1198,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_005",
+          "duration": 68,
+          "sourceFrameIndex": 5
         },
         {
           "x": 1596,
           "y": 1198,
           "w": 798,
           "h": 1198,
-          "name": "frame_005",
-          "duration": 111,
-          "sourceFrameIndex": 5
+          "name": "frame_006",
+          "duration": 68,
+          "sourceFrameIndex": 6
+        },
+        {
+          "x": 2394,
+          "y": 1198,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_007",
+          "duration": 68,
+          "sourceFrameIndex": 7
         },
         {
           "x": 0,
           "y": 2396,
           "w": 798,
           "h": 1198,
-          "name": "frame_006",
-          "duration": 111,
-          "sourceFrameIndex": 6
+          "name": "frame_008",
+          "duration": 68,
+          "sourceFrameIndex": 8
         },
         {
           "x": 798,
           "y": 2396,
           "w": 798,
           "h": 1198,
-          "name": "frame_007",
-          "duration": 111,
-          "sourceFrameIndex": 7
+          "name": "frame_009",
+          "duration": 68,
+          "sourceFrameIndex": 9
         },
         {
           "x": 1596,
           "y": 2396,
           "w": 798,
           "h": 1198,
-          "name": "frame_008",
-          "duration": 111,
-          "sourceFrameIndex": 8
+          "name": "frame_010",
+          "duration": 68,
+          "sourceFrameIndex": 10
+        },
+        {
+          "x": 2394,
+          "y": 2396,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_011",
+          "duration": 68,
+          "sourceFrameIndex": 11
+        },
+        {
+          "x": 0,
+          "y": 3594,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_012",
+          "duration": 68,
+          "sourceFrameIndex": 12
+        },
+        {
+          "x": 798,
+          "y": 3594,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_013",
+          "duration": 68,
+          "sourceFrameIndex": 13
+        },
+        {
+          "x": 1596,
+          "y": 3594,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_014",
+          "duration": 68,
+          "sourceFrameIndex": 14
+        },
+        {
+          "x": 2394,
+          "y": 3594,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_015",
+          "duration": 68,
+          "sourceFrameIndex": 15
         }
       ],
       "frameContentBounds": [
         {
-          "x": 227,
-          "y": 166,
-          "w": 382,
-          "h": 848
+          "x": 234,
+          "y": 165,
+          "w": 363,
+          "h": 852
         },
         {
-          "x": 303,
+          "x": 256,
+          "y": 163,
+          "w": 320,
+          "h": 867
+        },
+        {
+          "x": 269,
+          "y": 152,
+          "w": 278,
+          "h": 876
+        },
+        {
+          "x": 267,
+          "y": 150,
+          "w": 278,
+          "h": 877
+        },
+        {
+          "x": 262,
           "y": 148,
-          "w": 295,
-          "h": 878
+          "w": 278,
+          "h": 876
         },
         {
-          "x": 293,
-          "y": 147,
-          "w": 304,
-          "h": 872
-        },
-        {
-          "x": 284,
-          "y": 147,
-          "w": 312,
+          "x": 257,
+          "y": 150,
+          "w": 283,
           "h": 868
         },
         {
-          "x": 250,
-          "y": 150,
-          "w": 334,
-          "h": 866
+          "x": 256,
+          "y": 154,
+          "w": 284,
+          "h": 863
         },
         {
-          "x": 234,
-          "y": 155,
-          "w": 341,
+          "x": 252,
+          "y": 160,
+          "w": 286,
+          "h": 854
+        },
+        {
+          "x": 246,
+          "y": 160,
+          "w": 292,
+          "h": 854
+        },
+        {
+          "x": 231,
+          "y": 157,
+          "w": 308,
+          "h": 857
+        },
+        {
+          "x": 223,
+          "y": 154,
+          "w": 317,
           "h": 860
         },
         {
-          "x": 225,
-          "y": 159,
-          "w": 327,
-          "h": 856
+          "x": 223,
+          "y": 155,
+          "w": 317,
+          "h": 859
         },
         {
-          "x": 229,
-          "y": 160,
-          "w": 310,
-          "h": 855
+          "x": 226,
+          "y": 156,
+          "w": 314,
+          "h": 858
+        },
+        {
+          "x": 226,
+          "y": 158,
+          "w": 314,
+          "h": 856
         }
       ],
       "frameRects": [
-        {
-          "x": 798,
-          "y": 0,
-          "w": 798,
-          "h": 1198,
-          "name": "frame_001",
-          "duration": 111,
-          "sourceFrameIndex": 1
-        },
         {
           "x": 1596,
           "y": 0,
           "w": 798,
           "h": 1198,
           "name": "frame_002",
-          "duration": 111,
+          "duration": 68,
           "sourceFrameIndex": 2
         },
         {
-          "x": 0,
-          "y": 1198,
+          "x": 2394,
+          "y": 0,
           "w": 798,
           "h": 1198,
           "name": "frame_003",
-          "duration": 111,
+          "duration": 68,
           "sourceFrameIndex": 3
         },
         {
-          "x": 798,
+          "x": 0,
           "y": 1198,
           "w": 798,
           "h": 1198,
           "name": "frame_004",
-          "duration": 111,
+          "duration": 68,
           "sourceFrameIndex": 4
+        },
+        {
+          "x": 798,
+          "y": 1198,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_005",
+          "duration": 68,
+          "sourceFrameIndex": 5
         },
         {
           "x": 1596,
           "y": 1198,
           "w": 798,
           "h": 1198,
-          "name": "frame_005",
-          "duration": 111,
-          "sourceFrameIndex": 5
+          "name": "frame_006",
+          "duration": 68,
+          "sourceFrameIndex": 6
+        },
+        {
+          "x": 2394,
+          "y": 1198,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_007",
+          "duration": 68,
+          "sourceFrameIndex": 7
         },
         {
           "x": 0,
           "y": 2396,
           "w": 798,
           "h": 1198,
-          "name": "frame_006",
-          "duration": 111,
-          "sourceFrameIndex": 6
+          "name": "frame_008",
+          "duration": 68,
+          "sourceFrameIndex": 8
         },
         {
           "x": 798,
           "y": 2396,
           "w": 798,
           "h": 1198,
-          "name": "frame_007",
-          "duration": 111,
-          "sourceFrameIndex": 7
+          "name": "frame_009",
+          "duration": 68,
+          "sourceFrameIndex": 9
         },
         {
           "x": 1596,
           "y": 2396,
           "w": 798,
           "h": 1198,
-          "name": "frame_008",
-          "duration": 111,
-          "sourceFrameIndex": 8
+          "name": "frame_010",
+          "duration": 68,
+          "sourceFrameIndex": 10
+        },
+        {
+          "x": 2394,
+          "y": 2396,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_011",
+          "duration": 68,
+          "sourceFrameIndex": 11
+        },
+        {
+          "x": 0,
+          "y": 3594,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_012",
+          "duration": 68,
+          "sourceFrameIndex": 12
+        },
+        {
+          "x": 798,
+          "y": 3594,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_013",
+          "duration": 68,
+          "sourceFrameIndex": 13
+        },
+        {
+          "x": 1596,
+          "y": 3594,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_014",
+          "duration": 68,
+          "sourceFrameIndex": 14
+        },
+        {
+          "x": 2394,
+          "y": 3594,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_015",
+          "duration": 68,
+          "sourceFrameIndex": 15
         }
       ],
       "movementSpeedMultipliers": [
@@ -4170,7 +4809,13 @@ export const externalAnimationV1 = {
         0.802,
         0.782,
         0.77,
-        0.762
+        0.762,
+        0.76,
+        0.76,
+        0.76,
+        0.76,
+        0.76,
+        0.76
       ],
       "mirroredWest": true
     }

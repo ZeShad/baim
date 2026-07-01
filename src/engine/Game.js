@@ -16,6 +16,7 @@ import { assetManifest } from "../content/art/assetManifest.js";
 import { externalAnimationV1 } from "../content/art/externalAnimationV1.generated.js";
 
 const verbs = [VERBS.LOOK, VERBS.TALK, VERBS.USE, VERBS.TAKE];
+const CHARACTER_DISTANCE_SPEED_MULTIPLIER = 1.25;
 
 export class Game {
   constructor(canvas, uiRoot) {
@@ -244,7 +245,7 @@ export class Game {
   }
 
   sceneMovementSpeed(scene) {
-    return (scene.movementSpeed || 100) * this.walkSpeedMultiplier;
+    return (scene.movementSpeed || 100) * CHARACTER_DISTANCE_SPEED_MULTIPLIER * this.walkSpeedMultiplier;
   }
 
   cycleVerb() {
@@ -477,7 +478,7 @@ node tools/build-external-runtime-staging.js</pre>
   createSimpleAnimState() {
     return {
       x: 180,
-      baselineY: 650,
+      baselineY: 600,
       direction: "east",
       mode: "idle",
       moving: false,
@@ -532,20 +533,7 @@ node tools/build-external-runtime-staging.js</pre>
 
   simpleIdleFrame() {
     const start = this.simpleWalkPart("start");
-    if (!start?.sourceFrameRects?.[0]) return null;
-    return {
-      ...start,
-      role: "idle",
-      loop: false,
-      frameCount: 1,
-      initialFrame: 0,
-      frameStart: 0,
-      frameEndTrim: 0,
-      frameRects: [start.sourceFrameRects[0]],
-      frameContentBounds: start.sourceFrameContentBounds?.[0] ? [start.sourceFrameContentBounds[0]] : undefined,
-      contentBounds: start.sourceFrameContentBounds?.[0] || start.contentBounds,
-      movementSpeedMultipliers: [0]
-    };
+    return Renderer.holdFrameFromWalkStart(start);
   }
 
   simpleCurrentFrame() {
@@ -559,7 +547,7 @@ node tools/build-external-runtime-staging.js</pre>
   simpleCurrentKey() {
     const frame = this.simpleCurrentFrame();
     if (frame?.slot) return `${frame.slot}:${this.simpleAnim.direction}:${this.simpleAnim.mode}`;
-    return `idle_${this.simpleAnim.direction}`;
+    return `external_walk_east_start:${this.simpleAnim.direction}:${this.simpleAnim.mode}`;
   }
 
   setSimpleAnimMode(mode, options = {}) {

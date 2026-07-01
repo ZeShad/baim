@@ -78,6 +78,7 @@ export class AnimationPlayer {
     const frameCount = this.frameCountOverride || animation.frameCount || animation.frames?.length || 1;
     const fps = this.fpsOverride || animation.fps || 1;
     const loop = this.loopOverride ?? animation.loop;
+    if (!loop && (animation?.type === "strip" || animation?.type === "phasedStrip") && this.frameIndex >= frameCount - 1) return true;
     return !loop && this.elapsed * fps >= frameCount;
   }
 }

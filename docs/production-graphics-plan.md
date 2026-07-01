@@ -117,16 +117,15 @@ assets_src/characters/bai_mitko/
 ### Runtime Character Package
 
 ```text
-assets/chapter1/characters/bai_mitko/
-  bai_mitko.webp
-  bai_mitko.atlas.json
-  portraits.webp
-  portraits.atlas.json
+target/external_animation_v1/runtime/
+  walk_east_start.png
+  walk_east_loop.png
+  walk_east_stop.png
 ```
 
 ### Required Bai Mitko Animations
 
-- `idle`
+- held walk-start frame 0 for no-active-animation states
 - `walk_side` authored as east source, with west mirrored from east
 - `walk_down` deferred
 - `walk_up` deferred

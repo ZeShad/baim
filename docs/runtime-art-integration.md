@@ -62,15 +62,15 @@ assets/chapter1/scenes/village_square/background.png
 
 PNG is temporary. WebP is still preferred for final runtime delivery, but no WebP conversion tool is currently available in the project tooling.
 
-## Character Runtime Sprite
+## Character Runtime Animation
 
-Integrated static idle sprite:
+Bai Mitko no longer uses static runtime pose images. The runtime uses the external animation sheets generated under:
 
 ```text
-assets/chapter1/characters/bai_mitko/idle.png
+target/external_animation_v1/runtime/
 ```
 
-The idle sprite replaces the geometric placeholder when loaded. If it is missing, the renderer falls back to the geometric Bai Mitko placeholder.
+When Bai Mitko has no active authored animation for the current state, the renderer holds frame 0 of the current-direction walk-start animation.
 
 The model sheet remains source direction:
 
@@ -81,10 +81,8 @@ assets_src/characters/bai-mitko-model-sheet-v1.png
 Next character-art task:
 
 ```text
-Bai Mitko idle + walk runtime sprite/atlas pass
+Bai Mitko walk/talk/look/use/take animation pass
 ```
-
-The current `idle.png` can be reused as the idle key pose or replaced by a cleaner animation-ready cutout.
 
 ## Starting Inventory Icons
 

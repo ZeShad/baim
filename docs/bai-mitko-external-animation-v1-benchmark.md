@@ -124,13 +124,13 @@ target/external_animation_v1/runtime/walk_east_stop.png
 East:
 
 ```text
-idle_east -> walk_east_start once -> walk_east_loop repeated while moving -> walk_east_stop once -> idle_east
+walk_east_start frame 0 hold -> walk_east_start once -> walk_east_loop repeated while moving -> walk_east_stop once -> walk_east_start frame 0 hold
 ```
 
 West:
 
 ```text
-idle_west -> mirrored walk_east_start once -> mirrored walk_east_loop repeated while moving -> mirrored walk_east_stop once -> idle_west
+mirrored walk_east_start frame 0 hold -> mirrored walk_east_start once -> mirrored walk_east_loop repeated while moving -> mirrored walk_east_stop once -> mirrored walk_east_start frame 0 hold
 ```
 
 North/south and diagonals are intentionally deferred and safely fall back.

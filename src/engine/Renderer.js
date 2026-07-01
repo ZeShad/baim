@@ -11,7 +11,31 @@ export function stopRenderOffsetX(frame, frameIndex, mirrored = false) {
   const progress = Math.max(0, Math.min(1, (frameIndex - startFrame) / Math.max(1, endFrame - startFrame)));
   if (progress >= 1) return 0;
   const direction = mirrored ? -1 : 1;
-  return direction * startOffset * (1 - progress);
+  const offset = direction * startOffset * (1 - progress);
+  return offset === 0 ? 0 : offset;
+}
+
+function usesExternalWalkPose(player, definition) {
+  return player?.id === "npc.bai_mitko" && definition?.animationSource === "external_animation_v1";
+}
+
+export function stableExternalVisualBounds(definition) {
+  const bounds = [];
+  for (const parts of Object.values(definition?.animations?.walk?.parts || {})) {
+    for (const frame of Object.values(parts || {})) {
+      if (frame?.role === "loop") continue;
+      const isFullFrame = (bound) => bound && frame?.frameWidth && frame?.frameHeight
+        && bound.w >= frame.frameWidth * 0.98 && bound.h >= frame.frameHeight * 0.98;
+      if (frame?.contentBounds && !isFullFrame(frame.contentBounds)) bounds.push(frame.contentBounds);
+      if (Array.isArray(frame?.sourceFrameContentBounds)) bounds.push(...frame.sourceFrameContentBounds.filter((bound) => !isFullFrame(bound)));
+    }
+  }
+  if (!bounds.length) return null;
+  return {
+    w: Math.max(...bounds.map((bound) => bound.w || 0)),
+    h: Math.max(...bounds.map((bound) => bound.h || 0)),
+    baselineY: Math.max(...bounds.map((bound) => (bound.y || 0) + (bound.h || 0))) - 40
+  };
 }
 
 export class Renderer {
@@ -70,17 +94,14 @@ export class Renderer {
 
     const frame = this.game.simpleCurrentFrame();
     const mirrored = state.direction === "west";
-    const slot = frame?.slot || `idle_${state.direction}`;
+    const slot = frame?.slot || "external_walk_east_start";
     const image = this.game.assets.getCharacterImage("npc.bai_mitko", slot);
     const warnings = [];
     if (!image) warnings.push(`missing asset slot: ${slot}`);
-    if (image && !this.game.assets.isLoaded(image)) warnings.push(`loading/missing asset: ${slot} (${this.game.assets.getImageStatus(image)})`);
     let drawInfo = { drawX: 0, drawY: 0, sourceRect: null, baselineY: "n/a", anchor: "n/a" };
 
-    if (image && this.game.assets.isLoaded(image)) {
+    if (image) {
       if (frame) {
-        const valid = this.validateStrip("npc.bai_mitko", slot, image, frame);
-        if (!valid) warnings.push(`invalid frame metadata for ${slot}`);
         const frameIndex = state.frameIndex % Math.max(1, frame.frameCount);
         const bounds = this.frameContentBounds(frame, frameIndex);
         const scale = 500 / frame.frameHeight;
@@ -129,14 +150,37 @@ export class Renderer {
   }
 
   static resolveIdleWalkFrameForDefinition(player, definition, facing) {
+    return Renderer.resolveExternalWalkStartFrameForDefinition(player, definition, facing);
+  }
+
+  static resolveExternalWalkStartFrameForDefinition(player, definition, facing) {
     const walk = definition.animations.walk;
-    if (walk.type === "phasedStrip" && Object.keys(player.walkPartsByFacing || {}).length) {
+    const partsByFacing = player.walkPartsByFacing || walk.parts || {};
+    if (walk.type === "phasedStrip" && Object.keys(partsByFacing).length) {
       const direction = eastWestFallbackFacing(facing) || "east";
-      const frame = definition.animations.walk.parts?.[direction]?.start || definition.animations.walk.parts?.east?.start;
+      const frame = partsByFacing?.[direction]?.start || partsByFacing?.east?.start;
       if (!frame?.slot) return null;
-      return { facing, frameIndex: 0, frame, slot: frame.slot, mirrored: Boolean(frame.mirrored) };
+      return { facing, frameIndex: 0, frame: Renderer.holdFrameFromWalkStart(frame), slot: frame.slot, mirrored: Boolean(frame.mirrored) };
     }
     return null;
+  }
+
+  static holdFrameFromWalkStart(frame) {
+    if (!frame?.sourceFrameRects?.[0]) return frame;
+    return {
+      ...frame,
+      role: "hold",
+      loop: false,
+      frameCount: 1,
+      initialFrame: 0,
+      frameStart: 0,
+      frameEndTrim: 0,
+      frameRects: [frame.sourceFrameRects[0]],
+      frameContentBounds: frame.sourceFrameContentBounds?.[0] ? [frame.sourceFrameContentBounds[0]] : undefined,
+      contentBounds: frame.sourceFrameContentBounds?.[0] || frame.contentBounds,
+      movementSpeedMultipliers: [0],
+      stopRenderOffsetXStart: 0
+    };
   }
 
   drawSimpleShadow(x, y, width) {
@@ -195,13 +239,13 @@ export class Renderer {
     ];
     if (state.pendingStop) lines.push(`Stop requested, waiting for loop exit frame ${this.game.normalizedSimpleStopExitFrame()}.`);
     ctx.fillStyle = "rgba(20, 18, 14, 0.78)";
-    ctx.fillRect(18, 18, 430, 406 + warnings.length * 18);
+    ctx.fillRect(6, 6, 430, 406 + warnings.length * 18);
     ctx.fillStyle = "#f5ead5";
     ctx.font = "14px Consolas, monospace";
-    lines.forEach((line, index) => ctx.fillText(line, 30, 42 + index * 18));
+    lines.forEach((line, index) => ctx.fillText(line, 18, 30 + index * 18));
     if (warnings.length) {
       ctx.fillStyle = "#ff6c5d";
-      warnings.forEach((warning, index) => ctx.fillText(`warning: ${warning}`, 30, 434 + index * 18));
+      warnings.forEach((warning, index) => ctx.fillText(`warning: ${warning}`, 18, 422 + index * 18));
     }
   }
 
@@ -314,121 +358,102 @@ export class Renderer {
     const spriteInfo = this.resolveCharacterSprite(p, definition);
     const sprite = spriteInfo.image;
     const walkBob = p.animation === "walk" ? Math.sin(p.animationTime * 16) * 5 : 0;
-    if (this.game.assets.isLoaded(sprite)) {
-      const height = characterHeight(definition, this.game.currentScene, p.position);
-      const preserveFrameLayout = Boolean(spriteInfo.frame?.usesOriginalLudoLayout || spriteInfo.frame?.frameRects?.length);
-      const boundsForSize = spriteInfo.frame?.contentBounds || null;
-      const sourceWidth = preserveFrameLayout ? spriteInfo.frame.frameWidth : boundsForSize?.w || spriteInfo.frame?.frameWidth || sprite.width;
-      const sourceHeight = preserveFrameLayout ? spriteInfo.frame.frameHeight : boundsForSize?.h || spriteInfo.frame?.frameHeight || sprite.height;
-      const visualHeight = boundsForSize?.h || sourceHeight;
-      const scale = height / visualHeight;
-      const width = sourceWidth * scale;
-      const drawHeight = sourceHeight * scale;
-      const anchor = spriteInfo.frame?.anchor || definition.render.anchor;
-      const useRealWalk = p.animation === "walk" && spriteInfo.frame;
-      const verticalOffset = useRealWalk ? 0 : walkBob;
-      const frameIndex = spriteInfo.frame
-        ? Number.isInteger(spriteInfo.staticFrameIndex) ? spriteInfo.staticFrameIndex : this.game.player.animator.frameIndex % spriteInfo.frame.frameCount
-        : 0;
-      const renderOffsetX = stopRenderOffsetX(spriteInfo.frame, frameIndex, spriteInfo.mirrored);
-      const drawX = p.position.x + renderOffsetX - width * anchor.x;
-      const baselineOffset = preserveFrameLayout && boundsForSize
-        ? boundsForSize.y + boundsForSize.h
-        : spriteInfo.frame?.baselineY && boundsForSize ? spriteInfo.frame.baselineY - boundsForSize.y : sourceHeight * anchor.y;
-      const walkFootCorrectionY = preserveFrameLayout ? 10 : 0;
-      const drawY = p.position.y - baselineOffset * scale + verticalOffset + walkFootCorrectionY;
-      ctx.save();
-      ctx.fillStyle = "rgba(0, 0, 0, 0.26)";
-      ctx.beginPath();
-      const shadowWidth = (boundsForSize?.w || sourceWidth) * scale;
-      ctx.ellipse(p.position.x, p.position.y + 2, shadowWidth * 0.3, Math.max(6, height * 0.035), 0, 0, Math.PI * 2);
-      ctx.fill();
-      if (spriteInfo.frame) {
-        if (p.animation === "walk") {
-          p.lastWalkFrame = {
-            facing: p.facing,
-            frameIndex,
-            frame: spriteInfo.frame,
-            slot: spriteInfo.slot,
-            mirrored: Boolean(spriteInfo.mirrored)
-          };
-        }
-        const bounds = this.frameContentBounds(spriteInfo.frame, frameIndex);
-        this.drawFrameImage(sprite, frameIndex, spriteInfo.frame, bounds, drawX, drawY, width, drawHeight, spriteInfo.mirrored);
-      } else if (spriteInfo.mirrored) {
-        ctx.save();
-        ctx.translate(drawX + width, 0);
-        ctx.scale(-1, 1);
-        ctx.drawImage(sprite, 0, drawY, width, drawHeight);
-        ctx.restore();
-      } else {
-        ctx.drawImage(sprite, drawX, drawY, width, drawHeight);
-      }
-      if (this.game.debugSceneGeometry || this.game.debugAnimation) this.drawCharacterDebug(p, drawX, drawY, width, drawHeight, visualHeight, spriteInfo.slot, spriteInfo.frame, spriteInfo.mirrored, renderOffsetX);
-      ctx.restore();
-      return;
-    }
-
+    if (!sprite) return;
+    const height = characterHeight(definition, this.game.currentScene, p.position);
+    const preserveFrameLayout = Boolean(spriteInfo.frame?.usesOriginalLudoLayout || spriteInfo.frame?.frameRects?.length);
+    const boundsForSize = spriteInfo.frame?.contentBounds || null;
+    const sourceWidth = preserveFrameLayout && spriteInfo.frame ? spriteInfo.frame.frameWidth : boundsForSize?.w || spriteInfo.frame?.frameWidth || sprite.width;
+    const sourceHeight = preserveFrameLayout && spriteInfo.frame ? spriteInfo.frame.frameHeight : boundsForSize?.h || spriteInfo.frame?.frameHeight || sprite.height;
+    const stableBounds = preserveFrameLayout && usesExternalWalkPose(p, definition) ? stableExternalVisualBounds(definition) : null;
+    const visualHeight = stableBounds?.h || (preserveFrameLayout ? sourceHeight : boundsForSize?.h || sourceHeight);
+    const scale = height / visualHeight;
+    const width = sourceWidth * scale;
+    const drawHeight = sourceHeight * scale;
+    const anchor = spriteInfo.frame?.anchor || definition.render.anchor;
+    const useRealWalk = p.animation === "walk" && spriteInfo.frame;
+    const verticalOffset = useRealWalk ? 0 : walkBob;
+    const frameIndex = spriteInfo.frame
+      ? Number.isInteger(spriteInfo.staticFrameIndex) ? spriteInfo.staticFrameIndex : this.game.player.animator.frameIndex % spriteInfo.frame.frameCount
+      : 0;
+    const renderOffsetX = stopRenderOffsetX(spriteInfo.frame, frameIndex, spriteInfo.mirrored);
+    const drawX = p.position.x + renderOffsetX - width * anchor.x;
+    const baselineOffset = preserveFrameLayout && spriteInfo.frame
+      ? stableBounds?.baselineY || spriteInfo.frame.baselineY || sourceHeight
+      : spriteInfo.frame?.baselineY && boundsForSize ? spriteInfo.frame.baselineY - boundsForSize.y : sourceHeight * anchor.y;
+    const drawY = p.position.y - baselineOffset * scale + verticalOffset;
     ctx.save();
-    ctx.translate(p.position.x, p.position.y + walkBob);
-    ctx.fillStyle = "#25201b";
+    ctx.fillStyle = "rgba(0, 0, 0, 0.26)";
     ctx.beginPath();
-    ctx.ellipse(0, 48, 36, 10, 0, 0, Math.PI * 2);
+    const shadowWidth = (stableBounds?.w || boundsForSize?.w || sourceWidth) * scale;
+    ctx.ellipse(p.position.x, p.position.y + 2, shadowWidth * 0.3, Math.max(6, height * 0.035), 0, 0, Math.PI * 2);
     ctx.fill();
-    ctx.fillStyle = "#6d2e24";
-    ctx.fillRect(-21, -68, 42, 82);
-    ctx.fillStyle = "#d6a36f";
-    ctx.beginPath();
-    ctx.arc(0, -92, 27, 0, Math.PI * 2);
-    ctx.fill();
-    ctx.fillStyle = "#2b2620";
-    ctx.fillRect(-18, -124, 36, 18);
-    ctx.fillStyle = "#dbc38d";
-    ctx.fillRect(-38, -46, 20, 34);
-    ctx.fillRect(18, -46, 20, 34);
-    ctx.fillStyle = "#212121";
-    ctx.fillRect(-18, 14, 13, 48);
-    ctx.fillRect(5, 14, 13, 48);
-    ctx.fillStyle = "#f8e9c4";
-    ctx.font = "12px Arial";
-    ctx.fillText(p.animation, -18, -138);
+    if (spriteInfo.frame) {
+      if (p.animation === "walk") {
+        p.lastWalkFrame = {
+          facing: p.facing,
+          frameIndex,
+          frame: spriteInfo.frame,
+          slot: spriteInfo.slot,
+          mirrored: Boolean(spriteInfo.mirrored)
+        };
+      }
+      const bounds = preserveFrameLayout
+        ? { x: 0, y: 0, w: spriteInfo.frame.frameWidth, h: spriteInfo.frame.frameHeight }
+        : this.frameContentBounds(spriteInfo.frame, frameIndex);
+      this.drawFrameImage(sprite, frameIndex, spriteInfo.frame, bounds, drawX, drawY, width, drawHeight, spriteInfo.mirrored);
+    } else if (spriteInfo.mirrored) {
+      ctx.save();
+      ctx.translate(drawX + width, 0);
+      ctx.scale(-1, 1);
+      ctx.drawImage(sprite, 0, drawY, width, drawHeight);
+      ctx.restore();
+    } else {
+      ctx.drawImage(sprite, drawX, drawY, width, drawHeight);
+    }
+    if (this.game.debugSceneGeometry || this.game.debugAnimation) this.drawCharacterDebug(p, drawX, drawY, width, drawHeight, visualHeight, spriteInfo.slot, spriteInfo.frame, spriteInfo.mirrored, renderOffsetX);
     ctx.restore();
   }
 
   resolveCharacterSprite(player, definition) {
     const animation = definition.animations[player.animation] || definition.animations.idle;
     const facing = player.facing || definition.render.defaultFacing;
+    if (usesExternalWalkPose(player, definition) && player.animation !== "walk") {
+      const frameInfo = this.resolveExternalWalkStartFrame(player, definition, facing);
+      if (frameInfo?.slot) {
+        const image = this.game.assets.getCharacterImage(player.id, frameInfo.slot);
+        return { image, slot: frameInfo.slot, frame: frameInfo.frame, mirrored: Boolean(frameInfo.mirrored), staticFrameIndex: frameInfo.frameIndex };
+      }
+      return { image: null, slot: frameInfo?.slot || "external_walk_east_start" };
+    }
     if (player.animation === "idle") {
       const frameInfo = this.resolveIdleWalkFrame(player, definition, facing);
       if (frameInfo?.slot) {
         const image = this.game.assets.getCharacterImage(player.id, frameInfo.slot);
-        if (this.game.assets.isLoaded(image) && this.validateStrip(player.id, frameInfo.slot, image, frameInfo.frame)) {
-          return { image, slot: frameInfo.slot, frame: frameInfo.frame, mirrored: Boolean(frameInfo.mirrored), staticFrameIndex: frameInfo.frameIndex };
-        }
+        return { image, slot: frameInfo.slot, frame: frameInfo.frame, mirrored: Boolean(frameInfo.mirrored), staticFrameIndex: frameInfo.frameIndex };
       }
     }
     if (animation?.type === "phasedStrip" && Object.keys(player.walkPartsByFacing || {}).length) {
       const frame = this.resolveWalkPartFrame(player, definition, facing);
       if (frame?.slot) {
         const strip = this.game.assets.getCharacterImage(player.id, frame.slot);
-        if (this.game.assets.isLoaded(strip) && this.validateStrip(player.id, frame.slot, strip, frame)) return { image: strip, slot: frame.slot, frame, mirrored: Boolean(frame.mirrored) };
+        return { image: strip, slot: frame.slot, frame, mirrored: Boolean(frame.mirrored) };
       }
     } else if (animation?.type === "strip") {
       const frame = this.resolveStripFrame(animation, facing);
       if (frame?.slot) {
         const strip = this.game.assets.getCharacterImage(player.id, frame.slot);
-        if (this.game.assets.isLoaded(strip) && this.validateStrip(player.id, frame.slot, strip, frame)) return { image: strip, slot: frame.slot, frame, mirrored: Boolean(frame.mirrored) };
+        return { image: strip, slot: frame.slot, frame, mirrored: Boolean(frame.mirrored) };
       }
     } else {
       const preferredSlot = animation?.directions?.[facing];
       const preferredInfo = this.resolveDirectionalImage(preferredSlot);
       const preferred = this.game.assets.getCharacterImage(player.id, preferredInfo?.slot);
-      if (this.game.assets.isLoaded(preferred)) return { image: preferred, slot: preferredInfo.slot, mirrored: preferredInfo.mirrored };
+      if (preferredInfo?.slot) return { image: preferred, slot: preferredInfo.slot, mirrored: preferredInfo.mirrored };
     }
 
     const idleSlot = this.resolveIdleSlot(definition, facing);
     const idle = this.game.assets.getCharacterImage(player.id, idleSlot?.slot);
-    if (this.game.assets.isLoaded(idle)) return { image: idle, slot: idleSlot.slot, mirrored: idleSlot.mirrored };
+    if (idleSlot?.slot) return { image: idle, slot: idleSlot.slot, mirrored: idleSlot.mirrored };
 
     const fallback = this.game.assets.getCharacterImage(player.id, "idle");
     return { image: fallback, slot: "idle" };
@@ -444,6 +469,10 @@ export class Renderer {
     if (!frame?.slot) return null;
     const frameIndex = Math.min(0, Math.max(0, frame.frameCount - 1));
     return { facing, frameIndex, frame, slot: frame.slot, mirrored: Boolean(frame.mirrored) };
+  }
+
+  resolveExternalWalkStartFrame(player, definition, facing) {
+    return Renderer.resolveExternalWalkStartFrameForDefinition(player, definition, facing);
   }
 
   resolveWalkPartFrame(player, definition, facing) {
@@ -521,7 +550,10 @@ export class Renderer {
 
   frameSourceRect(frame, frameIndex, bounds = null) {
     const rect = frame.frameRects?.[frameIndex];
-    if (rect) return { x: rect.x, y: rect.y, w: rect.w, h: rect.h };
+    if (rect) {
+      const b = bounds || { x: 0, y: 0, w: rect.w, h: rect.h };
+      return { x: rect.x + b.x, y: rect.y + b.y, w: b.w, h: b.h };
+    }
     const b = bounds || frame.contentBounds || { x: 0, y: 0, w: frame.frameWidth, h: frame.frameHeight };
     return { x: frameIndex * frame.frameWidth + b.x, y: b.y, w: b.w, h: b.h };
   }
@@ -681,16 +713,8 @@ export class Renderer {
       return;
     }
 
-    const image = this.game.assets.getCharacterImage(characterId, entry.slot);
-    const loaded = this.game.assets.isLoaded(image);
     ctx.font = "12px Arial";
-    ctx.fillText(`${loaded ? "loaded" : "missing"} ${image?.naturalWidth || 0}x${image?.naturalHeight || 0}`, x + 10, y + 40);
-    ctx.fillText("static idle", x + 10, y + 56);
-    if (loaded) {
-      const h = 170;
-      const w = h * (image.width / image.height);
-      ctx.drawImage(image, x + 143 - w / 2, y + 252 - h, w, h);
-    }
+    ctx.fillText("no animation entry", x + 10, y + 40);
   }
 
   animLabFrameIndex(frame) {

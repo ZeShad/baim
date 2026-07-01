@@ -14,8 +14,8 @@
       "use": true,
       "source": "bai-mitko-walk-east-start.zip",
       "loop": false,
-      "frameStart": 2,
-      "frameEndTrim": 1
+      "frameStart": 1,
+      "frameEndTrim": 0
     },
     "walk_east_loop": {
       "use": true,
@@ -29,9 +29,9 @@
       "use": true,
       "source": "bai-mitko-walk-east-stop.zip",
       "loop": false,
-      "frameStart": 1,
+      "frameStart": 2,
       "frameEndTrim": 0,
-      "stopRenderOffsetXStart": -30
+      "stopRenderOffsetXStart": -10
     }
   },
   "mirrors": {
