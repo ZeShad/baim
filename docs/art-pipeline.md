@@ -43,14 +43,17 @@ Scene geometry is data, not drawn into the background:
 
 ## Character Animation
 
-The active Bai Mitko production path is external sprite-sheet animation:
+The active Bai Mitko production path starts from the approved model sheet:
 
-- Use Ludo.ai ZIP exports containing original sprite sheets plus JSON frame metadata.
-- Keep source ZIPs and unpacked files under `assets_src/characters/bai_mitko/external_animation_v1/`.
-- Runtime review uses the original sheets and metadata frame rectangles; do not normalize frames.
-- Required current external animation scope: `walk_east_start`, `walk_east_loop`, `walk_east_stop`; mirror these east parts for west.
-- North, south, diagonals, and run are intentionally deferred.
-- Run animations are deferred until explicitly approved for runtime.
+- `assets_src/characters/bai-mitko-model-sheet-v1.png` is the locked Bai Mitko identity source.
+- New Bai Mitko poses and animation source frames must be generated or edited from that model sheet
+  with strict identity preservation.
+- Do not accept generated outputs that change his face, body proportions, outfit, moustache,
+  friendly comic expression, or overall appeal.
+- Use clean green-background source images for the active cutout/removal pipeline.
+- Keep source images under `assets_src/characters/` and cleaned runtime images under `assets/`.
+- External Ludo.ai ZIP exports under `assets_src/characters/bai_mitko/external_animation_v1/` are
+  deferred review/import material until the model-sheet-driven character variables are stable.
 
 ## AI Image Generation Use
 
@@ -69,7 +72,7 @@ poses, then clean/paint/export controlled frames.
 Recommended asset flow:
 
 ```text
-prompted concept -> selected style frame -> cleaned production art -> atlas/layer export -> engine manifest
+approved model sheet -> identity-preserving pose/source edit -> green-removal cleanup -> atlas/layer export -> engine manifest
 ```
 
 ## Character Sheet Requirements

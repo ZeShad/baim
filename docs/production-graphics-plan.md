@@ -3,8 +3,15 @@
 ## Decision
 
 The game should use high-resolution painted 2D scenes with metadata-driven geometry and sprite-sheet
-character animation. The active Bai Mitko import path is external Ludo.ai sheets plus JSON frame
-metadata.
+character animation.
+
+`assets_src/characters/bai-mitko-model-sheet-v1.png` is the locked Bai Mitko identity source. New
+Bai Mitko poses, walk references, sprite frames, and animation inputs must be generated or edited
+from that approved model sheet as a strict identity-preservation workflow. If the face, body
+proportions, outfit, or friendly comic appeal drift, the output is rejected.
+
+External/Ludo.ai animation output is deferred review material until the model-sheet-driven character
+variables are stable again.
 
 ## Recommended Stack
 
@@ -39,9 +46,13 @@ The painted image is never the only source of truth. Gameplay geometry remains i
 
 ### Characters
 
-Use reviewed sprite sheets/atlases with metadata. Bai Mitko currently uses Ludo.ai ZIP exports:
-source sheets and JSON are kept under `assets_src/characters/bai_mitko/external_animation_v1/`,
-then staged for runtime review from the original sheets without frame normalization.
+Use reviewed sprite sheets/atlases with metadata. For Bai Mitko, the approved model sheet is the
+identity contract for every generated pose and animation source. Green-screen removal remains the
+active cutout pipeline for generated character assets, but the chroma source image itself must first
+match the locked model-sheet design.
+
+Existing Ludo.ai ZIP exports remain under `assets_src/characters/bai_mitko/external_animation_v1/`
+as deferred review/import material. Do not treat them as the current character-design authority.
 
 Rive is useful for menus, logos, UI widgets, election meters, posters, and small animated signs.
 It is not the first choice for painterly full-body adventure characters.
@@ -116,10 +127,13 @@ Use ChatGPT image generation in phases:
 3. Three Chapter 1 environment concepts: apartment, village square, mehana.
 4. Selected scene background final pass.
 5. Prop and inventory icons with clean transparent output.
-6. Dialogue portraits and expression sheets.
+6. Bai Mitko pose and animation source frames generated from the approved model sheet, on clean
+   green background for the green-removal pipeline.
+7. Dialogue portraits and expression sheets.
 
-AI output is source art, not final animation by itself. For Bai Mitko motion, use reviewed external
-sprite-sheet exports with JSON frame metadata.
+AI output is source art, not final animation by itself. For Bai Mitko motion, use model-sheet-locked
+pose/source generation first, then green removal, reviewed sprite sheets, and JSON frame metadata.
+External animation exports are allowed only after the source character variables are stable.
 
 ## First Art Milestone
 

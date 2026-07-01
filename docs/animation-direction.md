@@ -32,12 +32,13 @@ Use:
 
 Current Bai Mitko production path:
 
-- External Ludo.ai sprite sheets plus JSON frame metadata.
-- Original sheets are used directly with metadata frame rectangles.
-- Do not normalize the active Ludo frames.
-- `walk_east_start`, `walk_east_loop`, and `walk_east_stop` are the active review animations.
-- `walk_west_start`, `walk_west_loop`, and `walk_west_stop` mirror the east parts.
-- North, south, diagonals, and run animations are deferred until east/west is good.
+- The approved model sheet is the locked identity source for all Bai Mitko animation work.
+- Generate or edit pose/source frames from the model sheet with strict identity preservation.
+- Use green-background source images and the green-removal pipeline for runtime cutouts.
+- External Ludo.ai sprite sheets and JSON metadata are deferred review material, not the current
+  design authority, until the model-sheet-driven character variables are stable.
+- North, south, diagonals, and run animations remain deferred until the side-walk source direction
+  is approved.
 - Run animations are deferred until explicitly approved.
 
 All animations must map to stable animation names. Do not change animation IDs casually once content uses them.
