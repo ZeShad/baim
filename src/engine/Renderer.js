@@ -418,6 +418,10 @@ export class Renderer {
     const animation = definition.animations[player.animation] || definition.animations.idle;
     const facing = player.facing || definition.render.defaultFacing;
     if (usesExternalWalkPose(player, definition) && player.animation !== "walk") {
+      if (player.idleVariant?.slot) {
+        const image = this.game.assets.getCharacterImage(player.id, player.idleVariant.slot);
+        return { image, slot: player.idleVariant.slot, frame: player.idleVariant, mirrored: Boolean(player.idleVariant.mirrored) };
+      }
       const frameInfo = this.resolveExternalWalkStartFrame(player, definition, facing);
       if (frameInfo?.slot) {
         const image = this.game.assets.getCharacterImage(player.id, frameInfo.slot);

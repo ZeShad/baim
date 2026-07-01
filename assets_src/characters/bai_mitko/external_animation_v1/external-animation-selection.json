@@ -32,11 +32,27 @@
       "frameStart": 2,
       "frameEndTrim": 0,
       "stopRenderOffsetXStart": -10
+    },
+    "idle_east_1": {
+      "use": true,
+      "source": "bai-mitko-idle-east-1.zip",
+      "loop": false,
+      "frameStart": 0,
+      "frameEndTrim": 0
+    },
+    "idle_east_2": {
+      "use": true,
+      "source": "bai-mitko-idle-east-2.zip",
+      "loop": false,
+      "frameStart": 0,
+      "frameEndTrim": 0
     }
   },
   "mirrors": {
     "walk_west_start": "mirror walk_east_start",
     "walk_west_loop": "mirror walk_east_loop",
-    "walk_west_stop": "mirror walk_east_stop"
+    "walk_west_stop": "mirror walk_east_stop",
+    "idle_west_1": "mirror idle_east_1",
+    "idle_west_2": "mirror idle_east_2"
   }
 }

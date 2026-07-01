@@ -32,7 +32,9 @@ export const SELECTION_PATH = join(EXTERNAL_ROOT, "external-animation-selection.
 export const EXTERNAL_INPUTS = [
   { key: "walk_east_start", zipName: "bai-mitko-walk-east-start.zip", source: "C:/t/test/bai-mitko-walk-east-start.zip", active: true },
   { key: "walk_east_loop", zipName: "bai-mitko-walk-east-loop.zip", source: "C:/t/test/bai-mitko-walk-east-loop.zip", active: true },
-  { key: "walk_east_stop", zipName: "bai-mitko-walk-east-stop.zip", source: "C:/t/test/bai-mitko-walk-east-stop.zip", active: true }
+  { key: "walk_east_stop", zipName: "bai-mitko-walk-east-stop.zip", source: "C:/t/test/bai-mitko-walk-east-stop.zip", active: true },
+  { key: "idle_east_1", zipName: "bai-mitko-idle-east-1.zip", source: "C:/t/test/bai-mitko-idle-east-1.zip", active: true },
+  { key: "idle_east_2", zipName: "bai-mitko-idle-east-2.zip", source: "C:/t/test/bai-mitko-idle-east-2.zip", active: true }
 ];
 
 export const IMAGE_EXTENSIONS = new Set([".png"]);

@@ -7,12 +7,14 @@ import { DEFAULT_SAVE } from "../src/engine/ids.js";
 import { characterHeight } from "../src/engine/CharacterRenderMath.js";
 import { facingFromDelta, MovementSystem, requestWalkStop, eastWestFallbackFacing, walkMotionMultiplierForFrame } from "../src/engine/MovementSystem.js";
 import { AnimationPlayer } from "../src/engine/AnimationPlayer.js";
+import { Game } from "../src/engine/Game.js";
 import { Renderer, stableExternalVisualBounds, stopRenderOffsetX } from "../src/engine/Renderer.js";
 import { strings } from "../src/content/localization/index.js";
 import { chapter1 } from "../src/content/chapter1/index.js";
 import { assetManifest } from "../src/content/art/assetManifest.js";
 import { CHARACTER_CUTOUT_MARGIN_RATIO, CHARACTER_SOURCE_SCALE } from "../src/content/art/characterAssetConfig.js";
 import { characterDefinitions } from "../src/content/art/characters.js";
+import { externalAnimationV1 } from "../src/content/art/externalAnimationV1.generated.js";
 import { makePng } from "../tools/character-frame-utils.mjs";
 import {
   EXTERNAL_WALK_LOOP_MOTION_MAX,
@@ -100,6 +102,52 @@ test("Bai Mitko idle directions use walk-start animation frames instead of stati
   assert.equal(idle.west.mirrored, true);
   assert.equal(baiMitkoAssets.type, "externalAnimation");
   assert.equal(Object.values(baiMitkoAssets).some((value) => typeof value === "string" && value.startsWith("assets/")), false);
+});
+
+test("Bai Mitko external idle variants are generated for east and mirrored west", () => {
+  const east = externalAnimationV1.idleVariants.east[0];
+  const west = externalAnimationV1.idleVariants.west[0];
+  assert.equal(externalAnimationV1.idleVariants.east.length, 2);
+  assert.equal(externalAnimationV1.idleVariants.west.length, 2);
+  assert.equal(east.slot, "external_idle_east_1");
+  assert.equal(east.role, "idle");
+  assert.equal(east.loop, false);
+  assert.equal(east.fps, 20);
+  assert.equal(east.frameCount, 25);
+  assert.equal(externalAnimationV1.idleVariants.east[1].frameCount, 36);
+  assert.equal(west.slot, "external_idle_east_1");
+  assert.equal(west.mirrored, true);
+});
+
+test("idle variants trigger after irregular idle delay and finish back to hold", () => {
+  const player = {
+    animation: "idle",
+    target: null,
+    speaking: false,
+    facing: "east",
+    idleVariant: null,
+    idleVariantTimer: 0,
+    animator: {
+      isFinished() {
+        return false;
+      }
+    }
+  };
+  const game = Object.create(Game.prototype);
+  game.player = player;
+  game.characterVariant = "external_animation_v1";
+  game.updateIdleVariants(1);
+  assert.ok(["external_idle_east_1", "external_idle_east_2"].includes(player.idleVariant.slot));
+
+  player.animator = {
+    isFinished() {
+      return true;
+    }
+  };
+  game.updateIdleVariants(1 / 60);
+  assert.equal(player.idleVariant, null);
+  assert.ok(player.idleVariantTimer >= 1);
+  assert.ok(player.idleVariantTimer <= 3);
 });
 
 test("character cutouts use the shared 15 percent source margin", () => {

@@ -17,6 +17,8 @@ import { externalAnimationV1 } from "../content/art/externalAnimationV1.generate
 
 const verbs = [VERBS.LOOK, VERBS.TALK, VERBS.USE, VERBS.TAKE];
 const CHARACTER_DISTANCE_SPEED_MULTIPLIER = 1.25;
+const IDLE_VARIANT_DELAY_MIN = 1;
+const IDLE_VARIANT_DELAY_MAX = 3;
 
 export class Game {
   constructor(canvas, uiRoot) {
@@ -59,6 +61,8 @@ export class Game {
       movementStopping: false,
       stopAnimationStarted: false,
       stopAnimationFinished: false,
+      idleVariant: null,
+      idleVariantTimer: this.randomIdleVariantDelay(),
       speaking: false,
       animator: new AnimationPlayer(this.characterDefinitions["npc.bai_mitko"])
     };
@@ -95,6 +99,7 @@ export class Game {
     } else if (!this.paused && !this.menuOpen && !this.dialogue.current) {
       this.player.animator.beginTick();
       this.movement.update(dt);
+      this.updateIdleVariants(dt);
       this.player.animationTime += dt;
       this.player.animator.fpsOverride = this.currentAnimationFps();
       this.player.animator.frameCountOverride = this.currentAnimationFrameCount();
@@ -165,7 +170,47 @@ export class Game {
     return this.characterDefinitions["npc.bai_mitko"].animations.walk.parts || {};
   }
 
+  idleVariantsForFacing(facing = this.player.facing) {
+    const fallbackFacing = eastWestFallbackFacing(facing) || "east";
+    return externalAnimationV1.idleVariants?.[fallbackFacing] || externalAnimationV1.idleVariants?.east || [];
+  }
+
+  currentIdleVariantFrame() {
+    if (this.player.animation !== "idle" || !this.player.idleVariant) return null;
+    return this.player.idleVariant;
+  }
+
+  randomIdleVariantDelay() {
+    return IDLE_VARIANT_DELAY_MIN + Math.random() * (IDLE_VARIANT_DELAY_MAX - IDLE_VARIANT_DELAY_MIN);
+  }
+
+  updateIdleVariants(dt) {
+    if (!this.usesExternalCharacterAnimation()) return;
+    if (this.player.animation !== "idle" || this.player.target || this.player.speaking) {
+      this.player.idleVariant = null;
+      this.player.idleVariantTimer = this.randomIdleVariantDelay();
+      return;
+    }
+    if (this.player.idleVariant) {
+      if (this.player.animator?.isFinished()) {
+        this.player.idleVariant = null;
+        this.player.idleVariantTimer = this.randomIdleVariantDelay();
+      }
+      return;
+    }
+    this.player.idleVariantTimer = Math.max(0, Number(this.player.idleVariantTimer || 0) - dt);
+    if (this.player.idleVariantTimer > 0) return;
+    const variants = this.idleVariantsForFacing();
+    if (!variants.length) {
+      this.player.idleVariantTimer = this.randomIdleVariantDelay();
+      return;
+    }
+    this.player.idleVariant = variants[Math.floor(Math.random() * variants.length)];
+  }
+
   currentAnimationFps() {
+    const idleVariant = this.currentIdleVariantFrame();
+    if (idleVariant) return idleVariant.fps;
     if (this.player.animation !== "walk") return null;
     const frame = this.currentAnimationFrame();
     if (!frame) return null;
@@ -190,26 +235,38 @@ export class Game {
       const frame = this.currentAnimationFrame();
       return `${frame?.slot || "walk"}:${facing}:${part}`;
     }
-    if (this.player.animation === "idle") return `idle:${this.player.facing || "south"}`;
+    if (this.player.animation === "idle") {
+      const idleVariant = this.currentIdleVariantFrame();
+      if (idleVariant) return `${idleVariant.slot}:idle:${this.player.facing || "east"}`;
+      return `idle:${this.player.facing || "south"}`;
+    }
     return this.player.animation;
   }
 
   currentAnimationFrameCount() {
+    const idleVariant = this.currentIdleVariantFrame();
+    if (idleVariant) return idleVariant.frameCount || null;
     if (this.player.animation !== "walk") return null;
     return this.currentAnimationFrame()?.frameCount || null;
   }
 
   currentAnimationLoopStartFrame() {
+    const idleVariant = this.currentIdleVariantFrame();
+    if (idleVariant) return idleVariant.loopStartFrame ?? null;
     if (this.player.animation !== "walk") return null;
     return this.currentAnimationFrame()?.loopStartFrame ?? null;
   }
 
   currentAnimationInitialFrame() {
+    const idleVariant = this.currentIdleVariantFrame();
+    if (idleVariant) return idleVariant.initialFrame ?? null;
     if (this.player.animation !== "walk") return null;
     return this.currentAnimationFrame()?.initialFrame ?? null;
   }
 
   currentAnimationLoop() {
+    const idleVariant = this.currentIdleVariantFrame();
+    if (idleVariant) return Boolean(idleVariant.loop);
     if (this.player.animation !== "walk") return null;
     const frame = this.currentAnimationFrame();
     return frame ? Boolean(frame.loop) : null;

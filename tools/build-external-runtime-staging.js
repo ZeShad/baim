@@ -30,6 +30,7 @@ const generated = {
   concept: selection.concept,
   characterAssets: {},
   walkParts: { east: {}, west: {} },
+  idleVariants: { east: [], west: [] },
   animations: {}
 };
 
@@ -65,8 +66,10 @@ for (const [key, config] of Object.entries(selection.animations || {})) {
   const frameContentBounds = frameRects.map((rect) => alphaBoundsRect(sourceSheet, rect) || { x: 0, y: 0, w: rect.w, h: rect.h });
   const contentBounds = unionBounds(frameContentBounds) || { x: 0, y: 0, w: info.frameWidth, h: info.frameHeight };
   const role = roleFromKey(key);
-  const movementSpeedMultipliers = externalWalkMotionCurve(role, frameRects.length, frameStart);
-  const configuredInitialFrame = config.initialFrame ?? 1;
+  const movementSpeedMultipliers = role === "idle"
+    ? Array.from({ length: frameRects.length }, () => 0)
+    : externalWalkMotionCurve(role, frameRects.length, frameStart);
+  const configuredInitialFrame = config.initialFrame ?? (role === "idle" ? 0 : 1);
   const initialFrame = Math.max(0, Math.min(Number(configuredInitialFrame) || 0, Math.max(0, frameRects.length - 1)));
   const fps = Number(config.fps) || EXTERNAL_WALK_DEFAULT_FPS;
   const stopExitFrame = role === "loop" ? normalizedFrameIndex(config.stopExitFrame ?? 0, frameRects.length) : undefined;
@@ -112,8 +115,14 @@ for (const [key, config] of Object.entries(selection.animations || {})) {
   const slot = `external_${key}`;
   generated.characterAssets[slot] = metadata.src;
   generated.animations[key] = metadata;
-  generated.walkParts.east[metadata.role] = { ...metadata, slot };
-  generated.walkParts.west[metadata.role] = { ...metadata, slot, mirrored: true, mirrorSource: "east" };
+  if (metadata.role === "idle") {
+    const idleVariant = { ...metadata, slot, idleKey: key };
+    generated.idleVariants.east.push(idleVariant);
+    generated.idleVariants.west.push({ ...idleVariant, mirrored: true, mirrorSource: "east" });
+  } else {
+    generated.walkParts.east[metadata.role] = { ...metadata, slot };
+    generated.walkParts.west[metadata.role] = { ...metadata, slot, mirrored: true, mirrorSource: "east" };
+  }
   report.push({
     key,
     staged: true,
@@ -143,6 +152,7 @@ for (const [key, config] of Object.entries(selection.animations || {})) {
 }
 
 function roleFromKey(key) {
+  if (key.startsWith("idle_")) return "idle";
   if (key.endsWith("_start")) return "start";
   if (key.endsWith("_loop")) return "loop";
   if (key.endsWith("_stop")) return "stop";

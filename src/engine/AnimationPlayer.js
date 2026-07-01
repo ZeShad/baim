@@ -41,7 +41,7 @@ export class AnimationPlayer {
 
   update(dt) {
     const animation = this.definition.animations[this.name] || this.definition.animations.idle;
-    if (animation?.type === "strip" || animation?.type === "phasedStrip") {
+    if (this.frameCountOverride || animation?.type === "strip" || animation?.type === "phasedStrip") {
       const frameCount = this.frameCountOverride || animation.frameCount || 1;
       if (frameCount <= 1) return;
       this.elapsed += dt;
