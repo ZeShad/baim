@@ -42,20 +42,24 @@ Use this only after loading the approved runtime source image:
 Use case: illustration-story
 Asset type: source character cutout for green-screen removal, single east-walk key pose
 Primary request: Edit/derive from the approved east idle green source image. Keep the same Bai
-Mitko character, same canvas family, same green background, same painterly rendering, same lighting,
-same line weight, same face construction, same outfit details, same scale, and same framing. Change
-only the pose into one east-facing walking key pose for later animation work.
+Mitko character, same portrait canvas family, same green background, same painterly rendering, same
+lighting, same line weight, same face construction, same outfit details, same scale, and same
+framing. Change only the pose into one east-facing walking key pose for later animation work.
 Input images: Image 1 is the primary runtime style and identity anchor. Image 2 is secondary model
 sheet authority for approved design only.
 Pose: east/right walking key pose, one leg forward and one leg back, opposite arm swing, readable
 side-walk silhouette, torso still recognizably Bai Mitko. Keep head/face friendly and matching Image
 1.
+Composition/framing: match Image 1's portrait source canvas exactly: `1023x1537` proportions,
+full-body Bai Mitko at the same apparent height, same head size, same baseline/feet zone, same
+center of mass, and same green padding logic. Do not switch to a landscape canvas.
 Background: preserve the same flat green source-background treatment as Image 1. No transparency,
 no checkerboard, no scenery, no shadow, no text.
 Constraints: do not redesign the face, body proportions, jacket, shirt, pants, shoes, moustache,
 hair, rendering style, brush density, line weight, canvas ratio, or framing. Do not generate a fresh
 standalone interpretation.
-Reject if: the result looks from a different generation batch than Image 1.
+Reject if: the result looks from a different generation batch than Image 1, uses landscape
+proportions, changes the source canvas ratio, or changes Bai Mitko's apparent scale.
 ```
 
 ## Village Square Background

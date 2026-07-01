@@ -52,6 +52,10 @@ The active Bai Mitko production path starts from the approved model sheet:
   primary image anchor. For east-facing poses, `assets_src/characters/bai-mitko-idle-east-chroma-v1.png`
   is the primary style, canvas, lighting, scale, and rendering reference; the model sheet remains
   the secondary design authority.
+- East-facing runtime pose sources must keep the same portrait source-canvas family as the approved
+  east idle image: `1023x1537` proportions, matching apparent character height, head scale,
+  baseline/feet zone, center of mass, and green padding logic. Reject landscape outputs before
+  cleanup.
 - Generate additional Bai Mitko poses as edits/variants of the approved runtime source image family,
   not as fresh standalone images from text plus model sheet only.
 - Do not accept generated outputs that change his face, body proportions, outfit, moustache,

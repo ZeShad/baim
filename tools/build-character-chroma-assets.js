@@ -33,17 +33,26 @@ const CHARACTER_CHROMA_SOURCES = [
   {
     key: "idle_south",
     source: join(SOURCE_ROOT, "bai-mitko-idle-chroma-v1.png"),
-    outputs: ["idle.png", "idle_south.png"]
+    outputs: ["idle.png", "idle_south.png"],
+    expectedSourceSize: { width: 1023, height: 1537 }
   },
   {
     key: "idle_east",
     source: join(SOURCE_ROOT, "bai-mitko-idle-east-chroma-v1.png"),
-    outputs: ["idle_east.png"]
+    outputs: ["idle_east.png"],
+    expectedSourceSize: { width: 1023, height: 1537 }
   },
   {
     key: "idle_north",
     source: join(SOURCE_ROOT, "bai-mitko-idle-north-chroma-v1.png"),
-    outputs: ["idle_north.png"]
+    outputs: ["idle_north.png"],
+    expectedSourceSize: { width: 1023, height: 1537 }
+  },
+  {
+    key: "walk_east",
+    source: join(SOURCE_ROOT, "bai-mitko-walk-east-chroma-v1.png"),
+    outputs: ["walk_east.png"],
+    expectedSourceSize: { width: 1023, height: 1537 }
   }
 ];
 
@@ -61,6 +70,9 @@ for (const asset of CHARACTER_CHROMA_SOURCES) {
   }
 
   const source = readPng(asset.source);
+  if (asset.expectedSourceSize && (source.width !== asset.expectedSourceSize.width || source.height !== asset.expectedSourceSize.height)) {
+    throw new Error(`${asset.key} source must be ${asset.expectedSourceSize.width}x${asset.expectedSourceSize.height}, got ${source.width}x${source.height}: ${asset.source}`);
+  }
   const keyed = robustChromaKeyGreenToAlpha(source, CHROMA_OPTIONS);
   const scaled = await resizeWithSharp(keyed.png, CHARACTER_SOURCE_SCALE);
   const outputPng = addCanvasMargin(scaled, CHARACTER_CUTOUT_MARGIN_RATIO);
