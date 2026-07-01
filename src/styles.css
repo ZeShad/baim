@@ -1,0 +1,266 @@
+:root {
+  color-scheme: dark;
+  font-family: Arial, Helvetica, sans-serif;
+  background: #16130f;
+  color: #f1eadf;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  min-height: 100vh;
+  overflow: hidden;
+}
+
+#app {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  background: #111;
+}
+
+#game {
+  display: block;
+  width: 100vw;
+  height: 100vh;
+  image-rendering: auto;
+}
+
+#ui-root {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+button {
+  font: inherit;
+  min-height: 38px;
+  border: 1px solid #a78b5c;
+  background: #34291d;
+  color: #f5ead5;
+  cursor: pointer;
+}
+
+button:hover {
+  background: #4a3825;
+}
+
+.top-bar {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  display: flex;
+  gap: 6px;
+  pointer-events: auto;
+}
+
+.top-bar button {
+  min-width: 58px;
+  padding: 0 10px;
+}
+
+.panel {
+  position: absolute;
+  pointer-events: auto;
+  background: rgba(26, 22, 17, 0.96);
+  border: 1px solid #96784f;
+  box-shadow: 0 24px 80px rgba(0, 0, 0, 0.5);
+  color: #f5ead5;
+}
+
+.main-menu {
+  left: 50%;
+  top: 50%;
+  width: min(480px, calc(100vw - 32px));
+  transform: translate(-50%, -50%);
+  padding: 28px;
+  display: grid;
+  gap: 12px;
+}
+
+.main-menu h1,
+.main-menu p,
+.pause-menu h2,
+.quest-list h3 {
+  margin: 0;
+}
+
+.main-menu h1 {
+  font-size: 34px;
+}
+
+.pause-menu {
+  right: 18px;
+  top: 68px;
+  width: min(430px, calc(100vw - 36px));
+  padding: 18px;
+  display: grid;
+  gap: 10px;
+}
+
+.quest-list {
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px solid rgba(167, 139, 92, 0.45);
+}
+
+.quest-list p {
+  margin: 8px 0 0;
+  line-height: 1.35;
+}
+
+.dialogue-panel {
+  position: absolute;
+  left: 50%;
+  bottom: 138px;
+  width: min(760px, calc(100vw - 28px));
+  transform: translateX(-50%);
+  pointer-events: auto;
+  background: rgba(22, 18, 14, 0.96);
+  border: 1px solid #a78b5c;
+  padding: 16px;
+  display: grid;
+  gap: 8px;
+}
+
+.dialogue-panel p {
+  margin: 0 0 6px;
+  line-height: 1.4;
+}
+
+.dialogue-panel button {
+  width: 100%;
+  text-align: left;
+  padding: 8px 10px;
+}
+
+.dev-home {
+  left: 50%;
+  top: 50%;
+  width: min(760px, calc(100vw - 32px));
+  max-height: calc(100vh - 32px);
+  overflow: auto;
+  transform: translate(-50%, -50%);
+  padding: 28px;
+  display: grid;
+  gap: 16px;
+}
+
+.dev-home h1,
+.dev-home p {
+  margin: 0;
+}
+
+.dev-home a {
+  pointer-events: auto;
+  color: #f5ead5;
+  text-decoration: none;
+}
+
+.play-link {
+  display: block;
+  padding: 18px 20px;
+  background: #7a2f24;
+  border: 1px solid #d8b46f;
+  text-align: center;
+  font-size: 28px;
+  font-weight: 700;
+}
+
+.dev-links {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.dev-links a {
+  padding: 10px;
+  border: 1px solid rgba(216, 180, 111, 0.6);
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.dev-status-list {
+  display: grid;
+  gap: 8px;
+}
+
+.dev-status {
+  display: grid;
+  gap: 4px;
+  padding: 10px;
+  border: 1px solid rgba(216, 180, 111, 0.35);
+  background: rgba(255, 255, 255, 0.05);
+  line-height: 1.35;
+}
+
+.dev-status.pending {
+  border-color: rgba(230, 190, 98, 0.65);
+}
+
+.dev-status.rejected {
+  border-color: rgba(210, 100, 82, 0.7);
+}
+
+.dev-status span {
+  color: #d8ccbb;
+}
+
+.dev-status code,
+.dev-command {
+  font-family: Consolas, "Courier New", monospace;
+  color: #f2e5cf;
+}
+
+.dev-command {
+  margin: 0;
+  padding: 12px;
+  overflow: auto;
+  border: 1px solid rgba(216, 180, 111, 0.4);
+  background: rgba(0, 0, 0, 0.28);
+  white-space: pre-wrap;
+}
+
+.simple-anim-controls {
+  position: absolute;
+  left: 18px;
+  right: 18px;
+  bottom: 18px;
+  pointer-events: auto;
+  display: grid;
+  gap: 8px;
+  padding: 12px;
+  border: 1px solid rgba(35, 31, 25, 0.45);
+  background: rgba(24, 21, 18, 0.88);
+  color: #f5ead5;
+}
+
+.simple-anim-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.simple-anim-controls button {
+  min-height: 34px;
+  padding: 0 10px;
+}
+
+.simple-anim-controls button:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.simple-anim-controls label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+}
+
+.simple-anim-controls input[type="range"] {
+  width: min(360px, 45vw);
+}

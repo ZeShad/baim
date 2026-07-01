@@ -1,0 +1,112 @@
+import { moveToward } from "./geometry.js";
+
+export class MovementSystem {
+  constructor(player) {
+    this.player = player;
+  }
+
+  walkTo(point) {
+    const dx = point.x - this.player.position.x;
+    const dy = point.y - this.player.position.y;
+    this.player.facing = facingFromDelta(dx, dy, this.player);
+    this.player.target = { ...point };
+    this.player.animation = "walk";
+    this.player.movementStopping = false;
+    this.player.stopAnimationStarted = false;
+    this.player.stopAnimationFinished = false;
+    const parts = walkPartsForFacing(this.player);
+    this.player.walkPart = parts?.start ? "start" : "loop";
+  }
+
+  update(dt) {
+    if (!this.player.target) {
+      if (this.player.animation === "walk" && this.player.walkPart === "stop" && !this.player.animator?.isFinished()) {
+        this.player.movementStopping = true;
+        return;
+      }
+      if (this.player.animation === "walk" && this.player.walkPart === "stop") {
+        this.player.stopAnimationFinished = true;
+        this.player.movementStopping = false;
+      }
+      this.player.animation = this.player.speaking ? "talk" : "idle";
+      this.player.walkPart = null;
+      return;
+    }
+    if (this.player.animation === "walk" && this.player.walkPart === "start" && this.player.animator?.isFinished()) {
+      this.player.walkPart = "loop";
+    }
+    const previous = { ...this.player.position };
+    const motionMultiplier = walkMotionMultiplierForFrame(this.player);
+    this.player.position = moveToward(this.player.position, this.player.target, this.player.speed * motionMultiplier * dt);
+    this.player.facing = facingFromDelta(this.player.position.x - previous.x, this.player.position.y - previous.y, this.player);
+    if (this.player.position.x === this.player.target.x && this.player.position.y === this.player.target.y) {
+      this.player.target = null;
+      const parts = walkPartsForFacing(this.player);
+      if (parts?.stop) {
+        this.player.walkPart = "stop";
+        this.player.animation = "walk";
+        this.player.movementStopping = true;
+        this.player.stopAnimationStarted = true;
+        this.player.stopAnimationFinished = false;
+      } else {
+        this.player.animation = "idle";
+        this.player.walkPart = null;
+      }
+    }
+  }
+}
+
+function walkPartsForFacing(player) {
+  const facing = eastWestFallbackFacing(player.facing);
+  return facing ? player.walkPartsByFacing?.[facing] : null;
+}
+
+export function eastWestFallbackFacing(facing) {
+  if (facing === "east" || facing === "north_east" || facing === "south_east") return "east";
+  if (facing === "west" || facing === "north_west" || facing === "south_west") return "west";
+  return null;
+}
+
+export function walkMotionMultiplierForFrame(player) {
+  const facing = player.facing || "south";
+  const fallbackFacing = eastWestFallbackFacing(facing) || {
+    south_east: "south",
+    south_west: "south",
+    north_east: "north",
+    north_west: "north"
+  }[facing] || facing;
+  const movementStartFrame = player.walkMovementStartFrameByFacing?.[fallbackFacing] || 0;
+  const index = player.animator?.frameIndex ?? 0;
+  if (player.animation === "walk" && index < movementStartFrame) return 0;
+  const part = player.walkPart || "loop";
+  const multipliers = player.walkMotionMultipliersByFacing?.[fallbackFacing]?.[part] || player.walkMotionMultipliersByFacing?.[fallbackFacing] || player.walkMotionMultipliers;
+  if (!Array.isArray(multipliers) || !multipliers.length || player.animation !== "walk") return 1;
+  const value = Number(multipliers[index % multipliers.length]);
+  return Number.isFinite(value) && value > 0 ? value : 1;
+}
+
+export function facingFromDelta(dx, dy, player) {
+  const fallback = player.facing || "south";
+  if (Math.abs(dx) < 0.01 && Math.abs(dy) < 0.01) return fallback;
+  const bias = player.verticalDirectionBias || 1;
+  const adjustedDy = dy * bias;
+  const degrees = (Math.atan2(adjustedDy, dx) * 180) / Math.PI;
+  let facing;
+  if (degrees >= -22.5 && degrees < 22.5) facing = "east";
+  else if (degrees >= 22.5 && degrees < 67.5) facing = "south_east";
+  else if (degrees >= 67.5 && degrees < 112.5) facing = "south";
+  else if (degrees >= 112.5 && degrees < 157.5) facing = "south_west";
+  else if (degrees >= 157.5 || degrees < -157.5) facing = "west";
+  else if (degrees >= -157.5 && degrees < -112.5) facing = "north_west";
+  else if (degrees >= -112.5 && degrees < -67.5) facing = "north";
+  else facing = "north_east";
+
+  if (Math.abs(dy) >= Math.abs(dx) * 0.35) {
+    if (dy > 0 && facing === "east") facing = "south_east";
+    if (dy < 0 && facing === "east") facing = "north_east";
+    if (dy > 0 && facing === "west") facing = "south_west";
+    if (dy < 0 && facing === "west") facing = "north_west";
+  }
+  player.facingDebug = { dx, dy, adjustedDx: dx, adjustedDy, angle: degrees, selectedFacing: facing };
+  return facing;
+}

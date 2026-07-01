@@ -1,0 +1,42 @@
+{
+  "variant": "external_animation_v1",
+  "status": "review_required",
+  "scope": {
+    "activeDirections": ["east", "west_mirrored_from_east"],
+    "deferredDirections": ["north", "south", "diagonals"],
+    "note": "Only east and mirrored west are active. North/south/diagonals are intentionally deferred."
+  },
+  "concept": {
+    "animationParts": ["start", "loop", "stop"],
+    "activeDirection": "east",
+    "note": "East walk uses start/loop/stop. West mirrors east. North/south are not part of this task."
+  },
+  "animations": {
+    "walk_east_start": {
+      "source": "bai-mitko-walk-east-start.zip",
+      "use": true,
+      "loop": false,
+      "fps": 8,
+      "status": "review_required"
+    },
+    "walk_east_loop": {
+      "source": "bai-mitko-walk-east-loop.zip",
+      "use": true,
+      "loop": true,
+      "fps": 8,
+      "status": "review_required"
+    },
+    "walk_east_stop": {
+      "source": "bai-mitko-walk-east-stop.zip",
+      "use": true,
+      "loop": false,
+      "fps": 8,
+      "status": "review_required"
+    }
+  },
+  "mirrorRules": {
+    "walk_west_start": "mirror walk_east_start",
+    "walk_west_loop": "mirror walk_east_loop",
+    "walk_west_stop": "mirror walk_east_stop"
+  }
+}

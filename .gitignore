@@ -1,0 +1,11 @@
+node_modules/
+.DS_Store
+Thumbs.db
+npm-debug.log*
+target/
+
+# Bai Mitko external animation v1 generated outputs.
+assets_src/characters/bai_mitko/external_animation_v1/previews/
+assets_src/characters/bai_mitko/external_animation_v1/processed/
+assets_src/characters/bai_mitko/external_animation_v1/runtime_staging/
+assets_src/characters/bai_mitko/external_animation_v1/reports/
