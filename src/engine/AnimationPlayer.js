@@ -32,7 +32,7 @@ export class AnimationPlayer {
     const animation = this.definition.animations[this.name] || this.definition.animations.idle;
     const frameCount = this.frameCountOverride || animation.frameCount || animation.frames?.length || 1;
     const fps = this.fpsOverride || animation.fps || 1;
-    const initialFrame = Math.max(0, Math.min(this.initialFrameOverride || 0, frameCount - 1));
+    const initialFrame = Math.max(0, Math.min(this.initialFrameOverride ?? 0, frameCount - 1));
     this.elapsed = initialFrame / fps;
     this.frameIndex = initialFrame;
     this.resetThisTick = true;

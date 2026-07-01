@@ -5,15 +5,22 @@ import { SaveSystem } from "../src/engine/SaveSystem.js";
 import { pointInPolygon, isWalkable } from "../src/engine/SceneGeometry.js";
 import { DEFAULT_SAVE } from "../src/engine/ids.js";
 import { characterHeight } from "../src/engine/CharacterRenderMath.js";
-import { eastWestFallbackFacing, facingFromDelta, MovementSystem } from "../src/engine/MovementSystem.js";
+import { facingFromDelta, MovementSystem, requestWalkStop, eastWestFallbackFacing, walkMotionMultiplierForFrame } from "../src/engine/MovementSystem.js";
 import { AnimationPlayer } from "../src/engine/AnimationPlayer.js";
+import { Renderer, stopRenderOffsetX } from "../src/engine/Renderer.js";
 import { strings } from "../src/content/localization/index.js";
 import { chapter1 } from "../src/content/chapter1/index.js";
 import { assetManifest } from "../src/content/art/assetManifest.js";
 import { CHARACTER_CUTOUT_MARGIN_RATIO, CHARACTER_SOURCE_SCALE } from "../src/content/art/characterAssetConfig.js";
 import { characterDefinitions } from "../src/content/art/characters.js";
 import { makePng } from "../tools/character-frame-utils.mjs";
-import { chromaKeyGreenToAlpha, externalWalkMotionCurve } from "../tools/external-animation-utils.mjs";
+import {
+  EXTERNAL_WALK_LOOP_MOTION_MAX,
+  EXTERNAL_WALK_LOOP_MOTION_MIN,
+  chromaKeyGreenToAlpha,
+  externalWalkMotionCurve,
+  externalWalkRawMotionCurve
+} from "../tools/external-animation-utils.mjs";
 
 test("localization returns Bulgarian and English strings from stable keys", () => {
   const l10n = new Localization(strings, "bg");
@@ -94,9 +101,17 @@ test("east movement exposes start loop stop walk parts without mirroring metadat
   assert.equal(east.start.slot, "external_walk_east_start");
   assert.equal(east.loop.slot, "external_walk_east_loop");
   assert.equal(east.stop.slot, "external_walk_east_stop");
-  assert.equal(east.start.frameCount, 4);
+  assert.equal(east.start.frameCount, 13);
   assert.equal(east.loop.frameCount, 16);
-  assert.equal(east.stop.frameCount, 4);
+  assert.equal(east.stop.frameCount, 8);
+  assert.equal(east.start.initialFrame, 1);
+  assert.equal(east.loop.initialFrame, 1);
+  assert.equal(east.stop.initialFrame, 1);
+  assert.equal(east.start.fps, 16);
+  assert.equal(east.loop.fps, 16);
+  assert.equal(east.stop.fps, 16);
+  assert.equal(east.start.sourceFrameRects[0].sourceFrameIndex, 0);
+  assert.equal(east.loop.stopExitFrame, 0);
   assert.equal(east.start.loop, false);
   assert.equal(east.loop.loop, true);
   assert.equal(east.stop.loop, false);
@@ -128,23 +143,56 @@ test("east-only external walk maps diagonal east-west facings to active strips",
   assert.equal(eastWestFallbackFacing("north"), null);
 });
 
+test("east-west-only walk parts constrain movement facing to animated strips", () => {
+  const player = {
+    facing: "west",
+    verticalDirectionBias: 1.6,
+    walkPartsByFacing: {
+      east: { loop: {} },
+      west: { loop: {} }
+    }
+  };
+  assert.equal(facingFromDelta(40, 120, player), "east");
+  assert.equal(facingFromDelta(-40, 120, player), "west");
+  assert.equal(facingFromDelta(0, 120, player), "west");
+});
+
 test("external walk start ramps slowly and loop uses foot-push pulses", () => {
   const start = externalWalkMotionCurve("start", 9);
-  assert.equal(start[0], 0);
-  assert.ok(start[1] < start[4]);
-  assert.ok(start[4] < 0.2);
-  assert.ok(start[6] > start[5] * 1.4);
-  assert.equal(start.at(-1), 1);
+  assert.deepEqual(start.slice(0, 3), [0, 0, 0]);
+  assert.ok(start[3] < 0.5);
+  assert.ok(start[4] < start.at(-1));
+  assert.ok(start[7] - start[6] > start[5] - start[4]);
+  assert.equal(start.at(-1), EXTERNAL_WALK_LOOP_MOTION_MAX);
 
   const loop = externalWalkMotionCurve("loop", 16);
-  assert.ok(loop[2] > 1.6);
-  assert.ok(loop[2] < 1.9);
-  assert.ok(loop[10] > 1.6);
-  assert.ok(loop[10] < 1.9);
-  assert.ok(loop[6] > 0.35);
-  assert.ok(loop[6] < 0.55);
-  assert.ok(loop[14] > 0.35);
-  assert.ok(loop[14] < 0.55);
+  const rawLoop = externalWalkRawMotionCurve("loop", 16);
+  const rawMin = Math.min(...rawLoop);
+  const rawMax = Math.max(...rawLoop);
+  const expectedFrameTwo = Number((EXTERNAL_WALK_LOOP_MOTION_MIN + ((rawLoop[2] - rawMin) / (rawMax - rawMin)) * (EXTERNAL_WALK_LOOP_MOTION_MAX - EXTERNAL_WALK_LOOP_MOTION_MIN)).toFixed(3));
+  assert.equal(loop[2], expectedFrameTwo);
+  assert.ok(loop[2] > loop[6]);
+  assert.ok(loop[10] > loop[14]);
+  assert.equal(Math.min(...loop), EXTERNAL_WALK_LOOP_MOTION_MIN);
+  assert.equal(Math.max(...loop), EXTERNAL_WALK_LOOP_MOTION_MAX);
+  assert.ok(loop[2] - loop[6] < rawLoop[2] - rawLoop[6]);
+});
+
+test("walk motion multiplier preserves explicit zero values", () => {
+  const player = {
+    animation: "walk",
+    facing: "east",
+    walkPart: "start",
+    animator: { frameIndex: 0 },
+    walkMotionMultipliersByFacing: {
+      east: {
+        start: [0, 0.5, 1]
+      }
+    }
+  };
+  assert.equal(walkMotionMultiplierForFrame(player), 0);
+  player.animator.frameIndex = 1;
+  assert.equal(walkMotionMultiplierForFrame(player), 0.5);
 });
 
 test("walk animation can play startup frames once before looping from configured frame", () => {
@@ -195,7 +243,7 @@ test("playing the same stable animation key does not reset elapsed time", () => 
   assert.equal(player.resetThisTick, false);
 });
 
-test("loop animation starts at frame zero and wraps full length", () => {
+test("walk animation frames advance linearly from configured frame one", () => {
   const player = new AnimationPlayer({
     animations: {
       idle: { frames: ["idle"], fps: 1, loop: true },
@@ -205,11 +253,15 @@ test("loop animation starts at frame zero and wraps full length", () => {
   player.frameCountOverride = 16;
   player.fpsOverride = 8;
   player.loopOverride = true;
-  player.initialFrameOverride = 0;
+  player.initialFrameOverride = 1;
   player.play("walk", "external_walk_east_loop:east:loop");
-  assert.equal(player.frameIndex, 0);
+  assert.equal(player.frameIndex, 1);
+  player.update(0.99 / 8);
+  assert.equal(player.frameIndex, 1);
+  player.update(0.01 / 8);
+  assert.equal(player.frameIndex, 2);
   player.update(16 / 8);
-  assert.equal(player.frameIndex, 0);
+  assert.equal(player.frameIndex, 2);
 });
 
 test("non-looping walk parts report finished for start and stop phases", () => {
@@ -229,7 +281,107 @@ test("non-looping walk parts report finished for start and stop phases", () => {
   assert.equal(player.isFinished(), true);
 });
 
-test("movement stop phase enters once and can finish into idle", () => {
+test("movement starts stop phase immediately without waiting for loop exit frame", () => {
+  const animator = new AnimationPlayer({
+    animations: {
+      idle: { frames: ["idle"], fps: 1, loop: true },
+      walk: { type: "phasedStrip", frameCount: 4, fps: 4, loop: true }
+    }
+  });
+  const player = {
+    position: { x: 0, y: 0 },
+    target: null,
+    speed: 100,
+    animation: "idle",
+    facing: "east",
+    walkPart: "loop",
+    pendingStop: false,
+    stopAnimationStarted: false,
+    stopAnimationFinished: false,
+    movementStopping: false,
+    walkPartsByFacing: {
+      east: {
+        start: { frameCount: 3, fps: 3, loop: false },
+        loop: { frameCount: 4, fps: 4, loop: true, stopExitFrame: 2 },
+        stop: { frameCount: 3, fps: 3, loop: false }
+      }
+    },
+    animator
+  };
+  player.animation = "walk";
+  animator.frameIndex = 1;
+  requestWalkStop(player);
+  assert.equal(player.walkPart, "stop");
+  assert.equal(player.pendingStop, false);
+  assert.equal(player.stopAnimationStarted, true);
+});
+
+test("retargeting while walking continues loop instead of replaying start", () => {
+  const player = {
+    position: { x: 0, y: 0 },
+    target: { x: 100, y: 0 },
+    speed: 100,
+    animation: "walk",
+    facing: "east",
+    walkPart: "start",
+    pendingStop: false,
+    stopAnimationStarted: false,
+    stopAnimationFinished: false,
+    movementStopping: false,
+    walkPartsByFacing: {
+      east: {
+        start: { frameCount: 3, fps: 3, loop: false },
+        loop: { frameCount: 4, fps: 4, loop: true },
+        stop: { frameCount: 3, fps: 3, loop: false }
+      }
+    }
+  };
+  const movement = new MovementSystem(player);
+  movement.walkTo({ x: 200, y: 0 });
+  assert.equal(player.walkPart, "loop");
+});
+
+test("new walk from idle uses start part when available", () => {
+  const player = {
+    position: { x: 0, y: 0 },
+    target: null,
+    speed: 100,
+    animation: "idle",
+    facing: "east",
+    walkPart: null,
+    pendingStop: false,
+    stopAnimationStarted: false,
+    stopAnimationFinished: false,
+    movementStopping: false,
+    walkPartsByFacing: {
+      east: {
+        start: { frameCount: 3, fps: 3, loop: false },
+        loop: { frameCount: 4, fps: 4, loop: true }
+      }
+    }
+  };
+  const movement = new MovementSystem(player);
+  movement.walkTo({ x: 200, y: 0 });
+  assert.equal(player.walkPart, "start");
+});
+
+test("external idle pose uses walk start frame zero instead of stale walk frame", () => {
+  const definition = characterDefinitions["npc.bai_mitko"];
+  const player = {
+    walkPartsByFacing: definition.animations.walk.parts,
+    lastWalkFrame: {
+      frameIndex: 7,
+      frame: definition.animations.walk.parts.east.loop,
+      slot: definition.animations.walk.parts.east.loop.slot
+    }
+  };
+  const idle = Renderer.resolveIdleWalkFrameForDefinition(player, definition, "east");
+  assert.equal(idle.slot, "external_walk_east_start");
+  assert.equal(idle.frameIndex, 0);
+  assert.equal(idle.frame.role, "start");
+});
+
+test("movement stop phase plays once and can finish into idle", () => {
   const animator = new AnimationPlayer({
     animations: {
       idle: { frames: ["idle"], fps: 1, loop: true },
@@ -240,27 +392,25 @@ test("movement stop phase enters once and can finish into idle", () => {
     position: { x: 0, y: 0 },
     target: null,
     speed: 100,
-    animation: "idle",
+    animation: "walk",
     facing: "east",
-    walkPart: null,
+    walkPart: "loop",
+    pendingStop: true,
+    stopAnimationStarted: false,
+    stopAnimationFinished: false,
+    movementStopping: false,
     walkPartsByFacing: {
       east: {
-        start: { frameCount: 3, fps: 3, loop: false },
-        loop: { frameCount: 4, fps: 4, loop: true },
+        loop: { frameCount: 4, fps: 4, loop: true, stopExitFrame: 1 },
         stop: { frameCount: 3, fps: 3, loop: false }
       }
     },
     animator
   };
   const movement = new MovementSystem(player);
-  movement.walkTo({ x: 1, y: 0 });
-  animator.play("walk", "external_walk_east_start:east:start");
-  animator.frameCountOverride = 3;
-  animator.fpsOverride = 3;
-  animator.loopOverride = false;
-  movement.update(1);
+  animator.frameIndex = 1;
+  movement.update(1 / 60);
   assert.equal(player.walkPart, "stop");
-  assert.equal(player.stopAnimationStarted, true);
 
   animator.play("walk", "external_walk_east_stop:east:stop");
   animator.frameCountOverride = 3;
@@ -277,6 +427,14 @@ test("movement stop phase enters once and can finish into idle", () => {
   assert.equal(player.animation, "idle");
   assert.equal(player.walkPart, null);
   assert.equal(player.stopAnimationFinished, true);
+});
+
+test("stop render offset fades from initial frame to final frame", () => {
+  const frame = { role: "stop", frameCount: 8, initialFrame: 1, stopRenderOffsetXStart: -30 };
+  assert.equal(stopRenderOffsetX(frame, 1), -30);
+  assert.equal(stopRenderOffsetX(frame, 4), -15);
+  assert.equal(stopRenderOffsetX(frame, 7), 0);
+  assert.equal(stopRenderOffsetX(frame, 1, true), 30);
 });
 
 test("external animation chroma key converts green amount into soft alpha", () => {

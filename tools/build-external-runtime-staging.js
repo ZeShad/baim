@@ -9,6 +9,7 @@ import {
   alphaBounds,
   ensureDir,
   ensureExternalAnimationDirs,
+  EXTERNAL_WALK_DEFAULT_FPS,
   externalWalkMotionCurve,
   inspectAnimationFolder,
   readJson,
@@ -66,12 +67,20 @@ for (const [key, config] of Object.entries(selection.animations || {})) {
   const selectedFrames = explicitFrameCount
     ? info.frames.slice(frameStart, frameStart + explicitFrameCount)
     : info.frames.slice(frameStart, frameEndTrim ? -frameEndTrim : undefined);
+  const sourceFrameRects = info.frames.map(({ x, y, w, h, name, duration, index }) => ({ x, y, w, h, name, duration, sourceFrameIndex: index }));
   const frameRects = selectedFrames.map(({ x, y, w, h, name, duration, index }) => ({ x, y, w, h, name, duration, sourceFrameIndex: index }));
+  const sourceFrameContentBounds = sourceFrameRects.map((rect) => alphaBoundsRect(keyed.png, rect) || { x: 0, y: 0, w: rect.w, h: rect.h });
   const frameContentBounds = frameRects.map((rect) => alphaBoundsRect(keyed.png, rect) || { x: 0, y: 0, w: rect.w, h: rect.h });
   const contentBounds = unionBounds(frameContentBounds) || { x: 0, y: 0, w: info.frameWidth, h: info.frameHeight };
   const role = roleFromKey(key);
   const movementSpeedMultipliers = externalWalkMotionCurve(role, frameRects.length, frameStart);
-  const initialFrame = 0;
+  const configuredInitialFrame = config.initialFrame ?? 1;
+  const initialFrame = Math.max(0, Math.min(Number(configuredInitialFrame) || 0, Math.max(0, frameRects.length - 1)));
+  const fps = Number(config.fps) || EXTERNAL_WALK_DEFAULT_FPS;
+  const stopExitFrame = role === "loop" ? normalizedFrameIndex(config.stopExitFrame ?? 0, frameRects.length) : undefined;
+  const stopRenderOffsetXStart = role === "stop" && Number.isFinite(Number(config.stopRenderOffsetXStart))
+    ? Number(config.stopRenderOffsetXStart)
+    : undefined;
   const metadata = {
     src: `target/external_animation_v1/runtime/${key}.png`,
     sourceSheet: info.sheetImage,
@@ -91,15 +100,20 @@ for (const [key, config] of Object.entries(selection.animations || {})) {
     frameStart,
     frameEndTrim,
     configuredFrameCount: explicitFrameCount,
-    fps: config.fps || info.fps || 8,
+    fps,
     loop: Boolean(config.loop),
     role,
+    ...(stopExitFrame === undefined ? {} : { stopExitFrame }),
+    ...(stopRenderOffsetXStart === undefined ? {} : { stopRenderOffsetXStart }),
     initialFrame,
     anchorX: 0.5,
     anchorY: 1,
     anchor: { x: 0.5, y: 1 },
     baselineY: info.frameHeight,
     contentBounds,
+    sourceContentBounds: unionBounds(sourceFrameContentBounds) || { x: 0, y: 0, w: info.frameWidth, h: info.frameHeight },
+    sourceFrameContentBounds,
+    sourceFrameRects,
     frameContentBounds,
     frameRects,
     movementSpeedMultipliers,
@@ -128,6 +142,8 @@ for (const [key, config] of Object.entries(selection.animations || {})) {
     fps: metadata.fps,
     loop: metadata.loop,
     role: metadata.role,
+    ...(stopExitFrame === undefined ? {} : { stopExitFrame }),
+    ...(stopRenderOffsetXStart === undefined ? {} : { stopRenderOffsetXStart }),
     initialFrame,
     movementSpeedMultipliers,
     frameWidth: metadata.frameWidth,
@@ -174,6 +190,13 @@ function unionBounds(bounds) {
   const maxX = Math.max(...bounds.map((b) => b.x + b.w));
   const maxY = Math.max(...bounds.map((b) => b.y + b.h));
   return { x: minX, y: minY, w: maxX - minX, h: maxY - minY };
+}
+
+function normalizedFrameIndex(value, frameCount) {
+  const count = Math.max(1, Number(frameCount) || 1);
+  const numeric = Number(value);
+  if (!Number.isFinite(numeric)) return 0;
+  return ((Math.trunc(numeric) % count) + count) % count;
 }
 
 ensureDir(dirname(GENERATED_MODULE));

@@ -716,6 +716,15 @@ export function resolveConfiguredFps(config, metadata) {
   return Number(config?.fps) || metadata?.fps || 8;
 }
 
+export const EXTERNAL_WALK_DEFAULT_FPS = 16;
+export const EXTERNAL_WALK_STATIC_MOTION_MULTIPLIER = 1.25;
+export const EXTERNAL_WALK_FRAME_MOTION_WEIGHT = 0.49;
+export const EXTERNAL_WALK_LOOP_MOTION_MIN = 1;
+export const EXTERNAL_WALK_LOOP_MOTION_MAX = 1.2;
+export const EXTERNAL_WALK_START_SLOW_MULTIPLIER = 0.5;
+export const EXTERNAL_WALK_START_ACCELERATION_POINT = 0.6;
+export const EXTERNAL_WALK_START_HOLD_FRAMES = 3;
+
 export function walkMotionCurve(frameCount) {
   const cycle = [0.55, 0.68, 0.82, 1.08, 1.32, 1.48, 1.26, 1.0, 0.72];
   const raw = Array.from({ length: frameCount }, (_, index) => cycle[index % cycle.length]);
@@ -724,6 +733,41 @@ export function walkMotionCurve(frameCount) {
 }
 
 export function externalWalkMotionCurve(role, frameCount, sourceStartFrame = 0) {
+  if (role === "start") return externalWalkStartMotionCurve(frameCount, sourceStartFrame);
+  if (role === "loop") return externalWalkLoopMotionCurve(frameCount, sourceStartFrame);
+  return externalWalkRawMotionCurve(role, frameCount, sourceStartFrame).map((value) =>
+    Number((EXTERNAL_WALK_STATIC_MOTION_MULTIPLIER + (value - 1) * EXTERNAL_WALK_FRAME_MOTION_WEIGHT).toFixed(3))
+  );
+}
+
+export function externalWalkStartMotionCurve(frameCount, sourceStartFrame = 0) {
+  const raw = externalWalkRawMotionCurve("start", frameCount, sourceStartFrame);
+  const weighted = raw.map((value) => EXTERNAL_WALK_STATIC_MOTION_MULTIPLIER + (value - 1) * EXTERNAL_WALK_FRAME_MOTION_WEIGHT);
+  const holdFrames = Math.min(EXTERNAL_WALK_START_HOLD_FRAMES, Math.max(0, frameCount - 1));
+  const activeFrameCount = Math.max(1, frameCount - holdFrames);
+  return weighted.map((value, index) => {
+    if (index < holdFrames) return 0;
+    const activeIndex = index - holdFrames;
+    const t = activeFrameCount <= 1 ? 1 : activeIndex / (activeFrameCount - 1);
+    const slowValue = value * EXTERNAL_WALK_START_SLOW_MULTIPLIER;
+    if (t < EXTERNAL_WALK_START_ACCELERATION_POINT) return Number(slowValue.toFixed(3));
+    const ramp = easeInCubic((t - EXTERNAL_WALK_START_ACCELERATION_POINT) / (1 - EXTERNAL_WALK_START_ACCELERATION_POINT));
+    return Number((slowValue + (EXTERNAL_WALK_LOOP_MOTION_MAX - slowValue) * ramp).toFixed(3));
+  });
+}
+
+export function externalWalkLoopMotionCurve(frameCount, sourceStartFrame = 0) {
+  const raw = externalWalkRawMotionCurve("loop", frameCount, sourceStartFrame);
+  const min = Math.min(...raw);
+  const max = Math.max(...raw);
+  const range = Math.max(0.001, max - min);
+  return raw.map((value) => {
+    const normalized = (value - min) / range;
+    return Number((EXTERNAL_WALK_LOOP_MOTION_MIN + normalized * (EXTERNAL_WALK_LOOP_MOTION_MAX - EXTERNAL_WALK_LOOP_MOTION_MIN)).toFixed(3));
+  });
+}
+
+export function externalWalkRawMotionCurve(role, frameCount, sourceStartFrame = 0) {
   if (role === "start") {
     return Array.from({ length: frameCount }, (_, index) => {
       const t = frameCount <= 1 ? 1 : index / (frameCount - 1);
@@ -742,6 +786,11 @@ export function externalWalkMotionCurve(role, frameCount, sourceStartFrame = 0) 
 function easeOutCubic(value) {
   const t = Math.max(0, Math.min(1, value));
   return 1 - Math.pow(1 - t, 3);
+}
+
+function easeInCubic(value) {
+  const t = Math.max(0, Math.min(1, value));
+  return t * t * t;
 }
 
 export { alphaBounds, blit, makePng, readPng, writePng };

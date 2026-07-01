@@ -47,11 +47,14 @@ export class Game {
       verticalDirectionBias: this.characterDefinitions["npc.bai_mitko"].render.verticalDirectionBias,
       animationTime: 0,
       facingDebug: null,
-      walkMotionMultipliersByFacing: this.characterVariant === "external_animation_v1" ? this.defaultWalkMotionMultipliersByFacing() : {},
+      walkMotionMultipliersByFacing: this.usesExternalCharacterAnimation() ? this.defaultWalkMotionMultipliersByFacing() : {},
       walkMovementStartFrameByFacing: this.defaultWalkMovementStartFrameByFacing(),
-      animationFpsByFacing: this.characterVariant === "external_animation_v1" ? this.defaultAnimationFpsByFacing() : {},
-      walkPartsByFacing: this.characterVariant === "external_animation_v1" ? this.defaultWalkPartsByFacing() : {},
+      animationFpsByFacing: this.usesExternalCharacterAnimation() ? this.defaultAnimationFpsByFacing() : {},
+      walkPartsByFacing: this.usesExternalCharacterAnimation() ? this.defaultWalkPartsByFacing() : {},
       walkPart: null,
+      pendingStop: false,
+      stopExitFrame: 0,
+      canExitToStop: false,
       movementStopping: false,
       stopAnimationStarted: false,
       stopAnimationFinished: false,
@@ -59,7 +62,7 @@ export class Game {
       animator: new AnimationPlayer(this.characterDefinitions["npc.bai_mitko"])
     };
     this.simpleAnim = this.createSimpleAnimState();
-    if (this.characterVariant === "external_animation_v1") console.info("[characterVariant] using external_animation_v1 east/west only");
+    if (this.usesExternalCharacterAnimation()) console.info("[characterVariant] using external_animation_v1 east/west only");
     this.inventory = new InventorySystem(this.content.items, this.state);
     this.quests = new QuestSystem(this.content.quests, this.state);
     this.dialogue = new DialogueSystem(this.content.dialogues, this.localization, (effect) => this.applyDialogueEffect(effect));
@@ -163,7 +166,9 @@ export class Game {
 
   currentAnimationFps() {
     if (this.player.animation !== "walk") return null;
-    return this.currentAnimationFrame()?.fps || null;
+    const frame = this.currentAnimationFrame();
+    if (!frame) return null;
+    return frame.fps;
   }
 
   currentAnimationFrame() {
@@ -195,12 +200,12 @@ export class Game {
 
   currentAnimationLoopStartFrame() {
     if (this.player.animation !== "walk") return null;
-    return this.currentAnimationFrame()?.loopStartFrame || null;
+    return this.currentAnimationFrame()?.loopStartFrame ?? null;
   }
 
   currentAnimationInitialFrame() {
     if (this.player.animation !== "walk") return null;
-    return this.currentAnimationFrame()?.initialFrame || null;
+    return this.currentAnimationFrame()?.initialFrame ?? null;
   }
 
   currentAnimationLoop() {
@@ -216,7 +221,11 @@ export class Game {
 
   readCharacterVariant() {
     const params = new URLSearchParams(globalThis.location?.search || "");
-    return params.get("characterVariant") || "default";
+    return params.get("characterVariant") || "external_animation_v1";
+  }
+
+  usesExternalCharacterAnimation() {
+    return this.characterVariant === "external_animation_v1";
   }
 
   shouldShowDevHome() {
@@ -434,14 +443,14 @@ export class Game {
     panel.innerHTML = `
       <h1>Comrade Candidate Dev</h1>
       <p>Internal development links for runtime art and animation testing.</p>
-      <a class="play-link" href="./?play=1">Play</a>
+      <a class="play-link" href="./?play=1">Play Animated East/West</a>
       <div class="dev-status-list">
         <div class="dev-status">
           <strong>External Animation v1</strong>
           <span>active Bai Mitko animation import path. East start/loop/stop only; west mirrors east. North/south/diagonals deferred.</span>
           <a href="./?animLab=1">Open animLab external section</a>
           <a href="./?simpleAnimTest=1">Open simple animation test</a>
-          <a href="./?play=1&characterVariant=external_animation_v1">Play with External Animation v1</a>
+          <a href="./?play=1">Play with External Animation v1</a>
         </div>
       </div>
       <pre class="dev-command">node tools/unpack-external-animation-zips.js
@@ -451,7 +460,7 @@ node tools/build-external-runtime-staging.js</pre>
       <div class="dev-links">
         <a href="./?animLab=1">Animation Lab</a>
         <a href="./?simpleAnimTest=1">Simple Animation Test</a>
-        <a href="./?play=1&characterVariant=external_animation_v1">Play External Animation v1</a>
+        <a href="./?play=1">Play External Animation v1</a>
         <a href="./target/external_animation_v1/previews/walk_east_start.gif">Walk East Start GIF</a>
         <a href="./target/external_animation_v1/previews/walk_east_loop.gif">Walk East Loop GIF</a>
         <a href="./target/external_animation_v1/previews/walk_east_stop.gif">Walk East Stop GIF</a>
@@ -467,7 +476,7 @@ node tools/build-external-runtime-staging.js</pre>
 
   createSimpleAnimState() {
     return {
-      x: 640,
+      x: 180,
       baselineY: 650,
       direction: "east",
       mode: "idle",
@@ -476,21 +485,74 @@ node tools/build-external-runtime-staging.js</pre>
       frameIndex: 0,
       speed: 60,
       fpsOverride: 0,
-      showOverlays: true,
+      showOverlays: this.readSimpleAnimOverlaySetting(),
+      pendingStop: false,
+      stopExitFrame: this.readSimpleStopExitFrame(),
+      canExitToStop: false,
       sequence: null,
       debug: {},
       warnings: []
     };
   }
 
+  readSimpleAnimOverlaySetting() {
+    try {
+      const value = localStorage.getItem("baimitko.simpleAnim.showOverlays");
+      return value === "1";
+    } catch {
+      return false;
+    }
+  }
+
+  writeSimpleAnimOverlaySetting(value) {
+    try {
+      localStorage.setItem("baimitko.simpleAnim.showOverlays", value ? "1" : "0");
+    } catch {
+      // localStorage is optional in test and privacy-restricted browser contexts.
+    }
+  }
+
+  readSimpleStopExitFrame() {
+    const params = new URLSearchParams(globalThis.location?.search || "");
+    const value = Number(params.get("stopExitFrame"));
+    if (Number.isInteger(value) && value >= 0) return value;
+    return externalAnimationV1.walkParts?.east?.loop?.stopExitFrame ?? 0;
+  }
+
+  normalizedSimpleStopExitFrame(frame = this.simpleWalkPart("loop")) {
+    const frameCount = Math.max(1, Number(frame?.frameCount) || 1);
+    const value = Number(this.simpleAnim.stopExitFrame);
+    if (!Number.isFinite(value)) return 0;
+    return ((Math.trunc(value) % frameCount) + frameCount) % frameCount;
+  }
+
   simpleWalkPart(part) {
     return externalAnimationV1.walkParts?.east?.[part] || null;
+  }
+
+  simpleIdleFrame() {
+    const start = this.simpleWalkPart("start");
+    if (!start?.sourceFrameRects?.[0]) return null;
+    return {
+      ...start,
+      role: "idle",
+      loop: false,
+      frameCount: 1,
+      initialFrame: 0,
+      frameStart: 0,
+      frameEndTrim: 0,
+      frameRects: [start.sourceFrameRects[0]],
+      frameContentBounds: start.sourceFrameContentBounds?.[0] ? [start.sourceFrameContentBounds[0]] : undefined,
+      contentBounds: start.sourceFrameContentBounds?.[0] || start.contentBounds,
+      movementSpeedMultipliers: [0]
+    };
   }
 
   simpleCurrentFrame() {
     if (this.simpleAnim.mode === "start") return this.simpleWalkPart("start");
     if (this.simpleAnim.mode === "loop") return this.simpleWalkPart("loop");
     if (this.simpleAnim.mode === "stop") return this.simpleWalkPart("stop");
+    if (this.simpleAnim.mode === "idle") return this.simpleIdleFrame();
     return null;
   }
 
@@ -507,33 +569,57 @@ node tools/build-external-runtime-staging.js</pre>
     this.simpleAnim.sequence = options.sequence || null;
     const frame = this.simpleCurrentFrame();
     const fps = this.simpleAnimFps(frame);
-    const initialFrame = options.reset === false ? this.simpleAnim.frameIndex : frame?.initialFrame || 0;
+    const initialFrame = options.reset === false ? this.simpleAnim.frameIndex : frame?.initialFrame ?? 0;
     this.simpleAnim.frameIndex = initialFrame;
     this.simpleAnim.elapsed = initialFrame / Math.max(1, fps);
+    this.simpleAnim.canExitToStop = false;
   }
 
   resetSimpleAnim() {
-    this.simpleAnim = this.createSimpleAnimState();
+    this.simpleAnim.x = this.createSimpleAnimState().x;
     this.renderUi();
   }
 
   startSimpleWalk(direction) {
+    this.simpleAnim.pendingStop = false;
+    this.simpleAnim.canExitToStop = false;
+    if (this.simpleAnim.moving && (this.simpleAnim.mode === "start" || this.simpleAnim.mode === "loop")) {
+      this.simpleAnim.direction = direction;
+      this.simpleAnim.sequence = null;
+      if (this.simpleAnim.mode === "start") this.setSimpleAnimMode("loop", { direction, moving: true, reset: false });
+      return;
+    }
     const start = this.simpleWalkPart("start");
     this.setSimpleAnimMode(start ? "start" : "loop", { direction, moving: true });
   }
 
   stopSimpleWalk() {
     const stop = this.simpleWalkPart("stop");
-    this.setSimpleAnimMode(stop ? "stop" : "idle", { moving: false });
+    if (!stop || this.simpleAnim.mode === "idle") {
+      this.setSimpleAnimMode("idle", { moving: false });
+      return;
+    }
+    if (this.simpleAnim.mode === "stop") return;
+    this.simpleAnim.pendingStop = false;
+    this.simpleAnim.canExitToStop = false;
+    this.simpleAnim.moving = false;
+    this.simpleAnim.sequence = null;
+    this.simpleAnim.lastMoveMultiplier = 0;
+    this.simpleAnim.lastMoveDx = 0;
+    this.setSimpleAnimMode("stop", { direction: this.simpleAnim.direction, moving: false });
   }
 
   playSimplePart(part) {
+    this.simpleAnim.pendingStop = false;
+    this.simpleAnim.canExitToStop = false;
     this.setSimpleAnimMode(part, { direction: "east", moving: false });
   }
 
   playSimpleFullSequence(direction) {
     this.simpleAnim.direction = direction;
     this.simpleAnim.moving = false;
+    this.simpleAnim.pendingStop = false;
+    this.simpleAnim.canExitToStop = false;
     this.simpleAnim.sequence = {
       steps: [
         { mode: "idle", duration: 0.45 },
@@ -558,10 +644,12 @@ node tools/build-external-runtime-staging.js</pre>
     }
     this.simpleAnim.mode = step.mode;
     this.simpleAnim.moving = false;
-    this.simpleAnim.elapsed = 0;
-    this.simpleAnim.frameIndex = this.simpleCurrentFrame()?.initialFrame || 0;
+    const frame = this.simpleCurrentFrame();
+    const fps = this.simpleAnimFps(frame);
+    const initialFrame = frame?.initialFrame ?? 0;
+    this.simpleAnim.elapsed = initialFrame / Math.max(1, fps);
+    this.simpleAnim.frameIndex = initialFrame;
     if (step.mode === "loop") {
-      const frame = this.simpleCurrentFrame();
       sequence.loopFramesRemaining = (frame?.frameCount || 1) * (step.loops || 1);
     }
   }
@@ -574,7 +662,7 @@ node tools/build-external-runtime-staging.js</pre>
   }
 
   simpleAnimFps(frame) {
-    return Number(this.simpleAnim.fpsOverride) > 0 ? Number(this.simpleAnim.fpsOverride) : frame?.fps || 8;
+    return Number(this.simpleAnim.fpsOverride) > 0 ? Number(this.simpleAnim.fpsOverride) : frame?.fps || 16;
   }
 
   updateSimpleAnim(dt) {
@@ -600,11 +688,19 @@ node tools/build-external-runtime-staging.js</pre>
       if (state.mode === "start" && finished) this.setSimpleAnimMode("loop", { direction: state.direction, moving: true });
       const activeFrame = this.simpleCurrentFrame();
       const multipliers = activeFrame?.movementSpeedMultipliers || [];
-      const multiplier = multipliers[state.frameIndex % Math.max(1, multipliers.length)] || 1;
+      const value = Number(multipliers[state.frameIndex % Math.max(1, multipliers.length)]);
+      const multiplier = Number.isFinite(value) && value >= 0 ? value : 1;
       const direction = state.direction === "west" ? -1 : 1;
-      state.x += direction * state.speed * multiplier * dt;
+      const dx = direction * state.speed * multiplier * dt;
+      state.lastMoveMultiplier = multiplier;
+      state.lastMoveDx = dx;
+      state.x += dx;
       state.x = Math.max(180, Math.min(1100, state.x));
-    } else if (state.mode === "stop" && finished) {
+    } else {
+      state.lastMoveMultiplier = 0;
+      state.lastMoveDx = 0;
+    }
+    if (!state.moving && state.mode === "stop" && finished) {
       this.setSimpleAnimMode("idle", { direction: state.direction, moving: false });
     }
 
@@ -648,8 +744,12 @@ node tools/build-external-runtime-staging.js</pre>
         <button data-action="full-east" ${start && loop && stop ? "" : "disabled"}>Play Full East Sequence</button>
         <button data-action="full-west" ${start && loop && stop ? "" : "disabled"}>Play Full West Sequence</button>
       </div>
+      <div class="simple-anim-row">
+        <button data-action="clear-cache">Clear Cache + Reload</button>
+      </div>
       <label>movement speed <input data-control="speed" type="range" min="0" max="220" step="1" value="${this.simpleAnim.speed}"> <span>${this.simpleAnim.speed}px/s</span></label>
-      <label>fps override <input data-control="fps" type="range" min="0" max="20" step="1" value="${this.simpleAnim.fpsOverride}"> <span>${this.simpleAnim.fpsOverride || "metadata"}</span></label>
+      <label>fps override <input data-control="fps" type="range" min="0" max="20" step="1" value="${this.simpleAnim.fpsOverride}"> <span>${this.simpleAnim.fpsOverride || "16 default"}</span></label>
+      <label>stop exit frame <input data-control="stop-exit-frame" type="number" min="0" step="1" value="${this.simpleAnim.stopExitFrame}"> <span>${this.normalizedSimpleStopExitFrame(loop)}</span></label>
       <label><input data-control="overlays" type="checkbox" ${this.simpleAnim.showOverlays ? "checked" : ""}> show bounds/baseline overlays</label>
     `;
     panel.addEventListener("click", (event) => {
@@ -665,16 +765,39 @@ node tools/build-external-runtime-staging.js</pre>
       if (action === "stop-part") this.playSimplePart("stop");
       if (action === "full-east") this.playSimpleFullSequence("east");
       if (action === "full-west") this.playSimpleFullSequence("west");
+      if (action === "clear-cache") {
+        this.clearBrowserCachesAndReload();
+        return;
+      }
       this.renderUi();
     });
     panel.addEventListener("input", (event) => {
       const control = event.target?.dataset?.control;
       if (control === "speed") this.simpleAnim.speed = Number(event.target.value);
       if (control === "fps") this.simpleAnim.fpsOverride = Number(event.target.value);
-      if (control === "overlays") this.simpleAnim.showOverlays = event.target.checked;
+      if (control === "stop-exit-frame") this.simpleAnim.stopExitFrame = Number(event.target.value);
+      if (control === "overlays") {
+        this.simpleAnim.showOverlays = event.target.checked;
+        this.writeSimpleAnimOverlaySetting(this.simpleAnim.showOverlays);
+      }
       this.renderUi();
     });
     this.uiRoot.appendChild(panel);
+  }
+
+  async clearBrowserCachesAndReload() {
+    try {
+      if (globalThis.caches?.keys) {
+        const keys = await globalThis.caches.keys();
+        await Promise.all(keys.map((key) => globalThis.caches.delete(key)));
+      }
+      globalThis.localStorage?.clear();
+      globalThis.sessionStorage?.clear();
+    } catch (error) {
+      console.warn("[simpleAnim] cache clear failed; reloading anyway", error);
+    } finally {
+      globalThis.location?.reload();
+    }
   }
 
   createPause() {

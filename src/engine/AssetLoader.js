@@ -2,7 +2,6 @@ export class AssetLoader {
   constructor(manifest) {
     this.manifest = manifest;
     this.images = new Map();
-    this.targetAssetVersion = String(Date.now());
   }
 
   getSceneImage(sceneId, layer) {
@@ -29,7 +28,7 @@ export class AssetLoader {
     if (this.images.has(path)) return this.images.get(path);
 
     const image = new Image();
-    image.src = this.cacheSafePath(path);
+    image.src = path;
     image.dataset.loaded = "false";
     image.addEventListener("load", () => {
       image.dataset.loaded = "true";
@@ -39,12 +38,6 @@ export class AssetLoader {
     });
     this.images.set(path, image);
     return image;
-  }
-
-  cacheSafePath(path) {
-    if (!path.startsWith("target/")) return path;
-    const separator = path.includes("?") ? "&" : "?";
-    return `${path}${separator}v=${this.targetAssetVersion}`;
   }
 
   getSceneAssetPath(sceneId, layer) {

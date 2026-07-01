@@ -6,16 +6,18 @@ export class MovementSystem {
   }
 
   walkTo(point) {
+    const wasWalking = this.player.animation === "walk" && (this.player.target || this.player.walkPart === "start" || this.player.walkPart === "loop");
     const dx = point.x - this.player.position.x;
     const dy = point.y - this.player.position.y;
     this.player.facing = facingFromDelta(dx, dy, this.player);
     this.player.target = { ...point };
     this.player.animation = "walk";
+    this.player.pendingStop = false;
     this.player.movementStopping = false;
     this.player.stopAnimationStarted = false;
     this.player.stopAnimationFinished = false;
     const parts = walkPartsForFacing(this.player);
-    this.player.walkPart = parts?.start ? "start" : "loop";
+    this.player.walkPart = wasWalking ? "loop" : parts?.start ? "start" : "loop";
   }
 
   update(dt) {
@@ -27,6 +29,14 @@ export class MovementSystem {
       if (this.player.animation === "walk" && this.player.walkPart === "stop") {
         this.player.stopAnimationFinished = true;
         this.player.movementStopping = false;
+        this.player.pendingStop = false;
+      }
+      if (this.player.pendingStop) {
+        this.player.animation = "walk";
+        this.player.movementStopping = true;
+        this.player.stopExitFrame = stopExitFrameForPlayer(this.player);
+        beginWalkStop(this.player);
+        return;
       }
       this.player.animation = this.player.speaking ? "talk" : "idle";
       this.player.walkPart = null;
@@ -43,11 +53,7 @@ export class MovementSystem {
       this.player.target = null;
       const parts = walkPartsForFacing(this.player);
       if (parts?.stop) {
-        this.player.walkPart = "stop";
-        this.player.animation = "walk";
-        this.player.movementStopping = true;
-        this.player.stopAnimationStarted = true;
-        this.player.stopAnimationFinished = false;
+        requestWalkStop(this.player);
       } else {
         this.player.animation = "idle";
         this.player.walkPart = null;
@@ -56,7 +62,54 @@ export class MovementSystem {
   }
 }
 
-function walkPartsForFacing(player) {
+export function requestWalkStop(player) {
+  const parts = walkPartsForFacing(player);
+  if (!parts?.stop) {
+    player.target = null;
+    player.animation = player.speaking ? "talk" : "idle";
+    player.walkPart = null;
+    player.pendingStop = false;
+    return;
+  }
+  player.target = null;
+  player.animation = "walk";
+  player.walkPart = player.walkPart === "start" ? "start" : "loop";
+  player.pendingStop = true;
+  player.movementStopping = true;
+  player.stopAnimationStarted = false;
+  player.stopAnimationFinished = false;
+  player.stopExitFrame = stopExitFrameForPlayer(player);
+  beginWalkStop(player);
+}
+
+export function beginWalkStop(player) {
+  player.animation = "walk";
+  player.walkPart = "stop";
+  player.pendingStop = false;
+  player.movementStopping = true;
+  player.stopAnimationStarted = true;
+  player.stopAnimationFinished = false;
+  player.canExitToStop = false;
+}
+
+export function canExitToStop(player) {
+  if (!player.pendingStop || player.animation !== "walk" || player.walkPart !== "loop") return false;
+  const parts = walkPartsForFacing(player);
+  const loop = parts?.loop;
+  if (!loop?.frameCount) return true;
+  const frameIndex = ((player.animator?.frameIndex ?? 0) % loop.frameCount + loop.frameCount) % loop.frameCount;
+  return frameIndex === stopExitFrameForPlayer(player);
+}
+
+export function stopExitFrameForPlayer(player) {
+  const parts = walkPartsForFacing(player);
+  const loop = parts?.loop;
+  const configured = Number(loop?.stopExitFrame ?? parts?.stopExitFrame ?? 0);
+  const frameCount = Math.max(1, Number(loop?.frameCount) || 1);
+  return Number.isFinite(configured) ? ((Math.trunc(configured) % frameCount) + frameCount) % frameCount : 0;
+}
+
+export function walkPartsForFacing(player) {
   const facing = eastWestFallbackFacing(player.facing);
   return facing ? player.walkPartsByFacing?.[facing] : null;
 }
@@ -82,7 +135,7 @@ export function walkMotionMultiplierForFrame(player) {
   const multipliers = player.walkMotionMultipliersByFacing?.[fallbackFacing]?.[part] || player.walkMotionMultipliersByFacing?.[fallbackFacing] || player.walkMotionMultipliers;
   if (!Array.isArray(multipliers) || !multipliers.length || player.animation !== "walk") return 1;
   const value = Number(multipliers[index % multipliers.length]);
-  return Number.isFinite(value) && value > 0 ? value : 1;
+  return Number.isFinite(value) && value >= 0 ? value : 1;
 }
 
 export function facingFromDelta(dx, dy, player) {
@@ -107,6 +160,16 @@ export function facingFromDelta(dx, dy, player) {
     if (dy > 0 && facing === "west") facing = "south_west";
     if (dy < 0 && facing === "west") facing = "north_west";
   }
+  if (hasEastWestWalkOnly(player)) {
+    if (dx > 0.01) facing = "east";
+    else if (dx < -0.01) facing = "west";
+    else facing = eastWestFallbackFacing(player.facing) || "east";
+  }
   player.facingDebug = { dx, dy, adjustedDx: dx, adjustedDy, angle: degrees, selectedFacing: facing };
   return facing;
+}
+
+export function hasEastWestWalkOnly(player) {
+  const parts = player.walkPartsByFacing || {};
+  return Boolean(parts.east && parts.west && !parts.north && !parts.south);
 }

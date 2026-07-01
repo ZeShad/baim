@@ -1,7 +1,18 @@
 import { clamp } from "./geometry.js";
 import { characterHeight } from "./CharacterRenderMath.js";
-import { eastWestFallbackFacing } from "./MovementSystem.js";
+import { canExitToStop, eastWestFallbackFacing, stopExitFrameForPlayer } from "./MovementSystem.js";
 import { externalAnimationV1 } from "../content/art/externalAnimationV1.generated.js";
+
+export function stopRenderOffsetX(frame, frameIndex, mirrored = false) {
+  const startOffset = Number(frame?.stopRenderOffsetXStart);
+  if (!Number.isFinite(startOffset) || !frame || frame.role !== "stop") return 0;
+  const startFrame = Math.max(0, Math.min(Number(frame.initialFrame) || 0, Math.max(0, frame.frameCount - 1)));
+  const endFrame = Math.max(startFrame + 1, frame.frameCount - 1);
+  const progress = Math.max(0, Math.min(1, (frameIndex - startFrame) / Math.max(1, endFrame - startFrame)));
+  if (progress >= 1) return 0;
+  const direction = mirrored ? -1 : 1;
+  return direction * startOffset * (1 - progress);
+}
 
 export class Renderer {
   constructor(canvas, game) {
@@ -72,11 +83,11 @@ export class Renderer {
         if (!valid) warnings.push(`invalid frame metadata for ${slot}`);
         const frameIndex = state.frameIndex % Math.max(1, frame.frameCount);
         const bounds = this.frameContentBounds(frame, frameIndex);
-        const visualHeight = frame.contentBounds?.h || bounds.h || frame.frameHeight;
-        const scale = 500 / visualHeight;
+        const scale = 500 / frame.frameHeight;
         const width = frame.frameWidth * scale;
         const height = frame.frameHeight * scale;
-        const drawX = state.x - width * (frame.anchorX ?? frame.anchor?.x ?? 0.5);
+        const renderOffsetX = stopRenderOffsetX(frame, frameIndex, mirrored);
+        const drawX = state.x + renderOffsetX - width * (frame.anchorX ?? frame.anchor?.x ?? 0.5);
         const drawY = state.baselineY - (frame.baselineY || frame.frameHeight) * scale;
         const shadowWidth = (frame.contentBounds?.w || bounds.w) * scale;
         this.drawSimpleShadow(state.x, state.baselineY, shadowWidth);
@@ -89,7 +100,8 @@ export class Renderer {
           baselineY: frame.baselineY,
           anchor: `${frame.anchorX ?? frame.anchor?.x ?? 0.5},${frame.anchorY ?? frame.anchor?.y ?? 1}`,
           width,
-          height
+          height,
+          renderOffsetX
         };
         if (state.showOverlays) this.drawSimpleOverlays(drawX, drawY, width, height, state.baselineY, sourceRect);
       } else {
@@ -114,6 +126,17 @@ export class Renderer {
 
     state.debug = { drawInfo, warnings };
     this.drawSimpleDebug(frame, slot, mirrored, drawInfo, warnings);
+  }
+
+  static resolveIdleWalkFrameForDefinition(player, definition, facing) {
+    const walk = definition.animations.walk;
+    if (walk.type === "phasedStrip" && Object.keys(player.walkPartsByFacing || {}).length) {
+      const direction = eastWestFallbackFacing(facing) || "east";
+      const frame = definition.animations.walk.parts?.[direction]?.start || definition.animations.walk.parts?.east?.start;
+      if (!frame?.slot) return null;
+      return { facing, frameIndex: 0, frame, slot: frame.slot, mirrored: Boolean(frame.mirrored) };
+    }
+    return null;
   }
 
   drawSimpleShadow(x, y, width) {
@@ -156,22 +179,29 @@ export class Renderer {
       `frame: ${state.frameIndex}/${frame?.frameCount || 1}`,
       `fps: ${this.game.simpleAnimFps(frame)}`,
       `elapsed: ${state.elapsed.toFixed(2)}`,
+      `move multiplier: ${(state.lastMoveMultiplier || 0).toFixed(3)}`,
+      `dx/frame: ${(state.lastMoveDx || 0).toFixed(3)}`,
+      `pendingStop: ${Boolean(state.pendingStop)}`,
+      `stopExitFrame: ${this.game.normalizedSimpleStopExitFrame()}`,
+      `canExitToStop: ${Boolean(state.canExitToStop)}`,
       `loop: ${frame ? Boolean(frame.loop) : false}`,
       `mirrored: ${mirrored}`,
+      `render offset x: ${(drawInfo.renderOffsetX || 0).toFixed(1)}`,
       `draw: ${drawInfo.drawX.toFixed(1)},${drawInfo.drawY.toFixed(1)}`,
       `baselineY: ${drawInfo.baselineY}`,
       `anchor: ${drawInfo.anchor}`,
       `source rect: ${sourceRect}`,
       `slot: ${slot}`
     ];
+    if (state.pendingStop) lines.push(`Stop requested, waiting for loop exit frame ${this.game.normalizedSimpleStopExitFrame()}.`);
     ctx.fillStyle = "rgba(20, 18, 14, 0.78)";
-    ctx.fillRect(18, 18, 430, 298 + warnings.length * 18);
+    ctx.fillRect(18, 18, 430, 406 + warnings.length * 18);
     ctx.fillStyle = "#f5ead5";
     ctx.font = "14px Consolas, monospace";
     lines.forEach((line, index) => ctx.fillText(line, 30, 42 + index * 18));
     if (warnings.length) {
       ctx.fillStyle = "#ff6c5d";
-      warnings.forEach((warning, index) => ctx.fillText(`warning: ${warning}`, 30, 326 + index * 18));
+      warnings.forEach((warning, index) => ctx.fillText(`warning: ${warning}`, 30, 434 + index * 18));
     }
   }
 
@@ -297,11 +327,16 @@ export class Renderer {
       const anchor = spriteInfo.frame?.anchor || definition.render.anchor;
       const useRealWalk = p.animation === "walk" && spriteInfo.frame;
       const verticalOffset = useRealWalk ? 0 : walkBob;
-      const drawX = p.position.x - width * anchor.x;
-      const baselineOffset = preserveFrameLayout
-        ? spriteInfo.frame?.baselineY || sourceHeight * anchor.y
+      const frameIndex = spriteInfo.frame
+        ? Number.isInteger(spriteInfo.staticFrameIndex) ? spriteInfo.staticFrameIndex : this.game.player.animator.frameIndex % spriteInfo.frame.frameCount
+        : 0;
+      const renderOffsetX = stopRenderOffsetX(spriteInfo.frame, frameIndex, spriteInfo.mirrored);
+      const drawX = p.position.x + renderOffsetX - width * anchor.x;
+      const baselineOffset = preserveFrameLayout && boundsForSize
+        ? boundsForSize.y + boundsForSize.h
         : spriteInfo.frame?.baselineY && boundsForSize ? spriteInfo.frame.baselineY - boundsForSize.y : sourceHeight * anchor.y;
-      const drawY = p.position.y - baselineOffset * scale + verticalOffset;
+      const walkFootCorrectionY = preserveFrameLayout ? 10 : 0;
+      const drawY = p.position.y - baselineOffset * scale + verticalOffset + walkFootCorrectionY;
       ctx.save();
       ctx.fillStyle = "rgba(0, 0, 0, 0.26)";
       ctx.beginPath();
@@ -309,7 +344,6 @@ export class Renderer {
       ctx.ellipse(p.position.x, p.position.y + 2, shadowWidth * 0.3, Math.max(6, height * 0.035), 0, 0, Math.PI * 2);
       ctx.fill();
       if (spriteInfo.frame) {
-        const frameIndex = Number.isInteger(spriteInfo.staticFrameIndex) ? spriteInfo.staticFrameIndex : this.game.player.animator.frameIndex % spriteInfo.frame.frameCount;
         if (p.animation === "walk") {
           p.lastWalkFrame = {
             facing: p.facing,
@@ -330,7 +364,7 @@ export class Renderer {
       } else {
         ctx.drawImage(sprite, drawX, drawY, width, drawHeight);
       }
-      if (this.game.debugSceneGeometry || this.game.debugAnimation) this.drawCharacterDebug(p, drawX, drawY, width, drawHeight, visualHeight, spriteInfo.slot, spriteInfo.frame, spriteInfo.mirrored);
+      if (this.game.debugSceneGeometry || this.game.debugAnimation) this.drawCharacterDebug(p, drawX, drawY, width, drawHeight, visualHeight, spriteInfo.slot, spriteInfo.frame, spriteInfo.mirrored, renderOffsetX);
       ctx.restore();
       return;
     }
@@ -401,10 +435,11 @@ export class Renderer {
   }
 
   resolveIdleWalkFrame(player, definition, facing) {
-    if (player.lastWalkFrame?.frame) return player.lastWalkFrame;
+    const externalIdle = Renderer.resolveIdleWalkFrameForDefinition(player, definition, facing);
+    if (externalIdle) return externalIdle;
     const walk = definition.animations.walk;
     const frame = walk.type === "phasedStrip" && Object.keys(player.walkPartsByFacing || {}).length
-      ? this.resolveWalkPartFrame({ ...player, walkPart: "loop" }, definition, facing) || this.resolveWalkPartFrame({ ...player, walkPart: "loop" }, definition, "east")
+      ? this.resolveWalkPartFrame({ ...player, walkPart: "start" }, definition, facing) || this.resolveWalkPartFrame({ ...player, walkPart: "start" }, definition, "east")
       : this.resolveStripFrame(walk, facing) || this.resolveStripFrame(walk, definition.render.defaultFacing) || this.resolveStripFrame(walk, "east");
     if (!frame?.slot) return null;
     const frameIndex = Math.min(0, Math.max(0, frame.frameCount - 1));
@@ -496,7 +531,7 @@ export class Renderer {
     return frame.contentBounds || { x: 0, y: 0, w: frame.frameWidth, h: frame.frameHeight };
   }
 
-  drawCharacterDebug(player, drawX, drawY, width, height, sourceHeight, slot, frame, mirrored = false) {
+  drawCharacterDebug(player, drawX, drawY, width, height, sourceHeight, slot, frame, mirrored = false, renderOffsetX = 0) {
     const { ctx } = this;
     ctx.strokeStyle = "rgba(255, 80, 80, 0.9)";
     ctx.lineWidth = 2;
@@ -518,15 +553,19 @@ export class Renderer {
     const fps = animator.fpsOverride || frame?.fps || "n/a";
     const elapsed = animator.elapsed?.toFixed ? animator.elapsed.toFixed(2) : "0.00";
     const reset = animator.resetThisTick ? animator.resetReason || "yes" : "no";
+    const pendingStop = Boolean(player.pendingStop);
+    const stopExitFrame = stopExitFrameForPlayer(player);
+    const canExit = canExitToStop(player);
     ctx.fillText(`${this.game.currentScene.id} key:${animator.currentKey} prev:${animator.previousKey || "n/a"}`, drawX, drawY - 86);
     ctx.fillText(`${player.animation}:${player.walkPart || "idle"}/${player.facing}${fallback}/${slot} mirrored:${mirrored} frame:${frameIndex}/${frameCount} fps:${fps}`, drawX, drawY - 73);
     ctx.fillText(`elapsed:${elapsed} loop:${frame ? Boolean(frame.loop) : "n/a"} finished:${animator.isFinished()} reset:${reset}`, drawX, drawY - 60);
-    ctx.fillText(`moving:${Boolean(player.target)} stopping:${Boolean(player.movementStopping)} stopStarted:${Boolean(player.stopAnimationStarted)} stopFinished:${Boolean(player.stopAnimationFinished)}`, drawX, drawY - 47);
-    ctx.fillText(`feet:${Math.round(player.position.x)},${Math.round(player.position.y)} h:${renderedHeight} scale:${scale} baseline:${frame?.baselineY || "n/a"}`, drawX, drawY - 21);
+    ctx.fillText(`pendingStop:${pendingStop} stopExitFrame:${stopExitFrame} canExitToStop:${canExit} stopping:${Boolean(player.movementStopping)} mirrored:${mirrored}`, drawX, drawY - 47);
+    ctx.fillText(`moving:${Boolean(player.target)} stopStarted:${Boolean(player.stopAnimationStarted)} stopFinished:${Boolean(player.stopAnimationFinished)}`, drawX, drawY - 34);
+    ctx.fillText(`feet:${Math.round(player.position.x)},${Math.round(player.position.y)} h:${renderedHeight} scale:${scale} baseline:${frame?.baselineY || "n/a"} offsetX:${renderOffsetX.toFixed(1)}`, drawX, drawY - 21);
     ctx.fillText(`src:${sourceRect}`, drawX, drawY - 8);
     if (player.facingDebug) {
       const d = player.facingDebug;
-      ctx.fillText(`dx:${d.dx.toFixed(1)} dy:${d.dy.toFixed(1)} adj:${d.adjustedDx.toFixed(1)},${d.adjustedDy.toFixed(1)} angle:${d.angle.toFixed(1)}`, drawX, drawY - 34);
+      ctx.fillText(`dx:${d.dx.toFixed(1)} dy:${d.dy.toFixed(1)} adj:${d.adjustedDx.toFixed(1)},${d.adjustedDy.toFixed(1)} angle:${d.angle.toFixed(1)}`, drawX, drawY - 99);
     }
   }
 

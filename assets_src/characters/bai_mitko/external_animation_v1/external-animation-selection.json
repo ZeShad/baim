@@ -1,0 +1,42 @@
+{
+  "variant": "external_animation_v1",
+  "status": "review",
+  "scope": [
+    "east_source",
+    "west_mirrored_from_east"
+  ],
+  "concept": {
+    "source": "C:/t/test Ludo.ai ZIP exports",
+    "note": "East walk uses start/loop/stop. West mirrors east. North/south are deferred."
+  },
+  "animations": {
+    "walk_east_start": {
+      "use": true,
+      "source": "bai-mitko-walk-east-start.zip",
+      "loop": false,
+      "frameStart": 2,
+      "frameEndTrim": 1
+    },
+    "walk_east_loop": {
+      "use": true,
+      "source": "bai-mitko-walk-east-loop.zip",
+      "loop": true,
+      "stopExitFrame": 0,
+      "frameStart": 0,
+      "frameEndTrim": 0
+    },
+    "walk_east_stop": {
+      "use": true,
+      "source": "bai-mitko-walk-east-stop.zip",
+      "loop": false,
+      "frameStart": 1,
+      "frameEndTrim": 0,
+      "stopRenderOffsetXStart": -30
+    }
+  },
+  "mirrors": {
+    "walk_west_start": "mirror walk_east_start",
+    "walk_west_loop": "mirror walk_east_loop",
+    "walk_west_stop": "mirror walk_east_stop"
+  }
+}
