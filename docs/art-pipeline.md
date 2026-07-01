@@ -48,8 +48,17 @@ The active Bai Mitko production path starts from the approved model sheet:
 - `assets_src/characters/bai-mitko-model-sheet-v1.png` is the locked Bai Mitko identity source.
 - New Bai Mitko poses and animation source frames must be generated or edited from that model sheet
   with strict identity preservation.
+- For runtime pose/style continuity, use the closest approved green runtime source pose as the
+  primary image anchor. For east-facing poses, `assets_src/characters/bai-mitko-idle-east-chroma-v1.png`
+  is the primary style, canvas, lighting, scale, and rendering reference; the model sheet remains
+  the secondary design authority.
+- Generate additional Bai Mitko poses as edits/variants of the approved runtime source image family,
+  not as fresh standalone images from text plus model sheet only.
 - Do not accept generated outputs that change his face, body proportions, outfit, moustache,
   friendly comic expression, or overall appeal.
+- Reject outputs that change canvas ratio, framing, line weight, brush/detail density, green
+  background treatment, lighting, facial construction, jacket stripe language, shoe style, or the
+  existing runtime-pose image family.
 - For walk production, author only east-facing source images/frames for now. Do not generate
   separate west walk images; mirror east for west when needed.
 - North and south walk images/animations are deferred and should not be generated in the current

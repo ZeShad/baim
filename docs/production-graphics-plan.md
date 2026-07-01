@@ -10,6 +10,12 @@ Bai Mitko poses, walk references, sprite frames, and animation inputs must be ge
 from that approved model sheet as a strict identity-preservation workflow. If the face, body
 proportions, outfit, or friendly comic appeal drift, the output is rejected.
 
+Runtime pose generation must also use the closest approved green runtime pose as the primary style
+anchor. For east-facing Bai Mitko poses, use `assets_src/characters/bai-mitko-idle-east-chroma-v1.png`
+as the primary reference for canvas, framing, scale, lighting, rendering, green background, line
+weight, and face/style continuity. Do not generate new Bai Mitko runtime poses from text plus the
+model sheet alone.
+
 External/Ludo.ai animation output is deferred review material until the model-sheet-driven character
 variables are stable again.
 
@@ -54,6 +60,10 @@ match the locked model-sheet design.
 Current walk production scope is east-facing source only. Do not generate separate west walk assets;
 west should be mirrored from east. North and south walk assets are deferred and are not part of the
 current generation pass.
+
+The east walk key pose must be an edit/variant of the approved east idle green source image family.
+Reject any output that looks like a different generation batch, even if the character concept is
+recognizable.
 
 Character and animation cutouts use a deterministic source-to-runtime transform: remove green, scale
 the whole source canvas by `CHARACTER_SOURCE_SCALE = 0.6`, then add the shared
