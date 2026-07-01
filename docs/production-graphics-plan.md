@@ -51,6 +51,17 @@ identity contract for every generated pose and animation source. Green-screen re
 active cutout pipeline for generated character assets, but the chroma source image itself must first
 match the locked model-sheet design.
 
+Current walk production scope is east-facing source only. Do not generate separate west walk assets;
+west should be mirrored from east. North and south walk assets are deferred and are not part of the
+current generation pass.
+
+Character and animation cutouts use a deterministic source-to-runtime transform: remove green, scale
+the whole source canvas by `CHARACTER_SOURCE_SCALE = 0.6`, then add the shared
+`CHARACTER_CUTOUT_MARGIN_RATIO = 0.15` transparent canvas margin on all sides. Do not crop each pose
+to its silhouette; matching source canvases must keep matching runtime canvas size and stable sprite
+placement. Conversion tools must not create new Bai Mitko poses or directions unless explicitly
+requested.
+
 Existing Ludo.ai ZIP exports remain under `assets_src/characters/bai_mitko/external_animation_v1/`
 as deferred review/import material. Do not treat them as the current character-design authority.
 
@@ -106,9 +117,9 @@ assets/chapter1/characters/bai_mitko/
 ### Required Bai Mitko Animations
 
 - `idle`
-- `walk_down`
-- `walk_up`
-- `walk_side`
+- `walk_side` authored as east source, with west mirrored from east
+- `walk_down` deferred
+- `walk_up` deferred
 - `talk_neutral`
 - `talk_smug`
 - `look`
@@ -127,8 +138,9 @@ Use ChatGPT image generation in phases:
 3. Three Chapter 1 environment concepts: apartment, village square, mehana.
 4. Selected scene background final pass.
 5. Prop and inventory icons with clean transparent output.
-6. Bai Mitko pose and animation source frames generated from the approved model sheet, on clean
-   green background for the green-removal pipeline.
+6. Bai Mitko east-facing walk pose and animation source frames generated from the approved model
+   sheet, on clean green background for the green-removal pipeline. West is mirrored; north and
+   south are deferred.
 7. Dialogue portraits and expression sheets.
 
 AI output is source art, not final animation by itself. For Bai Mitko motion, use model-sheet-locked

@@ -25,7 +25,7 @@ export const characterDefinitions = {
         directions: {
           south: "idle_south",
           east: "idle_east",
-          west: "idle_west",
+          west: { slot: "idle_east", mirrored: true },
           north: "idle_north"
         },
         fallback: "idle"

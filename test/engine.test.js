@@ -9,6 +9,8 @@ import { eastWestFallbackFacing, facingFromDelta, MovementSystem } from "../src/
 import { AnimationPlayer } from "../src/engine/AnimationPlayer.js";
 import { strings } from "../src/content/localization/index.js";
 import { chapter1 } from "../src/content/chapter1/index.js";
+import { assetManifest } from "../src/content/art/assetManifest.js";
+import { CHARACTER_CUTOUT_MARGIN_RATIO, CHARACTER_SOURCE_SCALE } from "../src/content/art/characterAssetConfig.js";
 import { characterDefinitions } from "../src/content/art/characters.js";
 import { makePng } from "../tools/character-frame-utils.mjs";
 import { chromaKeyGreenToAlpha, externalWalkMotionCurve } from "../tools/external-animation-utils.mjs";
@@ -71,6 +73,17 @@ test("Bai Mitko render height is canonical across idle and walk assets", () => {
   assert.ok(Math.abs(idleHeight - walkSouthHeight) < 2);
   assert.ok(Math.abs(idleHeight - walkEastHeight) < 2);
   assert.ok(Math.abs(idleHeight - walkNorthHeight) < 2);
+});
+
+test("Bai Mitko west idle mirrors east instead of using a separate west image", () => {
+  const idle = characterDefinitions["npc.bai_mitko"].animations.idle.directions;
+  assert.deepEqual(idle.west, { slot: "idle_east", mirrored: true });
+  assert.equal(assetManifest.characters["npc.bai_mitko"].idle_west, undefined);
+});
+
+test("character cutouts use the shared 15 percent source margin", () => {
+  assert.equal(CHARACTER_SOURCE_SCALE, 0.6);
+  assert.equal(CHARACTER_CUTOUT_MARGIN_RATIO, 0.15);
 });
 
 test("east movement exposes start loop stop walk parts without mirroring metadata", () => {

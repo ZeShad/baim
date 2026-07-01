@@ -50,8 +50,19 @@ The active Bai Mitko production path starts from the approved model sheet:
   with strict identity preservation.
 - Do not accept generated outputs that change his face, body proportions, outfit, moustache,
   friendly comic expression, or overall appeal.
+- For walk production, author only east-facing source images/frames for now. Do not generate
+  separate west walk images; mirror east for west when needed.
+- North and south walk images/animations are deferred and should not be generated in the current
+  pass.
 - Use clean green-background source images for the active cutout/removal pipeline.
 - Keep source images under `assets_src/characters/` and cleaned runtime images under `assets/`.
+- Source-to-runtime character cutouts use a deterministic canvas transform: remove green, scale the
+  whole source canvas by `CHARACTER_SOURCE_SCALE = 0.6`, then add
+  `CHARACTER_CUTOUT_MARGIN_RATIO = 0.15` transparent canvas margin on all sides. Do not crop to each
+  pose's silhouette; matching source canvases must produce matching runtime canvas size and stable
+  sprite placement. Use the same constants for animation cutouts.
+- Green-removal utilities must only convert existing listed source files. Do not generate additional
+  Bai Mitko poses or directions unless explicitly requested.
 - External Ludo.ai ZIP exports under `assets_src/characters/bai_mitko/external_animation_v1/` are
   deferred review/import material until the model-sheet-driven character variables are stable.
 
@@ -82,7 +93,7 @@ For each character:
 - neutral front, 3/4, side, and back views;
 - clear silhouette at 160-240 px in game scale;
 - separate expression sheet for portraits;
-- walk cycle reference with 6-8 frames per direction;
+- current walk cycle reference: east-facing source only, with west mirrored from east;
 - talk loop with 2-4 mouth/gesture frames;
 - no baked shadows under feet; shadows are engine-side or scene-side.
 

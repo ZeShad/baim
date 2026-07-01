@@ -5,8 +5,10 @@
 - Apartment background: integrated as first real default-start background.
 - Village square background: integrated, technical proof works.
 - Village square art direction: usable for layout/runtime proof, but still too realistic and text-heavy for final style.
-- Bai Mitko model sheet: approved direction candidate.
-- Bai Mitko runtime animation: External Animation v1 Ludo.ai walk sheets are the active path for east/north/south, with west mirrored from east. Talk/look/use/take remain placeholders.
+- Bai Mitko model sheet: locked identity source.
+- Bai Mitko runtime animation: current source-art direction is model-sheet-preserving east walk
+  only, with west mirrored from east. North/south walk, talk/look/use/take remain placeholders or
+  deferred.
 - Inventory icons: starting inventory icons integrated for accordion, unpaid bills, and empty envelope.
 - UI skin: prototype.
 - Debug geometry: should remain hidden unless `Shift+G` or `?debugGeometry=1` is enabled.

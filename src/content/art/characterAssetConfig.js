@@ -1,0 +1,2 @@
+export const CHARACTER_SOURCE_SCALE = 0.6;
+export const CHARACTER_CUTOUT_MARGIN_RATIO = 0.15;

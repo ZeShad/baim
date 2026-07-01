@@ -35,10 +35,11 @@ Current Bai Mitko production path:
 - The approved model sheet is the locked identity source for all Bai Mitko animation work.
 - Generate or edit pose/source frames from the model sheet with strict identity preservation.
 - Use green-background source images and the green-removal pipeline for runtime cutouts.
+- Current walk authoring scope is east/source only. Do not generate separate west walk images or
+  west animation sources; west should mirror the approved east source at runtime or review time.
 - External Ludo.ai sprite sheets and JSON metadata are deferred review material, not the current
   design authority, until the model-sheet-driven character variables are stable.
-- North, south, diagonals, and run animations remain deferred until the side-walk source direction
-  is approved.
+- North, south, diagonals, and run animations are not current priorities and remain deferred.
 - Run animations are deferred until explicitly approved.
 
 All animations must map to stable animation names. Do not change animation IDs casually once content uses them.

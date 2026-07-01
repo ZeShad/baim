@@ -5,11 +5,13 @@
   "type": "module",
   "scripts": {
     "dev": "node tools/dev-server.mjs",
+    "build:characters": "node tools/build-character-chroma-assets.js",
     "test": "node --test test/engine.test.js"
   },
   "dependencies": {
     "gifenc": "^1.0.3",
-    "pngjs": "^7.0.0"
+    "pngjs": "^7.0.0",
+    "sharp": "^0.35.2"
   },
   "devDependencies": {
     "playwright": "^1.61.1"

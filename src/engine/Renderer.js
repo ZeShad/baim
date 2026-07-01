@@ -321,6 +321,12 @@ export class Renderer {
         }
         const bounds = this.frameContentBounds(spriteInfo.frame, frameIndex);
         this.drawFrameImage(sprite, frameIndex, spriteInfo.frame, bounds, drawX, drawY, width, drawHeight, spriteInfo.mirrored);
+      } else if (spriteInfo.mirrored) {
+        ctx.save();
+        ctx.translate(drawX + width, 0);
+        ctx.scale(-1, 1);
+        ctx.drawImage(sprite, 0, drawY, width, drawHeight);
+        ctx.restore();
       } else {
         ctx.drawImage(sprite, drawX, drawY, width, drawHeight);
       }
@@ -381,13 +387,14 @@ export class Renderer {
       }
     } else {
       const preferredSlot = animation?.directions?.[facing];
-      const preferred = this.game.assets.getCharacterImage(player.id, preferredSlot);
-      if (this.game.assets.isLoaded(preferred)) return { image: preferred, slot: preferredSlot };
+      const preferredInfo = this.resolveDirectionalImage(preferredSlot);
+      const preferred = this.game.assets.getCharacterImage(player.id, preferredInfo?.slot);
+      if (this.game.assets.isLoaded(preferred)) return { image: preferred, slot: preferredInfo.slot, mirrored: preferredInfo.mirrored };
     }
 
     const idleSlot = this.resolveIdleSlot(definition, facing);
-    const idle = this.game.assets.getCharacterImage(player.id, idleSlot);
-    if (this.game.assets.isLoaded(idle)) return { image: idle, slot: idleSlot };
+    const idle = this.game.assets.getCharacterImage(player.id, idleSlot?.slot);
+    if (this.game.assets.isLoaded(idle)) return { image: idle, slot: idleSlot.slot, mirrored: idleSlot.mirrored };
 
     const fallback = this.game.assets.getCharacterImage(player.id, "idle");
     return { image: fallback, slot: "idle" };
@@ -426,14 +433,21 @@ export class Renderer {
 
   resolveIdleSlot(definition, facing) {
     const directions = definition.animations.idle.directions;
-    if (directions[facing]) return directions[facing];
+    if (directions[facing]) return this.resolveDirectionalImage(directions[facing]);
     const fallbackFacing = {
       south_east: "east",
       north_east: "east",
       south_west: "west",
       north_west: "west"
     }[facing] || definition.render.defaultFacing;
-    return directions[fallbackFacing] || directions[definition.render.defaultFacing];
+    return this.resolveDirectionalImage(directions[fallbackFacing] || directions[definition.render.defaultFacing]);
+  }
+
+  resolveDirectionalImage(entry) {
+    if (!entry) return null;
+    if (typeof entry === "string") return { slot: entry, mirrored: false };
+    if (entry.slot) return { slot: entry.slot, mirrored: Boolean(entry.mirrored) };
+    return null;
   }
 
   drawFrameImage(image, frameIndex, frame, bounds, drawX, drawY, width, height, mirrored = false) {
