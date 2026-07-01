@@ -8,6 +8,7 @@ import {
   alphaBounds,
   ensureDir,
   ensureExternalAnimationDirs,
+  EXTERNAL_IDLE_DEFAULT_FPS,
   EXTERNAL_WALK_DEFAULT_FPS,
   externalWalkMotionCurve,
   inspectAnimationFolder,
@@ -71,7 +72,7 @@ for (const [key, config] of Object.entries(selection.animations || {})) {
     : externalWalkMotionCurve(role, frameRects.length, frameStart);
   const configuredInitialFrame = config.initialFrame ?? (role === "idle" ? 0 : 1);
   const initialFrame = Math.max(0, Math.min(Number(configuredInitialFrame) || 0, Math.max(0, frameRects.length - 1)));
-  const fps = Number(config.fps) || EXTERNAL_WALK_DEFAULT_FPS;
+  const fps = Number(config.fps) || (role === "idle" ? EXTERNAL_IDLE_DEFAULT_FPS : EXTERNAL_WALK_DEFAULT_FPS);
   const stopExitFrame = role === "loop" ? normalizedFrameIndex(config.stopExitFrame ?? 0, frameRects.length) : undefined;
   const stopRenderOffsetXStart = role === "stop" && Number.isFinite(Number(config.stopRenderOffsetXStart))
     ? Number(config.stopRenderOffsetXStart)
@@ -94,6 +95,7 @@ for (const [key, config] of Object.entries(selection.animations || {})) {
     configuredFrameCount: explicitFrameCount,
     fps,
     loop: Boolean(config.loop),
+    pingPong: Boolean(config.pingPong),
     role,
     ...(stopExitFrame === undefined ? {} : { stopExitFrame }),
     ...(stopRenderOffsetXStart === undefined ? {} : { stopRenderOffsetXStart }),

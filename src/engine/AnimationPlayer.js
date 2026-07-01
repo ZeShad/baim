@@ -11,6 +11,7 @@ export class AnimationPlayer {
     this.loopStartFrameOverride = null;
     this.initialFrameOverride = null;
     this.loopOverride = null;
+    this.pingPongOverride = null;
     this.resetThisTick = false;
     this.resetReason = null;
   }
@@ -49,12 +50,17 @@ export class AnimationPlayer {
       const next = Math.floor(this.elapsed * fps);
       const loopStartFrame = Math.max(0, Math.min(this.loopStartFrameOverride || animation.loopStartFrame || 0, frameCount - 1));
       const loop = this.loopOverride ?? animation.loop;
+      const pingPong = this.pingPongOverride ?? animation.pingPong;
       if (loop) {
         if (next < frameCount) this.frameIndex = next;
         else {
           const loopLength = Math.max(1, frameCount - loopStartFrame);
           this.frameIndex = loopStartFrame + ((next - loopStartFrame) % loopLength);
         }
+      } else if (pingPong) {
+        const sequenceLength = Math.max(1, frameCount * 2 - 2);
+        const clamped = Math.min(next, sequenceLength - 1);
+        this.frameIndex = clamped < frameCount ? clamped : sequenceLength - clamped;
       } else {
         this.frameIndex = Math.min(next, frameCount - 1);
       }
@@ -78,6 +84,8 @@ export class AnimationPlayer {
     const frameCount = this.frameCountOverride || animation.frameCount || animation.frames?.length || 1;
     const fps = this.fpsOverride || animation.fps || 1;
     const loop = this.loopOverride ?? animation.loop;
+    const pingPong = this.pingPongOverride ?? animation.pingPong;
+    if (!loop && pingPong) return this.elapsed * fps >= Math.max(1, frameCount * 2 - 2);
     if (!loop && (animation?.type === "strip" || animation?.type === "phasedStrip") && this.frameIndex >= frameCount - 1) return true;
     return !loop && this.elapsed * fps >= frameCount;
   }

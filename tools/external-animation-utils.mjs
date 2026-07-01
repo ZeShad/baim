@@ -34,7 +34,10 @@ export const EXTERNAL_INPUTS = [
   { key: "walk_east_loop", zipName: "bai-mitko-walk-east-loop.zip", source: "C:/t/test/bai-mitko-walk-east-loop.zip", active: true },
   { key: "walk_east_stop", zipName: "bai-mitko-walk-east-stop.zip", source: "C:/t/test/bai-mitko-walk-east-stop.zip", active: true },
   { key: "idle_east_1", zipName: "bai-mitko-idle-east-1.zip", source: "C:/t/test/bai-mitko-idle-east-1.zip", active: true },
-  { key: "idle_east_2", zipName: "bai-mitko-idle-east-2.zip", source: "C:/t/test/bai-mitko-idle-east-2.zip", active: true }
+  { key: "idle_east_2", zipName: "bai-mitko-idle-east-2.zip", source: "C:/t/test/bai-mitko-idle-east-2.zip", active: true },
+  { key: "idle_east_3", zipName: "bai-mitko-idle-east-3.zip", source: "C:/t/test/bai-mitko-idle-east-3.zip", active: true },
+  { key: "idle_east_4", zipName: "bai-mitko-idle-east-4.zip", source: "C:/t/test/bai-mitko-idle-east-4.zip", active: true },
+  { key: "idle_east_5", zipName: "bai-mitko-idle-east-5.zip", source: "C:/t/test/bai-mitko-idle-east-5.zip", active: true }
 ];
 
 export const IMAGE_EXTENSIONS = new Set([".png"]);
@@ -719,6 +722,7 @@ export function resolveConfiguredFps(config, metadata) {
 }
 
 export const EXTERNAL_WALK_DEFAULT_FPS = 20;
+export const EXTERNAL_IDLE_DEFAULT_FPS = 14;
 export const EXTERNAL_WALK_STATIC_MOTION_MULTIPLIER = 1.25;
 export const EXTERNAL_WALK_FRAME_MOTION_WEIGHT = 0.49;
 export const EXTERNAL_WALK_LOOP_MOTION_MIN = 1;

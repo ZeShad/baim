@@ -46,6 +46,27 @@
       "loop": false,
       "frameStart": 0,
       "frameEndTrim": 0
+    },
+    "idle_east_3": {
+      "use": true,
+      "source": "bai-mitko-idle-east-3.zip",
+      "loop": false,
+      "frameStart": 0,
+      "frameEndTrim": 0
+    },
+    "idle_east_4": {
+      "use": true,
+      "source": "bai-mitko-idle-east-4.zip",
+      "loop": false,
+      "frameStart": 0,
+      "frameEndTrim": 0
+    },
+    "idle_east_5": {
+      "use": true,
+      "source": "bai-mitko-idle-east-5.zip",
+      "loop": false,
+      "frameStart": 0,
+      "frameEndTrim": 0
     }
   },
   "mirrors": {
@@ -53,6 +74,9 @@
     "walk_west_loop": "mirror walk_east_loop",
     "walk_west_stop": "mirror walk_east_stop",
     "idle_west_1": "mirror idle_east_1",
-    "idle_west_2": "mirror idle_east_2"
+    "idle_west_2": "mirror idle_east_2",
+    "idle_west_3": "mirror idle_east_3",
+    "idle_west_4": "mirror idle_east_4",
+    "idle_west_5": "mirror idle_east_5"
   }
 }

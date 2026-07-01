@@ -19,6 +19,8 @@ const verbs = [VERBS.LOOK, VERBS.TALK, VERBS.USE, VERBS.TAKE];
 const CHARACTER_DISTANCE_SPEED_MULTIPLIER = 1.25;
 const IDLE_VARIANT_DELAY_MIN = 1;
 const IDLE_VARIANT_DELAY_MAX = 3;
+const IDLE_VARIANT_COMBO_PROBABILITY = 0.35;
+const IDLE_VARIANT_FOLLOWUP_IDLE5_PROBABILITY = 0.7;
 
 export class Game {
   constructor(canvas, uiRoot) {
@@ -62,6 +64,8 @@ export class Game {
       stopAnimationStarted: false,
       stopAnimationFinished: false,
       idleVariant: null,
+      idleVariantQueue: [],
+      idleHoldFrame: null,
       idleVariantTimer: this.randomIdleVariantDelay(),
       speaking: false,
       animator: new AnimationPlayer(this.characterDefinitions["npc.bai_mitko"])
@@ -98,7 +102,9 @@ export class Game {
       this.player.animationTime += dt;
     } else if (!this.paused && !this.menuOpen && !this.dialogue.current) {
       this.player.animator.beginTick();
+      const finishingStopFrame = this.finishingStopFrame();
       this.movement.update(dt);
+      if (finishingStopFrame && this.player.animation === "idle") this.setIdleHoldFrame(finishingStopFrame.frame, finishingStopFrame.frameIndex);
       this.updateIdleVariants(dt);
       this.player.animationTime += dt;
       this.player.animator.fpsOverride = this.currentAnimationFps();
@@ -106,6 +112,7 @@ export class Game {
       this.player.animator.loopStartFrameOverride = this.currentAnimationLoopStartFrame();
       this.player.animator.initialFrameOverride = this.currentAnimationInitialFrame();
       this.player.animator.loopOverride = this.currentAnimationLoop();
+      this.player.animator.pingPongOverride = this.currentAnimationPingPong();
       this.player.animator.play(this.player.animation, this.currentAnimationKey());
       this.player.animator.update(dt);
     }
@@ -180,6 +187,23 @@ export class Game {
     return this.player.idleVariant;
   }
 
+  setIdleHoldFrame(frame, frameIndex = null) {
+    if (!frame?.slot) return;
+    this.player.idleHoldFrame = {
+      frame,
+      slot: frame.slot,
+      mirrored: Boolean(frame.mirrored),
+      frameIndex: Number.isInteger(frameIndex) ? frameIndex : Math.max(0, (frame.frameCount || 1) - 1)
+    };
+  }
+
+  finishingStopFrame() {
+    if (this.player.animation !== "walk" || this.player.walkPart !== "stop" || !this.player.animator?.isFinished()) return null;
+    const frame = this.currentAnimationFrame();
+    if (!frame?.slot) return null;
+    return { frame, frameIndex: Math.max(0, (frame.frameCount || 1) - 1) };
+  }
+
   randomIdleVariantDelay() {
     return IDLE_VARIANT_DELAY_MIN + Math.random() * (IDLE_VARIANT_DELAY_MAX - IDLE_VARIANT_DELAY_MIN);
   }
@@ -188,13 +212,16 @@ export class Game {
     if (!this.usesExternalCharacterAnimation()) return;
     if (this.player.animation !== "idle" || this.player.target || this.player.speaking) {
       this.player.idleVariant = null;
+      this.player.idleVariantQueue = [];
       this.player.idleVariantTimer = this.randomIdleVariantDelay();
       return;
     }
     if (this.player.idleVariant) {
       if (this.player.animator?.isFinished()) {
-        this.player.idleVariant = null;
-        this.player.idleVariantTimer = this.randomIdleVariantDelay();
+        this.setIdleHoldFrame(this.player.idleVariant, Math.max(0, (this.player.idleVariant.frameCount || 1) - 1));
+        const nextVariant = this.player.idleVariantQueue?.shift() || null;
+        this.player.idleVariant = nextVariant;
+        if (!nextVariant) this.player.idleVariantTimer = this.randomIdleVariantDelay();
       }
       return;
     }
@@ -205,7 +232,28 @@ export class Game {
       this.player.idleVariantTimer = this.randomIdleVariantDelay();
       return;
     }
-    this.player.idleVariant = variants[Math.floor(Math.random() * variants.length)];
+    const sequence = this.randomIdleVariantSequence(variants);
+    this.player.idleVariant = sequence.shift() || null;
+    this.player.idleVariantQueue = sequence;
+  }
+
+  randomIdleVariant(variants, excludedSlot = null) {
+    const pool = variants.filter((variant) => variant?.slot && variant.slot !== excludedSlot);
+    if (!pool.length) return null;
+    return pool[Math.floor(Math.random() * pool.length)];
+  }
+
+  randomIdleVariantSequence(variants) {
+    const first = this.randomIdleVariant(variants);
+    if (!first) return [];
+    const sequence = [first];
+    if (variants.length < 2 || Math.random() >= IDLE_VARIANT_COMBO_PROBABILITY) return sequence;
+    const idle5 = variants.find((variant) => variant.slot === "external_idle_east_5");
+    const followup = idle5 && idle5.slot !== first.slot && Math.random() < IDLE_VARIANT_FOLLOWUP_IDLE5_PROBABILITY
+      ? idle5
+      : this.randomIdleVariant(variants, first.slot);
+    if (followup) sequence.push(followup);
+    return sequence;
   }
 
   currentAnimationFps() {
@@ -270,6 +318,12 @@ export class Game {
     if (this.player.animation !== "walk") return null;
     const frame = this.currentAnimationFrame();
     return frame ? Boolean(frame.loop) : null;
+  }
+
+  currentAnimationPingPong() {
+    const idleVariant = this.currentIdleVariantFrame();
+    if (idleVariant) return Boolean(idleVariant.pingPong);
+    return null;
   }
 
   readBooleanParam(name) {

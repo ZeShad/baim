@@ -105,18 +105,29 @@ test("Bai Mitko idle directions use walk-start animation frames instead of stati
 });
 
 test("Bai Mitko external idle variants are generated for east and mirrored west", () => {
-  const east = externalAnimationV1.idleVariants.east[0];
-  const west = externalAnimationV1.idleVariants.west[0];
-  assert.equal(externalAnimationV1.idleVariants.east.length, 2);
-  assert.equal(externalAnimationV1.idleVariants.west.length, 2);
-  assert.equal(east.slot, "external_idle_east_1");
-  assert.equal(east.role, "idle");
-  assert.equal(east.loop, false);
-  assert.equal(east.fps, 20);
-  assert.equal(east.frameCount, 25);
-  assert.equal(externalAnimationV1.idleVariants.east[1].frameCount, 36);
-  assert.equal(west.slot, "external_idle_east_1");
-  assert.equal(west.mirrored, true);
+  const east = externalAnimationV1.idleVariants.east;
+  const west = externalAnimationV1.idleVariants.west;
+  assert.equal(east.length, 5);
+  assert.equal(west.length, 5);
+  assert.deepEqual(
+    east.map((variant) => variant.slot),
+    ["external_idle_east_1", "external_idle_east_2", "external_idle_east_3", "external_idle_east_4", "external_idle_east_5"]
+  );
+  assert.deepEqual(
+    east.map((variant) => variant.pingPong),
+    [false, false, false, false, false]
+  );
+  assert.equal(east[0].role, "idle");
+  assert.equal(east[0].loop, false);
+  assert.equal(east[0].fps, 14);
+  assert.equal(east[0].frameCount, 25);
+  assert.equal(east[1].frameCount, 36);
+  assert.equal(east[2].frameCount, 36);
+  assert.equal(east[3].frameCount, 36);
+  assert.equal(east[4].frameCount, 36);
+  assert.equal(west[0].slot, "external_idle_east_1");
+  assert.equal(west[0].mirrored, true);
+  assert.equal(west[2].pingPong, false);
 });
 
 test("idle variants trigger after irregular idle delay and finish back to hold", () => {
@@ -126,6 +137,8 @@ test("idle variants trigger after irregular idle delay and finish back to hold",
     speaking: false,
     facing: "east",
     idleVariant: null,
+    idleVariantQueue: [],
+    idleHoldFrame: null,
     idleVariantTimer: 0,
     animator: {
       isFinished() {
@@ -137,7 +150,11 @@ test("idle variants trigger after irregular idle delay and finish back to hold",
   game.player = player;
   game.characterVariant = "external_animation_v1";
   game.updateIdleVariants(1);
-  assert.ok(["external_idle_east_1", "external_idle_east_2"].includes(player.idleVariant.slot));
+  assert.ok(
+    ["external_idle_east_1", "external_idle_east_2", "external_idle_east_3", "external_idle_east_4", "external_idle_east_5"].includes(
+      player.idleVariant.slot
+    )
+  );
 
   player.animator = {
     isFinished() {
@@ -146,8 +163,53 @@ test("idle variants trigger after irregular idle delay and finish back to hold",
   };
   game.updateIdleVariants(1 / 60);
   assert.equal(player.idleVariant, null);
+  assert.ok(player.idleHoldFrame);
+  assert.equal(player.idleHoldFrame.frameIndex, player.idleHoldFrame.frame.frameCount - 1);
   assert.ok(player.idleVariantTimer >= 1);
   assert.ok(player.idleVariantTimer <= 3);
+});
+
+test("idle variants can chain into idle five as a calm follow-up", () => {
+  const variants = externalAnimationV1.idleVariants.east;
+  const player = {
+    animation: "idle",
+    target: null,
+    speaking: false,
+    facing: "east",
+    idleVariant: null,
+    idleVariantQueue: [],
+    idleHoldFrame: null,
+    idleVariantTimer: 0,
+    animator: {
+      isFinished() {
+        return false;
+      }
+    }
+  };
+  const game = Object.create(Game.prototype);
+  game.player = player;
+  game.characterVariant = "external_animation_v1";
+
+  const originalRandom = Math.random;
+  Math.random = () => 0;
+  try {
+    game.updateIdleVariants(1);
+  } finally {
+    Math.random = originalRandom;
+  }
+
+  assert.equal(player.idleVariant.slot, variants[0].slot);
+  assert.equal(player.idleVariantQueue.length, 1);
+  assert.equal(player.idleVariantQueue[0].slot, "external_idle_east_5");
+
+  player.animator = {
+    isFinished() {
+      return true;
+    }
+  };
+  game.updateIdleVariants(1 / 60);
+  assert.equal(player.idleVariant.slot, "external_idle_east_5");
+  assert.equal(player.idleVariantQueue.length, 0);
 });
 
 test("character cutouts use the shared 15 percent source margin", () => {
@@ -286,6 +348,35 @@ test("phased strip animation advances frames in the game animation player", () =
   player.loopOverride = false;
   player.update(2 / 8);
   assert.equal(player.frameIndex, 2);
+});
+
+test("ping-pong strip animation plays forward then backward once", () => {
+  const player = new AnimationPlayer({
+    animations: {
+      idle: { frames: ["idle"], fps: 1, loop: true },
+      walk: { type: "phasedStrip", frameCount: 4, fps: 4, loop: false }
+    }
+  });
+  player.play("walk", "external_idle_east_3:east:idle");
+  player.frameCountOverride = 4;
+  player.fpsOverride = 4;
+  player.loopOverride = false;
+  player.pingPongOverride = true;
+  assert.equal(player.frameIndex, 0);
+  player.update(1 / 4);
+  assert.equal(player.frameIndex, 1);
+  player.update(1 / 4);
+  assert.equal(player.frameIndex, 2);
+  player.update(1 / 4);
+  assert.equal(player.frameIndex, 3);
+  player.update(1 / 4);
+  assert.equal(player.frameIndex, 2);
+  player.update(1 / 4);
+  assert.equal(player.frameIndex, 1);
+  assert.equal(player.isFinished(), false);
+  player.update(1 / 4);
+  assert.equal(player.frameIndex, 1);
+  assert.equal(player.isFinished(), true);
 });
 
 test("playing the same stable animation key does not reset elapsed time", () => {
@@ -526,6 +617,63 @@ test("external Bai Mitko non-walk states use walk-start frame zero when no anima
   assert.equal(sprite.frame.role, "hold");
   assert.equal(sprite.staticFrameIndex, 0);
   assert.equal(sprite.mirrored, true);
+});
+
+test("external Bai Mitko idle can hold the last frame of a completed animation", () => {
+  const definition = characterDefinitions["npc.bai_mitko"];
+  const renderer = Object.create(Renderer.prototype);
+  const heldFrame = externalAnimationV1.idleVariants.east[0];
+  const loadedHeld = { dataset: { loaded: "true" } };
+  renderer.game = {
+    assets: {
+      getCharacterImage(_characterId, slot) {
+        if (slot === heldFrame.slot) return loadedHeld;
+        return null;
+      },
+      isLoaded(image) {
+        return image?.dataset?.loaded === "true";
+      }
+    }
+  };
+  const sprite = renderer.resolveCharacterSprite({
+    id: "npc.bai_mitko",
+    animation: "idle",
+    facing: "east",
+    idleHoldFrame: {
+      frame: heldFrame,
+      slot: heldFrame.slot,
+      mirrored: false,
+      frameIndex: heldFrame.frameCount - 1
+    },
+    walkPartsByFacing: definition.animations.walk.parts
+  }, definition);
+
+  assert.equal(sprite.image, loadedHeld);
+  assert.equal(sprite.slot, heldFrame.slot);
+  assert.equal(sprite.staticFrameIndex, heldFrame.frameCount - 1);
+});
+
+test("finished stop animation stores its last frame as the next idle hold", () => {
+  const frame = characterDefinitions["npc.bai_mitko"].animations.walk.parts.east.stop;
+  const player = {
+    animation: "walk",
+    walkPart: "stop",
+    facing: "east",
+    walkPartsByFacing: characterDefinitions["npc.bai_mitko"].animations.walk.parts,
+    idleHoldFrame: null,
+    animator: {
+      isFinished() {
+        return true;
+      }
+    }
+  };
+  const game = Object.create(Game.prototype);
+  game.player = player;
+  const finishing = game.finishingStopFrame();
+  assert.equal(finishing.frame, frame);
+  game.setIdleHoldFrame(finishing.frame, finishing.frameIndex);
+  assert.equal(player.idleHoldFrame.slot, "external_walk_east_stop");
+  assert.equal(player.idleHoldFrame.frameIndex, frame.frameCount - 1);
 });
 
 test("external Bai Mitko idle ignores stale stop walk part", () => {

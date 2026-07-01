@@ -422,6 +422,16 @@ export class Renderer {
         const image = this.game.assets.getCharacterImage(player.id, player.idleVariant.slot);
         return { image, slot: player.idleVariant.slot, frame: player.idleVariant, mirrored: Boolean(player.idleVariant.mirrored) };
       }
+      if (player.idleHoldFrame?.slot) {
+        const image = this.game.assets.getCharacterImage(player.id, player.idleHoldFrame.slot);
+        return {
+          image,
+          slot: player.idleHoldFrame.slot,
+          frame: player.idleHoldFrame.frame,
+          mirrored: Boolean(player.idleHoldFrame.mirrored),
+          staticFrameIndex: player.idleHoldFrame.frameIndex
+        };
+      }
       const frameInfo = this.resolveExternalWalkStartFrame(player, definition, facing);
       if (frameInfo?.slot) {
         const image = this.game.assets.getCharacterImage(player.id, frameInfo.slot);
