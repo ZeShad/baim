@@ -37,7 +37,12 @@ export const EXTERNAL_INPUTS = [
   { key: "idle_east_2", zipName: "bai-mitko-idle-east-2.zip", source: "C:/t/test/bai-mitko-idle-east-2.zip", active: true },
   { key: "idle_east_3", zipName: "bai-mitko-idle-east-3.zip", source: "C:/t/test/bai-mitko-idle-east-3.zip", active: true },
   { key: "idle_east_4", zipName: "bai-mitko-idle-east-4.zip", source: "C:/t/test/bai-mitko-idle-east-4.zip", active: true },
-  { key: "idle_east_5", zipName: "bai-mitko-idle-east-5.zip", source: "C:/t/test/bai-mitko-idle-east-5.zip", active: true }
+  { key: "idle_east_5", zipName: "bai-mitko-idle-east-5.zip", source: "C:/t/test/bai-mitko-idle-east-5.zip", active: true },
+  { key: "idle_east_6", zipName: "bai-mitko-idle-east-6.zip", source: "C:/t/test/bai-mitko-idle-east-6.zip", active: true },
+  { key: "talk_east_long_1", zipName: "bai-mitko-talk-east-long-1.zip", source: "C:/t/test/bai-mitko-talk-east-long-1.zip", active: true },
+  { key: "talk_east_long_2", zipName: "bai-mitko-talk-east-long-2.zip", source: "C:/t/test/bai-mitko-talk-east-long-2.zip", active: true },
+  { key: "talk_east_short_1", zipName: "bai-mitko-talk-east-short-1.zip", source: "C:/t/test/bai-mitko-talk-east-short-1.zip", active: true },
+  { key: "reject_east_1", zipName: "bai-mitko-reject-east-1.zip", source: "C:/t/test/bai-mitko-reject-east-1.zip", active: true }
 ];
 
 export const IMAGE_EXTENSIONS = new Set([".png"]);

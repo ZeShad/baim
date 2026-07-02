@@ -1,3 +1,5 @@
+import { apartmentWalkGeometry } from "./walkMasks.generated.js";
+
 export const scenes = [
   {
     id: "scene.chapter1.apartment",
@@ -5,18 +7,14 @@ export const scenes = [
     palette: { sky: "#4d6f86", wall: "#735f49", floor: "#2f2a23" },
     movementSpeed: 70,
     playerStart: { x: 650, y: 520 },
-    walkPolygons: [
-      {
-        id: "walk.chapter1.apartment.main",
-        points: [
-          { x: 250, y: 435 },
-          { x: 1015, y: 430 },
-          { x: 1165, y: 585 },
-          { x: 95, y: 585 }
-        ]
-      }
+    walkPolygons: apartmentWalkGeometry.walkPolygons,
+    walkMask: apartmentWalkGeometry.walkMask,
+    perspectiveScale: { horizonY: 430, bottomY: 600, far: 0.76, near: 1.12 },
+    depthZones: [
+      { id: "depth.apartment.rear", yMin: 430, yMax: 492, scaleMin: 0.76, scaleMax: 0.88 },
+      { id: "depth.apartment.mid", yMin: 492, yMax: 545, scaleMin: 0.88, scaleMax: 1.02 },
+      { id: "depth.apartment.front", yMin: 545, yMax: 600, scaleMin: 1.02, scaleMax: 1.12 }
     ],
-    depthZones: [{ id: "depth.apartment.main", yMin: 420, yMax: 590, scaleMin: 0.78, scaleMax: 1.1 }],
     anchors: {
       door: { x: 1115, y: 500 },
       mirror: { x: 690, y: 420 },

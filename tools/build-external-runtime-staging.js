@@ -32,6 +32,11 @@ const generated = {
   characterAssets: {},
   walkParts: { east: {}, west: {} },
   idleVariants: { east: [], west: [] },
+  talkAnimations: {
+    east: { singleWord: [], singleShortSentence: [], singleLongSentence: [] },
+    west: { singleWord: [], singleShortSentence: [], singleLongSentence: [] }
+  },
+  rejectAnimations: { east: [], west: [] },
   animations: {}
 };
 
@@ -67,15 +72,18 @@ for (const [key, config] of Object.entries(selection.animations || {})) {
   const frameContentBounds = frameRects.map((rect) => alphaBoundsRect(sourceSheet, rect) || { x: 0, y: 0, w: rect.w, h: rect.h });
   const contentBounds = unionBounds(frameContentBounds) || { x: 0, y: 0, w: info.frameWidth, h: info.frameHeight };
   const role = roleFromKey(key);
-  const movementSpeedMultipliers = role === "idle"
+  const movementSpeedMultipliers = role === "idle" || role === "talk" || role === "reject"
     ? Array.from({ length: frameRects.length }, () => 0)
     : externalWalkMotionCurve(role, frameRects.length, frameStart);
-  const configuredInitialFrame = config.initialFrame ?? (role === "idle" ? 0 : 1);
+  const configuredInitialFrame = config.initialFrame ?? (role === "idle" || role === "talk" || role === "reject" ? 0 : 1);
   const initialFrame = Math.max(0, Math.min(Number(configuredInitialFrame) || 0, Math.max(0, frameRects.length - 1)));
   const fps = Number(config.fps) || (role === "idle" ? EXTERNAL_IDLE_DEFAULT_FPS : EXTERNAL_WALK_DEFAULT_FPS);
   const stopExitFrame = role === "loop" ? normalizedFrameIndex(config.stopExitFrame ?? 0, frameRects.length) : undefined;
   const stopRenderOffsetXStart = role === "stop" && Number.isFinite(Number(config.stopRenderOffsetXStart))
     ? Number(config.stopRenderOffsetXStart)
+    : undefined;
+  const stopRenderOffsetYStart = role === "stop" && Number.isFinite(Number(config.stopRenderOffsetYStart))
+    ? Number(config.stopRenderOffsetYStart)
     : undefined;
   const metadata = {
     src: `target/external_animation_v1/runtime/${key}.png`,
@@ -99,6 +107,7 @@ for (const [key, config] of Object.entries(selection.animations || {})) {
     role,
     ...(stopExitFrame === undefined ? {} : { stopExitFrame }),
     ...(stopRenderOffsetXStart === undefined ? {} : { stopRenderOffsetXStart }),
+    ...(stopRenderOffsetYStart === undefined ? {} : { stopRenderOffsetYStart }),
     initialFrame,
     anchorX: 0.5,
     anchorY: 1,
@@ -121,6 +130,15 @@ for (const [key, config] of Object.entries(selection.animations || {})) {
     const idleVariant = { ...metadata, slot, idleKey: key };
     generated.idleVariants.east.push(idleVariant);
     generated.idleVariants.west.push({ ...idleVariant, mirrored: true, mirrorSource: "east" });
+  } else if (metadata.role === "talk") {
+    const semantic = normalizeTalkSemantic(config.talkSemantic, config.talkLength);
+    const talkVariant = { ...metadata, slot, talkKey: key, talkSemantic: semantic.source, talkSemanticKey: semantic.key };
+    generated.talkAnimations.east[semantic.key].push(talkVariant);
+    generated.talkAnimations.west[semantic.key].push({ ...talkVariant, mirrored: true, mirrorSource: "east" });
+  } else if (metadata.role === "reject") {
+    const rejectVariant = { ...metadata, slot, rejectKey: key };
+    generated.rejectAnimations.east.push(rejectVariant);
+    generated.rejectAnimations.west.push({ ...rejectVariant, mirrored: true, mirrorSource: "east" });
   } else {
     generated.walkParts.east[metadata.role] = { ...metadata, slot };
     generated.walkParts.west[metadata.role] = { ...metadata, slot, mirrored: true, mirrorSource: "east" };
@@ -143,6 +161,7 @@ for (const [key, config] of Object.entries(selection.animations || {})) {
     role: metadata.role,
     ...(stopExitFrame === undefined ? {} : { stopExitFrame }),
     ...(stopRenderOffsetXStart === undefined ? {} : { stopRenderOffsetXStart }),
+    ...(stopRenderOffsetYStart === undefined ? {} : { stopRenderOffsetYStart }),
     initialFrame,
     movementSpeedMultipliers,
     frameWidth: metadata.frameWidth,
@@ -155,10 +174,22 @@ for (const [key, config] of Object.entries(selection.animations || {})) {
 
 function roleFromKey(key) {
   if (key.startsWith("idle_")) return "idle";
+  if (key.startsWith("talk_")) return "talk";
+  if (key.startsWith("reject_")) return "reject";
   if (key.endsWith("_start")) return "start";
   if (key.endsWith("_loop")) return "loop";
   if (key.endsWith("_stop")) return "stop";
   return "loop";
+}
+
+function normalizeTalkSemantic(value, legacyLength) {
+  const normalized = String(value || "").toLowerCase().replaceAll("-", "_");
+  if (normalized === "single_word") return { key: "singleWord", source: "single_word" };
+  if (normalized === "single_short_sentence") return { key: "singleShortSentence", source: "single_short_sentence" };
+  if (normalized === "single_long_sentence") return { key: "singleLongSentence", source: "single_long_sentence" };
+  if (legacyLength === "word") return { key: "singleWord", source: "single_word" };
+  if (legacyLength === "short") return { key: "singleShortSentence", source: "single_short_sentence" };
+  return { key: "singleLongSentence", source: "single_long_sentence" };
 }
 
 function alphaBoundsRect(png, rect) {

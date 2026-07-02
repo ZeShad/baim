@@ -31,7 +31,8 @@
       "loop": false,
       "frameStart": 2,
       "frameEndTrim": 0,
-      "stopRenderOffsetXStart": -10
+      "stopRenderOffsetXStart": -8,
+      "stopRenderOffsetYStart": -6
     },
     "idle_east_1": {
       "use": true,
@@ -67,6 +68,50 @@
       "loop": false,
       "frameStart": 0,
       "frameEndTrim": 0
+    },
+    "idle_east_6": {
+      "use": true,
+      "source": "bai-mitko-idle-east-6.zip",
+      "loop": false,
+      "frameStart": 0,
+      "frameEndTrim": 0
+    },
+    "talk_east_long_1": {
+      "use": true,
+      "source": "bai-mitko-talk-east-long-1.zip",
+      "loop": false,
+      "frameStart": 0,
+      "frameEndTrim": 0,
+      "fps": 12,
+      "talkLength": "long",
+      "talkSemantic": "single_long_sentence"
+    },
+    "talk_east_long_2": {
+      "use": true,
+      "source": "bai-mitko-talk-east-long-2.zip",
+      "loop": false,
+      "frameStart": 0,
+      "frameEndTrim": 0,
+      "fps": 12,
+      "talkLength": "short",
+      "talkSemantic": "single_short_sentence"
+    },
+    "talk_east_short_1": {
+      "use": true,
+      "source": "bai-mitko-talk-east-short-1.zip",
+      "loop": false,
+      "frameStart": 0,
+      "frameEndTrim": 0,
+      "fps": 12,
+      "talkLength": "word",
+      "talkSemantic": "single_word"
+    },
+    "reject_east_1": {
+      "use": true,
+      "source": "bai-mitko-reject-east-1.zip",
+      "loop": false,
+      "frameStart": 0,
+      "frameEndTrim": 0
     }
   },
   "mirrors": {
@@ -77,6 +122,11 @@
     "idle_west_2": "mirror idle_east_2",
     "idle_west_3": "mirror idle_east_3",
     "idle_west_4": "mirror idle_east_4",
-    "idle_west_5": "mirror idle_east_5"
+    "idle_west_5": "mirror idle_east_5",
+    "idle_west_6": "mirror idle_east_6",
+    "talk_west_long_1": "mirror talk_east_long_1",
+    "talk_west_long_2": "mirror talk_east_long_2",
+    "talk_west_short_1": "mirror talk_east_short_1",
+    "reject_west_1": "mirror reject_east_1"
   }
 }

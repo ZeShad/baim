@@ -1,14 +1,16 @@
 import { DialogueSystem } from "./DialogueSystem.js";
 import { InventorySystem } from "./InventorySystem.js";
 import { Localization } from "./Localization.js";
-import { eastWestFallbackFacing, MovementSystem } from "./MovementSystem.js";
+import { eastWestFallbackFacing, facingFromDelta, MovementSystem } from "./MovementSystem.js";
 import { QuestSystem } from "./QuestSystem.js";
 import { Renderer } from "./Renderer.js";
 import { SaveSystem } from "./SaveSystem.js";
 import { AnimationPlayer } from "./AnimationPlayer.js";
 import { AssetLoader } from "./AssetLoader.js";
+import { characterHeight } from "./CharacterRenderMath.js";
 import { DEFAULT_SAVE, LANGUAGES, VERBS } from "./ids.js";
-import { findTargetAt, isWalkable } from "./SceneGeometry.js";
+import { findTargetAt, isWalkable, nearestWalkablePoint } from "./SceneGeometry.js";
+import { distance } from "./geometry.js";
 import { strings } from "../content/localization/index.js";
 import { chapter1 } from "../content/chapter1/index.js";
 import { characterDefinitions } from "../content/art/characters.js";
@@ -16,11 +18,19 @@ import { assetManifest } from "../content/art/assetManifest.js";
 import { externalAnimationV1 } from "../content/art/externalAnimationV1.generated.js";
 
 const verbs = [VERBS.LOOK, VERBS.TALK, VERBS.USE, VERBS.TAKE];
-const CHARACTER_DISTANCE_SPEED_MULTIPLIER = 1.25;
+const CHARACTER_DISTANCE_SPEED_MULTIPLIER = 1.5625;
 const IDLE_VARIANT_DELAY_MIN = 1;
 const IDLE_VARIANT_DELAY_MAX = 3;
 const IDLE_VARIANT_COMBO_PROBABILITY = 0.35;
 const IDLE_VARIANT_FOLLOWUP_IDLE5_PROBABILITY = 0.7;
+const TARGET_INTERACTION_DISTANCE = 100;
+const TARGET_APPROACH_FEET_CANCEL_DISTANCE = 80;
+const TARGET_HAND_TO_FEET_X = 90;
+const TARGET_HAND_TO_FEET_Y = 155;
+const TARGET_REACH_ORIGIN_HEIGHT_RATIO = 0.58;
+const TARGET_REACH_ORIGIN_SIDE_RATIO = 0.14;
+const TALK_SINGLE_WORD_MAX_CHARS = 18;
+const TALK_LONG_SENTENCE_MIN_CHARS = 72;
 
 export class Game {
   constructor(canvas, uiRoot) {
@@ -46,6 +56,9 @@ export class Game {
       id: "npc.bai_mitko",
       position: { ...this.currentScene.playerStart },
       target: null,
+      pendingInteraction: null,
+      pendingFacingPoint: null,
+      interactionDebug: null,
       speed: this.sceneMovementSpeed(this.currentScene),
       animation: "idle",
       facing: this.characterDefinitions["npc.bai_mitko"].render.defaultFacing,
@@ -67,6 +80,7 @@ export class Game {
       idleVariantQueue: [],
       idleHoldFrame: null,
       idleVariantTimer: this.randomIdleVariantDelay(),
+      speechAnimation: null,
       speaking: false,
       animator: new AnimationPlayer(this.characterDefinitions["npc.bai_mitko"])
     };
@@ -105,6 +119,8 @@ export class Game {
       const finishingStopFrame = this.finishingStopFrame();
       this.movement.update(dt);
       if (finishingStopFrame && this.player.animation === "idle") this.setIdleHoldFrame(finishingStopFrame.frame, finishingStopFrame.frameIndex);
+      this.resolvePendingFacingPoint();
+      this.resolvePendingInteraction();
       this.updateIdleVariants(dt);
       this.player.animationTime += dt;
       this.player.animator.fpsOverride = this.currentAnimationFps();
@@ -115,6 +131,7 @@ export class Game {
       this.player.animator.pingPongOverride = this.currentAnimationPingPong();
       this.player.animator.play(this.player.animation, this.currentAnimationKey());
       this.player.animator.update(dt);
+      this.updateSpeechAnimationHold();
     }
     this.renderer.draw();
     requestAnimationFrame((next) => this.tick(next));
@@ -256,7 +273,13 @@ export class Game {
     return sequence;
   }
 
+  currentSpeechAnimationFrame() {
+    return this.player.speechAnimation || null;
+  }
+
   currentAnimationFps() {
+    const speech = this.currentSpeechAnimationFrame();
+    if (speech) return speech.fps;
     const idleVariant = this.currentIdleVariantFrame();
     if (idleVariant) return idleVariant.fps;
     if (this.player.animation !== "walk") return null;
@@ -288,10 +311,14 @@ export class Game {
       if (idleVariant) return `${idleVariant.slot}:idle:${this.player.facing || "east"}`;
       return `idle:${this.player.facing || "south"}`;
     }
+    const speech = this.currentSpeechAnimationFrame();
+    if (speech) return `${speech.slot}:${this.player.animation}:${this.player.facing || "east"}`;
     return this.player.animation;
   }
 
   currentAnimationFrameCount() {
+    const speech = this.currentSpeechAnimationFrame();
+    if (speech) return speech.frameCount || null;
     const idleVariant = this.currentIdleVariantFrame();
     if (idleVariant) return idleVariant.frameCount || null;
     if (this.player.animation !== "walk") return null;
@@ -299,6 +326,8 @@ export class Game {
   }
 
   currentAnimationLoopStartFrame() {
+    const speech = this.currentSpeechAnimationFrame();
+    if (speech) return speech.loopStartFrame ?? null;
     const idleVariant = this.currentIdleVariantFrame();
     if (idleVariant) return idleVariant.loopStartFrame ?? null;
     if (this.player.animation !== "walk") return null;
@@ -306,6 +335,8 @@ export class Game {
   }
 
   currentAnimationInitialFrame() {
+    const speech = this.currentSpeechAnimationFrame();
+    if (speech) return speech.initialFrame ?? null;
     const idleVariant = this.currentIdleVariantFrame();
     if (idleVariant) return idleVariant.initialFrame ?? null;
     if (this.player.animation !== "walk") return null;
@@ -313,6 +344,8 @@ export class Game {
   }
 
   currentAnimationLoop() {
+    const speech = this.currentSpeechAnimationFrame();
+    if (speech) return Boolean(speech.loop);
     const idleVariant = this.currentIdleVariantFrame();
     if (idleVariant) return Boolean(idleVariant.loop);
     if (this.player.animation !== "walk") return null;
@@ -321,6 +354,8 @@ export class Game {
   }
 
   currentAnimationPingPong() {
+    const speech = this.currentSpeechAnimationFrame();
+    if (speech) return Boolean(speech.pingPong);
     const idleVariant = this.currentIdleVariantFrame();
     if (idleVariant) return Boolean(idleVariant.pingPong);
     return null;
@@ -365,25 +400,199 @@ export class Game {
     this.renderUi();
   }
 
+  clearStatusMessage() {
+    this.message = "";
+    this.player.speechAnimation = null;
+    this.player.speaking = false;
+  }
+
+  setStatusMessage(message, options = {}) {
+    this.message = message;
+    this.startSpeechAnimationForMessage(message, options);
+  }
+
+  startSpeechAnimationForMessage(message, options = {}) {
+    if (!this.usesExternalCharacterAnimation() || !message || this.player.target || this.player.animation === "walk") return;
+    const frame = options.reject ? this.randomRejectAnimation() : this.talkAnimationForMessage(message);
+    if (!frame) return;
+    this.player.speechAnimation = frame;
+    this.player.idleVariant = null;
+    this.player.idleVariantQueue = [];
+    this.player.speaking = true;
+    this.player.animation = frame.role === "reject" ? "reject" : "talk";
+    this.player.animator?.play(this.player.animation, `${frame.slot}:${this.player.animation}:${this.player.facing || "east"}`);
+  }
+
+  updateSpeechAnimationHold() {
+    const frame = this.player.speechAnimation;
+    if (!frame || !this.player.animator?.isFinished()) return;
+    this.setIdleHoldFrame(frame, Math.max(0, (frame.frameCount || 1) - 1));
+    this.player.speechAnimation = null;
+    this.player.speaking = false;
+    if (!this.player.target) this.player.animation = "idle";
+  }
+
+  talkAnimationForMessage(message) {
+    const semantic = this.talkSemanticForMessage(message);
+    const facing = eastWestFallbackFacing(this.player.facing) || "east";
+    const byFacing = externalAnimationV1.talkAnimations?.[facing] || externalAnimationV1.talkAnimations?.east || {};
+    const pool = byFacing[semantic] || [];
+    return this.randomAnimationFrame(pool);
+  }
+
+  talkSemanticForMessage(message) {
+    const text = String(message || "").trim();
+    const words = text.match(/[\p{L}\p{N}]+/gu) || [];
+    const sentenceBreaks = text.match(/[.!?…]+/g) || [];
+    const sentenceCount = Math.max(1, sentenceBreaks.length || (text ? 1 : 0));
+    if (sentenceCount <= 1 && words.length <= 2 && text.length <= TALK_SINGLE_WORD_MAX_CHARS) return "singleWord";
+    if (sentenceCount <= 1 && text.length < TALK_LONG_SENTENCE_MIN_CHARS) return "singleShortSentence";
+    return "singleLongSentence";
+  }
+
+  randomRejectAnimation() {
+    const facing = eastWestFallbackFacing(this.player.facing) || "east";
+    const pool = externalAnimationV1.rejectAnimations?.[facing] || externalAnimationV1.rejectAnimations?.east || [];
+    return this.randomAnimationFrame(pool);
+  }
+
+  randomAnimationFrame(pool) {
+    if (!Array.isArray(pool) || !pool.length) return null;
+    return pool[Math.floor(Math.random() * pool.length)];
+  }
+
   handleWorldClick(point) {
     const target = findTargetAt(this.currentScene, point);
     if (target) {
-      this.handleTarget(target);
+      this.handleTarget(target, point);
       return;
     }
+    this.player.pendingInteraction = null;
     if (isWalkable(this.currentScene, point)) {
+      this.facePoint(point);
+      this.player.pendingFacingPoint = { ...point };
+      this.player.interactionDebug = {
+        kind: "move",
+        feet: { ...point }
+      };
       this.movement.walkTo(point);
-      this.message = this.t("msg.walk");
+      this.clearStatusMessage();
     }
   }
 
-  handleTarget(target) {
+  handleTarget(target, clickPoint = null) {
+    if (this.shouldApproachTargetBeforeAction(target, clickPoint)) return;
+    this.performTargetAction(target);
+  }
+
+  shouldApproachTargetBeforeAction(target, clickPoint = null) {
+    if (target.kind === "exit") return false;
+    const reachPoint = this.targetReachPoint(target, clickPoint);
+    if (!reachPoint) return false;
+    this.facePoint(reachPoint);
+    const feetGoal = this.targetFeetApproachPoint(reachPoint);
+    const approach = nearestWalkablePoint(this.currentScene, feetGoal) || nearestWalkablePoint(this.currentScene, reachPoint);
+    const reachOrigin = this.playerReachOriginPoint();
+    const distancePoint = reachPoint;
+    const reachDistance = distance(reachOrigin, distancePoint);
+    this.player.interactionDebug = {
+      kind: "target",
+      targetId: target.id,
+      click: clickPoint ? { ...clickPoint } : null,
+      hand: { ...reachPoint },
+      reachOrigin,
+      distancePoint: { ...distancePoint },
+      reachDistance,
+      feetGoal,
+      feet: approach ? { ...approach } : null
+    };
+    if (reachDistance <= TARGET_INTERACTION_DISTANCE) {
+      return false;
+    }
+    if (!approach || distance(this.player.position, approach) <= TARGET_APPROACH_FEET_CANCEL_DISTANCE) {
+      return false;
+    }
+    this.player.pendingFacingPoint = { ...reachPoint };
+    this.player.pendingInteraction = {
+      target,
+      verb: this.selectedVerb,
+      hand: reachPoint,
+      approach
+    };
+    this.movement.walkTo(approach, reachPoint);
+    this.clearStatusMessage();
+    return true;
+  }
+
+  resolvePendingFacingPoint() {
+    const point = this.player.pendingFacingPoint;
+    if (!point || this.player.target || this.player.animation === "walk") return;
+    this.player.pendingFacingPoint = null;
+    this.facePoint(point);
+  }
+
+  resolvePendingInteraction() {
+    const pending = this.player.pendingInteraction;
+    if (!pending || this.player.target || this.player.animation === "walk") return;
+    this.player.pendingInteraction = null;
+    if (pending.hand) this.facePoint(pending.hand);
+    const previousVerb = this.selectedVerb;
+    this.selectedVerb = pending.verb;
+    this.performTargetAction(pending.target);
+    this.selectedVerb = previousVerb;
+  }
+
+  targetCenter(target) {
+    if (target.rect) return { x: target.rect.x + target.rect.w * 0.5, y: target.rect.y + target.rect.h * 0.5 };
+    if (target.polygon?.length) {
+      const sum = target.polygon.reduce((acc, point) => ({ x: acc.x + point.x, y: acc.y + point.y }), { x: 0, y: 0 });
+      return { x: sum.x / target.polygon.length, y: sum.y / target.polygon.length };
+    }
+    return null;
+  }
+
+  targetReachPoint(target, clickPoint = null) {
+    if (clickPoint) return { ...clickPoint };
+    if (target.rect) {
+      return {
+        x: target.rect.x + target.rect.w * 0.3,
+        y: target.rect.y + target.rect.h * 0.5
+      };
+    }
+    return clickPoint || this.targetCenter(target);
+  }
+
+  targetFeetApproachPoint(handPoint) {
+    const side = this.player.position.x >= handPoint.x ? 1 : -1;
+    return {
+      x: handPoint.x + side * TARGET_HAND_TO_FEET_X,
+      y: handPoint.y + TARGET_HAND_TO_FEET_Y
+    };
+  }
+
+  playerReachOriginPoint() {
+    const definition = this.characterDefinitions?.["npc.bai_mitko"] || characterDefinitions["npc.bai_mitko"];
+    const height = characterHeight(definition, this.currentScene, this.player.position);
+    const facing = eastWestFallbackFacing(this.player.facing) || this.player.facing || "east";
+    const side = facing === "west" ? -1 : 1;
+    return {
+      x: this.player.position.x + side * height * TARGET_REACH_ORIGIN_SIDE_RATIO,
+      y: this.player.position.y - height * TARGET_REACH_ORIGIN_HEIGHT_RATIO
+    };
+  }
+
+  facePoint(point) {
+    if (!point) return;
+    this.player.facing = facingFromDelta(point.x - this.player.position.x, point.y - this.player.position.y, this.player);
+  }
+
+  performTargetAction(target) {
     if (target.kind === "exit") {
       this.changeScene(target.targetSceneId, target.targetPosition);
       return;
     }
     if (this.selectedVerb === VERBS.LOOK) {
-      this.message = this.t(target.lookKey || target.nameKey);
+      this.setStatusMessage(this.t(target.lookKey || target.nameKey));
       return;
     }
     if (this.selectedVerb === VERBS.TALK) {
@@ -392,7 +601,7 @@ export class Game {
         this.player.speaking = true;
         this.renderUi();
       } else {
-        this.message = this.t("msg.need_talk");
+        this.setStatusMessage(this.t("msg.need_talk"), { reject: true });
       }
       return;
     }
@@ -404,36 +613,36 @@ export class Game {
       this.useTarget(target);
       return;
     }
-    this.message = this.t("msg.no_use");
+    this.setStatusMessage(this.t("msg.no_use"), { reject: true });
   }
 
   takeTarget(target) {
     if (this.inventory.has(target.takeItemId)) {
-      this.message = this.t("msg.already_taken");
+      this.setStatusMessage(this.t("msg.already_taken"), { reject: true });
       return;
     }
     this.inventory.add(target.takeItemId);
     if (target.flagOnTake) this.state[target.flagOnTake] = true;
-    this.message = this.t("msg.taken");
+    this.setStatusMessage(this.t("msg.taken"));
     this.save();
   }
 
   useTarget(target) {
     if (target.id === "hotspot.mehana.oil" && this.inventory.has("item.sunflower_oil")) {
       this.state.drankOilBeforeTonyChallenge = true;
-      this.message = this.t("msg.oil_used");
+      this.setStatusMessage(this.t("msg.oil_used"));
       this.save();
       return;
     }
     if (target.id === "npc.tony_fridge" && this.inventory.has("item.accordion")) {
       this.state.flags.tonyDistracted = true;
-      this.message = this.t("msg.accordion_tony");
+      this.setStatusMessage(this.t("msg.accordion_tony"));
       this.save();
       return;
     }
     if (target.id === "hotspot.mehana.water_jug" && this.state.flags.tonyChallengeStarted) {
       if (!this.state.flags.tonyDistracted) {
-        this.message = this.t("msg.water_swap_missing");
+        this.setStatusMessage(this.t("msg.water_swap_missing"), { reject: true });
         this.state.suspicion += 8;
         this.save();
         return;
@@ -445,17 +654,17 @@ export class Game {
       this.state.suspicion += 10;
       this.state.publicMood += 5;
       this.quests.complete("quest.chapter1.tony_vote");
-      this.message = this.t("msg.water_swap_success");
+      this.setStatusMessage(this.t("msg.water_swap_success"));
       this.save();
       return;
     }
-    this.message = this.t("msg.no_use");
+    this.setStatusMessage(this.t("msg.no_use"), { reject: true });
   }
 
   applyDialogueEffect(effect) {
     if (effect === "tonyChallengeStarted") {
       this.state.flags.tonyChallengeStarted = true;
-      this.message = this.t("dialogue.tony.challenge");
+      this.setStatusMessage(this.t("dialogue.tony.challenge"));
     }
     if (effect === "tonyChallengeRefused") {
       this.state.suspicion += 3;
@@ -475,6 +684,9 @@ export class Game {
     this.state.currentSceneId = sceneId;
     this.player.position = { ...(position || this.currentScene.playerStart) };
     this.player.target = null;
+    this.player.pendingInteraction = null;
+    this.player.pendingFacingPoint = null;
+    this.player.interactionDebug = null;
     this.player.speed = this.sceneMovementSpeed(this.currentScene);
     this.save();
   }
@@ -499,6 +711,10 @@ export class Game {
     this.inventory = new InventorySystem(this.content.items, this.state);
     this.quests = new QuestSystem(this.content.quests, this.state);
     this.player.position = { ...this.currentScene.playerStart };
+    this.player.target = null;
+    this.player.pendingInteraction = null;
+    this.player.pendingFacingPoint = null;
+    this.player.interactionDebug = null;
     this.message = this.t("ui.hint");
     this.menuOpen = true;
     this.paused = false;
@@ -647,11 +863,17 @@ node tools/build-external-runtime-staging.js</pre>
     return Renderer.holdFrameFromWalkStart(start);
   }
 
+  simpleActionFrame(key) {
+    const frame = externalAnimationV1.animations?.[key];
+    return frame ? { ...frame, slot: `external_${key}` } : null;
+  }
+
   simpleCurrentFrame() {
     if (this.simpleAnim.mode === "start") return this.simpleWalkPart("start");
     if (this.simpleAnim.mode === "loop") return this.simpleWalkPart("loop");
     if (this.simpleAnim.mode === "stop") return this.simpleWalkPart("stop");
     if (this.simpleAnim.mode === "idle") return this.simpleIdleFrame();
+    if (this.simpleAnim.mode?.startsWith("talk_") || this.simpleAnim.mode?.startsWith("reject_")) return this.simpleActionFrame(this.simpleAnim.mode);
     return null;
   }
 
@@ -826,6 +1048,10 @@ node tools/build-external-runtime-staging.js</pre>
     const start = this.simpleWalkPart("start");
     const loop = this.simpleWalkPart("loop");
     const stop = this.simpleWalkPart("stop");
+    const talkShort = this.simpleActionFrame("talk_east_short_1");
+    const talkLong1 = this.simpleActionFrame("talk_east_long_1");
+    const talkLong2 = this.simpleActionFrame("talk_east_long_2");
+    const reject = this.simpleActionFrame("reject_east_1");
     this.uiRoot.innerHTML = "";
     const panel = element("section", "simple-anim-controls");
     panel.innerHTML = `
@@ -842,6 +1068,12 @@ node tools/build-external-runtime-staging.js</pre>
         <button data-action="stop-part" ${stop ? "" : "disabled"}>Play East Stop</button>
         <button data-action="full-east" ${start && loop && stop ? "" : "disabled"}>Play Full East Sequence</button>
         <button data-action="full-west" ${start && loop && stop ? "" : "disabled"}>Play Full West Sequence</button>
+      </div>
+      <div class="simple-anim-row">
+        <button data-action="talk_east_short_1" ${talkShort ? "" : "disabled"}>Talk Short 1</button>
+        <button data-action="talk_east_long_1" ${talkLong1 ? "" : "disabled"}>Talk Long 1</button>
+        <button data-action="talk_east_long_2" ${talkLong2 ? "" : "disabled"}>Talk Long 2</button>
+        <button data-action="reject_east_1" ${reject ? "" : "disabled"}>Reject 1</button>
       </div>
       <div class="simple-anim-row">
         <button data-action="clear-cache">Clear Cache + Reload</button>
@@ -862,6 +1094,7 @@ node tools/build-external-runtime-staging.js</pre>
       if (action === "start") this.playSimplePart("start");
       if (action === "loop") this.playSimplePart("loop");
       if (action === "stop-part") this.playSimplePart("stop");
+      if (action.startsWith("talk_") || action.startsWith("reject_")) this.playSimplePart(action);
       if (action === "full-east") this.playSimpleFullSequence("east");
       if (action === "full-west") this.playSimpleFullSequence("west");
       if (action === "clear-cache") {

@@ -5,6 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "node tools/dev-server.mjs",
+    "build:walkmasks": "node tools/build-walk-masks.js",
     "build:characters": "node tools/build-character-chroma-assets.js",
     "test": "node --test test/engine.test.js"
   },

@@ -18,7 +18,12 @@ export const externalAnimationV1 = {
     "external_idle_east_2": "target/external_animation_v1/runtime/idle_east_2.png",
     "external_idle_east_3": "target/external_animation_v1/runtime/idle_east_3.png",
     "external_idle_east_4": "target/external_animation_v1/runtime/idle_east_4.png",
-    "external_idle_east_5": "target/external_animation_v1/runtime/idle_east_5.png"
+    "external_idle_east_5": "target/external_animation_v1/runtime/idle_east_5.png",
+    "external_idle_east_6": "target/external_animation_v1/runtime/idle_east_6.png",
+    "external_talk_east_long_1": "target/external_animation_v1/runtime/talk_east_long_1.png",
+    "external_talk_east_long_2": "target/external_animation_v1/runtime/talk_east_long_2.png",
+    "external_talk_east_short_1": "target/external_animation_v1/runtime/talk_east_short_1.png",
+    "external_reject_east_1": "target/external_animation_v1/runtime/reject_east_1.png"
   },
   "walkParts": {
     "east": {
@@ -1125,7 +1130,8 @@ export const externalAnimationV1 = {
         "loop": false,
         "pingPong": false,
         "role": "stop",
-        "stopRenderOffsetXStart": -10,
+        "stopRenderOffsetXStart": -8,
+        "stopRenderOffsetYStart": -6,
         "initialFrame": 1,
         "anchorX": 0.5,
         "anchorY": 1,
@@ -2732,7 +2738,8 @@ export const externalAnimationV1 = {
         "loop": false,
         "pingPong": false,
         "role": "stop",
-        "stopRenderOffsetXStart": -10,
+        "stopRenderOffsetXStart": -8,
+        "stopRenderOffsetYStart": -6,
         "initialFrame": 1,
         "anchorX": 0.5,
         "anchorY": 1,
@@ -8744,6 +8751,1176 @@ export const externalAnimationV1 = {
         "mirroredWest": true,
         "slot": "external_idle_east_5",
         "idleKey": "idle_east_5"
+      },
+      {
+        "src": "target/external_animation_v1/runtime/idle_east_6.png",
+        "sourceSheet": "target\\external_animation_v1\\unpacked\\idle_east_6\\sprite--9px-frames-36-rows-6-cols-6.png",
+        "metadataFile": "target\\external_animation_v1\\unpacked\\idle_east_6\\sprite--9px-frames-36-rows-6-cols-6.json",
+        "usesOriginalLudoLayout": true,
+        "sourcePreserved": true,
+        "runtimeSource": "unpacked-alpha-sheet",
+        "frameWidth": 798,
+        "frameHeight": 1198,
+        "sheetWidth": 4788,
+        "sheetHeight": 7188,
+        "frameCount": 36,
+        "sourceFrameCount": 36,
+        "frameStart": 0,
+        "frameEndTrim": 0,
+        "configuredFrameCount": null,
+        "fps": 14,
+        "loop": false,
+        "pingPong": false,
+        "role": "idle",
+        "initialFrame": 0,
+        "anchorX": 0.5,
+        "anchorY": 1,
+        "anchor": {
+          "x": 0.5,
+          "y": 1
+        },
+        "baselineY": 1198,
+        "contentBounds": {
+          "x": 195,
+          "y": 156,
+          "w": 362,
+          "h": 860
+        },
+        "sourceContentBounds": {
+          "x": 195,
+          "y": 156,
+          "w": 362,
+          "h": 860
+        },
+        "sourceFrameContentBounds": [
+          {
+            "x": 227,
+            "y": 158,
+            "w": 313,
+            "h": 858
+          },
+          {
+            "x": 227,
+            "y": 156,
+            "w": 317,
+            "h": 860
+          },
+          {
+            "x": 227,
+            "y": 158,
+            "w": 319,
+            "h": 858
+          },
+          {
+            "x": 227,
+            "y": 157,
+            "w": 321,
+            "h": 859
+          },
+          {
+            "x": 226,
+            "y": 156,
+            "w": 324,
+            "h": 858
+          },
+          {
+            "x": 223,
+            "y": 156,
+            "w": 328,
+            "h": 858
+          },
+          {
+            "x": 221,
+            "y": 156,
+            "w": 330,
+            "h": 858
+          },
+          {
+            "x": 209,
+            "y": 157,
+            "w": 344,
+            "h": 857
+          },
+          {
+            "x": 204,
+            "y": 157,
+            "w": 345,
+            "h": 857
+          },
+          {
+            "x": 200,
+            "y": 158,
+            "w": 347,
+            "h": 856
+          },
+          {
+            "x": 197,
+            "y": 158,
+            "w": 348,
+            "h": 856
+          },
+          {
+            "x": 195,
+            "y": 159,
+            "w": 348,
+            "h": 855
+          },
+          {
+            "x": 195,
+            "y": 159,
+            "w": 347,
+            "h": 855
+          },
+          {
+            "x": 195,
+            "y": 158,
+            "w": 346,
+            "h": 856
+          },
+          {
+            "x": 197,
+            "y": 158,
+            "w": 344,
+            "h": 856
+          },
+          {
+            "x": 199,
+            "y": 159,
+            "w": 341,
+            "h": 855
+          },
+          {
+            "x": 204,
+            "y": 159,
+            "w": 339,
+            "h": 855
+          },
+          {
+            "x": 207,
+            "y": 160,
+            "w": 338,
+            "h": 854
+          },
+          {
+            "x": 210,
+            "y": 160,
+            "w": 337,
+            "h": 854
+          },
+          {
+            "x": 216,
+            "y": 161,
+            "w": 334,
+            "h": 853
+          },
+          {
+            "x": 220,
+            "y": 162,
+            "w": 332,
+            "h": 852
+          },
+          {
+            "x": 229,
+            "y": 163,
+            "w": 325,
+            "h": 851
+          },
+          {
+            "x": 234,
+            "y": 163,
+            "w": 321,
+            "h": 851
+          },
+          {
+            "x": 238,
+            "y": 162,
+            "w": 318,
+            "h": 852
+          },
+          {
+            "x": 240,
+            "y": 162,
+            "w": 316,
+            "h": 852
+          },
+          {
+            "x": 240,
+            "y": 162,
+            "w": 317,
+            "h": 852
+          },
+          {
+            "x": 240,
+            "y": 162,
+            "w": 316,
+            "h": 852
+          },
+          {
+            "x": 239,
+            "y": 163,
+            "w": 316,
+            "h": 851
+          },
+          {
+            "x": 237,
+            "y": 162,
+            "w": 317,
+            "h": 852
+          },
+          {
+            "x": 235,
+            "y": 161,
+            "w": 316,
+            "h": 853
+          },
+          {
+            "x": 234,
+            "y": 160,
+            "w": 315,
+            "h": 854
+          },
+          {
+            "x": 234,
+            "y": 160,
+            "w": 314,
+            "h": 854
+          },
+          {
+            "x": 231,
+            "y": 159,
+            "w": 314,
+            "h": 855
+          },
+          {
+            "x": 231,
+            "y": 159,
+            "w": 312,
+            "h": 855
+          },
+          {
+            "x": 230,
+            "y": 159,
+            "w": 312,
+            "h": 855
+          },
+          {
+            "x": 227,
+            "y": 158,
+            "w": 313,
+            "h": 856
+          }
+        ],
+        "sourceFrameRects": [
+          {
+            "x": 0,
+            "y": 0,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_000",
+            "duration": 103,
+            "sourceFrameIndex": 0
+          },
+          {
+            "x": 798,
+            "y": 0,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_001",
+            "duration": 103,
+            "sourceFrameIndex": 1
+          },
+          {
+            "x": 1596,
+            "y": 0,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_002",
+            "duration": 103,
+            "sourceFrameIndex": 2
+          },
+          {
+            "x": 2394,
+            "y": 0,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_003",
+            "duration": 103,
+            "sourceFrameIndex": 3
+          },
+          {
+            "x": 3192,
+            "y": 0,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_004",
+            "duration": 103,
+            "sourceFrameIndex": 4
+          },
+          {
+            "x": 3990,
+            "y": 0,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_005",
+            "duration": 103,
+            "sourceFrameIndex": 5
+          },
+          {
+            "x": 0,
+            "y": 1198,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_006",
+            "duration": 103,
+            "sourceFrameIndex": 6
+          },
+          {
+            "x": 798,
+            "y": 1198,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_007",
+            "duration": 103,
+            "sourceFrameIndex": 7
+          },
+          {
+            "x": 1596,
+            "y": 1198,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_008",
+            "duration": 103,
+            "sourceFrameIndex": 8
+          },
+          {
+            "x": 2394,
+            "y": 1198,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_009",
+            "duration": 103,
+            "sourceFrameIndex": 9
+          },
+          {
+            "x": 3192,
+            "y": 1198,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_010",
+            "duration": 103,
+            "sourceFrameIndex": 10
+          },
+          {
+            "x": 3990,
+            "y": 1198,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_011",
+            "duration": 103,
+            "sourceFrameIndex": 11
+          },
+          {
+            "x": 0,
+            "y": 2396,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_012",
+            "duration": 103,
+            "sourceFrameIndex": 12
+          },
+          {
+            "x": 798,
+            "y": 2396,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_013",
+            "duration": 103,
+            "sourceFrameIndex": 13
+          },
+          {
+            "x": 1596,
+            "y": 2396,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_014",
+            "duration": 103,
+            "sourceFrameIndex": 14
+          },
+          {
+            "x": 2394,
+            "y": 2396,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_015",
+            "duration": 103,
+            "sourceFrameIndex": 15
+          },
+          {
+            "x": 3192,
+            "y": 2396,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_016",
+            "duration": 103,
+            "sourceFrameIndex": 16
+          },
+          {
+            "x": 3990,
+            "y": 2396,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_017",
+            "duration": 103,
+            "sourceFrameIndex": 17
+          },
+          {
+            "x": 0,
+            "y": 3594,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_018",
+            "duration": 103,
+            "sourceFrameIndex": 18
+          },
+          {
+            "x": 798,
+            "y": 3594,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_019",
+            "duration": 103,
+            "sourceFrameIndex": 19
+          },
+          {
+            "x": 1596,
+            "y": 3594,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_020",
+            "duration": 103,
+            "sourceFrameIndex": 20
+          },
+          {
+            "x": 2394,
+            "y": 3594,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_021",
+            "duration": 103,
+            "sourceFrameIndex": 21
+          },
+          {
+            "x": 3192,
+            "y": 3594,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_022",
+            "duration": 103,
+            "sourceFrameIndex": 22
+          },
+          {
+            "x": 3990,
+            "y": 3594,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_023",
+            "duration": 103,
+            "sourceFrameIndex": 23
+          },
+          {
+            "x": 0,
+            "y": 4792,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_024",
+            "duration": 103,
+            "sourceFrameIndex": 24
+          },
+          {
+            "x": 798,
+            "y": 4792,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_025",
+            "duration": 103,
+            "sourceFrameIndex": 25
+          },
+          {
+            "x": 1596,
+            "y": 4792,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_026",
+            "duration": 103,
+            "sourceFrameIndex": 26
+          },
+          {
+            "x": 2394,
+            "y": 4792,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_027",
+            "duration": 103,
+            "sourceFrameIndex": 27
+          },
+          {
+            "x": 3192,
+            "y": 4792,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_028",
+            "duration": 103,
+            "sourceFrameIndex": 28
+          },
+          {
+            "x": 3990,
+            "y": 4792,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_029",
+            "duration": 103,
+            "sourceFrameIndex": 29
+          },
+          {
+            "x": 0,
+            "y": 5990,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_030",
+            "duration": 103,
+            "sourceFrameIndex": 30
+          },
+          {
+            "x": 798,
+            "y": 5990,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_031",
+            "duration": 103,
+            "sourceFrameIndex": 31
+          },
+          {
+            "x": 1596,
+            "y": 5990,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_032",
+            "duration": 103,
+            "sourceFrameIndex": 32
+          },
+          {
+            "x": 2394,
+            "y": 5990,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_033",
+            "duration": 103,
+            "sourceFrameIndex": 33
+          },
+          {
+            "x": 3192,
+            "y": 5990,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_034",
+            "duration": 103,
+            "sourceFrameIndex": 34
+          },
+          {
+            "x": 3990,
+            "y": 5990,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_035",
+            "duration": 103,
+            "sourceFrameIndex": 35
+          }
+        ],
+        "frameContentBounds": [
+          {
+            "x": 227,
+            "y": 158,
+            "w": 313,
+            "h": 858
+          },
+          {
+            "x": 227,
+            "y": 156,
+            "w": 317,
+            "h": 860
+          },
+          {
+            "x": 227,
+            "y": 158,
+            "w": 319,
+            "h": 858
+          },
+          {
+            "x": 227,
+            "y": 157,
+            "w": 321,
+            "h": 859
+          },
+          {
+            "x": 226,
+            "y": 156,
+            "w": 324,
+            "h": 858
+          },
+          {
+            "x": 223,
+            "y": 156,
+            "w": 328,
+            "h": 858
+          },
+          {
+            "x": 221,
+            "y": 156,
+            "w": 330,
+            "h": 858
+          },
+          {
+            "x": 209,
+            "y": 157,
+            "w": 344,
+            "h": 857
+          },
+          {
+            "x": 204,
+            "y": 157,
+            "w": 345,
+            "h": 857
+          },
+          {
+            "x": 200,
+            "y": 158,
+            "w": 347,
+            "h": 856
+          },
+          {
+            "x": 197,
+            "y": 158,
+            "w": 348,
+            "h": 856
+          },
+          {
+            "x": 195,
+            "y": 159,
+            "w": 348,
+            "h": 855
+          },
+          {
+            "x": 195,
+            "y": 159,
+            "w": 347,
+            "h": 855
+          },
+          {
+            "x": 195,
+            "y": 158,
+            "w": 346,
+            "h": 856
+          },
+          {
+            "x": 197,
+            "y": 158,
+            "w": 344,
+            "h": 856
+          },
+          {
+            "x": 199,
+            "y": 159,
+            "w": 341,
+            "h": 855
+          },
+          {
+            "x": 204,
+            "y": 159,
+            "w": 339,
+            "h": 855
+          },
+          {
+            "x": 207,
+            "y": 160,
+            "w": 338,
+            "h": 854
+          },
+          {
+            "x": 210,
+            "y": 160,
+            "w": 337,
+            "h": 854
+          },
+          {
+            "x": 216,
+            "y": 161,
+            "w": 334,
+            "h": 853
+          },
+          {
+            "x": 220,
+            "y": 162,
+            "w": 332,
+            "h": 852
+          },
+          {
+            "x": 229,
+            "y": 163,
+            "w": 325,
+            "h": 851
+          },
+          {
+            "x": 234,
+            "y": 163,
+            "w": 321,
+            "h": 851
+          },
+          {
+            "x": 238,
+            "y": 162,
+            "w": 318,
+            "h": 852
+          },
+          {
+            "x": 240,
+            "y": 162,
+            "w": 316,
+            "h": 852
+          },
+          {
+            "x": 240,
+            "y": 162,
+            "w": 317,
+            "h": 852
+          },
+          {
+            "x": 240,
+            "y": 162,
+            "w": 316,
+            "h": 852
+          },
+          {
+            "x": 239,
+            "y": 163,
+            "w": 316,
+            "h": 851
+          },
+          {
+            "x": 237,
+            "y": 162,
+            "w": 317,
+            "h": 852
+          },
+          {
+            "x": 235,
+            "y": 161,
+            "w": 316,
+            "h": 853
+          },
+          {
+            "x": 234,
+            "y": 160,
+            "w": 315,
+            "h": 854
+          },
+          {
+            "x": 234,
+            "y": 160,
+            "w": 314,
+            "h": 854
+          },
+          {
+            "x": 231,
+            "y": 159,
+            "w": 314,
+            "h": 855
+          },
+          {
+            "x": 231,
+            "y": 159,
+            "w": 312,
+            "h": 855
+          },
+          {
+            "x": 230,
+            "y": 159,
+            "w": 312,
+            "h": 855
+          },
+          {
+            "x": 227,
+            "y": 158,
+            "w": 313,
+            "h": 856
+          }
+        ],
+        "frameRects": [
+          {
+            "x": 0,
+            "y": 0,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_000",
+            "duration": 103,
+            "sourceFrameIndex": 0
+          },
+          {
+            "x": 798,
+            "y": 0,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_001",
+            "duration": 103,
+            "sourceFrameIndex": 1
+          },
+          {
+            "x": 1596,
+            "y": 0,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_002",
+            "duration": 103,
+            "sourceFrameIndex": 2
+          },
+          {
+            "x": 2394,
+            "y": 0,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_003",
+            "duration": 103,
+            "sourceFrameIndex": 3
+          },
+          {
+            "x": 3192,
+            "y": 0,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_004",
+            "duration": 103,
+            "sourceFrameIndex": 4
+          },
+          {
+            "x": 3990,
+            "y": 0,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_005",
+            "duration": 103,
+            "sourceFrameIndex": 5
+          },
+          {
+            "x": 0,
+            "y": 1198,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_006",
+            "duration": 103,
+            "sourceFrameIndex": 6
+          },
+          {
+            "x": 798,
+            "y": 1198,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_007",
+            "duration": 103,
+            "sourceFrameIndex": 7
+          },
+          {
+            "x": 1596,
+            "y": 1198,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_008",
+            "duration": 103,
+            "sourceFrameIndex": 8
+          },
+          {
+            "x": 2394,
+            "y": 1198,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_009",
+            "duration": 103,
+            "sourceFrameIndex": 9
+          },
+          {
+            "x": 3192,
+            "y": 1198,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_010",
+            "duration": 103,
+            "sourceFrameIndex": 10
+          },
+          {
+            "x": 3990,
+            "y": 1198,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_011",
+            "duration": 103,
+            "sourceFrameIndex": 11
+          },
+          {
+            "x": 0,
+            "y": 2396,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_012",
+            "duration": 103,
+            "sourceFrameIndex": 12
+          },
+          {
+            "x": 798,
+            "y": 2396,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_013",
+            "duration": 103,
+            "sourceFrameIndex": 13
+          },
+          {
+            "x": 1596,
+            "y": 2396,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_014",
+            "duration": 103,
+            "sourceFrameIndex": 14
+          },
+          {
+            "x": 2394,
+            "y": 2396,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_015",
+            "duration": 103,
+            "sourceFrameIndex": 15
+          },
+          {
+            "x": 3192,
+            "y": 2396,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_016",
+            "duration": 103,
+            "sourceFrameIndex": 16
+          },
+          {
+            "x": 3990,
+            "y": 2396,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_017",
+            "duration": 103,
+            "sourceFrameIndex": 17
+          },
+          {
+            "x": 0,
+            "y": 3594,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_018",
+            "duration": 103,
+            "sourceFrameIndex": 18
+          },
+          {
+            "x": 798,
+            "y": 3594,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_019",
+            "duration": 103,
+            "sourceFrameIndex": 19
+          },
+          {
+            "x": 1596,
+            "y": 3594,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_020",
+            "duration": 103,
+            "sourceFrameIndex": 20
+          },
+          {
+            "x": 2394,
+            "y": 3594,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_021",
+            "duration": 103,
+            "sourceFrameIndex": 21
+          },
+          {
+            "x": 3192,
+            "y": 3594,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_022",
+            "duration": 103,
+            "sourceFrameIndex": 22
+          },
+          {
+            "x": 3990,
+            "y": 3594,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_023",
+            "duration": 103,
+            "sourceFrameIndex": 23
+          },
+          {
+            "x": 0,
+            "y": 4792,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_024",
+            "duration": 103,
+            "sourceFrameIndex": 24
+          },
+          {
+            "x": 798,
+            "y": 4792,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_025",
+            "duration": 103,
+            "sourceFrameIndex": 25
+          },
+          {
+            "x": 1596,
+            "y": 4792,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_026",
+            "duration": 103,
+            "sourceFrameIndex": 26
+          },
+          {
+            "x": 2394,
+            "y": 4792,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_027",
+            "duration": 103,
+            "sourceFrameIndex": 27
+          },
+          {
+            "x": 3192,
+            "y": 4792,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_028",
+            "duration": 103,
+            "sourceFrameIndex": 28
+          },
+          {
+            "x": 3990,
+            "y": 4792,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_029",
+            "duration": 103,
+            "sourceFrameIndex": 29
+          },
+          {
+            "x": 0,
+            "y": 5990,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_030",
+            "duration": 103,
+            "sourceFrameIndex": 30
+          },
+          {
+            "x": 798,
+            "y": 5990,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_031",
+            "duration": 103,
+            "sourceFrameIndex": 31
+          },
+          {
+            "x": 1596,
+            "y": 5990,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_032",
+            "duration": 103,
+            "sourceFrameIndex": 32
+          },
+          {
+            "x": 2394,
+            "y": 5990,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_033",
+            "duration": 103,
+            "sourceFrameIndex": 33
+          },
+          {
+            "x": 3192,
+            "y": 5990,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_034",
+            "duration": 103,
+            "sourceFrameIndex": 34
+          },
+          {
+            "x": 3990,
+            "y": 5990,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_035",
+            "duration": 103,
+            "sourceFrameIndex": 35
+          }
+        ],
+        "movementSpeedMultipliers": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "mirroredWest": true,
+        "slot": "external_idle_east_6",
+        "idleKey": "idle_east_6"
       }
     ],
     "west": [
@@ -14265,6 +15442,8660 @@ export const externalAnimationV1 = {
         "idleKey": "idle_east_5",
         "mirrored": true,
         "mirrorSource": "east"
+      },
+      {
+        "src": "target/external_animation_v1/runtime/idle_east_6.png",
+        "sourceSheet": "target\\external_animation_v1\\unpacked\\idle_east_6\\sprite--9px-frames-36-rows-6-cols-6.png",
+        "metadataFile": "target\\external_animation_v1\\unpacked\\idle_east_6\\sprite--9px-frames-36-rows-6-cols-6.json",
+        "usesOriginalLudoLayout": true,
+        "sourcePreserved": true,
+        "runtimeSource": "unpacked-alpha-sheet",
+        "frameWidth": 798,
+        "frameHeight": 1198,
+        "sheetWidth": 4788,
+        "sheetHeight": 7188,
+        "frameCount": 36,
+        "sourceFrameCount": 36,
+        "frameStart": 0,
+        "frameEndTrim": 0,
+        "configuredFrameCount": null,
+        "fps": 14,
+        "loop": false,
+        "pingPong": false,
+        "role": "idle",
+        "initialFrame": 0,
+        "anchorX": 0.5,
+        "anchorY": 1,
+        "anchor": {
+          "x": 0.5,
+          "y": 1
+        },
+        "baselineY": 1198,
+        "contentBounds": {
+          "x": 195,
+          "y": 156,
+          "w": 362,
+          "h": 860
+        },
+        "sourceContentBounds": {
+          "x": 195,
+          "y": 156,
+          "w": 362,
+          "h": 860
+        },
+        "sourceFrameContentBounds": [
+          {
+            "x": 227,
+            "y": 158,
+            "w": 313,
+            "h": 858
+          },
+          {
+            "x": 227,
+            "y": 156,
+            "w": 317,
+            "h": 860
+          },
+          {
+            "x": 227,
+            "y": 158,
+            "w": 319,
+            "h": 858
+          },
+          {
+            "x": 227,
+            "y": 157,
+            "w": 321,
+            "h": 859
+          },
+          {
+            "x": 226,
+            "y": 156,
+            "w": 324,
+            "h": 858
+          },
+          {
+            "x": 223,
+            "y": 156,
+            "w": 328,
+            "h": 858
+          },
+          {
+            "x": 221,
+            "y": 156,
+            "w": 330,
+            "h": 858
+          },
+          {
+            "x": 209,
+            "y": 157,
+            "w": 344,
+            "h": 857
+          },
+          {
+            "x": 204,
+            "y": 157,
+            "w": 345,
+            "h": 857
+          },
+          {
+            "x": 200,
+            "y": 158,
+            "w": 347,
+            "h": 856
+          },
+          {
+            "x": 197,
+            "y": 158,
+            "w": 348,
+            "h": 856
+          },
+          {
+            "x": 195,
+            "y": 159,
+            "w": 348,
+            "h": 855
+          },
+          {
+            "x": 195,
+            "y": 159,
+            "w": 347,
+            "h": 855
+          },
+          {
+            "x": 195,
+            "y": 158,
+            "w": 346,
+            "h": 856
+          },
+          {
+            "x": 197,
+            "y": 158,
+            "w": 344,
+            "h": 856
+          },
+          {
+            "x": 199,
+            "y": 159,
+            "w": 341,
+            "h": 855
+          },
+          {
+            "x": 204,
+            "y": 159,
+            "w": 339,
+            "h": 855
+          },
+          {
+            "x": 207,
+            "y": 160,
+            "w": 338,
+            "h": 854
+          },
+          {
+            "x": 210,
+            "y": 160,
+            "w": 337,
+            "h": 854
+          },
+          {
+            "x": 216,
+            "y": 161,
+            "w": 334,
+            "h": 853
+          },
+          {
+            "x": 220,
+            "y": 162,
+            "w": 332,
+            "h": 852
+          },
+          {
+            "x": 229,
+            "y": 163,
+            "w": 325,
+            "h": 851
+          },
+          {
+            "x": 234,
+            "y": 163,
+            "w": 321,
+            "h": 851
+          },
+          {
+            "x": 238,
+            "y": 162,
+            "w": 318,
+            "h": 852
+          },
+          {
+            "x": 240,
+            "y": 162,
+            "w": 316,
+            "h": 852
+          },
+          {
+            "x": 240,
+            "y": 162,
+            "w": 317,
+            "h": 852
+          },
+          {
+            "x": 240,
+            "y": 162,
+            "w": 316,
+            "h": 852
+          },
+          {
+            "x": 239,
+            "y": 163,
+            "w": 316,
+            "h": 851
+          },
+          {
+            "x": 237,
+            "y": 162,
+            "w": 317,
+            "h": 852
+          },
+          {
+            "x": 235,
+            "y": 161,
+            "w": 316,
+            "h": 853
+          },
+          {
+            "x": 234,
+            "y": 160,
+            "w": 315,
+            "h": 854
+          },
+          {
+            "x": 234,
+            "y": 160,
+            "w": 314,
+            "h": 854
+          },
+          {
+            "x": 231,
+            "y": 159,
+            "w": 314,
+            "h": 855
+          },
+          {
+            "x": 231,
+            "y": 159,
+            "w": 312,
+            "h": 855
+          },
+          {
+            "x": 230,
+            "y": 159,
+            "w": 312,
+            "h": 855
+          },
+          {
+            "x": 227,
+            "y": 158,
+            "w": 313,
+            "h": 856
+          }
+        ],
+        "sourceFrameRects": [
+          {
+            "x": 0,
+            "y": 0,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_000",
+            "duration": 103,
+            "sourceFrameIndex": 0
+          },
+          {
+            "x": 798,
+            "y": 0,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_001",
+            "duration": 103,
+            "sourceFrameIndex": 1
+          },
+          {
+            "x": 1596,
+            "y": 0,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_002",
+            "duration": 103,
+            "sourceFrameIndex": 2
+          },
+          {
+            "x": 2394,
+            "y": 0,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_003",
+            "duration": 103,
+            "sourceFrameIndex": 3
+          },
+          {
+            "x": 3192,
+            "y": 0,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_004",
+            "duration": 103,
+            "sourceFrameIndex": 4
+          },
+          {
+            "x": 3990,
+            "y": 0,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_005",
+            "duration": 103,
+            "sourceFrameIndex": 5
+          },
+          {
+            "x": 0,
+            "y": 1198,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_006",
+            "duration": 103,
+            "sourceFrameIndex": 6
+          },
+          {
+            "x": 798,
+            "y": 1198,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_007",
+            "duration": 103,
+            "sourceFrameIndex": 7
+          },
+          {
+            "x": 1596,
+            "y": 1198,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_008",
+            "duration": 103,
+            "sourceFrameIndex": 8
+          },
+          {
+            "x": 2394,
+            "y": 1198,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_009",
+            "duration": 103,
+            "sourceFrameIndex": 9
+          },
+          {
+            "x": 3192,
+            "y": 1198,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_010",
+            "duration": 103,
+            "sourceFrameIndex": 10
+          },
+          {
+            "x": 3990,
+            "y": 1198,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_011",
+            "duration": 103,
+            "sourceFrameIndex": 11
+          },
+          {
+            "x": 0,
+            "y": 2396,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_012",
+            "duration": 103,
+            "sourceFrameIndex": 12
+          },
+          {
+            "x": 798,
+            "y": 2396,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_013",
+            "duration": 103,
+            "sourceFrameIndex": 13
+          },
+          {
+            "x": 1596,
+            "y": 2396,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_014",
+            "duration": 103,
+            "sourceFrameIndex": 14
+          },
+          {
+            "x": 2394,
+            "y": 2396,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_015",
+            "duration": 103,
+            "sourceFrameIndex": 15
+          },
+          {
+            "x": 3192,
+            "y": 2396,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_016",
+            "duration": 103,
+            "sourceFrameIndex": 16
+          },
+          {
+            "x": 3990,
+            "y": 2396,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_017",
+            "duration": 103,
+            "sourceFrameIndex": 17
+          },
+          {
+            "x": 0,
+            "y": 3594,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_018",
+            "duration": 103,
+            "sourceFrameIndex": 18
+          },
+          {
+            "x": 798,
+            "y": 3594,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_019",
+            "duration": 103,
+            "sourceFrameIndex": 19
+          },
+          {
+            "x": 1596,
+            "y": 3594,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_020",
+            "duration": 103,
+            "sourceFrameIndex": 20
+          },
+          {
+            "x": 2394,
+            "y": 3594,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_021",
+            "duration": 103,
+            "sourceFrameIndex": 21
+          },
+          {
+            "x": 3192,
+            "y": 3594,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_022",
+            "duration": 103,
+            "sourceFrameIndex": 22
+          },
+          {
+            "x": 3990,
+            "y": 3594,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_023",
+            "duration": 103,
+            "sourceFrameIndex": 23
+          },
+          {
+            "x": 0,
+            "y": 4792,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_024",
+            "duration": 103,
+            "sourceFrameIndex": 24
+          },
+          {
+            "x": 798,
+            "y": 4792,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_025",
+            "duration": 103,
+            "sourceFrameIndex": 25
+          },
+          {
+            "x": 1596,
+            "y": 4792,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_026",
+            "duration": 103,
+            "sourceFrameIndex": 26
+          },
+          {
+            "x": 2394,
+            "y": 4792,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_027",
+            "duration": 103,
+            "sourceFrameIndex": 27
+          },
+          {
+            "x": 3192,
+            "y": 4792,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_028",
+            "duration": 103,
+            "sourceFrameIndex": 28
+          },
+          {
+            "x": 3990,
+            "y": 4792,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_029",
+            "duration": 103,
+            "sourceFrameIndex": 29
+          },
+          {
+            "x": 0,
+            "y": 5990,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_030",
+            "duration": 103,
+            "sourceFrameIndex": 30
+          },
+          {
+            "x": 798,
+            "y": 5990,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_031",
+            "duration": 103,
+            "sourceFrameIndex": 31
+          },
+          {
+            "x": 1596,
+            "y": 5990,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_032",
+            "duration": 103,
+            "sourceFrameIndex": 32
+          },
+          {
+            "x": 2394,
+            "y": 5990,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_033",
+            "duration": 103,
+            "sourceFrameIndex": 33
+          },
+          {
+            "x": 3192,
+            "y": 5990,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_034",
+            "duration": 103,
+            "sourceFrameIndex": 34
+          },
+          {
+            "x": 3990,
+            "y": 5990,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_035",
+            "duration": 103,
+            "sourceFrameIndex": 35
+          }
+        ],
+        "frameContentBounds": [
+          {
+            "x": 227,
+            "y": 158,
+            "w": 313,
+            "h": 858
+          },
+          {
+            "x": 227,
+            "y": 156,
+            "w": 317,
+            "h": 860
+          },
+          {
+            "x": 227,
+            "y": 158,
+            "w": 319,
+            "h": 858
+          },
+          {
+            "x": 227,
+            "y": 157,
+            "w": 321,
+            "h": 859
+          },
+          {
+            "x": 226,
+            "y": 156,
+            "w": 324,
+            "h": 858
+          },
+          {
+            "x": 223,
+            "y": 156,
+            "w": 328,
+            "h": 858
+          },
+          {
+            "x": 221,
+            "y": 156,
+            "w": 330,
+            "h": 858
+          },
+          {
+            "x": 209,
+            "y": 157,
+            "w": 344,
+            "h": 857
+          },
+          {
+            "x": 204,
+            "y": 157,
+            "w": 345,
+            "h": 857
+          },
+          {
+            "x": 200,
+            "y": 158,
+            "w": 347,
+            "h": 856
+          },
+          {
+            "x": 197,
+            "y": 158,
+            "w": 348,
+            "h": 856
+          },
+          {
+            "x": 195,
+            "y": 159,
+            "w": 348,
+            "h": 855
+          },
+          {
+            "x": 195,
+            "y": 159,
+            "w": 347,
+            "h": 855
+          },
+          {
+            "x": 195,
+            "y": 158,
+            "w": 346,
+            "h": 856
+          },
+          {
+            "x": 197,
+            "y": 158,
+            "w": 344,
+            "h": 856
+          },
+          {
+            "x": 199,
+            "y": 159,
+            "w": 341,
+            "h": 855
+          },
+          {
+            "x": 204,
+            "y": 159,
+            "w": 339,
+            "h": 855
+          },
+          {
+            "x": 207,
+            "y": 160,
+            "w": 338,
+            "h": 854
+          },
+          {
+            "x": 210,
+            "y": 160,
+            "w": 337,
+            "h": 854
+          },
+          {
+            "x": 216,
+            "y": 161,
+            "w": 334,
+            "h": 853
+          },
+          {
+            "x": 220,
+            "y": 162,
+            "w": 332,
+            "h": 852
+          },
+          {
+            "x": 229,
+            "y": 163,
+            "w": 325,
+            "h": 851
+          },
+          {
+            "x": 234,
+            "y": 163,
+            "w": 321,
+            "h": 851
+          },
+          {
+            "x": 238,
+            "y": 162,
+            "w": 318,
+            "h": 852
+          },
+          {
+            "x": 240,
+            "y": 162,
+            "w": 316,
+            "h": 852
+          },
+          {
+            "x": 240,
+            "y": 162,
+            "w": 317,
+            "h": 852
+          },
+          {
+            "x": 240,
+            "y": 162,
+            "w": 316,
+            "h": 852
+          },
+          {
+            "x": 239,
+            "y": 163,
+            "w": 316,
+            "h": 851
+          },
+          {
+            "x": 237,
+            "y": 162,
+            "w": 317,
+            "h": 852
+          },
+          {
+            "x": 235,
+            "y": 161,
+            "w": 316,
+            "h": 853
+          },
+          {
+            "x": 234,
+            "y": 160,
+            "w": 315,
+            "h": 854
+          },
+          {
+            "x": 234,
+            "y": 160,
+            "w": 314,
+            "h": 854
+          },
+          {
+            "x": 231,
+            "y": 159,
+            "w": 314,
+            "h": 855
+          },
+          {
+            "x": 231,
+            "y": 159,
+            "w": 312,
+            "h": 855
+          },
+          {
+            "x": 230,
+            "y": 159,
+            "w": 312,
+            "h": 855
+          },
+          {
+            "x": 227,
+            "y": 158,
+            "w": 313,
+            "h": 856
+          }
+        ],
+        "frameRects": [
+          {
+            "x": 0,
+            "y": 0,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_000",
+            "duration": 103,
+            "sourceFrameIndex": 0
+          },
+          {
+            "x": 798,
+            "y": 0,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_001",
+            "duration": 103,
+            "sourceFrameIndex": 1
+          },
+          {
+            "x": 1596,
+            "y": 0,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_002",
+            "duration": 103,
+            "sourceFrameIndex": 2
+          },
+          {
+            "x": 2394,
+            "y": 0,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_003",
+            "duration": 103,
+            "sourceFrameIndex": 3
+          },
+          {
+            "x": 3192,
+            "y": 0,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_004",
+            "duration": 103,
+            "sourceFrameIndex": 4
+          },
+          {
+            "x": 3990,
+            "y": 0,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_005",
+            "duration": 103,
+            "sourceFrameIndex": 5
+          },
+          {
+            "x": 0,
+            "y": 1198,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_006",
+            "duration": 103,
+            "sourceFrameIndex": 6
+          },
+          {
+            "x": 798,
+            "y": 1198,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_007",
+            "duration": 103,
+            "sourceFrameIndex": 7
+          },
+          {
+            "x": 1596,
+            "y": 1198,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_008",
+            "duration": 103,
+            "sourceFrameIndex": 8
+          },
+          {
+            "x": 2394,
+            "y": 1198,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_009",
+            "duration": 103,
+            "sourceFrameIndex": 9
+          },
+          {
+            "x": 3192,
+            "y": 1198,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_010",
+            "duration": 103,
+            "sourceFrameIndex": 10
+          },
+          {
+            "x": 3990,
+            "y": 1198,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_011",
+            "duration": 103,
+            "sourceFrameIndex": 11
+          },
+          {
+            "x": 0,
+            "y": 2396,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_012",
+            "duration": 103,
+            "sourceFrameIndex": 12
+          },
+          {
+            "x": 798,
+            "y": 2396,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_013",
+            "duration": 103,
+            "sourceFrameIndex": 13
+          },
+          {
+            "x": 1596,
+            "y": 2396,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_014",
+            "duration": 103,
+            "sourceFrameIndex": 14
+          },
+          {
+            "x": 2394,
+            "y": 2396,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_015",
+            "duration": 103,
+            "sourceFrameIndex": 15
+          },
+          {
+            "x": 3192,
+            "y": 2396,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_016",
+            "duration": 103,
+            "sourceFrameIndex": 16
+          },
+          {
+            "x": 3990,
+            "y": 2396,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_017",
+            "duration": 103,
+            "sourceFrameIndex": 17
+          },
+          {
+            "x": 0,
+            "y": 3594,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_018",
+            "duration": 103,
+            "sourceFrameIndex": 18
+          },
+          {
+            "x": 798,
+            "y": 3594,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_019",
+            "duration": 103,
+            "sourceFrameIndex": 19
+          },
+          {
+            "x": 1596,
+            "y": 3594,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_020",
+            "duration": 103,
+            "sourceFrameIndex": 20
+          },
+          {
+            "x": 2394,
+            "y": 3594,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_021",
+            "duration": 103,
+            "sourceFrameIndex": 21
+          },
+          {
+            "x": 3192,
+            "y": 3594,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_022",
+            "duration": 103,
+            "sourceFrameIndex": 22
+          },
+          {
+            "x": 3990,
+            "y": 3594,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_023",
+            "duration": 103,
+            "sourceFrameIndex": 23
+          },
+          {
+            "x": 0,
+            "y": 4792,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_024",
+            "duration": 103,
+            "sourceFrameIndex": 24
+          },
+          {
+            "x": 798,
+            "y": 4792,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_025",
+            "duration": 103,
+            "sourceFrameIndex": 25
+          },
+          {
+            "x": 1596,
+            "y": 4792,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_026",
+            "duration": 103,
+            "sourceFrameIndex": 26
+          },
+          {
+            "x": 2394,
+            "y": 4792,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_027",
+            "duration": 103,
+            "sourceFrameIndex": 27
+          },
+          {
+            "x": 3192,
+            "y": 4792,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_028",
+            "duration": 103,
+            "sourceFrameIndex": 28
+          },
+          {
+            "x": 3990,
+            "y": 4792,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_029",
+            "duration": 103,
+            "sourceFrameIndex": 29
+          },
+          {
+            "x": 0,
+            "y": 5990,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_030",
+            "duration": 103,
+            "sourceFrameIndex": 30
+          },
+          {
+            "x": 798,
+            "y": 5990,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_031",
+            "duration": 103,
+            "sourceFrameIndex": 31
+          },
+          {
+            "x": 1596,
+            "y": 5990,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_032",
+            "duration": 103,
+            "sourceFrameIndex": 32
+          },
+          {
+            "x": 2394,
+            "y": 5990,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_033",
+            "duration": 103,
+            "sourceFrameIndex": 33
+          },
+          {
+            "x": 3192,
+            "y": 5990,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_034",
+            "duration": 103,
+            "sourceFrameIndex": 34
+          },
+          {
+            "x": 3990,
+            "y": 5990,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_035",
+            "duration": 103,
+            "sourceFrameIndex": 35
+          }
+        ],
+        "movementSpeedMultipliers": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "mirroredWest": true,
+        "slot": "external_idle_east_6",
+        "idleKey": "idle_east_6",
+        "mirrored": true,
+        "mirrorSource": "east"
+      }
+    ]
+  },
+  "talkAnimations": {
+    "east": {
+      "singleWord": [
+        {
+          "src": "target/external_animation_v1/runtime/talk_east_short_1.png",
+          "sourceSheet": "target\\external_animation_v1\\unpacked\\talk_east_short_1\\sprite--9px-frames-16-rows-4-cols-4.png",
+          "metadataFile": "target\\external_animation_v1\\unpacked\\talk_east_short_1\\sprite--9px-frames-16-rows-4-cols-4.json",
+          "usesOriginalLudoLayout": true,
+          "sourcePreserved": true,
+          "runtimeSource": "unpacked-alpha-sheet",
+          "frameWidth": 798,
+          "frameHeight": 1198,
+          "sheetWidth": 3192,
+          "sheetHeight": 4792,
+          "frameCount": 16,
+          "sourceFrameCount": 16,
+          "frameStart": 0,
+          "frameEndTrim": 0,
+          "configuredFrameCount": null,
+          "fps": 12,
+          "loop": false,
+          "pingPong": false,
+          "role": "talk",
+          "initialFrame": 0,
+          "anchorX": 0.5,
+          "anchorY": 1,
+          "anchor": {
+            "x": 0.5,
+            "y": 1
+          },
+          "baselineY": 1198,
+          "contentBounds": {
+            "x": 224,
+            "y": 160,
+            "w": 321,
+            "h": 853
+          },
+          "sourceContentBounds": {
+            "x": 224,
+            "y": 160,
+            "w": 321,
+            "h": 853
+          },
+          "sourceFrameContentBounds": [
+            {
+              "x": 228,
+              "y": 161,
+              "w": 315,
+              "h": 851
+            },
+            {
+              "x": 229,
+              "y": 160,
+              "w": 316,
+              "h": 852
+            },
+            {
+              "x": 227,
+              "y": 166,
+              "w": 317,
+              "h": 846
+            },
+            {
+              "x": 225,
+              "y": 171,
+              "w": 320,
+              "h": 840
+            },
+            {
+              "x": 224,
+              "y": 172,
+              "w": 319,
+              "h": 839
+            },
+            {
+              "x": 224,
+              "y": 171,
+              "w": 319,
+              "h": 840
+            },
+            {
+              "x": 225,
+              "y": 167,
+              "w": 317,
+              "h": 844
+            },
+            {
+              "x": 226,
+              "y": 166,
+              "w": 316,
+              "h": 846
+            },
+            {
+              "x": 225,
+              "y": 173,
+              "w": 317,
+              "h": 839
+            },
+            {
+              "x": 225,
+              "y": 174,
+              "w": 317,
+              "h": 838
+            },
+            {
+              "x": 225,
+              "y": 173,
+              "w": 317,
+              "h": 839
+            },
+            {
+              "x": 227,
+              "y": 167,
+              "w": 315,
+              "h": 845
+            },
+            {
+              "x": 227,
+              "y": 167,
+              "w": 315,
+              "h": 846
+            },
+            {
+              "x": 227,
+              "y": 164,
+              "w": 315,
+              "h": 849
+            },
+            {
+              "x": 227,
+              "y": 161,
+              "w": 315,
+              "h": 851
+            },
+            {
+              "x": 227,
+              "y": 161,
+              "w": 315,
+              "h": 851
+            }
+          ],
+          "sourceFrameRects": [
+            {
+              "x": 0,
+              "y": 0,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_000",
+              "duration": 117,
+              "sourceFrameIndex": 0
+            },
+            {
+              "x": 798,
+              "y": 0,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_001",
+              "duration": 117,
+              "sourceFrameIndex": 1
+            },
+            {
+              "x": 1596,
+              "y": 0,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_002",
+              "duration": 117,
+              "sourceFrameIndex": 2
+            },
+            {
+              "x": 2394,
+              "y": 0,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_003",
+              "duration": 117,
+              "sourceFrameIndex": 3
+            },
+            {
+              "x": 0,
+              "y": 1198,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_004",
+              "duration": 117,
+              "sourceFrameIndex": 4
+            },
+            {
+              "x": 798,
+              "y": 1198,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_005",
+              "duration": 117,
+              "sourceFrameIndex": 5
+            },
+            {
+              "x": 1596,
+              "y": 1198,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_006",
+              "duration": 117,
+              "sourceFrameIndex": 6
+            },
+            {
+              "x": 2394,
+              "y": 1198,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_007",
+              "duration": 117,
+              "sourceFrameIndex": 7
+            },
+            {
+              "x": 0,
+              "y": 2396,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_008",
+              "duration": 117,
+              "sourceFrameIndex": 8
+            },
+            {
+              "x": 798,
+              "y": 2396,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_009",
+              "duration": 117,
+              "sourceFrameIndex": 9
+            },
+            {
+              "x": 1596,
+              "y": 2396,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_010",
+              "duration": 117,
+              "sourceFrameIndex": 10
+            },
+            {
+              "x": 2394,
+              "y": 2396,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_011",
+              "duration": 117,
+              "sourceFrameIndex": 11
+            },
+            {
+              "x": 0,
+              "y": 3594,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_012",
+              "duration": 117,
+              "sourceFrameIndex": 12
+            },
+            {
+              "x": 798,
+              "y": 3594,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_013",
+              "duration": 117,
+              "sourceFrameIndex": 13
+            },
+            {
+              "x": 1596,
+              "y": 3594,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_014",
+              "duration": 117,
+              "sourceFrameIndex": 14
+            },
+            {
+              "x": 2394,
+              "y": 3594,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_015",
+              "duration": 117,
+              "sourceFrameIndex": 15
+            }
+          ],
+          "frameContentBounds": [
+            {
+              "x": 228,
+              "y": 161,
+              "w": 315,
+              "h": 851
+            },
+            {
+              "x": 229,
+              "y": 160,
+              "w": 316,
+              "h": 852
+            },
+            {
+              "x": 227,
+              "y": 166,
+              "w": 317,
+              "h": 846
+            },
+            {
+              "x": 225,
+              "y": 171,
+              "w": 320,
+              "h": 840
+            },
+            {
+              "x": 224,
+              "y": 172,
+              "w": 319,
+              "h": 839
+            },
+            {
+              "x": 224,
+              "y": 171,
+              "w": 319,
+              "h": 840
+            },
+            {
+              "x": 225,
+              "y": 167,
+              "w": 317,
+              "h": 844
+            },
+            {
+              "x": 226,
+              "y": 166,
+              "w": 316,
+              "h": 846
+            },
+            {
+              "x": 225,
+              "y": 173,
+              "w": 317,
+              "h": 839
+            },
+            {
+              "x": 225,
+              "y": 174,
+              "w": 317,
+              "h": 838
+            },
+            {
+              "x": 225,
+              "y": 173,
+              "w": 317,
+              "h": 839
+            },
+            {
+              "x": 227,
+              "y": 167,
+              "w": 315,
+              "h": 845
+            },
+            {
+              "x": 227,
+              "y": 167,
+              "w": 315,
+              "h": 846
+            },
+            {
+              "x": 227,
+              "y": 164,
+              "w": 315,
+              "h": 849
+            },
+            {
+              "x": 227,
+              "y": 161,
+              "w": 315,
+              "h": 851
+            },
+            {
+              "x": 227,
+              "y": 161,
+              "w": 315,
+              "h": 851
+            }
+          ],
+          "frameRects": [
+            {
+              "x": 0,
+              "y": 0,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_000",
+              "duration": 117,
+              "sourceFrameIndex": 0
+            },
+            {
+              "x": 798,
+              "y": 0,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_001",
+              "duration": 117,
+              "sourceFrameIndex": 1
+            },
+            {
+              "x": 1596,
+              "y": 0,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_002",
+              "duration": 117,
+              "sourceFrameIndex": 2
+            },
+            {
+              "x": 2394,
+              "y": 0,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_003",
+              "duration": 117,
+              "sourceFrameIndex": 3
+            },
+            {
+              "x": 0,
+              "y": 1198,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_004",
+              "duration": 117,
+              "sourceFrameIndex": 4
+            },
+            {
+              "x": 798,
+              "y": 1198,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_005",
+              "duration": 117,
+              "sourceFrameIndex": 5
+            },
+            {
+              "x": 1596,
+              "y": 1198,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_006",
+              "duration": 117,
+              "sourceFrameIndex": 6
+            },
+            {
+              "x": 2394,
+              "y": 1198,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_007",
+              "duration": 117,
+              "sourceFrameIndex": 7
+            },
+            {
+              "x": 0,
+              "y": 2396,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_008",
+              "duration": 117,
+              "sourceFrameIndex": 8
+            },
+            {
+              "x": 798,
+              "y": 2396,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_009",
+              "duration": 117,
+              "sourceFrameIndex": 9
+            },
+            {
+              "x": 1596,
+              "y": 2396,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_010",
+              "duration": 117,
+              "sourceFrameIndex": 10
+            },
+            {
+              "x": 2394,
+              "y": 2396,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_011",
+              "duration": 117,
+              "sourceFrameIndex": 11
+            },
+            {
+              "x": 0,
+              "y": 3594,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_012",
+              "duration": 117,
+              "sourceFrameIndex": 12
+            },
+            {
+              "x": 798,
+              "y": 3594,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_013",
+              "duration": 117,
+              "sourceFrameIndex": 13
+            },
+            {
+              "x": 1596,
+              "y": 3594,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_014",
+              "duration": 117,
+              "sourceFrameIndex": 14
+            },
+            {
+              "x": 2394,
+              "y": 3594,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_015",
+              "duration": 117,
+              "sourceFrameIndex": 15
+            }
+          ],
+          "movementSpeedMultipliers": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "mirroredWest": true,
+          "slot": "external_talk_east_short_1",
+          "talkKey": "talk_east_short_1",
+          "talkSemantic": "single_word",
+          "talkSemanticKey": "singleWord"
+        }
+      ],
+      "singleShortSentence": [
+        {
+          "src": "target/external_animation_v1/runtime/talk_east_long_2.png",
+          "sourceSheet": "target\\external_animation_v1\\unpacked\\talk_east_long_2\\sprite--9px-frames-36-rows-6-cols-6.png",
+          "metadataFile": "target\\external_animation_v1\\unpacked\\talk_east_long_2\\sprite--9px-frames-36-rows-6-cols-6.json",
+          "usesOriginalLudoLayout": true,
+          "sourcePreserved": true,
+          "runtimeSource": "unpacked-alpha-sheet",
+          "frameWidth": 798,
+          "frameHeight": 1198,
+          "sheetWidth": 4788,
+          "sheetHeight": 7188,
+          "frameCount": 36,
+          "sourceFrameCount": 36,
+          "frameStart": 0,
+          "frameEndTrim": 0,
+          "configuredFrameCount": null,
+          "fps": 12,
+          "loop": false,
+          "pingPong": false,
+          "role": "talk",
+          "initialFrame": 0,
+          "anchorX": 0.5,
+          "anchorY": 1,
+          "anchor": {
+            "x": 0.5,
+            "y": 1
+          },
+          "baselineY": 1198,
+          "contentBounds": {
+            "x": 224,
+            "y": 160,
+            "w": 319,
+            "h": 854
+          },
+          "sourceContentBounds": {
+            "x": 224,
+            "y": 160,
+            "w": 319,
+            "h": 854
+          },
+          "sourceFrameContentBounds": [
+            {
+              "x": 227,
+              "y": 160,
+              "w": 316,
+              "h": 854
+            },
+            {
+              "x": 227,
+              "y": 160,
+              "w": 316,
+              "h": 853
+            },
+            {
+              "x": 227,
+              "y": 160,
+              "w": 316,
+              "h": 853
+            },
+            {
+              "x": 227,
+              "y": 160,
+              "w": 316,
+              "h": 853
+            },
+            {
+              "x": 228,
+              "y": 160,
+              "w": 314,
+              "h": 853
+            },
+            {
+              "x": 228,
+              "y": 161,
+              "w": 314,
+              "h": 852
+            },
+            {
+              "x": 229,
+              "y": 163,
+              "w": 313,
+              "h": 850
+            },
+            {
+              "x": 230,
+              "y": 164,
+              "w": 312,
+              "h": 848
+            },
+            {
+              "x": 230,
+              "y": 164,
+              "w": 312,
+              "h": 848
+            },
+            {
+              "x": 229,
+              "y": 164,
+              "w": 313,
+              "h": 849
+            },
+            {
+              "x": 228,
+              "y": 163,
+              "w": 314,
+              "h": 850
+            },
+            {
+              "x": 227,
+              "y": 163,
+              "w": 315,
+              "h": 850
+            },
+            {
+              "x": 226,
+              "y": 163,
+              "w": 316,
+              "h": 850
+            },
+            {
+              "x": 225,
+              "y": 163,
+              "w": 317,
+              "h": 851
+            },
+            {
+              "x": 225,
+              "y": 164,
+              "w": 317,
+              "h": 850
+            },
+            {
+              "x": 225,
+              "y": 165,
+              "w": 317,
+              "h": 849
+            },
+            {
+              "x": 224,
+              "y": 168,
+              "w": 318,
+              "h": 846
+            },
+            {
+              "x": 224,
+              "y": 171,
+              "w": 318,
+              "h": 843
+            },
+            {
+              "x": 224,
+              "y": 172,
+              "w": 318,
+              "h": 842
+            },
+            {
+              "x": 224,
+              "y": 172,
+              "w": 319,
+              "h": 842
+            },
+            {
+              "x": 225,
+              "y": 172,
+              "w": 318,
+              "h": 842
+            },
+            {
+              "x": 226,
+              "y": 170,
+              "w": 316,
+              "h": 844
+            },
+            {
+              "x": 228,
+              "y": 169,
+              "w": 314,
+              "h": 845
+            },
+            {
+              "x": 228,
+              "y": 167,
+              "w": 314,
+              "h": 847
+            },
+            {
+              "x": 229,
+              "y": 167,
+              "w": 313,
+              "h": 847
+            },
+            {
+              "x": 229,
+              "y": 167,
+              "w": 313,
+              "h": 847
+            },
+            {
+              "x": 229,
+              "y": 167,
+              "w": 313,
+              "h": 847
+            },
+            {
+              "x": 229,
+              "y": 167,
+              "w": 313,
+              "h": 847
+            },
+            {
+              "x": 229,
+              "y": 168,
+              "w": 313,
+              "h": 846
+            },
+            {
+              "x": 229,
+              "y": 166,
+              "w": 313,
+              "h": 848
+            },
+            {
+              "x": 228,
+              "y": 162,
+              "w": 314,
+              "h": 852
+            },
+            {
+              "x": 228,
+              "y": 161,
+              "w": 314,
+              "h": 853
+            },
+            {
+              "x": 228,
+              "y": 161,
+              "w": 314,
+              "h": 852
+            },
+            {
+              "x": 227,
+              "y": 160,
+              "w": 315,
+              "h": 853
+            },
+            {
+              "x": 227,
+              "y": 160,
+              "w": 315,
+              "h": 853
+            },
+            {
+              "x": 227,
+              "y": 161,
+              "w": 315,
+              "h": 852
+            }
+          ],
+          "sourceFrameRects": [
+            {
+              "x": 0,
+              "y": 0,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_000",
+              "duration": 105,
+              "sourceFrameIndex": 0
+            },
+            {
+              "x": 798,
+              "y": 0,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_001",
+              "duration": 105,
+              "sourceFrameIndex": 1
+            },
+            {
+              "x": 1596,
+              "y": 0,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_002",
+              "duration": 105,
+              "sourceFrameIndex": 2
+            },
+            {
+              "x": 2394,
+              "y": 0,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_003",
+              "duration": 105,
+              "sourceFrameIndex": 3
+            },
+            {
+              "x": 3192,
+              "y": 0,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_004",
+              "duration": 105,
+              "sourceFrameIndex": 4
+            },
+            {
+              "x": 3990,
+              "y": 0,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_005",
+              "duration": 105,
+              "sourceFrameIndex": 5
+            },
+            {
+              "x": 0,
+              "y": 1198,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_006",
+              "duration": 105,
+              "sourceFrameIndex": 6
+            },
+            {
+              "x": 798,
+              "y": 1198,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_007",
+              "duration": 105,
+              "sourceFrameIndex": 7
+            },
+            {
+              "x": 1596,
+              "y": 1198,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_008",
+              "duration": 105,
+              "sourceFrameIndex": 8
+            },
+            {
+              "x": 2394,
+              "y": 1198,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_009",
+              "duration": 105,
+              "sourceFrameIndex": 9
+            },
+            {
+              "x": 3192,
+              "y": 1198,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_010",
+              "duration": 105,
+              "sourceFrameIndex": 10
+            },
+            {
+              "x": 3990,
+              "y": 1198,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_011",
+              "duration": 105,
+              "sourceFrameIndex": 11
+            },
+            {
+              "x": 0,
+              "y": 2396,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_012",
+              "duration": 105,
+              "sourceFrameIndex": 12
+            },
+            {
+              "x": 798,
+              "y": 2396,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_013",
+              "duration": 105,
+              "sourceFrameIndex": 13
+            },
+            {
+              "x": 1596,
+              "y": 2396,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_014",
+              "duration": 105,
+              "sourceFrameIndex": 14
+            },
+            {
+              "x": 2394,
+              "y": 2396,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_015",
+              "duration": 105,
+              "sourceFrameIndex": 15
+            },
+            {
+              "x": 3192,
+              "y": 2396,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_016",
+              "duration": 105,
+              "sourceFrameIndex": 16
+            },
+            {
+              "x": 3990,
+              "y": 2396,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_017",
+              "duration": 105,
+              "sourceFrameIndex": 17
+            },
+            {
+              "x": 0,
+              "y": 3594,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_018",
+              "duration": 105,
+              "sourceFrameIndex": 18
+            },
+            {
+              "x": 798,
+              "y": 3594,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_019",
+              "duration": 105,
+              "sourceFrameIndex": 19
+            },
+            {
+              "x": 1596,
+              "y": 3594,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_020",
+              "duration": 105,
+              "sourceFrameIndex": 20
+            },
+            {
+              "x": 2394,
+              "y": 3594,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_021",
+              "duration": 105,
+              "sourceFrameIndex": 21
+            },
+            {
+              "x": 3192,
+              "y": 3594,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_022",
+              "duration": 105,
+              "sourceFrameIndex": 22
+            },
+            {
+              "x": 3990,
+              "y": 3594,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_023",
+              "duration": 105,
+              "sourceFrameIndex": 23
+            },
+            {
+              "x": 0,
+              "y": 4792,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_024",
+              "duration": 105,
+              "sourceFrameIndex": 24
+            },
+            {
+              "x": 798,
+              "y": 4792,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_025",
+              "duration": 105,
+              "sourceFrameIndex": 25
+            },
+            {
+              "x": 1596,
+              "y": 4792,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_026",
+              "duration": 105,
+              "sourceFrameIndex": 26
+            },
+            {
+              "x": 2394,
+              "y": 4792,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_027",
+              "duration": 105,
+              "sourceFrameIndex": 27
+            },
+            {
+              "x": 3192,
+              "y": 4792,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_028",
+              "duration": 105,
+              "sourceFrameIndex": 28
+            },
+            {
+              "x": 3990,
+              "y": 4792,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_029",
+              "duration": 105,
+              "sourceFrameIndex": 29
+            },
+            {
+              "x": 0,
+              "y": 5990,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_030",
+              "duration": 105,
+              "sourceFrameIndex": 30
+            },
+            {
+              "x": 798,
+              "y": 5990,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_031",
+              "duration": 105,
+              "sourceFrameIndex": 31
+            },
+            {
+              "x": 1596,
+              "y": 5990,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_032",
+              "duration": 105,
+              "sourceFrameIndex": 32
+            },
+            {
+              "x": 2394,
+              "y": 5990,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_033",
+              "duration": 105,
+              "sourceFrameIndex": 33
+            },
+            {
+              "x": 3192,
+              "y": 5990,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_034",
+              "duration": 105,
+              "sourceFrameIndex": 34
+            },
+            {
+              "x": 3990,
+              "y": 5990,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_035",
+              "duration": 105,
+              "sourceFrameIndex": 35
+            }
+          ],
+          "frameContentBounds": [
+            {
+              "x": 227,
+              "y": 160,
+              "w": 316,
+              "h": 854
+            },
+            {
+              "x": 227,
+              "y": 160,
+              "w": 316,
+              "h": 853
+            },
+            {
+              "x": 227,
+              "y": 160,
+              "w": 316,
+              "h": 853
+            },
+            {
+              "x": 227,
+              "y": 160,
+              "w": 316,
+              "h": 853
+            },
+            {
+              "x": 228,
+              "y": 160,
+              "w": 314,
+              "h": 853
+            },
+            {
+              "x": 228,
+              "y": 161,
+              "w": 314,
+              "h": 852
+            },
+            {
+              "x": 229,
+              "y": 163,
+              "w": 313,
+              "h": 850
+            },
+            {
+              "x": 230,
+              "y": 164,
+              "w": 312,
+              "h": 848
+            },
+            {
+              "x": 230,
+              "y": 164,
+              "w": 312,
+              "h": 848
+            },
+            {
+              "x": 229,
+              "y": 164,
+              "w": 313,
+              "h": 849
+            },
+            {
+              "x": 228,
+              "y": 163,
+              "w": 314,
+              "h": 850
+            },
+            {
+              "x": 227,
+              "y": 163,
+              "w": 315,
+              "h": 850
+            },
+            {
+              "x": 226,
+              "y": 163,
+              "w": 316,
+              "h": 850
+            },
+            {
+              "x": 225,
+              "y": 163,
+              "w": 317,
+              "h": 851
+            },
+            {
+              "x": 225,
+              "y": 164,
+              "w": 317,
+              "h": 850
+            },
+            {
+              "x": 225,
+              "y": 165,
+              "w": 317,
+              "h": 849
+            },
+            {
+              "x": 224,
+              "y": 168,
+              "w": 318,
+              "h": 846
+            },
+            {
+              "x": 224,
+              "y": 171,
+              "w": 318,
+              "h": 843
+            },
+            {
+              "x": 224,
+              "y": 172,
+              "w": 318,
+              "h": 842
+            },
+            {
+              "x": 224,
+              "y": 172,
+              "w": 319,
+              "h": 842
+            },
+            {
+              "x": 225,
+              "y": 172,
+              "w": 318,
+              "h": 842
+            },
+            {
+              "x": 226,
+              "y": 170,
+              "w": 316,
+              "h": 844
+            },
+            {
+              "x": 228,
+              "y": 169,
+              "w": 314,
+              "h": 845
+            },
+            {
+              "x": 228,
+              "y": 167,
+              "w": 314,
+              "h": 847
+            },
+            {
+              "x": 229,
+              "y": 167,
+              "w": 313,
+              "h": 847
+            },
+            {
+              "x": 229,
+              "y": 167,
+              "w": 313,
+              "h": 847
+            },
+            {
+              "x": 229,
+              "y": 167,
+              "w": 313,
+              "h": 847
+            },
+            {
+              "x": 229,
+              "y": 167,
+              "w": 313,
+              "h": 847
+            },
+            {
+              "x": 229,
+              "y": 168,
+              "w": 313,
+              "h": 846
+            },
+            {
+              "x": 229,
+              "y": 166,
+              "w": 313,
+              "h": 848
+            },
+            {
+              "x": 228,
+              "y": 162,
+              "w": 314,
+              "h": 852
+            },
+            {
+              "x": 228,
+              "y": 161,
+              "w": 314,
+              "h": 853
+            },
+            {
+              "x": 228,
+              "y": 161,
+              "w": 314,
+              "h": 852
+            },
+            {
+              "x": 227,
+              "y": 160,
+              "w": 315,
+              "h": 853
+            },
+            {
+              "x": 227,
+              "y": 160,
+              "w": 315,
+              "h": 853
+            },
+            {
+              "x": 227,
+              "y": 161,
+              "w": 315,
+              "h": 852
+            }
+          ],
+          "frameRects": [
+            {
+              "x": 0,
+              "y": 0,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_000",
+              "duration": 105,
+              "sourceFrameIndex": 0
+            },
+            {
+              "x": 798,
+              "y": 0,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_001",
+              "duration": 105,
+              "sourceFrameIndex": 1
+            },
+            {
+              "x": 1596,
+              "y": 0,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_002",
+              "duration": 105,
+              "sourceFrameIndex": 2
+            },
+            {
+              "x": 2394,
+              "y": 0,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_003",
+              "duration": 105,
+              "sourceFrameIndex": 3
+            },
+            {
+              "x": 3192,
+              "y": 0,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_004",
+              "duration": 105,
+              "sourceFrameIndex": 4
+            },
+            {
+              "x": 3990,
+              "y": 0,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_005",
+              "duration": 105,
+              "sourceFrameIndex": 5
+            },
+            {
+              "x": 0,
+              "y": 1198,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_006",
+              "duration": 105,
+              "sourceFrameIndex": 6
+            },
+            {
+              "x": 798,
+              "y": 1198,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_007",
+              "duration": 105,
+              "sourceFrameIndex": 7
+            },
+            {
+              "x": 1596,
+              "y": 1198,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_008",
+              "duration": 105,
+              "sourceFrameIndex": 8
+            },
+            {
+              "x": 2394,
+              "y": 1198,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_009",
+              "duration": 105,
+              "sourceFrameIndex": 9
+            },
+            {
+              "x": 3192,
+              "y": 1198,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_010",
+              "duration": 105,
+              "sourceFrameIndex": 10
+            },
+            {
+              "x": 3990,
+              "y": 1198,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_011",
+              "duration": 105,
+              "sourceFrameIndex": 11
+            },
+            {
+              "x": 0,
+              "y": 2396,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_012",
+              "duration": 105,
+              "sourceFrameIndex": 12
+            },
+            {
+              "x": 798,
+              "y": 2396,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_013",
+              "duration": 105,
+              "sourceFrameIndex": 13
+            },
+            {
+              "x": 1596,
+              "y": 2396,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_014",
+              "duration": 105,
+              "sourceFrameIndex": 14
+            },
+            {
+              "x": 2394,
+              "y": 2396,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_015",
+              "duration": 105,
+              "sourceFrameIndex": 15
+            },
+            {
+              "x": 3192,
+              "y": 2396,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_016",
+              "duration": 105,
+              "sourceFrameIndex": 16
+            },
+            {
+              "x": 3990,
+              "y": 2396,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_017",
+              "duration": 105,
+              "sourceFrameIndex": 17
+            },
+            {
+              "x": 0,
+              "y": 3594,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_018",
+              "duration": 105,
+              "sourceFrameIndex": 18
+            },
+            {
+              "x": 798,
+              "y": 3594,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_019",
+              "duration": 105,
+              "sourceFrameIndex": 19
+            },
+            {
+              "x": 1596,
+              "y": 3594,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_020",
+              "duration": 105,
+              "sourceFrameIndex": 20
+            },
+            {
+              "x": 2394,
+              "y": 3594,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_021",
+              "duration": 105,
+              "sourceFrameIndex": 21
+            },
+            {
+              "x": 3192,
+              "y": 3594,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_022",
+              "duration": 105,
+              "sourceFrameIndex": 22
+            },
+            {
+              "x": 3990,
+              "y": 3594,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_023",
+              "duration": 105,
+              "sourceFrameIndex": 23
+            },
+            {
+              "x": 0,
+              "y": 4792,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_024",
+              "duration": 105,
+              "sourceFrameIndex": 24
+            },
+            {
+              "x": 798,
+              "y": 4792,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_025",
+              "duration": 105,
+              "sourceFrameIndex": 25
+            },
+            {
+              "x": 1596,
+              "y": 4792,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_026",
+              "duration": 105,
+              "sourceFrameIndex": 26
+            },
+            {
+              "x": 2394,
+              "y": 4792,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_027",
+              "duration": 105,
+              "sourceFrameIndex": 27
+            },
+            {
+              "x": 3192,
+              "y": 4792,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_028",
+              "duration": 105,
+              "sourceFrameIndex": 28
+            },
+            {
+              "x": 3990,
+              "y": 4792,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_029",
+              "duration": 105,
+              "sourceFrameIndex": 29
+            },
+            {
+              "x": 0,
+              "y": 5990,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_030",
+              "duration": 105,
+              "sourceFrameIndex": 30
+            },
+            {
+              "x": 798,
+              "y": 5990,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_031",
+              "duration": 105,
+              "sourceFrameIndex": 31
+            },
+            {
+              "x": 1596,
+              "y": 5990,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_032",
+              "duration": 105,
+              "sourceFrameIndex": 32
+            },
+            {
+              "x": 2394,
+              "y": 5990,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_033",
+              "duration": 105,
+              "sourceFrameIndex": 33
+            },
+            {
+              "x": 3192,
+              "y": 5990,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_034",
+              "duration": 105,
+              "sourceFrameIndex": 34
+            },
+            {
+              "x": 3990,
+              "y": 5990,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_035",
+              "duration": 105,
+              "sourceFrameIndex": 35
+            }
+          ],
+          "movementSpeedMultipliers": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "mirroredWest": true,
+          "slot": "external_talk_east_long_2",
+          "talkKey": "talk_east_long_2",
+          "talkSemantic": "single_short_sentence",
+          "talkSemanticKey": "singleShortSentence"
+        }
+      ],
+      "singleLongSentence": [
+        {
+          "src": "target/external_animation_v1/runtime/talk_east_long_1.png",
+          "sourceSheet": "target\\external_animation_v1\\unpacked\\talk_east_long_1\\sprite--9px-frames-25-rows-5-cols-5.png",
+          "metadataFile": "target\\external_animation_v1\\unpacked\\talk_east_long_1\\sprite--9px-frames-25-rows-5-cols-5.json",
+          "usesOriginalLudoLayout": true,
+          "sourcePreserved": true,
+          "runtimeSource": "unpacked-alpha-sheet",
+          "frameWidth": 798,
+          "frameHeight": 1198,
+          "sheetWidth": 3990,
+          "sheetHeight": 5990,
+          "frameCount": 25,
+          "sourceFrameCount": 25,
+          "frameStart": 0,
+          "frameEndTrim": 0,
+          "configuredFrameCount": null,
+          "fps": 12,
+          "loop": false,
+          "pingPong": false,
+          "role": "talk",
+          "initialFrame": 0,
+          "anchorX": 0.5,
+          "anchorY": 1,
+          "anchor": {
+            "x": 0.5,
+            "y": 1
+          },
+          "baselineY": 1198,
+          "contentBounds": {
+            "x": 226,
+            "y": 160,
+            "w": 317,
+            "h": 854
+          },
+          "sourceContentBounds": {
+            "x": 226,
+            "y": 160,
+            "w": 317,
+            "h": 854
+          },
+          "sourceFrameContentBounds": [
+            {
+              "x": 227,
+              "y": 161,
+              "w": 316,
+              "h": 853
+            },
+            {
+              "x": 227,
+              "y": 161,
+              "w": 316,
+              "h": 853
+            },
+            {
+              "x": 227,
+              "y": 161,
+              "w": 316,
+              "h": 852
+            },
+            {
+              "x": 227,
+              "y": 165,
+              "w": 316,
+              "h": 849
+            },
+            {
+              "x": 227,
+              "y": 166,
+              "w": 315,
+              "h": 848
+            },
+            {
+              "x": 227,
+              "y": 167,
+              "w": 315,
+              "h": 847
+            },
+            {
+              "x": 226,
+              "y": 167,
+              "w": 316,
+              "h": 847
+            },
+            {
+              "x": 228,
+              "y": 167,
+              "w": 314,
+              "h": 847
+            },
+            {
+              "x": 228,
+              "y": 167,
+              "w": 314,
+              "h": 847
+            },
+            {
+              "x": 228,
+              "y": 167,
+              "w": 314,
+              "h": 847
+            },
+            {
+              "x": 228,
+              "y": 166,
+              "w": 314,
+              "h": 848
+            },
+            {
+              "x": 228,
+              "y": 167,
+              "w": 314,
+              "h": 847
+            },
+            {
+              "x": 228,
+              "y": 167,
+              "w": 314,
+              "h": 847
+            },
+            {
+              "x": 230,
+              "y": 168,
+              "w": 312,
+              "h": 846
+            },
+            {
+              "x": 230,
+              "y": 167,
+              "w": 312,
+              "h": 847
+            },
+            {
+              "x": 231,
+              "y": 167,
+              "w": 311,
+              "h": 847
+            },
+            {
+              "x": 231,
+              "y": 169,
+              "w": 311,
+              "h": 845
+            },
+            {
+              "x": 232,
+              "y": 169,
+              "w": 310,
+              "h": 845
+            },
+            {
+              "x": 232,
+              "y": 169,
+              "w": 310,
+              "h": 845
+            },
+            {
+              "x": 232,
+              "y": 169,
+              "w": 310,
+              "h": 845
+            },
+            {
+              "x": 232,
+              "y": 169,
+              "w": 310,
+              "h": 845
+            },
+            {
+              "x": 231,
+              "y": 167,
+              "w": 311,
+              "h": 846
+            },
+            {
+              "x": 229,
+              "y": 164,
+              "w": 313,
+              "h": 849
+            },
+            {
+              "x": 229,
+              "y": 161,
+              "w": 314,
+              "h": 852
+            },
+            {
+              "x": 228,
+              "y": 160,
+              "w": 314,
+              "h": 853
+            }
+          ],
+          "sourceFrameRects": [
+            {
+              "x": 0,
+              "y": 0,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_000",
+              "duration": 112,
+              "sourceFrameIndex": 0
+            },
+            {
+              "x": 798,
+              "y": 0,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_001",
+              "duration": 112,
+              "sourceFrameIndex": 1
+            },
+            {
+              "x": 1596,
+              "y": 0,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_002",
+              "duration": 112,
+              "sourceFrameIndex": 2
+            },
+            {
+              "x": 2394,
+              "y": 0,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_003",
+              "duration": 112,
+              "sourceFrameIndex": 3
+            },
+            {
+              "x": 3192,
+              "y": 0,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_004",
+              "duration": 112,
+              "sourceFrameIndex": 4
+            },
+            {
+              "x": 0,
+              "y": 1198,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_005",
+              "duration": 112,
+              "sourceFrameIndex": 5
+            },
+            {
+              "x": 798,
+              "y": 1198,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_006",
+              "duration": 112,
+              "sourceFrameIndex": 6
+            },
+            {
+              "x": 1596,
+              "y": 1198,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_007",
+              "duration": 112,
+              "sourceFrameIndex": 7
+            },
+            {
+              "x": 2394,
+              "y": 1198,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_008",
+              "duration": 112,
+              "sourceFrameIndex": 8
+            },
+            {
+              "x": 3192,
+              "y": 1198,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_009",
+              "duration": 112,
+              "sourceFrameIndex": 9
+            },
+            {
+              "x": 0,
+              "y": 2396,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_010",
+              "duration": 112,
+              "sourceFrameIndex": 10
+            },
+            {
+              "x": 798,
+              "y": 2396,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_011",
+              "duration": 112,
+              "sourceFrameIndex": 11
+            },
+            {
+              "x": 1596,
+              "y": 2396,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_012",
+              "duration": 112,
+              "sourceFrameIndex": 12
+            },
+            {
+              "x": 2394,
+              "y": 2396,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_013",
+              "duration": 112,
+              "sourceFrameIndex": 13
+            },
+            {
+              "x": 3192,
+              "y": 2396,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_014",
+              "duration": 112,
+              "sourceFrameIndex": 14
+            },
+            {
+              "x": 0,
+              "y": 3594,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_015",
+              "duration": 112,
+              "sourceFrameIndex": 15
+            },
+            {
+              "x": 798,
+              "y": 3594,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_016",
+              "duration": 112,
+              "sourceFrameIndex": 16
+            },
+            {
+              "x": 1596,
+              "y": 3594,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_017",
+              "duration": 112,
+              "sourceFrameIndex": 17
+            },
+            {
+              "x": 2394,
+              "y": 3594,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_018",
+              "duration": 112,
+              "sourceFrameIndex": 18
+            },
+            {
+              "x": 3192,
+              "y": 3594,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_019",
+              "duration": 112,
+              "sourceFrameIndex": 19
+            },
+            {
+              "x": 0,
+              "y": 4792,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_020",
+              "duration": 112,
+              "sourceFrameIndex": 20
+            },
+            {
+              "x": 798,
+              "y": 4792,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_021",
+              "duration": 112,
+              "sourceFrameIndex": 21
+            },
+            {
+              "x": 1596,
+              "y": 4792,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_022",
+              "duration": 112,
+              "sourceFrameIndex": 22
+            },
+            {
+              "x": 2394,
+              "y": 4792,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_023",
+              "duration": 112,
+              "sourceFrameIndex": 23
+            },
+            {
+              "x": 3192,
+              "y": 4792,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_024",
+              "duration": 112,
+              "sourceFrameIndex": 24
+            }
+          ],
+          "frameContentBounds": [
+            {
+              "x": 227,
+              "y": 161,
+              "w": 316,
+              "h": 853
+            },
+            {
+              "x": 227,
+              "y": 161,
+              "w": 316,
+              "h": 853
+            },
+            {
+              "x": 227,
+              "y": 161,
+              "w": 316,
+              "h": 852
+            },
+            {
+              "x": 227,
+              "y": 165,
+              "w": 316,
+              "h": 849
+            },
+            {
+              "x": 227,
+              "y": 166,
+              "w": 315,
+              "h": 848
+            },
+            {
+              "x": 227,
+              "y": 167,
+              "w": 315,
+              "h": 847
+            },
+            {
+              "x": 226,
+              "y": 167,
+              "w": 316,
+              "h": 847
+            },
+            {
+              "x": 228,
+              "y": 167,
+              "w": 314,
+              "h": 847
+            },
+            {
+              "x": 228,
+              "y": 167,
+              "w": 314,
+              "h": 847
+            },
+            {
+              "x": 228,
+              "y": 167,
+              "w": 314,
+              "h": 847
+            },
+            {
+              "x": 228,
+              "y": 166,
+              "w": 314,
+              "h": 848
+            },
+            {
+              "x": 228,
+              "y": 167,
+              "w": 314,
+              "h": 847
+            },
+            {
+              "x": 228,
+              "y": 167,
+              "w": 314,
+              "h": 847
+            },
+            {
+              "x": 230,
+              "y": 168,
+              "w": 312,
+              "h": 846
+            },
+            {
+              "x": 230,
+              "y": 167,
+              "w": 312,
+              "h": 847
+            },
+            {
+              "x": 231,
+              "y": 167,
+              "w": 311,
+              "h": 847
+            },
+            {
+              "x": 231,
+              "y": 169,
+              "w": 311,
+              "h": 845
+            },
+            {
+              "x": 232,
+              "y": 169,
+              "w": 310,
+              "h": 845
+            },
+            {
+              "x": 232,
+              "y": 169,
+              "w": 310,
+              "h": 845
+            },
+            {
+              "x": 232,
+              "y": 169,
+              "w": 310,
+              "h": 845
+            },
+            {
+              "x": 232,
+              "y": 169,
+              "w": 310,
+              "h": 845
+            },
+            {
+              "x": 231,
+              "y": 167,
+              "w": 311,
+              "h": 846
+            },
+            {
+              "x": 229,
+              "y": 164,
+              "w": 313,
+              "h": 849
+            },
+            {
+              "x": 229,
+              "y": 161,
+              "w": 314,
+              "h": 852
+            },
+            {
+              "x": 228,
+              "y": 160,
+              "w": 314,
+              "h": 853
+            }
+          ],
+          "frameRects": [
+            {
+              "x": 0,
+              "y": 0,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_000",
+              "duration": 112,
+              "sourceFrameIndex": 0
+            },
+            {
+              "x": 798,
+              "y": 0,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_001",
+              "duration": 112,
+              "sourceFrameIndex": 1
+            },
+            {
+              "x": 1596,
+              "y": 0,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_002",
+              "duration": 112,
+              "sourceFrameIndex": 2
+            },
+            {
+              "x": 2394,
+              "y": 0,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_003",
+              "duration": 112,
+              "sourceFrameIndex": 3
+            },
+            {
+              "x": 3192,
+              "y": 0,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_004",
+              "duration": 112,
+              "sourceFrameIndex": 4
+            },
+            {
+              "x": 0,
+              "y": 1198,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_005",
+              "duration": 112,
+              "sourceFrameIndex": 5
+            },
+            {
+              "x": 798,
+              "y": 1198,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_006",
+              "duration": 112,
+              "sourceFrameIndex": 6
+            },
+            {
+              "x": 1596,
+              "y": 1198,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_007",
+              "duration": 112,
+              "sourceFrameIndex": 7
+            },
+            {
+              "x": 2394,
+              "y": 1198,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_008",
+              "duration": 112,
+              "sourceFrameIndex": 8
+            },
+            {
+              "x": 3192,
+              "y": 1198,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_009",
+              "duration": 112,
+              "sourceFrameIndex": 9
+            },
+            {
+              "x": 0,
+              "y": 2396,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_010",
+              "duration": 112,
+              "sourceFrameIndex": 10
+            },
+            {
+              "x": 798,
+              "y": 2396,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_011",
+              "duration": 112,
+              "sourceFrameIndex": 11
+            },
+            {
+              "x": 1596,
+              "y": 2396,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_012",
+              "duration": 112,
+              "sourceFrameIndex": 12
+            },
+            {
+              "x": 2394,
+              "y": 2396,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_013",
+              "duration": 112,
+              "sourceFrameIndex": 13
+            },
+            {
+              "x": 3192,
+              "y": 2396,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_014",
+              "duration": 112,
+              "sourceFrameIndex": 14
+            },
+            {
+              "x": 0,
+              "y": 3594,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_015",
+              "duration": 112,
+              "sourceFrameIndex": 15
+            },
+            {
+              "x": 798,
+              "y": 3594,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_016",
+              "duration": 112,
+              "sourceFrameIndex": 16
+            },
+            {
+              "x": 1596,
+              "y": 3594,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_017",
+              "duration": 112,
+              "sourceFrameIndex": 17
+            },
+            {
+              "x": 2394,
+              "y": 3594,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_018",
+              "duration": 112,
+              "sourceFrameIndex": 18
+            },
+            {
+              "x": 3192,
+              "y": 3594,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_019",
+              "duration": 112,
+              "sourceFrameIndex": 19
+            },
+            {
+              "x": 0,
+              "y": 4792,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_020",
+              "duration": 112,
+              "sourceFrameIndex": 20
+            },
+            {
+              "x": 798,
+              "y": 4792,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_021",
+              "duration": 112,
+              "sourceFrameIndex": 21
+            },
+            {
+              "x": 1596,
+              "y": 4792,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_022",
+              "duration": 112,
+              "sourceFrameIndex": 22
+            },
+            {
+              "x": 2394,
+              "y": 4792,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_023",
+              "duration": 112,
+              "sourceFrameIndex": 23
+            },
+            {
+              "x": 3192,
+              "y": 4792,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_024",
+              "duration": 112,
+              "sourceFrameIndex": 24
+            }
+          ],
+          "movementSpeedMultipliers": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "mirroredWest": true,
+          "slot": "external_talk_east_long_1",
+          "talkKey": "talk_east_long_1",
+          "talkSemantic": "single_long_sentence",
+          "talkSemanticKey": "singleLongSentence"
+        }
+      ]
+    },
+    "west": {
+      "singleWord": [
+        {
+          "src": "target/external_animation_v1/runtime/talk_east_short_1.png",
+          "sourceSheet": "target\\external_animation_v1\\unpacked\\talk_east_short_1\\sprite--9px-frames-16-rows-4-cols-4.png",
+          "metadataFile": "target\\external_animation_v1\\unpacked\\talk_east_short_1\\sprite--9px-frames-16-rows-4-cols-4.json",
+          "usesOriginalLudoLayout": true,
+          "sourcePreserved": true,
+          "runtimeSource": "unpacked-alpha-sheet",
+          "frameWidth": 798,
+          "frameHeight": 1198,
+          "sheetWidth": 3192,
+          "sheetHeight": 4792,
+          "frameCount": 16,
+          "sourceFrameCount": 16,
+          "frameStart": 0,
+          "frameEndTrim": 0,
+          "configuredFrameCount": null,
+          "fps": 12,
+          "loop": false,
+          "pingPong": false,
+          "role": "talk",
+          "initialFrame": 0,
+          "anchorX": 0.5,
+          "anchorY": 1,
+          "anchor": {
+            "x": 0.5,
+            "y": 1
+          },
+          "baselineY": 1198,
+          "contentBounds": {
+            "x": 224,
+            "y": 160,
+            "w": 321,
+            "h": 853
+          },
+          "sourceContentBounds": {
+            "x": 224,
+            "y": 160,
+            "w": 321,
+            "h": 853
+          },
+          "sourceFrameContentBounds": [
+            {
+              "x": 228,
+              "y": 161,
+              "w": 315,
+              "h": 851
+            },
+            {
+              "x": 229,
+              "y": 160,
+              "w": 316,
+              "h": 852
+            },
+            {
+              "x": 227,
+              "y": 166,
+              "w": 317,
+              "h": 846
+            },
+            {
+              "x": 225,
+              "y": 171,
+              "w": 320,
+              "h": 840
+            },
+            {
+              "x": 224,
+              "y": 172,
+              "w": 319,
+              "h": 839
+            },
+            {
+              "x": 224,
+              "y": 171,
+              "w": 319,
+              "h": 840
+            },
+            {
+              "x": 225,
+              "y": 167,
+              "w": 317,
+              "h": 844
+            },
+            {
+              "x": 226,
+              "y": 166,
+              "w": 316,
+              "h": 846
+            },
+            {
+              "x": 225,
+              "y": 173,
+              "w": 317,
+              "h": 839
+            },
+            {
+              "x": 225,
+              "y": 174,
+              "w": 317,
+              "h": 838
+            },
+            {
+              "x": 225,
+              "y": 173,
+              "w": 317,
+              "h": 839
+            },
+            {
+              "x": 227,
+              "y": 167,
+              "w": 315,
+              "h": 845
+            },
+            {
+              "x": 227,
+              "y": 167,
+              "w": 315,
+              "h": 846
+            },
+            {
+              "x": 227,
+              "y": 164,
+              "w": 315,
+              "h": 849
+            },
+            {
+              "x": 227,
+              "y": 161,
+              "w": 315,
+              "h": 851
+            },
+            {
+              "x": 227,
+              "y": 161,
+              "w": 315,
+              "h": 851
+            }
+          ],
+          "sourceFrameRects": [
+            {
+              "x": 0,
+              "y": 0,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_000",
+              "duration": 117,
+              "sourceFrameIndex": 0
+            },
+            {
+              "x": 798,
+              "y": 0,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_001",
+              "duration": 117,
+              "sourceFrameIndex": 1
+            },
+            {
+              "x": 1596,
+              "y": 0,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_002",
+              "duration": 117,
+              "sourceFrameIndex": 2
+            },
+            {
+              "x": 2394,
+              "y": 0,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_003",
+              "duration": 117,
+              "sourceFrameIndex": 3
+            },
+            {
+              "x": 0,
+              "y": 1198,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_004",
+              "duration": 117,
+              "sourceFrameIndex": 4
+            },
+            {
+              "x": 798,
+              "y": 1198,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_005",
+              "duration": 117,
+              "sourceFrameIndex": 5
+            },
+            {
+              "x": 1596,
+              "y": 1198,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_006",
+              "duration": 117,
+              "sourceFrameIndex": 6
+            },
+            {
+              "x": 2394,
+              "y": 1198,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_007",
+              "duration": 117,
+              "sourceFrameIndex": 7
+            },
+            {
+              "x": 0,
+              "y": 2396,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_008",
+              "duration": 117,
+              "sourceFrameIndex": 8
+            },
+            {
+              "x": 798,
+              "y": 2396,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_009",
+              "duration": 117,
+              "sourceFrameIndex": 9
+            },
+            {
+              "x": 1596,
+              "y": 2396,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_010",
+              "duration": 117,
+              "sourceFrameIndex": 10
+            },
+            {
+              "x": 2394,
+              "y": 2396,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_011",
+              "duration": 117,
+              "sourceFrameIndex": 11
+            },
+            {
+              "x": 0,
+              "y": 3594,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_012",
+              "duration": 117,
+              "sourceFrameIndex": 12
+            },
+            {
+              "x": 798,
+              "y": 3594,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_013",
+              "duration": 117,
+              "sourceFrameIndex": 13
+            },
+            {
+              "x": 1596,
+              "y": 3594,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_014",
+              "duration": 117,
+              "sourceFrameIndex": 14
+            },
+            {
+              "x": 2394,
+              "y": 3594,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_015",
+              "duration": 117,
+              "sourceFrameIndex": 15
+            }
+          ],
+          "frameContentBounds": [
+            {
+              "x": 228,
+              "y": 161,
+              "w": 315,
+              "h": 851
+            },
+            {
+              "x": 229,
+              "y": 160,
+              "w": 316,
+              "h": 852
+            },
+            {
+              "x": 227,
+              "y": 166,
+              "w": 317,
+              "h": 846
+            },
+            {
+              "x": 225,
+              "y": 171,
+              "w": 320,
+              "h": 840
+            },
+            {
+              "x": 224,
+              "y": 172,
+              "w": 319,
+              "h": 839
+            },
+            {
+              "x": 224,
+              "y": 171,
+              "w": 319,
+              "h": 840
+            },
+            {
+              "x": 225,
+              "y": 167,
+              "w": 317,
+              "h": 844
+            },
+            {
+              "x": 226,
+              "y": 166,
+              "w": 316,
+              "h": 846
+            },
+            {
+              "x": 225,
+              "y": 173,
+              "w": 317,
+              "h": 839
+            },
+            {
+              "x": 225,
+              "y": 174,
+              "w": 317,
+              "h": 838
+            },
+            {
+              "x": 225,
+              "y": 173,
+              "w": 317,
+              "h": 839
+            },
+            {
+              "x": 227,
+              "y": 167,
+              "w": 315,
+              "h": 845
+            },
+            {
+              "x": 227,
+              "y": 167,
+              "w": 315,
+              "h": 846
+            },
+            {
+              "x": 227,
+              "y": 164,
+              "w": 315,
+              "h": 849
+            },
+            {
+              "x": 227,
+              "y": 161,
+              "w": 315,
+              "h": 851
+            },
+            {
+              "x": 227,
+              "y": 161,
+              "w": 315,
+              "h": 851
+            }
+          ],
+          "frameRects": [
+            {
+              "x": 0,
+              "y": 0,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_000",
+              "duration": 117,
+              "sourceFrameIndex": 0
+            },
+            {
+              "x": 798,
+              "y": 0,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_001",
+              "duration": 117,
+              "sourceFrameIndex": 1
+            },
+            {
+              "x": 1596,
+              "y": 0,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_002",
+              "duration": 117,
+              "sourceFrameIndex": 2
+            },
+            {
+              "x": 2394,
+              "y": 0,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_003",
+              "duration": 117,
+              "sourceFrameIndex": 3
+            },
+            {
+              "x": 0,
+              "y": 1198,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_004",
+              "duration": 117,
+              "sourceFrameIndex": 4
+            },
+            {
+              "x": 798,
+              "y": 1198,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_005",
+              "duration": 117,
+              "sourceFrameIndex": 5
+            },
+            {
+              "x": 1596,
+              "y": 1198,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_006",
+              "duration": 117,
+              "sourceFrameIndex": 6
+            },
+            {
+              "x": 2394,
+              "y": 1198,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_007",
+              "duration": 117,
+              "sourceFrameIndex": 7
+            },
+            {
+              "x": 0,
+              "y": 2396,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_008",
+              "duration": 117,
+              "sourceFrameIndex": 8
+            },
+            {
+              "x": 798,
+              "y": 2396,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_009",
+              "duration": 117,
+              "sourceFrameIndex": 9
+            },
+            {
+              "x": 1596,
+              "y": 2396,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_010",
+              "duration": 117,
+              "sourceFrameIndex": 10
+            },
+            {
+              "x": 2394,
+              "y": 2396,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_011",
+              "duration": 117,
+              "sourceFrameIndex": 11
+            },
+            {
+              "x": 0,
+              "y": 3594,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_012",
+              "duration": 117,
+              "sourceFrameIndex": 12
+            },
+            {
+              "x": 798,
+              "y": 3594,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_013",
+              "duration": 117,
+              "sourceFrameIndex": 13
+            },
+            {
+              "x": 1596,
+              "y": 3594,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_014",
+              "duration": 117,
+              "sourceFrameIndex": 14
+            },
+            {
+              "x": 2394,
+              "y": 3594,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_015",
+              "duration": 117,
+              "sourceFrameIndex": 15
+            }
+          ],
+          "movementSpeedMultipliers": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "mirroredWest": true,
+          "slot": "external_talk_east_short_1",
+          "talkKey": "talk_east_short_1",
+          "talkSemantic": "single_word",
+          "talkSemanticKey": "singleWord",
+          "mirrored": true,
+          "mirrorSource": "east"
+        }
+      ],
+      "singleShortSentence": [
+        {
+          "src": "target/external_animation_v1/runtime/talk_east_long_2.png",
+          "sourceSheet": "target\\external_animation_v1\\unpacked\\talk_east_long_2\\sprite--9px-frames-36-rows-6-cols-6.png",
+          "metadataFile": "target\\external_animation_v1\\unpacked\\talk_east_long_2\\sprite--9px-frames-36-rows-6-cols-6.json",
+          "usesOriginalLudoLayout": true,
+          "sourcePreserved": true,
+          "runtimeSource": "unpacked-alpha-sheet",
+          "frameWidth": 798,
+          "frameHeight": 1198,
+          "sheetWidth": 4788,
+          "sheetHeight": 7188,
+          "frameCount": 36,
+          "sourceFrameCount": 36,
+          "frameStart": 0,
+          "frameEndTrim": 0,
+          "configuredFrameCount": null,
+          "fps": 12,
+          "loop": false,
+          "pingPong": false,
+          "role": "talk",
+          "initialFrame": 0,
+          "anchorX": 0.5,
+          "anchorY": 1,
+          "anchor": {
+            "x": 0.5,
+            "y": 1
+          },
+          "baselineY": 1198,
+          "contentBounds": {
+            "x": 224,
+            "y": 160,
+            "w": 319,
+            "h": 854
+          },
+          "sourceContentBounds": {
+            "x": 224,
+            "y": 160,
+            "w": 319,
+            "h": 854
+          },
+          "sourceFrameContentBounds": [
+            {
+              "x": 227,
+              "y": 160,
+              "w": 316,
+              "h": 854
+            },
+            {
+              "x": 227,
+              "y": 160,
+              "w": 316,
+              "h": 853
+            },
+            {
+              "x": 227,
+              "y": 160,
+              "w": 316,
+              "h": 853
+            },
+            {
+              "x": 227,
+              "y": 160,
+              "w": 316,
+              "h": 853
+            },
+            {
+              "x": 228,
+              "y": 160,
+              "w": 314,
+              "h": 853
+            },
+            {
+              "x": 228,
+              "y": 161,
+              "w": 314,
+              "h": 852
+            },
+            {
+              "x": 229,
+              "y": 163,
+              "w": 313,
+              "h": 850
+            },
+            {
+              "x": 230,
+              "y": 164,
+              "w": 312,
+              "h": 848
+            },
+            {
+              "x": 230,
+              "y": 164,
+              "w": 312,
+              "h": 848
+            },
+            {
+              "x": 229,
+              "y": 164,
+              "w": 313,
+              "h": 849
+            },
+            {
+              "x": 228,
+              "y": 163,
+              "w": 314,
+              "h": 850
+            },
+            {
+              "x": 227,
+              "y": 163,
+              "w": 315,
+              "h": 850
+            },
+            {
+              "x": 226,
+              "y": 163,
+              "w": 316,
+              "h": 850
+            },
+            {
+              "x": 225,
+              "y": 163,
+              "w": 317,
+              "h": 851
+            },
+            {
+              "x": 225,
+              "y": 164,
+              "w": 317,
+              "h": 850
+            },
+            {
+              "x": 225,
+              "y": 165,
+              "w": 317,
+              "h": 849
+            },
+            {
+              "x": 224,
+              "y": 168,
+              "w": 318,
+              "h": 846
+            },
+            {
+              "x": 224,
+              "y": 171,
+              "w": 318,
+              "h": 843
+            },
+            {
+              "x": 224,
+              "y": 172,
+              "w": 318,
+              "h": 842
+            },
+            {
+              "x": 224,
+              "y": 172,
+              "w": 319,
+              "h": 842
+            },
+            {
+              "x": 225,
+              "y": 172,
+              "w": 318,
+              "h": 842
+            },
+            {
+              "x": 226,
+              "y": 170,
+              "w": 316,
+              "h": 844
+            },
+            {
+              "x": 228,
+              "y": 169,
+              "w": 314,
+              "h": 845
+            },
+            {
+              "x": 228,
+              "y": 167,
+              "w": 314,
+              "h": 847
+            },
+            {
+              "x": 229,
+              "y": 167,
+              "w": 313,
+              "h": 847
+            },
+            {
+              "x": 229,
+              "y": 167,
+              "w": 313,
+              "h": 847
+            },
+            {
+              "x": 229,
+              "y": 167,
+              "w": 313,
+              "h": 847
+            },
+            {
+              "x": 229,
+              "y": 167,
+              "w": 313,
+              "h": 847
+            },
+            {
+              "x": 229,
+              "y": 168,
+              "w": 313,
+              "h": 846
+            },
+            {
+              "x": 229,
+              "y": 166,
+              "w": 313,
+              "h": 848
+            },
+            {
+              "x": 228,
+              "y": 162,
+              "w": 314,
+              "h": 852
+            },
+            {
+              "x": 228,
+              "y": 161,
+              "w": 314,
+              "h": 853
+            },
+            {
+              "x": 228,
+              "y": 161,
+              "w": 314,
+              "h": 852
+            },
+            {
+              "x": 227,
+              "y": 160,
+              "w": 315,
+              "h": 853
+            },
+            {
+              "x": 227,
+              "y": 160,
+              "w": 315,
+              "h": 853
+            },
+            {
+              "x": 227,
+              "y": 161,
+              "w": 315,
+              "h": 852
+            }
+          ],
+          "sourceFrameRects": [
+            {
+              "x": 0,
+              "y": 0,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_000",
+              "duration": 105,
+              "sourceFrameIndex": 0
+            },
+            {
+              "x": 798,
+              "y": 0,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_001",
+              "duration": 105,
+              "sourceFrameIndex": 1
+            },
+            {
+              "x": 1596,
+              "y": 0,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_002",
+              "duration": 105,
+              "sourceFrameIndex": 2
+            },
+            {
+              "x": 2394,
+              "y": 0,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_003",
+              "duration": 105,
+              "sourceFrameIndex": 3
+            },
+            {
+              "x": 3192,
+              "y": 0,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_004",
+              "duration": 105,
+              "sourceFrameIndex": 4
+            },
+            {
+              "x": 3990,
+              "y": 0,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_005",
+              "duration": 105,
+              "sourceFrameIndex": 5
+            },
+            {
+              "x": 0,
+              "y": 1198,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_006",
+              "duration": 105,
+              "sourceFrameIndex": 6
+            },
+            {
+              "x": 798,
+              "y": 1198,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_007",
+              "duration": 105,
+              "sourceFrameIndex": 7
+            },
+            {
+              "x": 1596,
+              "y": 1198,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_008",
+              "duration": 105,
+              "sourceFrameIndex": 8
+            },
+            {
+              "x": 2394,
+              "y": 1198,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_009",
+              "duration": 105,
+              "sourceFrameIndex": 9
+            },
+            {
+              "x": 3192,
+              "y": 1198,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_010",
+              "duration": 105,
+              "sourceFrameIndex": 10
+            },
+            {
+              "x": 3990,
+              "y": 1198,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_011",
+              "duration": 105,
+              "sourceFrameIndex": 11
+            },
+            {
+              "x": 0,
+              "y": 2396,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_012",
+              "duration": 105,
+              "sourceFrameIndex": 12
+            },
+            {
+              "x": 798,
+              "y": 2396,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_013",
+              "duration": 105,
+              "sourceFrameIndex": 13
+            },
+            {
+              "x": 1596,
+              "y": 2396,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_014",
+              "duration": 105,
+              "sourceFrameIndex": 14
+            },
+            {
+              "x": 2394,
+              "y": 2396,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_015",
+              "duration": 105,
+              "sourceFrameIndex": 15
+            },
+            {
+              "x": 3192,
+              "y": 2396,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_016",
+              "duration": 105,
+              "sourceFrameIndex": 16
+            },
+            {
+              "x": 3990,
+              "y": 2396,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_017",
+              "duration": 105,
+              "sourceFrameIndex": 17
+            },
+            {
+              "x": 0,
+              "y": 3594,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_018",
+              "duration": 105,
+              "sourceFrameIndex": 18
+            },
+            {
+              "x": 798,
+              "y": 3594,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_019",
+              "duration": 105,
+              "sourceFrameIndex": 19
+            },
+            {
+              "x": 1596,
+              "y": 3594,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_020",
+              "duration": 105,
+              "sourceFrameIndex": 20
+            },
+            {
+              "x": 2394,
+              "y": 3594,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_021",
+              "duration": 105,
+              "sourceFrameIndex": 21
+            },
+            {
+              "x": 3192,
+              "y": 3594,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_022",
+              "duration": 105,
+              "sourceFrameIndex": 22
+            },
+            {
+              "x": 3990,
+              "y": 3594,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_023",
+              "duration": 105,
+              "sourceFrameIndex": 23
+            },
+            {
+              "x": 0,
+              "y": 4792,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_024",
+              "duration": 105,
+              "sourceFrameIndex": 24
+            },
+            {
+              "x": 798,
+              "y": 4792,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_025",
+              "duration": 105,
+              "sourceFrameIndex": 25
+            },
+            {
+              "x": 1596,
+              "y": 4792,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_026",
+              "duration": 105,
+              "sourceFrameIndex": 26
+            },
+            {
+              "x": 2394,
+              "y": 4792,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_027",
+              "duration": 105,
+              "sourceFrameIndex": 27
+            },
+            {
+              "x": 3192,
+              "y": 4792,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_028",
+              "duration": 105,
+              "sourceFrameIndex": 28
+            },
+            {
+              "x": 3990,
+              "y": 4792,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_029",
+              "duration": 105,
+              "sourceFrameIndex": 29
+            },
+            {
+              "x": 0,
+              "y": 5990,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_030",
+              "duration": 105,
+              "sourceFrameIndex": 30
+            },
+            {
+              "x": 798,
+              "y": 5990,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_031",
+              "duration": 105,
+              "sourceFrameIndex": 31
+            },
+            {
+              "x": 1596,
+              "y": 5990,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_032",
+              "duration": 105,
+              "sourceFrameIndex": 32
+            },
+            {
+              "x": 2394,
+              "y": 5990,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_033",
+              "duration": 105,
+              "sourceFrameIndex": 33
+            },
+            {
+              "x": 3192,
+              "y": 5990,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_034",
+              "duration": 105,
+              "sourceFrameIndex": 34
+            },
+            {
+              "x": 3990,
+              "y": 5990,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_035",
+              "duration": 105,
+              "sourceFrameIndex": 35
+            }
+          ],
+          "frameContentBounds": [
+            {
+              "x": 227,
+              "y": 160,
+              "w": 316,
+              "h": 854
+            },
+            {
+              "x": 227,
+              "y": 160,
+              "w": 316,
+              "h": 853
+            },
+            {
+              "x": 227,
+              "y": 160,
+              "w": 316,
+              "h": 853
+            },
+            {
+              "x": 227,
+              "y": 160,
+              "w": 316,
+              "h": 853
+            },
+            {
+              "x": 228,
+              "y": 160,
+              "w": 314,
+              "h": 853
+            },
+            {
+              "x": 228,
+              "y": 161,
+              "w": 314,
+              "h": 852
+            },
+            {
+              "x": 229,
+              "y": 163,
+              "w": 313,
+              "h": 850
+            },
+            {
+              "x": 230,
+              "y": 164,
+              "w": 312,
+              "h": 848
+            },
+            {
+              "x": 230,
+              "y": 164,
+              "w": 312,
+              "h": 848
+            },
+            {
+              "x": 229,
+              "y": 164,
+              "w": 313,
+              "h": 849
+            },
+            {
+              "x": 228,
+              "y": 163,
+              "w": 314,
+              "h": 850
+            },
+            {
+              "x": 227,
+              "y": 163,
+              "w": 315,
+              "h": 850
+            },
+            {
+              "x": 226,
+              "y": 163,
+              "w": 316,
+              "h": 850
+            },
+            {
+              "x": 225,
+              "y": 163,
+              "w": 317,
+              "h": 851
+            },
+            {
+              "x": 225,
+              "y": 164,
+              "w": 317,
+              "h": 850
+            },
+            {
+              "x": 225,
+              "y": 165,
+              "w": 317,
+              "h": 849
+            },
+            {
+              "x": 224,
+              "y": 168,
+              "w": 318,
+              "h": 846
+            },
+            {
+              "x": 224,
+              "y": 171,
+              "w": 318,
+              "h": 843
+            },
+            {
+              "x": 224,
+              "y": 172,
+              "w": 318,
+              "h": 842
+            },
+            {
+              "x": 224,
+              "y": 172,
+              "w": 319,
+              "h": 842
+            },
+            {
+              "x": 225,
+              "y": 172,
+              "w": 318,
+              "h": 842
+            },
+            {
+              "x": 226,
+              "y": 170,
+              "w": 316,
+              "h": 844
+            },
+            {
+              "x": 228,
+              "y": 169,
+              "w": 314,
+              "h": 845
+            },
+            {
+              "x": 228,
+              "y": 167,
+              "w": 314,
+              "h": 847
+            },
+            {
+              "x": 229,
+              "y": 167,
+              "w": 313,
+              "h": 847
+            },
+            {
+              "x": 229,
+              "y": 167,
+              "w": 313,
+              "h": 847
+            },
+            {
+              "x": 229,
+              "y": 167,
+              "w": 313,
+              "h": 847
+            },
+            {
+              "x": 229,
+              "y": 167,
+              "w": 313,
+              "h": 847
+            },
+            {
+              "x": 229,
+              "y": 168,
+              "w": 313,
+              "h": 846
+            },
+            {
+              "x": 229,
+              "y": 166,
+              "w": 313,
+              "h": 848
+            },
+            {
+              "x": 228,
+              "y": 162,
+              "w": 314,
+              "h": 852
+            },
+            {
+              "x": 228,
+              "y": 161,
+              "w": 314,
+              "h": 853
+            },
+            {
+              "x": 228,
+              "y": 161,
+              "w": 314,
+              "h": 852
+            },
+            {
+              "x": 227,
+              "y": 160,
+              "w": 315,
+              "h": 853
+            },
+            {
+              "x": 227,
+              "y": 160,
+              "w": 315,
+              "h": 853
+            },
+            {
+              "x": 227,
+              "y": 161,
+              "w": 315,
+              "h": 852
+            }
+          ],
+          "frameRects": [
+            {
+              "x": 0,
+              "y": 0,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_000",
+              "duration": 105,
+              "sourceFrameIndex": 0
+            },
+            {
+              "x": 798,
+              "y": 0,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_001",
+              "duration": 105,
+              "sourceFrameIndex": 1
+            },
+            {
+              "x": 1596,
+              "y": 0,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_002",
+              "duration": 105,
+              "sourceFrameIndex": 2
+            },
+            {
+              "x": 2394,
+              "y": 0,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_003",
+              "duration": 105,
+              "sourceFrameIndex": 3
+            },
+            {
+              "x": 3192,
+              "y": 0,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_004",
+              "duration": 105,
+              "sourceFrameIndex": 4
+            },
+            {
+              "x": 3990,
+              "y": 0,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_005",
+              "duration": 105,
+              "sourceFrameIndex": 5
+            },
+            {
+              "x": 0,
+              "y": 1198,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_006",
+              "duration": 105,
+              "sourceFrameIndex": 6
+            },
+            {
+              "x": 798,
+              "y": 1198,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_007",
+              "duration": 105,
+              "sourceFrameIndex": 7
+            },
+            {
+              "x": 1596,
+              "y": 1198,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_008",
+              "duration": 105,
+              "sourceFrameIndex": 8
+            },
+            {
+              "x": 2394,
+              "y": 1198,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_009",
+              "duration": 105,
+              "sourceFrameIndex": 9
+            },
+            {
+              "x": 3192,
+              "y": 1198,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_010",
+              "duration": 105,
+              "sourceFrameIndex": 10
+            },
+            {
+              "x": 3990,
+              "y": 1198,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_011",
+              "duration": 105,
+              "sourceFrameIndex": 11
+            },
+            {
+              "x": 0,
+              "y": 2396,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_012",
+              "duration": 105,
+              "sourceFrameIndex": 12
+            },
+            {
+              "x": 798,
+              "y": 2396,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_013",
+              "duration": 105,
+              "sourceFrameIndex": 13
+            },
+            {
+              "x": 1596,
+              "y": 2396,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_014",
+              "duration": 105,
+              "sourceFrameIndex": 14
+            },
+            {
+              "x": 2394,
+              "y": 2396,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_015",
+              "duration": 105,
+              "sourceFrameIndex": 15
+            },
+            {
+              "x": 3192,
+              "y": 2396,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_016",
+              "duration": 105,
+              "sourceFrameIndex": 16
+            },
+            {
+              "x": 3990,
+              "y": 2396,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_017",
+              "duration": 105,
+              "sourceFrameIndex": 17
+            },
+            {
+              "x": 0,
+              "y": 3594,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_018",
+              "duration": 105,
+              "sourceFrameIndex": 18
+            },
+            {
+              "x": 798,
+              "y": 3594,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_019",
+              "duration": 105,
+              "sourceFrameIndex": 19
+            },
+            {
+              "x": 1596,
+              "y": 3594,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_020",
+              "duration": 105,
+              "sourceFrameIndex": 20
+            },
+            {
+              "x": 2394,
+              "y": 3594,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_021",
+              "duration": 105,
+              "sourceFrameIndex": 21
+            },
+            {
+              "x": 3192,
+              "y": 3594,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_022",
+              "duration": 105,
+              "sourceFrameIndex": 22
+            },
+            {
+              "x": 3990,
+              "y": 3594,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_023",
+              "duration": 105,
+              "sourceFrameIndex": 23
+            },
+            {
+              "x": 0,
+              "y": 4792,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_024",
+              "duration": 105,
+              "sourceFrameIndex": 24
+            },
+            {
+              "x": 798,
+              "y": 4792,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_025",
+              "duration": 105,
+              "sourceFrameIndex": 25
+            },
+            {
+              "x": 1596,
+              "y": 4792,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_026",
+              "duration": 105,
+              "sourceFrameIndex": 26
+            },
+            {
+              "x": 2394,
+              "y": 4792,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_027",
+              "duration": 105,
+              "sourceFrameIndex": 27
+            },
+            {
+              "x": 3192,
+              "y": 4792,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_028",
+              "duration": 105,
+              "sourceFrameIndex": 28
+            },
+            {
+              "x": 3990,
+              "y": 4792,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_029",
+              "duration": 105,
+              "sourceFrameIndex": 29
+            },
+            {
+              "x": 0,
+              "y": 5990,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_030",
+              "duration": 105,
+              "sourceFrameIndex": 30
+            },
+            {
+              "x": 798,
+              "y": 5990,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_031",
+              "duration": 105,
+              "sourceFrameIndex": 31
+            },
+            {
+              "x": 1596,
+              "y": 5990,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_032",
+              "duration": 105,
+              "sourceFrameIndex": 32
+            },
+            {
+              "x": 2394,
+              "y": 5990,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_033",
+              "duration": 105,
+              "sourceFrameIndex": 33
+            },
+            {
+              "x": 3192,
+              "y": 5990,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_034",
+              "duration": 105,
+              "sourceFrameIndex": 34
+            },
+            {
+              "x": 3990,
+              "y": 5990,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_035",
+              "duration": 105,
+              "sourceFrameIndex": 35
+            }
+          ],
+          "movementSpeedMultipliers": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "mirroredWest": true,
+          "slot": "external_talk_east_long_2",
+          "talkKey": "talk_east_long_2",
+          "talkSemantic": "single_short_sentence",
+          "talkSemanticKey": "singleShortSentence",
+          "mirrored": true,
+          "mirrorSource": "east"
+        }
+      ],
+      "singleLongSentence": [
+        {
+          "src": "target/external_animation_v1/runtime/talk_east_long_1.png",
+          "sourceSheet": "target\\external_animation_v1\\unpacked\\talk_east_long_1\\sprite--9px-frames-25-rows-5-cols-5.png",
+          "metadataFile": "target\\external_animation_v1\\unpacked\\talk_east_long_1\\sprite--9px-frames-25-rows-5-cols-5.json",
+          "usesOriginalLudoLayout": true,
+          "sourcePreserved": true,
+          "runtimeSource": "unpacked-alpha-sheet",
+          "frameWidth": 798,
+          "frameHeight": 1198,
+          "sheetWidth": 3990,
+          "sheetHeight": 5990,
+          "frameCount": 25,
+          "sourceFrameCount": 25,
+          "frameStart": 0,
+          "frameEndTrim": 0,
+          "configuredFrameCount": null,
+          "fps": 12,
+          "loop": false,
+          "pingPong": false,
+          "role": "talk",
+          "initialFrame": 0,
+          "anchorX": 0.5,
+          "anchorY": 1,
+          "anchor": {
+            "x": 0.5,
+            "y": 1
+          },
+          "baselineY": 1198,
+          "contentBounds": {
+            "x": 226,
+            "y": 160,
+            "w": 317,
+            "h": 854
+          },
+          "sourceContentBounds": {
+            "x": 226,
+            "y": 160,
+            "w": 317,
+            "h": 854
+          },
+          "sourceFrameContentBounds": [
+            {
+              "x": 227,
+              "y": 161,
+              "w": 316,
+              "h": 853
+            },
+            {
+              "x": 227,
+              "y": 161,
+              "w": 316,
+              "h": 853
+            },
+            {
+              "x": 227,
+              "y": 161,
+              "w": 316,
+              "h": 852
+            },
+            {
+              "x": 227,
+              "y": 165,
+              "w": 316,
+              "h": 849
+            },
+            {
+              "x": 227,
+              "y": 166,
+              "w": 315,
+              "h": 848
+            },
+            {
+              "x": 227,
+              "y": 167,
+              "w": 315,
+              "h": 847
+            },
+            {
+              "x": 226,
+              "y": 167,
+              "w": 316,
+              "h": 847
+            },
+            {
+              "x": 228,
+              "y": 167,
+              "w": 314,
+              "h": 847
+            },
+            {
+              "x": 228,
+              "y": 167,
+              "w": 314,
+              "h": 847
+            },
+            {
+              "x": 228,
+              "y": 167,
+              "w": 314,
+              "h": 847
+            },
+            {
+              "x": 228,
+              "y": 166,
+              "w": 314,
+              "h": 848
+            },
+            {
+              "x": 228,
+              "y": 167,
+              "w": 314,
+              "h": 847
+            },
+            {
+              "x": 228,
+              "y": 167,
+              "w": 314,
+              "h": 847
+            },
+            {
+              "x": 230,
+              "y": 168,
+              "w": 312,
+              "h": 846
+            },
+            {
+              "x": 230,
+              "y": 167,
+              "w": 312,
+              "h": 847
+            },
+            {
+              "x": 231,
+              "y": 167,
+              "w": 311,
+              "h": 847
+            },
+            {
+              "x": 231,
+              "y": 169,
+              "w": 311,
+              "h": 845
+            },
+            {
+              "x": 232,
+              "y": 169,
+              "w": 310,
+              "h": 845
+            },
+            {
+              "x": 232,
+              "y": 169,
+              "w": 310,
+              "h": 845
+            },
+            {
+              "x": 232,
+              "y": 169,
+              "w": 310,
+              "h": 845
+            },
+            {
+              "x": 232,
+              "y": 169,
+              "w": 310,
+              "h": 845
+            },
+            {
+              "x": 231,
+              "y": 167,
+              "w": 311,
+              "h": 846
+            },
+            {
+              "x": 229,
+              "y": 164,
+              "w": 313,
+              "h": 849
+            },
+            {
+              "x": 229,
+              "y": 161,
+              "w": 314,
+              "h": 852
+            },
+            {
+              "x": 228,
+              "y": 160,
+              "w": 314,
+              "h": 853
+            }
+          ],
+          "sourceFrameRects": [
+            {
+              "x": 0,
+              "y": 0,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_000",
+              "duration": 112,
+              "sourceFrameIndex": 0
+            },
+            {
+              "x": 798,
+              "y": 0,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_001",
+              "duration": 112,
+              "sourceFrameIndex": 1
+            },
+            {
+              "x": 1596,
+              "y": 0,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_002",
+              "duration": 112,
+              "sourceFrameIndex": 2
+            },
+            {
+              "x": 2394,
+              "y": 0,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_003",
+              "duration": 112,
+              "sourceFrameIndex": 3
+            },
+            {
+              "x": 3192,
+              "y": 0,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_004",
+              "duration": 112,
+              "sourceFrameIndex": 4
+            },
+            {
+              "x": 0,
+              "y": 1198,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_005",
+              "duration": 112,
+              "sourceFrameIndex": 5
+            },
+            {
+              "x": 798,
+              "y": 1198,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_006",
+              "duration": 112,
+              "sourceFrameIndex": 6
+            },
+            {
+              "x": 1596,
+              "y": 1198,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_007",
+              "duration": 112,
+              "sourceFrameIndex": 7
+            },
+            {
+              "x": 2394,
+              "y": 1198,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_008",
+              "duration": 112,
+              "sourceFrameIndex": 8
+            },
+            {
+              "x": 3192,
+              "y": 1198,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_009",
+              "duration": 112,
+              "sourceFrameIndex": 9
+            },
+            {
+              "x": 0,
+              "y": 2396,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_010",
+              "duration": 112,
+              "sourceFrameIndex": 10
+            },
+            {
+              "x": 798,
+              "y": 2396,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_011",
+              "duration": 112,
+              "sourceFrameIndex": 11
+            },
+            {
+              "x": 1596,
+              "y": 2396,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_012",
+              "duration": 112,
+              "sourceFrameIndex": 12
+            },
+            {
+              "x": 2394,
+              "y": 2396,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_013",
+              "duration": 112,
+              "sourceFrameIndex": 13
+            },
+            {
+              "x": 3192,
+              "y": 2396,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_014",
+              "duration": 112,
+              "sourceFrameIndex": 14
+            },
+            {
+              "x": 0,
+              "y": 3594,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_015",
+              "duration": 112,
+              "sourceFrameIndex": 15
+            },
+            {
+              "x": 798,
+              "y": 3594,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_016",
+              "duration": 112,
+              "sourceFrameIndex": 16
+            },
+            {
+              "x": 1596,
+              "y": 3594,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_017",
+              "duration": 112,
+              "sourceFrameIndex": 17
+            },
+            {
+              "x": 2394,
+              "y": 3594,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_018",
+              "duration": 112,
+              "sourceFrameIndex": 18
+            },
+            {
+              "x": 3192,
+              "y": 3594,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_019",
+              "duration": 112,
+              "sourceFrameIndex": 19
+            },
+            {
+              "x": 0,
+              "y": 4792,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_020",
+              "duration": 112,
+              "sourceFrameIndex": 20
+            },
+            {
+              "x": 798,
+              "y": 4792,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_021",
+              "duration": 112,
+              "sourceFrameIndex": 21
+            },
+            {
+              "x": 1596,
+              "y": 4792,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_022",
+              "duration": 112,
+              "sourceFrameIndex": 22
+            },
+            {
+              "x": 2394,
+              "y": 4792,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_023",
+              "duration": 112,
+              "sourceFrameIndex": 23
+            },
+            {
+              "x": 3192,
+              "y": 4792,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_024",
+              "duration": 112,
+              "sourceFrameIndex": 24
+            }
+          ],
+          "frameContentBounds": [
+            {
+              "x": 227,
+              "y": 161,
+              "w": 316,
+              "h": 853
+            },
+            {
+              "x": 227,
+              "y": 161,
+              "w": 316,
+              "h": 853
+            },
+            {
+              "x": 227,
+              "y": 161,
+              "w": 316,
+              "h": 852
+            },
+            {
+              "x": 227,
+              "y": 165,
+              "w": 316,
+              "h": 849
+            },
+            {
+              "x": 227,
+              "y": 166,
+              "w": 315,
+              "h": 848
+            },
+            {
+              "x": 227,
+              "y": 167,
+              "w": 315,
+              "h": 847
+            },
+            {
+              "x": 226,
+              "y": 167,
+              "w": 316,
+              "h": 847
+            },
+            {
+              "x": 228,
+              "y": 167,
+              "w": 314,
+              "h": 847
+            },
+            {
+              "x": 228,
+              "y": 167,
+              "w": 314,
+              "h": 847
+            },
+            {
+              "x": 228,
+              "y": 167,
+              "w": 314,
+              "h": 847
+            },
+            {
+              "x": 228,
+              "y": 166,
+              "w": 314,
+              "h": 848
+            },
+            {
+              "x": 228,
+              "y": 167,
+              "w": 314,
+              "h": 847
+            },
+            {
+              "x": 228,
+              "y": 167,
+              "w": 314,
+              "h": 847
+            },
+            {
+              "x": 230,
+              "y": 168,
+              "w": 312,
+              "h": 846
+            },
+            {
+              "x": 230,
+              "y": 167,
+              "w": 312,
+              "h": 847
+            },
+            {
+              "x": 231,
+              "y": 167,
+              "w": 311,
+              "h": 847
+            },
+            {
+              "x": 231,
+              "y": 169,
+              "w": 311,
+              "h": 845
+            },
+            {
+              "x": 232,
+              "y": 169,
+              "w": 310,
+              "h": 845
+            },
+            {
+              "x": 232,
+              "y": 169,
+              "w": 310,
+              "h": 845
+            },
+            {
+              "x": 232,
+              "y": 169,
+              "w": 310,
+              "h": 845
+            },
+            {
+              "x": 232,
+              "y": 169,
+              "w": 310,
+              "h": 845
+            },
+            {
+              "x": 231,
+              "y": 167,
+              "w": 311,
+              "h": 846
+            },
+            {
+              "x": 229,
+              "y": 164,
+              "w": 313,
+              "h": 849
+            },
+            {
+              "x": 229,
+              "y": 161,
+              "w": 314,
+              "h": 852
+            },
+            {
+              "x": 228,
+              "y": 160,
+              "w": 314,
+              "h": 853
+            }
+          ],
+          "frameRects": [
+            {
+              "x": 0,
+              "y": 0,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_000",
+              "duration": 112,
+              "sourceFrameIndex": 0
+            },
+            {
+              "x": 798,
+              "y": 0,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_001",
+              "duration": 112,
+              "sourceFrameIndex": 1
+            },
+            {
+              "x": 1596,
+              "y": 0,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_002",
+              "duration": 112,
+              "sourceFrameIndex": 2
+            },
+            {
+              "x": 2394,
+              "y": 0,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_003",
+              "duration": 112,
+              "sourceFrameIndex": 3
+            },
+            {
+              "x": 3192,
+              "y": 0,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_004",
+              "duration": 112,
+              "sourceFrameIndex": 4
+            },
+            {
+              "x": 0,
+              "y": 1198,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_005",
+              "duration": 112,
+              "sourceFrameIndex": 5
+            },
+            {
+              "x": 798,
+              "y": 1198,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_006",
+              "duration": 112,
+              "sourceFrameIndex": 6
+            },
+            {
+              "x": 1596,
+              "y": 1198,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_007",
+              "duration": 112,
+              "sourceFrameIndex": 7
+            },
+            {
+              "x": 2394,
+              "y": 1198,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_008",
+              "duration": 112,
+              "sourceFrameIndex": 8
+            },
+            {
+              "x": 3192,
+              "y": 1198,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_009",
+              "duration": 112,
+              "sourceFrameIndex": 9
+            },
+            {
+              "x": 0,
+              "y": 2396,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_010",
+              "duration": 112,
+              "sourceFrameIndex": 10
+            },
+            {
+              "x": 798,
+              "y": 2396,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_011",
+              "duration": 112,
+              "sourceFrameIndex": 11
+            },
+            {
+              "x": 1596,
+              "y": 2396,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_012",
+              "duration": 112,
+              "sourceFrameIndex": 12
+            },
+            {
+              "x": 2394,
+              "y": 2396,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_013",
+              "duration": 112,
+              "sourceFrameIndex": 13
+            },
+            {
+              "x": 3192,
+              "y": 2396,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_014",
+              "duration": 112,
+              "sourceFrameIndex": 14
+            },
+            {
+              "x": 0,
+              "y": 3594,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_015",
+              "duration": 112,
+              "sourceFrameIndex": 15
+            },
+            {
+              "x": 798,
+              "y": 3594,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_016",
+              "duration": 112,
+              "sourceFrameIndex": 16
+            },
+            {
+              "x": 1596,
+              "y": 3594,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_017",
+              "duration": 112,
+              "sourceFrameIndex": 17
+            },
+            {
+              "x": 2394,
+              "y": 3594,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_018",
+              "duration": 112,
+              "sourceFrameIndex": 18
+            },
+            {
+              "x": 3192,
+              "y": 3594,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_019",
+              "duration": 112,
+              "sourceFrameIndex": 19
+            },
+            {
+              "x": 0,
+              "y": 4792,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_020",
+              "duration": 112,
+              "sourceFrameIndex": 20
+            },
+            {
+              "x": 798,
+              "y": 4792,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_021",
+              "duration": 112,
+              "sourceFrameIndex": 21
+            },
+            {
+              "x": 1596,
+              "y": 4792,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_022",
+              "duration": 112,
+              "sourceFrameIndex": 22
+            },
+            {
+              "x": 2394,
+              "y": 4792,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_023",
+              "duration": 112,
+              "sourceFrameIndex": 23
+            },
+            {
+              "x": 3192,
+              "y": 4792,
+              "w": 798,
+              "h": 1198,
+              "name": "frame_024",
+              "duration": 112,
+              "sourceFrameIndex": 24
+            }
+          ],
+          "movementSpeedMultipliers": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "mirroredWest": true,
+          "slot": "external_talk_east_long_1",
+          "talkKey": "talk_east_long_1",
+          "talkSemantic": "single_long_sentence",
+          "talkSemanticKey": "singleLongSentence",
+          "mirrored": true,
+          "mirrorSource": "east"
+        }
+      ]
+    }
+  },
+  "rejectAnimations": {
+    "east": [
+      {
+        "src": "target/external_animation_v1/runtime/reject_east_1.png",
+        "sourceSheet": "target\\external_animation_v1\\unpacked\\reject_east_1\\sprite--9px-frames-36-rows-6-cols-6.png",
+        "metadataFile": "target\\external_animation_v1\\unpacked\\reject_east_1\\sprite--9px-frames-36-rows-6-cols-6.json",
+        "usesOriginalLudoLayout": true,
+        "sourcePreserved": true,
+        "runtimeSource": "unpacked-alpha-sheet",
+        "frameWidth": 798,
+        "frameHeight": 1198,
+        "sheetWidth": 4788,
+        "sheetHeight": 7188,
+        "frameCount": 36,
+        "sourceFrameCount": 36,
+        "frameStart": 0,
+        "frameEndTrim": 0,
+        "configuredFrameCount": null,
+        "fps": 20,
+        "loop": false,
+        "pingPong": false,
+        "role": "reject",
+        "initialFrame": 0,
+        "anchorX": 0.5,
+        "anchorY": 1,
+        "anchor": {
+          "x": 0.5,
+          "y": 1
+        },
+        "baselineY": 1198,
+        "contentBounds": {
+          "x": 209,
+          "y": 155,
+          "w": 335,
+          "h": 861
+        },
+        "sourceContentBounds": {
+          "x": 209,
+          "y": 155,
+          "w": 335,
+          "h": 861
+        },
+        "sourceFrameContentBounds": [
+          {
+            "x": 227,
+            "y": 158,
+            "w": 313,
+            "h": 858
+          },
+          {
+            "x": 227,
+            "y": 158,
+            "w": 313,
+            "h": 858
+          },
+          {
+            "x": 227,
+            "y": 158,
+            "w": 313,
+            "h": 858
+          },
+          {
+            "x": 227,
+            "y": 158,
+            "w": 313,
+            "h": 858
+          },
+          {
+            "x": 227,
+            "y": 159,
+            "w": 313,
+            "h": 857
+          },
+          {
+            "x": 227,
+            "y": 158,
+            "w": 313,
+            "h": 858
+          },
+          {
+            "x": 226,
+            "y": 160,
+            "w": 314,
+            "h": 856
+          },
+          {
+            "x": 226,
+            "y": 160,
+            "w": 313,
+            "h": 856
+          },
+          {
+            "x": 223,
+            "y": 160,
+            "w": 316,
+            "h": 856
+          },
+          {
+            "x": 220,
+            "y": 159,
+            "w": 319,
+            "h": 857
+          },
+          {
+            "x": 217,
+            "y": 158,
+            "w": 322,
+            "h": 858
+          },
+          {
+            "x": 215,
+            "y": 157,
+            "w": 324,
+            "h": 857
+          },
+          {
+            "x": 212,
+            "y": 156,
+            "w": 327,
+            "h": 858
+          },
+          {
+            "x": 211,
+            "y": 156,
+            "w": 328,
+            "h": 858
+          },
+          {
+            "x": 210,
+            "y": 155,
+            "w": 329,
+            "h": 859
+          },
+          {
+            "x": 209,
+            "y": 157,
+            "w": 330,
+            "h": 857
+          },
+          {
+            "x": 209,
+            "y": 158,
+            "w": 330,
+            "h": 856
+          },
+          {
+            "x": 209,
+            "y": 159,
+            "w": 330,
+            "h": 855
+          },
+          {
+            "x": 211,
+            "y": 162,
+            "w": 328,
+            "h": 852
+          },
+          {
+            "x": 212,
+            "y": 164,
+            "w": 327,
+            "h": 850
+          },
+          {
+            "x": 220,
+            "y": 167,
+            "w": 319,
+            "h": 847
+          },
+          {
+            "x": 229,
+            "y": 166,
+            "w": 311,
+            "h": 848
+          },
+          {
+            "x": 232,
+            "y": 165,
+            "w": 308,
+            "h": 849
+          },
+          {
+            "x": 234,
+            "y": 164,
+            "w": 308,
+            "h": 850
+          },
+          {
+            "x": 235,
+            "y": 165,
+            "w": 308,
+            "h": 850
+          },
+          {
+            "x": 236,
+            "y": 165,
+            "w": 307,
+            "h": 849
+          },
+          {
+            "x": 237,
+            "y": 165,
+            "w": 306,
+            "h": 849
+          },
+          {
+            "x": 237,
+            "y": 165,
+            "w": 306,
+            "h": 851
+          },
+          {
+            "x": 237,
+            "y": 165,
+            "w": 307,
+            "h": 851
+          },
+          {
+            "x": 237,
+            "y": 164,
+            "w": 307,
+            "h": 852
+          },
+          {
+            "x": 237,
+            "y": 164,
+            "w": 307,
+            "h": 852
+          },
+          {
+            "x": 235,
+            "y": 162,
+            "w": 308,
+            "h": 854
+          },
+          {
+            "x": 234,
+            "y": 161,
+            "w": 309,
+            "h": 855
+          },
+          {
+            "x": 232,
+            "y": 159,
+            "w": 310,
+            "h": 857
+          },
+          {
+            "x": 231,
+            "y": 159,
+            "w": 311,
+            "h": 855
+          },
+          {
+            "x": 227,
+            "y": 158,
+            "w": 313,
+            "h": 856
+          }
+        ],
+        "sourceFrameRects": [
+          {
+            "x": 0,
+            "y": 0,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_000",
+            "duration": 101,
+            "sourceFrameIndex": 0
+          },
+          {
+            "x": 798,
+            "y": 0,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_001",
+            "duration": 101,
+            "sourceFrameIndex": 1
+          },
+          {
+            "x": 1596,
+            "y": 0,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_002",
+            "duration": 101,
+            "sourceFrameIndex": 2
+          },
+          {
+            "x": 2394,
+            "y": 0,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_003",
+            "duration": 101,
+            "sourceFrameIndex": 3
+          },
+          {
+            "x": 3192,
+            "y": 0,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_004",
+            "duration": 101,
+            "sourceFrameIndex": 4
+          },
+          {
+            "x": 3990,
+            "y": 0,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_005",
+            "duration": 101,
+            "sourceFrameIndex": 5
+          },
+          {
+            "x": 0,
+            "y": 1198,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_006",
+            "duration": 101,
+            "sourceFrameIndex": 6
+          },
+          {
+            "x": 798,
+            "y": 1198,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_007",
+            "duration": 101,
+            "sourceFrameIndex": 7
+          },
+          {
+            "x": 1596,
+            "y": 1198,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_008",
+            "duration": 101,
+            "sourceFrameIndex": 8
+          },
+          {
+            "x": 2394,
+            "y": 1198,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_009",
+            "duration": 101,
+            "sourceFrameIndex": 9
+          },
+          {
+            "x": 3192,
+            "y": 1198,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_010",
+            "duration": 101,
+            "sourceFrameIndex": 10
+          },
+          {
+            "x": 3990,
+            "y": 1198,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_011",
+            "duration": 101,
+            "sourceFrameIndex": 11
+          },
+          {
+            "x": 0,
+            "y": 2396,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_012",
+            "duration": 101,
+            "sourceFrameIndex": 12
+          },
+          {
+            "x": 798,
+            "y": 2396,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_013",
+            "duration": 101,
+            "sourceFrameIndex": 13
+          },
+          {
+            "x": 1596,
+            "y": 2396,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_014",
+            "duration": 101,
+            "sourceFrameIndex": 14
+          },
+          {
+            "x": 2394,
+            "y": 2396,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_015",
+            "duration": 101,
+            "sourceFrameIndex": 15
+          },
+          {
+            "x": 3192,
+            "y": 2396,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_016",
+            "duration": 101,
+            "sourceFrameIndex": 16
+          },
+          {
+            "x": 3990,
+            "y": 2396,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_017",
+            "duration": 101,
+            "sourceFrameIndex": 17
+          },
+          {
+            "x": 0,
+            "y": 3594,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_018",
+            "duration": 101,
+            "sourceFrameIndex": 18
+          },
+          {
+            "x": 798,
+            "y": 3594,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_019",
+            "duration": 101,
+            "sourceFrameIndex": 19
+          },
+          {
+            "x": 1596,
+            "y": 3594,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_020",
+            "duration": 101,
+            "sourceFrameIndex": 20
+          },
+          {
+            "x": 2394,
+            "y": 3594,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_021",
+            "duration": 101,
+            "sourceFrameIndex": 21
+          },
+          {
+            "x": 3192,
+            "y": 3594,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_022",
+            "duration": 101,
+            "sourceFrameIndex": 22
+          },
+          {
+            "x": 3990,
+            "y": 3594,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_023",
+            "duration": 101,
+            "sourceFrameIndex": 23
+          },
+          {
+            "x": 0,
+            "y": 4792,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_024",
+            "duration": 101,
+            "sourceFrameIndex": 24
+          },
+          {
+            "x": 798,
+            "y": 4792,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_025",
+            "duration": 101,
+            "sourceFrameIndex": 25
+          },
+          {
+            "x": 1596,
+            "y": 4792,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_026",
+            "duration": 101,
+            "sourceFrameIndex": 26
+          },
+          {
+            "x": 2394,
+            "y": 4792,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_027",
+            "duration": 101,
+            "sourceFrameIndex": 27
+          },
+          {
+            "x": 3192,
+            "y": 4792,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_028",
+            "duration": 101,
+            "sourceFrameIndex": 28
+          },
+          {
+            "x": 3990,
+            "y": 4792,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_029",
+            "duration": 101,
+            "sourceFrameIndex": 29
+          },
+          {
+            "x": 0,
+            "y": 5990,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_030",
+            "duration": 101,
+            "sourceFrameIndex": 30
+          },
+          {
+            "x": 798,
+            "y": 5990,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_031",
+            "duration": 101,
+            "sourceFrameIndex": 31
+          },
+          {
+            "x": 1596,
+            "y": 5990,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_032",
+            "duration": 101,
+            "sourceFrameIndex": 32
+          },
+          {
+            "x": 2394,
+            "y": 5990,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_033",
+            "duration": 101,
+            "sourceFrameIndex": 33
+          },
+          {
+            "x": 3192,
+            "y": 5990,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_034",
+            "duration": 101,
+            "sourceFrameIndex": 34
+          },
+          {
+            "x": 3990,
+            "y": 5990,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_035",
+            "duration": 101,
+            "sourceFrameIndex": 35
+          }
+        ],
+        "frameContentBounds": [
+          {
+            "x": 227,
+            "y": 158,
+            "w": 313,
+            "h": 858
+          },
+          {
+            "x": 227,
+            "y": 158,
+            "w": 313,
+            "h": 858
+          },
+          {
+            "x": 227,
+            "y": 158,
+            "w": 313,
+            "h": 858
+          },
+          {
+            "x": 227,
+            "y": 158,
+            "w": 313,
+            "h": 858
+          },
+          {
+            "x": 227,
+            "y": 159,
+            "w": 313,
+            "h": 857
+          },
+          {
+            "x": 227,
+            "y": 158,
+            "w": 313,
+            "h": 858
+          },
+          {
+            "x": 226,
+            "y": 160,
+            "w": 314,
+            "h": 856
+          },
+          {
+            "x": 226,
+            "y": 160,
+            "w": 313,
+            "h": 856
+          },
+          {
+            "x": 223,
+            "y": 160,
+            "w": 316,
+            "h": 856
+          },
+          {
+            "x": 220,
+            "y": 159,
+            "w": 319,
+            "h": 857
+          },
+          {
+            "x": 217,
+            "y": 158,
+            "w": 322,
+            "h": 858
+          },
+          {
+            "x": 215,
+            "y": 157,
+            "w": 324,
+            "h": 857
+          },
+          {
+            "x": 212,
+            "y": 156,
+            "w": 327,
+            "h": 858
+          },
+          {
+            "x": 211,
+            "y": 156,
+            "w": 328,
+            "h": 858
+          },
+          {
+            "x": 210,
+            "y": 155,
+            "w": 329,
+            "h": 859
+          },
+          {
+            "x": 209,
+            "y": 157,
+            "w": 330,
+            "h": 857
+          },
+          {
+            "x": 209,
+            "y": 158,
+            "w": 330,
+            "h": 856
+          },
+          {
+            "x": 209,
+            "y": 159,
+            "w": 330,
+            "h": 855
+          },
+          {
+            "x": 211,
+            "y": 162,
+            "w": 328,
+            "h": 852
+          },
+          {
+            "x": 212,
+            "y": 164,
+            "w": 327,
+            "h": 850
+          },
+          {
+            "x": 220,
+            "y": 167,
+            "w": 319,
+            "h": 847
+          },
+          {
+            "x": 229,
+            "y": 166,
+            "w": 311,
+            "h": 848
+          },
+          {
+            "x": 232,
+            "y": 165,
+            "w": 308,
+            "h": 849
+          },
+          {
+            "x": 234,
+            "y": 164,
+            "w": 308,
+            "h": 850
+          },
+          {
+            "x": 235,
+            "y": 165,
+            "w": 308,
+            "h": 850
+          },
+          {
+            "x": 236,
+            "y": 165,
+            "w": 307,
+            "h": 849
+          },
+          {
+            "x": 237,
+            "y": 165,
+            "w": 306,
+            "h": 849
+          },
+          {
+            "x": 237,
+            "y": 165,
+            "w": 306,
+            "h": 851
+          },
+          {
+            "x": 237,
+            "y": 165,
+            "w": 307,
+            "h": 851
+          },
+          {
+            "x": 237,
+            "y": 164,
+            "w": 307,
+            "h": 852
+          },
+          {
+            "x": 237,
+            "y": 164,
+            "w": 307,
+            "h": 852
+          },
+          {
+            "x": 235,
+            "y": 162,
+            "w": 308,
+            "h": 854
+          },
+          {
+            "x": 234,
+            "y": 161,
+            "w": 309,
+            "h": 855
+          },
+          {
+            "x": 232,
+            "y": 159,
+            "w": 310,
+            "h": 857
+          },
+          {
+            "x": 231,
+            "y": 159,
+            "w": 311,
+            "h": 855
+          },
+          {
+            "x": 227,
+            "y": 158,
+            "w": 313,
+            "h": 856
+          }
+        ],
+        "frameRects": [
+          {
+            "x": 0,
+            "y": 0,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_000",
+            "duration": 101,
+            "sourceFrameIndex": 0
+          },
+          {
+            "x": 798,
+            "y": 0,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_001",
+            "duration": 101,
+            "sourceFrameIndex": 1
+          },
+          {
+            "x": 1596,
+            "y": 0,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_002",
+            "duration": 101,
+            "sourceFrameIndex": 2
+          },
+          {
+            "x": 2394,
+            "y": 0,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_003",
+            "duration": 101,
+            "sourceFrameIndex": 3
+          },
+          {
+            "x": 3192,
+            "y": 0,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_004",
+            "duration": 101,
+            "sourceFrameIndex": 4
+          },
+          {
+            "x": 3990,
+            "y": 0,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_005",
+            "duration": 101,
+            "sourceFrameIndex": 5
+          },
+          {
+            "x": 0,
+            "y": 1198,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_006",
+            "duration": 101,
+            "sourceFrameIndex": 6
+          },
+          {
+            "x": 798,
+            "y": 1198,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_007",
+            "duration": 101,
+            "sourceFrameIndex": 7
+          },
+          {
+            "x": 1596,
+            "y": 1198,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_008",
+            "duration": 101,
+            "sourceFrameIndex": 8
+          },
+          {
+            "x": 2394,
+            "y": 1198,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_009",
+            "duration": 101,
+            "sourceFrameIndex": 9
+          },
+          {
+            "x": 3192,
+            "y": 1198,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_010",
+            "duration": 101,
+            "sourceFrameIndex": 10
+          },
+          {
+            "x": 3990,
+            "y": 1198,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_011",
+            "duration": 101,
+            "sourceFrameIndex": 11
+          },
+          {
+            "x": 0,
+            "y": 2396,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_012",
+            "duration": 101,
+            "sourceFrameIndex": 12
+          },
+          {
+            "x": 798,
+            "y": 2396,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_013",
+            "duration": 101,
+            "sourceFrameIndex": 13
+          },
+          {
+            "x": 1596,
+            "y": 2396,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_014",
+            "duration": 101,
+            "sourceFrameIndex": 14
+          },
+          {
+            "x": 2394,
+            "y": 2396,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_015",
+            "duration": 101,
+            "sourceFrameIndex": 15
+          },
+          {
+            "x": 3192,
+            "y": 2396,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_016",
+            "duration": 101,
+            "sourceFrameIndex": 16
+          },
+          {
+            "x": 3990,
+            "y": 2396,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_017",
+            "duration": 101,
+            "sourceFrameIndex": 17
+          },
+          {
+            "x": 0,
+            "y": 3594,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_018",
+            "duration": 101,
+            "sourceFrameIndex": 18
+          },
+          {
+            "x": 798,
+            "y": 3594,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_019",
+            "duration": 101,
+            "sourceFrameIndex": 19
+          },
+          {
+            "x": 1596,
+            "y": 3594,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_020",
+            "duration": 101,
+            "sourceFrameIndex": 20
+          },
+          {
+            "x": 2394,
+            "y": 3594,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_021",
+            "duration": 101,
+            "sourceFrameIndex": 21
+          },
+          {
+            "x": 3192,
+            "y": 3594,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_022",
+            "duration": 101,
+            "sourceFrameIndex": 22
+          },
+          {
+            "x": 3990,
+            "y": 3594,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_023",
+            "duration": 101,
+            "sourceFrameIndex": 23
+          },
+          {
+            "x": 0,
+            "y": 4792,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_024",
+            "duration": 101,
+            "sourceFrameIndex": 24
+          },
+          {
+            "x": 798,
+            "y": 4792,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_025",
+            "duration": 101,
+            "sourceFrameIndex": 25
+          },
+          {
+            "x": 1596,
+            "y": 4792,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_026",
+            "duration": 101,
+            "sourceFrameIndex": 26
+          },
+          {
+            "x": 2394,
+            "y": 4792,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_027",
+            "duration": 101,
+            "sourceFrameIndex": 27
+          },
+          {
+            "x": 3192,
+            "y": 4792,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_028",
+            "duration": 101,
+            "sourceFrameIndex": 28
+          },
+          {
+            "x": 3990,
+            "y": 4792,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_029",
+            "duration": 101,
+            "sourceFrameIndex": 29
+          },
+          {
+            "x": 0,
+            "y": 5990,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_030",
+            "duration": 101,
+            "sourceFrameIndex": 30
+          },
+          {
+            "x": 798,
+            "y": 5990,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_031",
+            "duration": 101,
+            "sourceFrameIndex": 31
+          },
+          {
+            "x": 1596,
+            "y": 5990,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_032",
+            "duration": 101,
+            "sourceFrameIndex": 32
+          },
+          {
+            "x": 2394,
+            "y": 5990,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_033",
+            "duration": 101,
+            "sourceFrameIndex": 33
+          },
+          {
+            "x": 3192,
+            "y": 5990,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_034",
+            "duration": 101,
+            "sourceFrameIndex": 34
+          },
+          {
+            "x": 3990,
+            "y": 5990,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_035",
+            "duration": 101,
+            "sourceFrameIndex": 35
+          }
+        ],
+        "movementSpeedMultipliers": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "mirroredWest": true,
+        "slot": "external_reject_east_1",
+        "rejectKey": "reject_east_1"
+      }
+    ],
+    "west": [
+      {
+        "src": "target/external_animation_v1/runtime/reject_east_1.png",
+        "sourceSheet": "target\\external_animation_v1\\unpacked\\reject_east_1\\sprite--9px-frames-36-rows-6-cols-6.png",
+        "metadataFile": "target\\external_animation_v1\\unpacked\\reject_east_1\\sprite--9px-frames-36-rows-6-cols-6.json",
+        "usesOriginalLudoLayout": true,
+        "sourcePreserved": true,
+        "runtimeSource": "unpacked-alpha-sheet",
+        "frameWidth": 798,
+        "frameHeight": 1198,
+        "sheetWidth": 4788,
+        "sheetHeight": 7188,
+        "frameCount": 36,
+        "sourceFrameCount": 36,
+        "frameStart": 0,
+        "frameEndTrim": 0,
+        "configuredFrameCount": null,
+        "fps": 20,
+        "loop": false,
+        "pingPong": false,
+        "role": "reject",
+        "initialFrame": 0,
+        "anchorX": 0.5,
+        "anchorY": 1,
+        "anchor": {
+          "x": 0.5,
+          "y": 1
+        },
+        "baselineY": 1198,
+        "contentBounds": {
+          "x": 209,
+          "y": 155,
+          "w": 335,
+          "h": 861
+        },
+        "sourceContentBounds": {
+          "x": 209,
+          "y": 155,
+          "w": 335,
+          "h": 861
+        },
+        "sourceFrameContentBounds": [
+          {
+            "x": 227,
+            "y": 158,
+            "w": 313,
+            "h": 858
+          },
+          {
+            "x": 227,
+            "y": 158,
+            "w": 313,
+            "h": 858
+          },
+          {
+            "x": 227,
+            "y": 158,
+            "w": 313,
+            "h": 858
+          },
+          {
+            "x": 227,
+            "y": 158,
+            "w": 313,
+            "h": 858
+          },
+          {
+            "x": 227,
+            "y": 159,
+            "w": 313,
+            "h": 857
+          },
+          {
+            "x": 227,
+            "y": 158,
+            "w": 313,
+            "h": 858
+          },
+          {
+            "x": 226,
+            "y": 160,
+            "w": 314,
+            "h": 856
+          },
+          {
+            "x": 226,
+            "y": 160,
+            "w": 313,
+            "h": 856
+          },
+          {
+            "x": 223,
+            "y": 160,
+            "w": 316,
+            "h": 856
+          },
+          {
+            "x": 220,
+            "y": 159,
+            "w": 319,
+            "h": 857
+          },
+          {
+            "x": 217,
+            "y": 158,
+            "w": 322,
+            "h": 858
+          },
+          {
+            "x": 215,
+            "y": 157,
+            "w": 324,
+            "h": 857
+          },
+          {
+            "x": 212,
+            "y": 156,
+            "w": 327,
+            "h": 858
+          },
+          {
+            "x": 211,
+            "y": 156,
+            "w": 328,
+            "h": 858
+          },
+          {
+            "x": 210,
+            "y": 155,
+            "w": 329,
+            "h": 859
+          },
+          {
+            "x": 209,
+            "y": 157,
+            "w": 330,
+            "h": 857
+          },
+          {
+            "x": 209,
+            "y": 158,
+            "w": 330,
+            "h": 856
+          },
+          {
+            "x": 209,
+            "y": 159,
+            "w": 330,
+            "h": 855
+          },
+          {
+            "x": 211,
+            "y": 162,
+            "w": 328,
+            "h": 852
+          },
+          {
+            "x": 212,
+            "y": 164,
+            "w": 327,
+            "h": 850
+          },
+          {
+            "x": 220,
+            "y": 167,
+            "w": 319,
+            "h": 847
+          },
+          {
+            "x": 229,
+            "y": 166,
+            "w": 311,
+            "h": 848
+          },
+          {
+            "x": 232,
+            "y": 165,
+            "w": 308,
+            "h": 849
+          },
+          {
+            "x": 234,
+            "y": 164,
+            "w": 308,
+            "h": 850
+          },
+          {
+            "x": 235,
+            "y": 165,
+            "w": 308,
+            "h": 850
+          },
+          {
+            "x": 236,
+            "y": 165,
+            "w": 307,
+            "h": 849
+          },
+          {
+            "x": 237,
+            "y": 165,
+            "w": 306,
+            "h": 849
+          },
+          {
+            "x": 237,
+            "y": 165,
+            "w": 306,
+            "h": 851
+          },
+          {
+            "x": 237,
+            "y": 165,
+            "w": 307,
+            "h": 851
+          },
+          {
+            "x": 237,
+            "y": 164,
+            "w": 307,
+            "h": 852
+          },
+          {
+            "x": 237,
+            "y": 164,
+            "w": 307,
+            "h": 852
+          },
+          {
+            "x": 235,
+            "y": 162,
+            "w": 308,
+            "h": 854
+          },
+          {
+            "x": 234,
+            "y": 161,
+            "w": 309,
+            "h": 855
+          },
+          {
+            "x": 232,
+            "y": 159,
+            "w": 310,
+            "h": 857
+          },
+          {
+            "x": 231,
+            "y": 159,
+            "w": 311,
+            "h": 855
+          },
+          {
+            "x": 227,
+            "y": 158,
+            "w": 313,
+            "h": 856
+          }
+        ],
+        "sourceFrameRects": [
+          {
+            "x": 0,
+            "y": 0,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_000",
+            "duration": 101,
+            "sourceFrameIndex": 0
+          },
+          {
+            "x": 798,
+            "y": 0,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_001",
+            "duration": 101,
+            "sourceFrameIndex": 1
+          },
+          {
+            "x": 1596,
+            "y": 0,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_002",
+            "duration": 101,
+            "sourceFrameIndex": 2
+          },
+          {
+            "x": 2394,
+            "y": 0,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_003",
+            "duration": 101,
+            "sourceFrameIndex": 3
+          },
+          {
+            "x": 3192,
+            "y": 0,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_004",
+            "duration": 101,
+            "sourceFrameIndex": 4
+          },
+          {
+            "x": 3990,
+            "y": 0,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_005",
+            "duration": 101,
+            "sourceFrameIndex": 5
+          },
+          {
+            "x": 0,
+            "y": 1198,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_006",
+            "duration": 101,
+            "sourceFrameIndex": 6
+          },
+          {
+            "x": 798,
+            "y": 1198,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_007",
+            "duration": 101,
+            "sourceFrameIndex": 7
+          },
+          {
+            "x": 1596,
+            "y": 1198,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_008",
+            "duration": 101,
+            "sourceFrameIndex": 8
+          },
+          {
+            "x": 2394,
+            "y": 1198,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_009",
+            "duration": 101,
+            "sourceFrameIndex": 9
+          },
+          {
+            "x": 3192,
+            "y": 1198,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_010",
+            "duration": 101,
+            "sourceFrameIndex": 10
+          },
+          {
+            "x": 3990,
+            "y": 1198,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_011",
+            "duration": 101,
+            "sourceFrameIndex": 11
+          },
+          {
+            "x": 0,
+            "y": 2396,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_012",
+            "duration": 101,
+            "sourceFrameIndex": 12
+          },
+          {
+            "x": 798,
+            "y": 2396,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_013",
+            "duration": 101,
+            "sourceFrameIndex": 13
+          },
+          {
+            "x": 1596,
+            "y": 2396,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_014",
+            "duration": 101,
+            "sourceFrameIndex": 14
+          },
+          {
+            "x": 2394,
+            "y": 2396,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_015",
+            "duration": 101,
+            "sourceFrameIndex": 15
+          },
+          {
+            "x": 3192,
+            "y": 2396,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_016",
+            "duration": 101,
+            "sourceFrameIndex": 16
+          },
+          {
+            "x": 3990,
+            "y": 2396,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_017",
+            "duration": 101,
+            "sourceFrameIndex": 17
+          },
+          {
+            "x": 0,
+            "y": 3594,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_018",
+            "duration": 101,
+            "sourceFrameIndex": 18
+          },
+          {
+            "x": 798,
+            "y": 3594,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_019",
+            "duration": 101,
+            "sourceFrameIndex": 19
+          },
+          {
+            "x": 1596,
+            "y": 3594,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_020",
+            "duration": 101,
+            "sourceFrameIndex": 20
+          },
+          {
+            "x": 2394,
+            "y": 3594,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_021",
+            "duration": 101,
+            "sourceFrameIndex": 21
+          },
+          {
+            "x": 3192,
+            "y": 3594,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_022",
+            "duration": 101,
+            "sourceFrameIndex": 22
+          },
+          {
+            "x": 3990,
+            "y": 3594,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_023",
+            "duration": 101,
+            "sourceFrameIndex": 23
+          },
+          {
+            "x": 0,
+            "y": 4792,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_024",
+            "duration": 101,
+            "sourceFrameIndex": 24
+          },
+          {
+            "x": 798,
+            "y": 4792,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_025",
+            "duration": 101,
+            "sourceFrameIndex": 25
+          },
+          {
+            "x": 1596,
+            "y": 4792,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_026",
+            "duration": 101,
+            "sourceFrameIndex": 26
+          },
+          {
+            "x": 2394,
+            "y": 4792,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_027",
+            "duration": 101,
+            "sourceFrameIndex": 27
+          },
+          {
+            "x": 3192,
+            "y": 4792,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_028",
+            "duration": 101,
+            "sourceFrameIndex": 28
+          },
+          {
+            "x": 3990,
+            "y": 4792,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_029",
+            "duration": 101,
+            "sourceFrameIndex": 29
+          },
+          {
+            "x": 0,
+            "y": 5990,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_030",
+            "duration": 101,
+            "sourceFrameIndex": 30
+          },
+          {
+            "x": 798,
+            "y": 5990,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_031",
+            "duration": 101,
+            "sourceFrameIndex": 31
+          },
+          {
+            "x": 1596,
+            "y": 5990,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_032",
+            "duration": 101,
+            "sourceFrameIndex": 32
+          },
+          {
+            "x": 2394,
+            "y": 5990,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_033",
+            "duration": 101,
+            "sourceFrameIndex": 33
+          },
+          {
+            "x": 3192,
+            "y": 5990,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_034",
+            "duration": 101,
+            "sourceFrameIndex": 34
+          },
+          {
+            "x": 3990,
+            "y": 5990,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_035",
+            "duration": 101,
+            "sourceFrameIndex": 35
+          }
+        ],
+        "frameContentBounds": [
+          {
+            "x": 227,
+            "y": 158,
+            "w": 313,
+            "h": 858
+          },
+          {
+            "x": 227,
+            "y": 158,
+            "w": 313,
+            "h": 858
+          },
+          {
+            "x": 227,
+            "y": 158,
+            "w": 313,
+            "h": 858
+          },
+          {
+            "x": 227,
+            "y": 158,
+            "w": 313,
+            "h": 858
+          },
+          {
+            "x": 227,
+            "y": 159,
+            "w": 313,
+            "h": 857
+          },
+          {
+            "x": 227,
+            "y": 158,
+            "w": 313,
+            "h": 858
+          },
+          {
+            "x": 226,
+            "y": 160,
+            "w": 314,
+            "h": 856
+          },
+          {
+            "x": 226,
+            "y": 160,
+            "w": 313,
+            "h": 856
+          },
+          {
+            "x": 223,
+            "y": 160,
+            "w": 316,
+            "h": 856
+          },
+          {
+            "x": 220,
+            "y": 159,
+            "w": 319,
+            "h": 857
+          },
+          {
+            "x": 217,
+            "y": 158,
+            "w": 322,
+            "h": 858
+          },
+          {
+            "x": 215,
+            "y": 157,
+            "w": 324,
+            "h": 857
+          },
+          {
+            "x": 212,
+            "y": 156,
+            "w": 327,
+            "h": 858
+          },
+          {
+            "x": 211,
+            "y": 156,
+            "w": 328,
+            "h": 858
+          },
+          {
+            "x": 210,
+            "y": 155,
+            "w": 329,
+            "h": 859
+          },
+          {
+            "x": 209,
+            "y": 157,
+            "w": 330,
+            "h": 857
+          },
+          {
+            "x": 209,
+            "y": 158,
+            "w": 330,
+            "h": 856
+          },
+          {
+            "x": 209,
+            "y": 159,
+            "w": 330,
+            "h": 855
+          },
+          {
+            "x": 211,
+            "y": 162,
+            "w": 328,
+            "h": 852
+          },
+          {
+            "x": 212,
+            "y": 164,
+            "w": 327,
+            "h": 850
+          },
+          {
+            "x": 220,
+            "y": 167,
+            "w": 319,
+            "h": 847
+          },
+          {
+            "x": 229,
+            "y": 166,
+            "w": 311,
+            "h": 848
+          },
+          {
+            "x": 232,
+            "y": 165,
+            "w": 308,
+            "h": 849
+          },
+          {
+            "x": 234,
+            "y": 164,
+            "w": 308,
+            "h": 850
+          },
+          {
+            "x": 235,
+            "y": 165,
+            "w": 308,
+            "h": 850
+          },
+          {
+            "x": 236,
+            "y": 165,
+            "w": 307,
+            "h": 849
+          },
+          {
+            "x": 237,
+            "y": 165,
+            "w": 306,
+            "h": 849
+          },
+          {
+            "x": 237,
+            "y": 165,
+            "w": 306,
+            "h": 851
+          },
+          {
+            "x": 237,
+            "y": 165,
+            "w": 307,
+            "h": 851
+          },
+          {
+            "x": 237,
+            "y": 164,
+            "w": 307,
+            "h": 852
+          },
+          {
+            "x": 237,
+            "y": 164,
+            "w": 307,
+            "h": 852
+          },
+          {
+            "x": 235,
+            "y": 162,
+            "w": 308,
+            "h": 854
+          },
+          {
+            "x": 234,
+            "y": 161,
+            "w": 309,
+            "h": 855
+          },
+          {
+            "x": 232,
+            "y": 159,
+            "w": 310,
+            "h": 857
+          },
+          {
+            "x": 231,
+            "y": 159,
+            "w": 311,
+            "h": 855
+          },
+          {
+            "x": 227,
+            "y": 158,
+            "w": 313,
+            "h": 856
+          }
+        ],
+        "frameRects": [
+          {
+            "x": 0,
+            "y": 0,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_000",
+            "duration": 101,
+            "sourceFrameIndex": 0
+          },
+          {
+            "x": 798,
+            "y": 0,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_001",
+            "duration": 101,
+            "sourceFrameIndex": 1
+          },
+          {
+            "x": 1596,
+            "y": 0,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_002",
+            "duration": 101,
+            "sourceFrameIndex": 2
+          },
+          {
+            "x": 2394,
+            "y": 0,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_003",
+            "duration": 101,
+            "sourceFrameIndex": 3
+          },
+          {
+            "x": 3192,
+            "y": 0,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_004",
+            "duration": 101,
+            "sourceFrameIndex": 4
+          },
+          {
+            "x": 3990,
+            "y": 0,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_005",
+            "duration": 101,
+            "sourceFrameIndex": 5
+          },
+          {
+            "x": 0,
+            "y": 1198,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_006",
+            "duration": 101,
+            "sourceFrameIndex": 6
+          },
+          {
+            "x": 798,
+            "y": 1198,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_007",
+            "duration": 101,
+            "sourceFrameIndex": 7
+          },
+          {
+            "x": 1596,
+            "y": 1198,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_008",
+            "duration": 101,
+            "sourceFrameIndex": 8
+          },
+          {
+            "x": 2394,
+            "y": 1198,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_009",
+            "duration": 101,
+            "sourceFrameIndex": 9
+          },
+          {
+            "x": 3192,
+            "y": 1198,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_010",
+            "duration": 101,
+            "sourceFrameIndex": 10
+          },
+          {
+            "x": 3990,
+            "y": 1198,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_011",
+            "duration": 101,
+            "sourceFrameIndex": 11
+          },
+          {
+            "x": 0,
+            "y": 2396,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_012",
+            "duration": 101,
+            "sourceFrameIndex": 12
+          },
+          {
+            "x": 798,
+            "y": 2396,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_013",
+            "duration": 101,
+            "sourceFrameIndex": 13
+          },
+          {
+            "x": 1596,
+            "y": 2396,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_014",
+            "duration": 101,
+            "sourceFrameIndex": 14
+          },
+          {
+            "x": 2394,
+            "y": 2396,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_015",
+            "duration": 101,
+            "sourceFrameIndex": 15
+          },
+          {
+            "x": 3192,
+            "y": 2396,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_016",
+            "duration": 101,
+            "sourceFrameIndex": 16
+          },
+          {
+            "x": 3990,
+            "y": 2396,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_017",
+            "duration": 101,
+            "sourceFrameIndex": 17
+          },
+          {
+            "x": 0,
+            "y": 3594,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_018",
+            "duration": 101,
+            "sourceFrameIndex": 18
+          },
+          {
+            "x": 798,
+            "y": 3594,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_019",
+            "duration": 101,
+            "sourceFrameIndex": 19
+          },
+          {
+            "x": 1596,
+            "y": 3594,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_020",
+            "duration": 101,
+            "sourceFrameIndex": 20
+          },
+          {
+            "x": 2394,
+            "y": 3594,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_021",
+            "duration": 101,
+            "sourceFrameIndex": 21
+          },
+          {
+            "x": 3192,
+            "y": 3594,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_022",
+            "duration": 101,
+            "sourceFrameIndex": 22
+          },
+          {
+            "x": 3990,
+            "y": 3594,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_023",
+            "duration": 101,
+            "sourceFrameIndex": 23
+          },
+          {
+            "x": 0,
+            "y": 4792,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_024",
+            "duration": 101,
+            "sourceFrameIndex": 24
+          },
+          {
+            "x": 798,
+            "y": 4792,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_025",
+            "duration": 101,
+            "sourceFrameIndex": 25
+          },
+          {
+            "x": 1596,
+            "y": 4792,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_026",
+            "duration": 101,
+            "sourceFrameIndex": 26
+          },
+          {
+            "x": 2394,
+            "y": 4792,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_027",
+            "duration": 101,
+            "sourceFrameIndex": 27
+          },
+          {
+            "x": 3192,
+            "y": 4792,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_028",
+            "duration": 101,
+            "sourceFrameIndex": 28
+          },
+          {
+            "x": 3990,
+            "y": 4792,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_029",
+            "duration": 101,
+            "sourceFrameIndex": 29
+          },
+          {
+            "x": 0,
+            "y": 5990,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_030",
+            "duration": 101,
+            "sourceFrameIndex": 30
+          },
+          {
+            "x": 798,
+            "y": 5990,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_031",
+            "duration": 101,
+            "sourceFrameIndex": 31
+          },
+          {
+            "x": 1596,
+            "y": 5990,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_032",
+            "duration": 101,
+            "sourceFrameIndex": 32
+          },
+          {
+            "x": 2394,
+            "y": 5990,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_033",
+            "duration": 101,
+            "sourceFrameIndex": 33
+          },
+          {
+            "x": 3192,
+            "y": 5990,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_034",
+            "duration": 101,
+            "sourceFrameIndex": 34
+          },
+          {
+            "x": 3990,
+            "y": 5990,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_035",
+            "duration": 101,
+            "sourceFrameIndex": 35
+          }
+        ],
+        "movementSpeedMultipliers": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "mirroredWest": true,
+        "slot": "external_reject_east_1",
+        "rejectKey": "reject_east_1",
+        "mirrored": true,
+        "mirrorSource": "east"
       }
     ]
   },
@@ -15370,7 +25201,8 @@ export const externalAnimationV1 = {
       "loop": false,
       "pingPong": false,
       "role": "stop",
-      "stopRenderOffsetXStart": -10,
+      "stopRenderOffsetXStart": -8,
+      "stopRenderOffsetYStart": -6,
       "initialFrame": 1,
       "anchorX": 0.5,
       "anchorY": 1,
@@ -21323,6 +31155,4885 @@ export const externalAnimationV1 = {
           "h": 1198,
           "name": "frame_035",
           "duration": 104,
+          "sourceFrameIndex": 35
+        }
+      ],
+      "movementSpeedMultipliers": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "mirroredWest": true
+    },
+    "idle_east_6": {
+      "src": "target/external_animation_v1/runtime/idle_east_6.png",
+      "sourceSheet": "target\\external_animation_v1\\unpacked\\idle_east_6\\sprite--9px-frames-36-rows-6-cols-6.png",
+      "metadataFile": "target\\external_animation_v1\\unpacked\\idle_east_6\\sprite--9px-frames-36-rows-6-cols-6.json",
+      "usesOriginalLudoLayout": true,
+      "sourcePreserved": true,
+      "runtimeSource": "unpacked-alpha-sheet",
+      "frameWidth": 798,
+      "frameHeight": 1198,
+      "sheetWidth": 4788,
+      "sheetHeight": 7188,
+      "frameCount": 36,
+      "sourceFrameCount": 36,
+      "frameStart": 0,
+      "frameEndTrim": 0,
+      "configuredFrameCount": null,
+      "fps": 14,
+      "loop": false,
+      "pingPong": false,
+      "role": "idle",
+      "initialFrame": 0,
+      "anchorX": 0.5,
+      "anchorY": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "baselineY": 1198,
+      "contentBounds": {
+        "x": 195,
+        "y": 156,
+        "w": 362,
+        "h": 860
+      },
+      "sourceContentBounds": {
+        "x": 195,
+        "y": 156,
+        "w": 362,
+        "h": 860
+      },
+      "sourceFrameContentBounds": [
+        {
+          "x": 227,
+          "y": 158,
+          "w": 313,
+          "h": 858
+        },
+        {
+          "x": 227,
+          "y": 156,
+          "w": 317,
+          "h": 860
+        },
+        {
+          "x": 227,
+          "y": 158,
+          "w": 319,
+          "h": 858
+        },
+        {
+          "x": 227,
+          "y": 157,
+          "w": 321,
+          "h": 859
+        },
+        {
+          "x": 226,
+          "y": 156,
+          "w": 324,
+          "h": 858
+        },
+        {
+          "x": 223,
+          "y": 156,
+          "w": 328,
+          "h": 858
+        },
+        {
+          "x": 221,
+          "y": 156,
+          "w": 330,
+          "h": 858
+        },
+        {
+          "x": 209,
+          "y": 157,
+          "w": 344,
+          "h": 857
+        },
+        {
+          "x": 204,
+          "y": 157,
+          "w": 345,
+          "h": 857
+        },
+        {
+          "x": 200,
+          "y": 158,
+          "w": 347,
+          "h": 856
+        },
+        {
+          "x": 197,
+          "y": 158,
+          "w": 348,
+          "h": 856
+        },
+        {
+          "x": 195,
+          "y": 159,
+          "w": 348,
+          "h": 855
+        },
+        {
+          "x": 195,
+          "y": 159,
+          "w": 347,
+          "h": 855
+        },
+        {
+          "x": 195,
+          "y": 158,
+          "w": 346,
+          "h": 856
+        },
+        {
+          "x": 197,
+          "y": 158,
+          "w": 344,
+          "h": 856
+        },
+        {
+          "x": 199,
+          "y": 159,
+          "w": 341,
+          "h": 855
+        },
+        {
+          "x": 204,
+          "y": 159,
+          "w": 339,
+          "h": 855
+        },
+        {
+          "x": 207,
+          "y": 160,
+          "w": 338,
+          "h": 854
+        },
+        {
+          "x": 210,
+          "y": 160,
+          "w": 337,
+          "h": 854
+        },
+        {
+          "x": 216,
+          "y": 161,
+          "w": 334,
+          "h": 853
+        },
+        {
+          "x": 220,
+          "y": 162,
+          "w": 332,
+          "h": 852
+        },
+        {
+          "x": 229,
+          "y": 163,
+          "w": 325,
+          "h": 851
+        },
+        {
+          "x": 234,
+          "y": 163,
+          "w": 321,
+          "h": 851
+        },
+        {
+          "x": 238,
+          "y": 162,
+          "w": 318,
+          "h": 852
+        },
+        {
+          "x": 240,
+          "y": 162,
+          "w": 316,
+          "h": 852
+        },
+        {
+          "x": 240,
+          "y": 162,
+          "w": 317,
+          "h": 852
+        },
+        {
+          "x": 240,
+          "y": 162,
+          "w": 316,
+          "h": 852
+        },
+        {
+          "x": 239,
+          "y": 163,
+          "w": 316,
+          "h": 851
+        },
+        {
+          "x": 237,
+          "y": 162,
+          "w": 317,
+          "h": 852
+        },
+        {
+          "x": 235,
+          "y": 161,
+          "w": 316,
+          "h": 853
+        },
+        {
+          "x": 234,
+          "y": 160,
+          "w": 315,
+          "h": 854
+        },
+        {
+          "x": 234,
+          "y": 160,
+          "w": 314,
+          "h": 854
+        },
+        {
+          "x": 231,
+          "y": 159,
+          "w": 314,
+          "h": 855
+        },
+        {
+          "x": 231,
+          "y": 159,
+          "w": 312,
+          "h": 855
+        },
+        {
+          "x": 230,
+          "y": 159,
+          "w": 312,
+          "h": 855
+        },
+        {
+          "x": 227,
+          "y": 158,
+          "w": 313,
+          "h": 856
+        }
+      ],
+      "sourceFrameRects": [
+        {
+          "x": 0,
+          "y": 0,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_000",
+          "duration": 103,
+          "sourceFrameIndex": 0
+        },
+        {
+          "x": 798,
+          "y": 0,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_001",
+          "duration": 103,
+          "sourceFrameIndex": 1
+        },
+        {
+          "x": 1596,
+          "y": 0,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_002",
+          "duration": 103,
+          "sourceFrameIndex": 2
+        },
+        {
+          "x": 2394,
+          "y": 0,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_003",
+          "duration": 103,
+          "sourceFrameIndex": 3
+        },
+        {
+          "x": 3192,
+          "y": 0,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_004",
+          "duration": 103,
+          "sourceFrameIndex": 4
+        },
+        {
+          "x": 3990,
+          "y": 0,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_005",
+          "duration": 103,
+          "sourceFrameIndex": 5
+        },
+        {
+          "x": 0,
+          "y": 1198,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_006",
+          "duration": 103,
+          "sourceFrameIndex": 6
+        },
+        {
+          "x": 798,
+          "y": 1198,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_007",
+          "duration": 103,
+          "sourceFrameIndex": 7
+        },
+        {
+          "x": 1596,
+          "y": 1198,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_008",
+          "duration": 103,
+          "sourceFrameIndex": 8
+        },
+        {
+          "x": 2394,
+          "y": 1198,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_009",
+          "duration": 103,
+          "sourceFrameIndex": 9
+        },
+        {
+          "x": 3192,
+          "y": 1198,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_010",
+          "duration": 103,
+          "sourceFrameIndex": 10
+        },
+        {
+          "x": 3990,
+          "y": 1198,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_011",
+          "duration": 103,
+          "sourceFrameIndex": 11
+        },
+        {
+          "x": 0,
+          "y": 2396,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_012",
+          "duration": 103,
+          "sourceFrameIndex": 12
+        },
+        {
+          "x": 798,
+          "y": 2396,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_013",
+          "duration": 103,
+          "sourceFrameIndex": 13
+        },
+        {
+          "x": 1596,
+          "y": 2396,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_014",
+          "duration": 103,
+          "sourceFrameIndex": 14
+        },
+        {
+          "x": 2394,
+          "y": 2396,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_015",
+          "duration": 103,
+          "sourceFrameIndex": 15
+        },
+        {
+          "x": 3192,
+          "y": 2396,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_016",
+          "duration": 103,
+          "sourceFrameIndex": 16
+        },
+        {
+          "x": 3990,
+          "y": 2396,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_017",
+          "duration": 103,
+          "sourceFrameIndex": 17
+        },
+        {
+          "x": 0,
+          "y": 3594,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_018",
+          "duration": 103,
+          "sourceFrameIndex": 18
+        },
+        {
+          "x": 798,
+          "y": 3594,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_019",
+          "duration": 103,
+          "sourceFrameIndex": 19
+        },
+        {
+          "x": 1596,
+          "y": 3594,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_020",
+          "duration": 103,
+          "sourceFrameIndex": 20
+        },
+        {
+          "x": 2394,
+          "y": 3594,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_021",
+          "duration": 103,
+          "sourceFrameIndex": 21
+        },
+        {
+          "x": 3192,
+          "y": 3594,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_022",
+          "duration": 103,
+          "sourceFrameIndex": 22
+        },
+        {
+          "x": 3990,
+          "y": 3594,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_023",
+          "duration": 103,
+          "sourceFrameIndex": 23
+        },
+        {
+          "x": 0,
+          "y": 4792,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_024",
+          "duration": 103,
+          "sourceFrameIndex": 24
+        },
+        {
+          "x": 798,
+          "y": 4792,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_025",
+          "duration": 103,
+          "sourceFrameIndex": 25
+        },
+        {
+          "x": 1596,
+          "y": 4792,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_026",
+          "duration": 103,
+          "sourceFrameIndex": 26
+        },
+        {
+          "x": 2394,
+          "y": 4792,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_027",
+          "duration": 103,
+          "sourceFrameIndex": 27
+        },
+        {
+          "x": 3192,
+          "y": 4792,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_028",
+          "duration": 103,
+          "sourceFrameIndex": 28
+        },
+        {
+          "x": 3990,
+          "y": 4792,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_029",
+          "duration": 103,
+          "sourceFrameIndex": 29
+        },
+        {
+          "x": 0,
+          "y": 5990,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_030",
+          "duration": 103,
+          "sourceFrameIndex": 30
+        },
+        {
+          "x": 798,
+          "y": 5990,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_031",
+          "duration": 103,
+          "sourceFrameIndex": 31
+        },
+        {
+          "x": 1596,
+          "y": 5990,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_032",
+          "duration": 103,
+          "sourceFrameIndex": 32
+        },
+        {
+          "x": 2394,
+          "y": 5990,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_033",
+          "duration": 103,
+          "sourceFrameIndex": 33
+        },
+        {
+          "x": 3192,
+          "y": 5990,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_034",
+          "duration": 103,
+          "sourceFrameIndex": 34
+        },
+        {
+          "x": 3990,
+          "y": 5990,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_035",
+          "duration": 103,
+          "sourceFrameIndex": 35
+        }
+      ],
+      "frameContentBounds": [
+        {
+          "x": 227,
+          "y": 158,
+          "w": 313,
+          "h": 858
+        },
+        {
+          "x": 227,
+          "y": 156,
+          "w": 317,
+          "h": 860
+        },
+        {
+          "x": 227,
+          "y": 158,
+          "w": 319,
+          "h": 858
+        },
+        {
+          "x": 227,
+          "y": 157,
+          "w": 321,
+          "h": 859
+        },
+        {
+          "x": 226,
+          "y": 156,
+          "w": 324,
+          "h": 858
+        },
+        {
+          "x": 223,
+          "y": 156,
+          "w": 328,
+          "h": 858
+        },
+        {
+          "x": 221,
+          "y": 156,
+          "w": 330,
+          "h": 858
+        },
+        {
+          "x": 209,
+          "y": 157,
+          "w": 344,
+          "h": 857
+        },
+        {
+          "x": 204,
+          "y": 157,
+          "w": 345,
+          "h": 857
+        },
+        {
+          "x": 200,
+          "y": 158,
+          "w": 347,
+          "h": 856
+        },
+        {
+          "x": 197,
+          "y": 158,
+          "w": 348,
+          "h": 856
+        },
+        {
+          "x": 195,
+          "y": 159,
+          "w": 348,
+          "h": 855
+        },
+        {
+          "x": 195,
+          "y": 159,
+          "w": 347,
+          "h": 855
+        },
+        {
+          "x": 195,
+          "y": 158,
+          "w": 346,
+          "h": 856
+        },
+        {
+          "x": 197,
+          "y": 158,
+          "w": 344,
+          "h": 856
+        },
+        {
+          "x": 199,
+          "y": 159,
+          "w": 341,
+          "h": 855
+        },
+        {
+          "x": 204,
+          "y": 159,
+          "w": 339,
+          "h": 855
+        },
+        {
+          "x": 207,
+          "y": 160,
+          "w": 338,
+          "h": 854
+        },
+        {
+          "x": 210,
+          "y": 160,
+          "w": 337,
+          "h": 854
+        },
+        {
+          "x": 216,
+          "y": 161,
+          "w": 334,
+          "h": 853
+        },
+        {
+          "x": 220,
+          "y": 162,
+          "w": 332,
+          "h": 852
+        },
+        {
+          "x": 229,
+          "y": 163,
+          "w": 325,
+          "h": 851
+        },
+        {
+          "x": 234,
+          "y": 163,
+          "w": 321,
+          "h": 851
+        },
+        {
+          "x": 238,
+          "y": 162,
+          "w": 318,
+          "h": 852
+        },
+        {
+          "x": 240,
+          "y": 162,
+          "w": 316,
+          "h": 852
+        },
+        {
+          "x": 240,
+          "y": 162,
+          "w": 317,
+          "h": 852
+        },
+        {
+          "x": 240,
+          "y": 162,
+          "w": 316,
+          "h": 852
+        },
+        {
+          "x": 239,
+          "y": 163,
+          "w": 316,
+          "h": 851
+        },
+        {
+          "x": 237,
+          "y": 162,
+          "w": 317,
+          "h": 852
+        },
+        {
+          "x": 235,
+          "y": 161,
+          "w": 316,
+          "h": 853
+        },
+        {
+          "x": 234,
+          "y": 160,
+          "w": 315,
+          "h": 854
+        },
+        {
+          "x": 234,
+          "y": 160,
+          "w": 314,
+          "h": 854
+        },
+        {
+          "x": 231,
+          "y": 159,
+          "w": 314,
+          "h": 855
+        },
+        {
+          "x": 231,
+          "y": 159,
+          "w": 312,
+          "h": 855
+        },
+        {
+          "x": 230,
+          "y": 159,
+          "w": 312,
+          "h": 855
+        },
+        {
+          "x": 227,
+          "y": 158,
+          "w": 313,
+          "h": 856
+        }
+      ],
+      "frameRects": [
+        {
+          "x": 0,
+          "y": 0,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_000",
+          "duration": 103,
+          "sourceFrameIndex": 0
+        },
+        {
+          "x": 798,
+          "y": 0,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_001",
+          "duration": 103,
+          "sourceFrameIndex": 1
+        },
+        {
+          "x": 1596,
+          "y": 0,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_002",
+          "duration": 103,
+          "sourceFrameIndex": 2
+        },
+        {
+          "x": 2394,
+          "y": 0,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_003",
+          "duration": 103,
+          "sourceFrameIndex": 3
+        },
+        {
+          "x": 3192,
+          "y": 0,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_004",
+          "duration": 103,
+          "sourceFrameIndex": 4
+        },
+        {
+          "x": 3990,
+          "y": 0,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_005",
+          "duration": 103,
+          "sourceFrameIndex": 5
+        },
+        {
+          "x": 0,
+          "y": 1198,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_006",
+          "duration": 103,
+          "sourceFrameIndex": 6
+        },
+        {
+          "x": 798,
+          "y": 1198,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_007",
+          "duration": 103,
+          "sourceFrameIndex": 7
+        },
+        {
+          "x": 1596,
+          "y": 1198,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_008",
+          "duration": 103,
+          "sourceFrameIndex": 8
+        },
+        {
+          "x": 2394,
+          "y": 1198,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_009",
+          "duration": 103,
+          "sourceFrameIndex": 9
+        },
+        {
+          "x": 3192,
+          "y": 1198,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_010",
+          "duration": 103,
+          "sourceFrameIndex": 10
+        },
+        {
+          "x": 3990,
+          "y": 1198,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_011",
+          "duration": 103,
+          "sourceFrameIndex": 11
+        },
+        {
+          "x": 0,
+          "y": 2396,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_012",
+          "duration": 103,
+          "sourceFrameIndex": 12
+        },
+        {
+          "x": 798,
+          "y": 2396,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_013",
+          "duration": 103,
+          "sourceFrameIndex": 13
+        },
+        {
+          "x": 1596,
+          "y": 2396,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_014",
+          "duration": 103,
+          "sourceFrameIndex": 14
+        },
+        {
+          "x": 2394,
+          "y": 2396,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_015",
+          "duration": 103,
+          "sourceFrameIndex": 15
+        },
+        {
+          "x": 3192,
+          "y": 2396,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_016",
+          "duration": 103,
+          "sourceFrameIndex": 16
+        },
+        {
+          "x": 3990,
+          "y": 2396,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_017",
+          "duration": 103,
+          "sourceFrameIndex": 17
+        },
+        {
+          "x": 0,
+          "y": 3594,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_018",
+          "duration": 103,
+          "sourceFrameIndex": 18
+        },
+        {
+          "x": 798,
+          "y": 3594,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_019",
+          "duration": 103,
+          "sourceFrameIndex": 19
+        },
+        {
+          "x": 1596,
+          "y": 3594,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_020",
+          "duration": 103,
+          "sourceFrameIndex": 20
+        },
+        {
+          "x": 2394,
+          "y": 3594,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_021",
+          "duration": 103,
+          "sourceFrameIndex": 21
+        },
+        {
+          "x": 3192,
+          "y": 3594,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_022",
+          "duration": 103,
+          "sourceFrameIndex": 22
+        },
+        {
+          "x": 3990,
+          "y": 3594,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_023",
+          "duration": 103,
+          "sourceFrameIndex": 23
+        },
+        {
+          "x": 0,
+          "y": 4792,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_024",
+          "duration": 103,
+          "sourceFrameIndex": 24
+        },
+        {
+          "x": 798,
+          "y": 4792,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_025",
+          "duration": 103,
+          "sourceFrameIndex": 25
+        },
+        {
+          "x": 1596,
+          "y": 4792,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_026",
+          "duration": 103,
+          "sourceFrameIndex": 26
+        },
+        {
+          "x": 2394,
+          "y": 4792,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_027",
+          "duration": 103,
+          "sourceFrameIndex": 27
+        },
+        {
+          "x": 3192,
+          "y": 4792,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_028",
+          "duration": 103,
+          "sourceFrameIndex": 28
+        },
+        {
+          "x": 3990,
+          "y": 4792,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_029",
+          "duration": 103,
+          "sourceFrameIndex": 29
+        },
+        {
+          "x": 0,
+          "y": 5990,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_030",
+          "duration": 103,
+          "sourceFrameIndex": 30
+        },
+        {
+          "x": 798,
+          "y": 5990,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_031",
+          "duration": 103,
+          "sourceFrameIndex": 31
+        },
+        {
+          "x": 1596,
+          "y": 5990,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_032",
+          "duration": 103,
+          "sourceFrameIndex": 32
+        },
+        {
+          "x": 2394,
+          "y": 5990,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_033",
+          "duration": 103,
+          "sourceFrameIndex": 33
+        },
+        {
+          "x": 3192,
+          "y": 5990,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_034",
+          "duration": 103,
+          "sourceFrameIndex": 34
+        },
+        {
+          "x": 3990,
+          "y": 5990,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_035",
+          "duration": 103,
+          "sourceFrameIndex": 35
+        }
+      ],
+      "movementSpeedMultipliers": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "mirroredWest": true
+    },
+    "talk_east_long_1": {
+      "src": "target/external_animation_v1/runtime/talk_east_long_1.png",
+      "sourceSheet": "target\\external_animation_v1\\unpacked\\talk_east_long_1\\sprite--9px-frames-25-rows-5-cols-5.png",
+      "metadataFile": "target\\external_animation_v1\\unpacked\\talk_east_long_1\\sprite--9px-frames-25-rows-5-cols-5.json",
+      "usesOriginalLudoLayout": true,
+      "sourcePreserved": true,
+      "runtimeSource": "unpacked-alpha-sheet",
+      "frameWidth": 798,
+      "frameHeight": 1198,
+      "sheetWidth": 3990,
+      "sheetHeight": 5990,
+      "frameCount": 25,
+      "sourceFrameCount": 25,
+      "frameStart": 0,
+      "frameEndTrim": 0,
+      "configuredFrameCount": null,
+      "fps": 12,
+      "loop": false,
+      "pingPong": false,
+      "role": "talk",
+      "initialFrame": 0,
+      "anchorX": 0.5,
+      "anchorY": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "baselineY": 1198,
+      "contentBounds": {
+        "x": 226,
+        "y": 160,
+        "w": 317,
+        "h": 854
+      },
+      "sourceContentBounds": {
+        "x": 226,
+        "y": 160,
+        "w": 317,
+        "h": 854
+      },
+      "sourceFrameContentBounds": [
+        {
+          "x": 227,
+          "y": 161,
+          "w": 316,
+          "h": 853
+        },
+        {
+          "x": 227,
+          "y": 161,
+          "w": 316,
+          "h": 853
+        },
+        {
+          "x": 227,
+          "y": 161,
+          "w": 316,
+          "h": 852
+        },
+        {
+          "x": 227,
+          "y": 165,
+          "w": 316,
+          "h": 849
+        },
+        {
+          "x": 227,
+          "y": 166,
+          "w": 315,
+          "h": 848
+        },
+        {
+          "x": 227,
+          "y": 167,
+          "w": 315,
+          "h": 847
+        },
+        {
+          "x": 226,
+          "y": 167,
+          "w": 316,
+          "h": 847
+        },
+        {
+          "x": 228,
+          "y": 167,
+          "w": 314,
+          "h": 847
+        },
+        {
+          "x": 228,
+          "y": 167,
+          "w": 314,
+          "h": 847
+        },
+        {
+          "x": 228,
+          "y": 167,
+          "w": 314,
+          "h": 847
+        },
+        {
+          "x": 228,
+          "y": 166,
+          "w": 314,
+          "h": 848
+        },
+        {
+          "x": 228,
+          "y": 167,
+          "w": 314,
+          "h": 847
+        },
+        {
+          "x": 228,
+          "y": 167,
+          "w": 314,
+          "h": 847
+        },
+        {
+          "x": 230,
+          "y": 168,
+          "w": 312,
+          "h": 846
+        },
+        {
+          "x": 230,
+          "y": 167,
+          "w": 312,
+          "h": 847
+        },
+        {
+          "x": 231,
+          "y": 167,
+          "w": 311,
+          "h": 847
+        },
+        {
+          "x": 231,
+          "y": 169,
+          "w": 311,
+          "h": 845
+        },
+        {
+          "x": 232,
+          "y": 169,
+          "w": 310,
+          "h": 845
+        },
+        {
+          "x": 232,
+          "y": 169,
+          "w": 310,
+          "h": 845
+        },
+        {
+          "x": 232,
+          "y": 169,
+          "w": 310,
+          "h": 845
+        },
+        {
+          "x": 232,
+          "y": 169,
+          "w": 310,
+          "h": 845
+        },
+        {
+          "x": 231,
+          "y": 167,
+          "w": 311,
+          "h": 846
+        },
+        {
+          "x": 229,
+          "y": 164,
+          "w": 313,
+          "h": 849
+        },
+        {
+          "x": 229,
+          "y": 161,
+          "w": 314,
+          "h": 852
+        },
+        {
+          "x": 228,
+          "y": 160,
+          "w": 314,
+          "h": 853
+        }
+      ],
+      "sourceFrameRects": [
+        {
+          "x": 0,
+          "y": 0,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_000",
+          "duration": 112,
+          "sourceFrameIndex": 0
+        },
+        {
+          "x": 798,
+          "y": 0,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_001",
+          "duration": 112,
+          "sourceFrameIndex": 1
+        },
+        {
+          "x": 1596,
+          "y": 0,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_002",
+          "duration": 112,
+          "sourceFrameIndex": 2
+        },
+        {
+          "x": 2394,
+          "y": 0,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_003",
+          "duration": 112,
+          "sourceFrameIndex": 3
+        },
+        {
+          "x": 3192,
+          "y": 0,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_004",
+          "duration": 112,
+          "sourceFrameIndex": 4
+        },
+        {
+          "x": 0,
+          "y": 1198,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_005",
+          "duration": 112,
+          "sourceFrameIndex": 5
+        },
+        {
+          "x": 798,
+          "y": 1198,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_006",
+          "duration": 112,
+          "sourceFrameIndex": 6
+        },
+        {
+          "x": 1596,
+          "y": 1198,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_007",
+          "duration": 112,
+          "sourceFrameIndex": 7
+        },
+        {
+          "x": 2394,
+          "y": 1198,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_008",
+          "duration": 112,
+          "sourceFrameIndex": 8
+        },
+        {
+          "x": 3192,
+          "y": 1198,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_009",
+          "duration": 112,
+          "sourceFrameIndex": 9
+        },
+        {
+          "x": 0,
+          "y": 2396,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_010",
+          "duration": 112,
+          "sourceFrameIndex": 10
+        },
+        {
+          "x": 798,
+          "y": 2396,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_011",
+          "duration": 112,
+          "sourceFrameIndex": 11
+        },
+        {
+          "x": 1596,
+          "y": 2396,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_012",
+          "duration": 112,
+          "sourceFrameIndex": 12
+        },
+        {
+          "x": 2394,
+          "y": 2396,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_013",
+          "duration": 112,
+          "sourceFrameIndex": 13
+        },
+        {
+          "x": 3192,
+          "y": 2396,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_014",
+          "duration": 112,
+          "sourceFrameIndex": 14
+        },
+        {
+          "x": 0,
+          "y": 3594,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_015",
+          "duration": 112,
+          "sourceFrameIndex": 15
+        },
+        {
+          "x": 798,
+          "y": 3594,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_016",
+          "duration": 112,
+          "sourceFrameIndex": 16
+        },
+        {
+          "x": 1596,
+          "y": 3594,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_017",
+          "duration": 112,
+          "sourceFrameIndex": 17
+        },
+        {
+          "x": 2394,
+          "y": 3594,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_018",
+          "duration": 112,
+          "sourceFrameIndex": 18
+        },
+        {
+          "x": 3192,
+          "y": 3594,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_019",
+          "duration": 112,
+          "sourceFrameIndex": 19
+        },
+        {
+          "x": 0,
+          "y": 4792,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_020",
+          "duration": 112,
+          "sourceFrameIndex": 20
+        },
+        {
+          "x": 798,
+          "y": 4792,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_021",
+          "duration": 112,
+          "sourceFrameIndex": 21
+        },
+        {
+          "x": 1596,
+          "y": 4792,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_022",
+          "duration": 112,
+          "sourceFrameIndex": 22
+        },
+        {
+          "x": 2394,
+          "y": 4792,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_023",
+          "duration": 112,
+          "sourceFrameIndex": 23
+        },
+        {
+          "x": 3192,
+          "y": 4792,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_024",
+          "duration": 112,
+          "sourceFrameIndex": 24
+        }
+      ],
+      "frameContentBounds": [
+        {
+          "x": 227,
+          "y": 161,
+          "w": 316,
+          "h": 853
+        },
+        {
+          "x": 227,
+          "y": 161,
+          "w": 316,
+          "h": 853
+        },
+        {
+          "x": 227,
+          "y": 161,
+          "w": 316,
+          "h": 852
+        },
+        {
+          "x": 227,
+          "y": 165,
+          "w": 316,
+          "h": 849
+        },
+        {
+          "x": 227,
+          "y": 166,
+          "w": 315,
+          "h": 848
+        },
+        {
+          "x": 227,
+          "y": 167,
+          "w": 315,
+          "h": 847
+        },
+        {
+          "x": 226,
+          "y": 167,
+          "w": 316,
+          "h": 847
+        },
+        {
+          "x": 228,
+          "y": 167,
+          "w": 314,
+          "h": 847
+        },
+        {
+          "x": 228,
+          "y": 167,
+          "w": 314,
+          "h": 847
+        },
+        {
+          "x": 228,
+          "y": 167,
+          "w": 314,
+          "h": 847
+        },
+        {
+          "x": 228,
+          "y": 166,
+          "w": 314,
+          "h": 848
+        },
+        {
+          "x": 228,
+          "y": 167,
+          "w": 314,
+          "h": 847
+        },
+        {
+          "x": 228,
+          "y": 167,
+          "w": 314,
+          "h": 847
+        },
+        {
+          "x": 230,
+          "y": 168,
+          "w": 312,
+          "h": 846
+        },
+        {
+          "x": 230,
+          "y": 167,
+          "w": 312,
+          "h": 847
+        },
+        {
+          "x": 231,
+          "y": 167,
+          "w": 311,
+          "h": 847
+        },
+        {
+          "x": 231,
+          "y": 169,
+          "w": 311,
+          "h": 845
+        },
+        {
+          "x": 232,
+          "y": 169,
+          "w": 310,
+          "h": 845
+        },
+        {
+          "x": 232,
+          "y": 169,
+          "w": 310,
+          "h": 845
+        },
+        {
+          "x": 232,
+          "y": 169,
+          "w": 310,
+          "h": 845
+        },
+        {
+          "x": 232,
+          "y": 169,
+          "w": 310,
+          "h": 845
+        },
+        {
+          "x": 231,
+          "y": 167,
+          "w": 311,
+          "h": 846
+        },
+        {
+          "x": 229,
+          "y": 164,
+          "w": 313,
+          "h": 849
+        },
+        {
+          "x": 229,
+          "y": 161,
+          "w": 314,
+          "h": 852
+        },
+        {
+          "x": 228,
+          "y": 160,
+          "w": 314,
+          "h": 853
+        }
+      ],
+      "frameRects": [
+        {
+          "x": 0,
+          "y": 0,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_000",
+          "duration": 112,
+          "sourceFrameIndex": 0
+        },
+        {
+          "x": 798,
+          "y": 0,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_001",
+          "duration": 112,
+          "sourceFrameIndex": 1
+        },
+        {
+          "x": 1596,
+          "y": 0,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_002",
+          "duration": 112,
+          "sourceFrameIndex": 2
+        },
+        {
+          "x": 2394,
+          "y": 0,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_003",
+          "duration": 112,
+          "sourceFrameIndex": 3
+        },
+        {
+          "x": 3192,
+          "y": 0,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_004",
+          "duration": 112,
+          "sourceFrameIndex": 4
+        },
+        {
+          "x": 0,
+          "y": 1198,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_005",
+          "duration": 112,
+          "sourceFrameIndex": 5
+        },
+        {
+          "x": 798,
+          "y": 1198,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_006",
+          "duration": 112,
+          "sourceFrameIndex": 6
+        },
+        {
+          "x": 1596,
+          "y": 1198,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_007",
+          "duration": 112,
+          "sourceFrameIndex": 7
+        },
+        {
+          "x": 2394,
+          "y": 1198,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_008",
+          "duration": 112,
+          "sourceFrameIndex": 8
+        },
+        {
+          "x": 3192,
+          "y": 1198,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_009",
+          "duration": 112,
+          "sourceFrameIndex": 9
+        },
+        {
+          "x": 0,
+          "y": 2396,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_010",
+          "duration": 112,
+          "sourceFrameIndex": 10
+        },
+        {
+          "x": 798,
+          "y": 2396,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_011",
+          "duration": 112,
+          "sourceFrameIndex": 11
+        },
+        {
+          "x": 1596,
+          "y": 2396,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_012",
+          "duration": 112,
+          "sourceFrameIndex": 12
+        },
+        {
+          "x": 2394,
+          "y": 2396,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_013",
+          "duration": 112,
+          "sourceFrameIndex": 13
+        },
+        {
+          "x": 3192,
+          "y": 2396,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_014",
+          "duration": 112,
+          "sourceFrameIndex": 14
+        },
+        {
+          "x": 0,
+          "y": 3594,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_015",
+          "duration": 112,
+          "sourceFrameIndex": 15
+        },
+        {
+          "x": 798,
+          "y": 3594,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_016",
+          "duration": 112,
+          "sourceFrameIndex": 16
+        },
+        {
+          "x": 1596,
+          "y": 3594,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_017",
+          "duration": 112,
+          "sourceFrameIndex": 17
+        },
+        {
+          "x": 2394,
+          "y": 3594,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_018",
+          "duration": 112,
+          "sourceFrameIndex": 18
+        },
+        {
+          "x": 3192,
+          "y": 3594,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_019",
+          "duration": 112,
+          "sourceFrameIndex": 19
+        },
+        {
+          "x": 0,
+          "y": 4792,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_020",
+          "duration": 112,
+          "sourceFrameIndex": 20
+        },
+        {
+          "x": 798,
+          "y": 4792,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_021",
+          "duration": 112,
+          "sourceFrameIndex": 21
+        },
+        {
+          "x": 1596,
+          "y": 4792,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_022",
+          "duration": 112,
+          "sourceFrameIndex": 22
+        },
+        {
+          "x": 2394,
+          "y": 4792,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_023",
+          "duration": 112,
+          "sourceFrameIndex": 23
+        },
+        {
+          "x": 3192,
+          "y": 4792,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_024",
+          "duration": 112,
+          "sourceFrameIndex": 24
+        }
+      ],
+      "movementSpeedMultipliers": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "mirroredWest": true
+    },
+    "talk_east_long_2": {
+      "src": "target/external_animation_v1/runtime/talk_east_long_2.png",
+      "sourceSheet": "target\\external_animation_v1\\unpacked\\talk_east_long_2\\sprite--9px-frames-36-rows-6-cols-6.png",
+      "metadataFile": "target\\external_animation_v1\\unpacked\\talk_east_long_2\\sprite--9px-frames-36-rows-6-cols-6.json",
+      "usesOriginalLudoLayout": true,
+      "sourcePreserved": true,
+      "runtimeSource": "unpacked-alpha-sheet",
+      "frameWidth": 798,
+      "frameHeight": 1198,
+      "sheetWidth": 4788,
+      "sheetHeight": 7188,
+      "frameCount": 36,
+      "sourceFrameCount": 36,
+      "frameStart": 0,
+      "frameEndTrim": 0,
+      "configuredFrameCount": null,
+      "fps": 12,
+      "loop": false,
+      "pingPong": false,
+      "role": "talk",
+      "initialFrame": 0,
+      "anchorX": 0.5,
+      "anchorY": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "baselineY": 1198,
+      "contentBounds": {
+        "x": 224,
+        "y": 160,
+        "w": 319,
+        "h": 854
+      },
+      "sourceContentBounds": {
+        "x": 224,
+        "y": 160,
+        "w": 319,
+        "h": 854
+      },
+      "sourceFrameContentBounds": [
+        {
+          "x": 227,
+          "y": 160,
+          "w": 316,
+          "h": 854
+        },
+        {
+          "x": 227,
+          "y": 160,
+          "w": 316,
+          "h": 853
+        },
+        {
+          "x": 227,
+          "y": 160,
+          "w": 316,
+          "h": 853
+        },
+        {
+          "x": 227,
+          "y": 160,
+          "w": 316,
+          "h": 853
+        },
+        {
+          "x": 228,
+          "y": 160,
+          "w": 314,
+          "h": 853
+        },
+        {
+          "x": 228,
+          "y": 161,
+          "w": 314,
+          "h": 852
+        },
+        {
+          "x": 229,
+          "y": 163,
+          "w": 313,
+          "h": 850
+        },
+        {
+          "x": 230,
+          "y": 164,
+          "w": 312,
+          "h": 848
+        },
+        {
+          "x": 230,
+          "y": 164,
+          "w": 312,
+          "h": 848
+        },
+        {
+          "x": 229,
+          "y": 164,
+          "w": 313,
+          "h": 849
+        },
+        {
+          "x": 228,
+          "y": 163,
+          "w": 314,
+          "h": 850
+        },
+        {
+          "x": 227,
+          "y": 163,
+          "w": 315,
+          "h": 850
+        },
+        {
+          "x": 226,
+          "y": 163,
+          "w": 316,
+          "h": 850
+        },
+        {
+          "x": 225,
+          "y": 163,
+          "w": 317,
+          "h": 851
+        },
+        {
+          "x": 225,
+          "y": 164,
+          "w": 317,
+          "h": 850
+        },
+        {
+          "x": 225,
+          "y": 165,
+          "w": 317,
+          "h": 849
+        },
+        {
+          "x": 224,
+          "y": 168,
+          "w": 318,
+          "h": 846
+        },
+        {
+          "x": 224,
+          "y": 171,
+          "w": 318,
+          "h": 843
+        },
+        {
+          "x": 224,
+          "y": 172,
+          "w": 318,
+          "h": 842
+        },
+        {
+          "x": 224,
+          "y": 172,
+          "w": 319,
+          "h": 842
+        },
+        {
+          "x": 225,
+          "y": 172,
+          "w": 318,
+          "h": 842
+        },
+        {
+          "x": 226,
+          "y": 170,
+          "w": 316,
+          "h": 844
+        },
+        {
+          "x": 228,
+          "y": 169,
+          "w": 314,
+          "h": 845
+        },
+        {
+          "x": 228,
+          "y": 167,
+          "w": 314,
+          "h": 847
+        },
+        {
+          "x": 229,
+          "y": 167,
+          "w": 313,
+          "h": 847
+        },
+        {
+          "x": 229,
+          "y": 167,
+          "w": 313,
+          "h": 847
+        },
+        {
+          "x": 229,
+          "y": 167,
+          "w": 313,
+          "h": 847
+        },
+        {
+          "x": 229,
+          "y": 167,
+          "w": 313,
+          "h": 847
+        },
+        {
+          "x": 229,
+          "y": 168,
+          "w": 313,
+          "h": 846
+        },
+        {
+          "x": 229,
+          "y": 166,
+          "w": 313,
+          "h": 848
+        },
+        {
+          "x": 228,
+          "y": 162,
+          "w": 314,
+          "h": 852
+        },
+        {
+          "x": 228,
+          "y": 161,
+          "w": 314,
+          "h": 853
+        },
+        {
+          "x": 228,
+          "y": 161,
+          "w": 314,
+          "h": 852
+        },
+        {
+          "x": 227,
+          "y": 160,
+          "w": 315,
+          "h": 853
+        },
+        {
+          "x": 227,
+          "y": 160,
+          "w": 315,
+          "h": 853
+        },
+        {
+          "x": 227,
+          "y": 161,
+          "w": 315,
+          "h": 852
+        }
+      ],
+      "sourceFrameRects": [
+        {
+          "x": 0,
+          "y": 0,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_000",
+          "duration": 105,
+          "sourceFrameIndex": 0
+        },
+        {
+          "x": 798,
+          "y": 0,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_001",
+          "duration": 105,
+          "sourceFrameIndex": 1
+        },
+        {
+          "x": 1596,
+          "y": 0,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_002",
+          "duration": 105,
+          "sourceFrameIndex": 2
+        },
+        {
+          "x": 2394,
+          "y": 0,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_003",
+          "duration": 105,
+          "sourceFrameIndex": 3
+        },
+        {
+          "x": 3192,
+          "y": 0,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_004",
+          "duration": 105,
+          "sourceFrameIndex": 4
+        },
+        {
+          "x": 3990,
+          "y": 0,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_005",
+          "duration": 105,
+          "sourceFrameIndex": 5
+        },
+        {
+          "x": 0,
+          "y": 1198,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_006",
+          "duration": 105,
+          "sourceFrameIndex": 6
+        },
+        {
+          "x": 798,
+          "y": 1198,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_007",
+          "duration": 105,
+          "sourceFrameIndex": 7
+        },
+        {
+          "x": 1596,
+          "y": 1198,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_008",
+          "duration": 105,
+          "sourceFrameIndex": 8
+        },
+        {
+          "x": 2394,
+          "y": 1198,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_009",
+          "duration": 105,
+          "sourceFrameIndex": 9
+        },
+        {
+          "x": 3192,
+          "y": 1198,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_010",
+          "duration": 105,
+          "sourceFrameIndex": 10
+        },
+        {
+          "x": 3990,
+          "y": 1198,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_011",
+          "duration": 105,
+          "sourceFrameIndex": 11
+        },
+        {
+          "x": 0,
+          "y": 2396,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_012",
+          "duration": 105,
+          "sourceFrameIndex": 12
+        },
+        {
+          "x": 798,
+          "y": 2396,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_013",
+          "duration": 105,
+          "sourceFrameIndex": 13
+        },
+        {
+          "x": 1596,
+          "y": 2396,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_014",
+          "duration": 105,
+          "sourceFrameIndex": 14
+        },
+        {
+          "x": 2394,
+          "y": 2396,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_015",
+          "duration": 105,
+          "sourceFrameIndex": 15
+        },
+        {
+          "x": 3192,
+          "y": 2396,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_016",
+          "duration": 105,
+          "sourceFrameIndex": 16
+        },
+        {
+          "x": 3990,
+          "y": 2396,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_017",
+          "duration": 105,
+          "sourceFrameIndex": 17
+        },
+        {
+          "x": 0,
+          "y": 3594,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_018",
+          "duration": 105,
+          "sourceFrameIndex": 18
+        },
+        {
+          "x": 798,
+          "y": 3594,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_019",
+          "duration": 105,
+          "sourceFrameIndex": 19
+        },
+        {
+          "x": 1596,
+          "y": 3594,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_020",
+          "duration": 105,
+          "sourceFrameIndex": 20
+        },
+        {
+          "x": 2394,
+          "y": 3594,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_021",
+          "duration": 105,
+          "sourceFrameIndex": 21
+        },
+        {
+          "x": 3192,
+          "y": 3594,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_022",
+          "duration": 105,
+          "sourceFrameIndex": 22
+        },
+        {
+          "x": 3990,
+          "y": 3594,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_023",
+          "duration": 105,
+          "sourceFrameIndex": 23
+        },
+        {
+          "x": 0,
+          "y": 4792,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_024",
+          "duration": 105,
+          "sourceFrameIndex": 24
+        },
+        {
+          "x": 798,
+          "y": 4792,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_025",
+          "duration": 105,
+          "sourceFrameIndex": 25
+        },
+        {
+          "x": 1596,
+          "y": 4792,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_026",
+          "duration": 105,
+          "sourceFrameIndex": 26
+        },
+        {
+          "x": 2394,
+          "y": 4792,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_027",
+          "duration": 105,
+          "sourceFrameIndex": 27
+        },
+        {
+          "x": 3192,
+          "y": 4792,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_028",
+          "duration": 105,
+          "sourceFrameIndex": 28
+        },
+        {
+          "x": 3990,
+          "y": 4792,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_029",
+          "duration": 105,
+          "sourceFrameIndex": 29
+        },
+        {
+          "x": 0,
+          "y": 5990,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_030",
+          "duration": 105,
+          "sourceFrameIndex": 30
+        },
+        {
+          "x": 798,
+          "y": 5990,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_031",
+          "duration": 105,
+          "sourceFrameIndex": 31
+        },
+        {
+          "x": 1596,
+          "y": 5990,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_032",
+          "duration": 105,
+          "sourceFrameIndex": 32
+        },
+        {
+          "x": 2394,
+          "y": 5990,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_033",
+          "duration": 105,
+          "sourceFrameIndex": 33
+        },
+        {
+          "x": 3192,
+          "y": 5990,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_034",
+          "duration": 105,
+          "sourceFrameIndex": 34
+        },
+        {
+          "x": 3990,
+          "y": 5990,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_035",
+          "duration": 105,
+          "sourceFrameIndex": 35
+        }
+      ],
+      "frameContentBounds": [
+        {
+          "x": 227,
+          "y": 160,
+          "w": 316,
+          "h": 854
+        },
+        {
+          "x": 227,
+          "y": 160,
+          "w": 316,
+          "h": 853
+        },
+        {
+          "x": 227,
+          "y": 160,
+          "w": 316,
+          "h": 853
+        },
+        {
+          "x": 227,
+          "y": 160,
+          "w": 316,
+          "h": 853
+        },
+        {
+          "x": 228,
+          "y": 160,
+          "w": 314,
+          "h": 853
+        },
+        {
+          "x": 228,
+          "y": 161,
+          "w": 314,
+          "h": 852
+        },
+        {
+          "x": 229,
+          "y": 163,
+          "w": 313,
+          "h": 850
+        },
+        {
+          "x": 230,
+          "y": 164,
+          "w": 312,
+          "h": 848
+        },
+        {
+          "x": 230,
+          "y": 164,
+          "w": 312,
+          "h": 848
+        },
+        {
+          "x": 229,
+          "y": 164,
+          "w": 313,
+          "h": 849
+        },
+        {
+          "x": 228,
+          "y": 163,
+          "w": 314,
+          "h": 850
+        },
+        {
+          "x": 227,
+          "y": 163,
+          "w": 315,
+          "h": 850
+        },
+        {
+          "x": 226,
+          "y": 163,
+          "w": 316,
+          "h": 850
+        },
+        {
+          "x": 225,
+          "y": 163,
+          "w": 317,
+          "h": 851
+        },
+        {
+          "x": 225,
+          "y": 164,
+          "w": 317,
+          "h": 850
+        },
+        {
+          "x": 225,
+          "y": 165,
+          "w": 317,
+          "h": 849
+        },
+        {
+          "x": 224,
+          "y": 168,
+          "w": 318,
+          "h": 846
+        },
+        {
+          "x": 224,
+          "y": 171,
+          "w": 318,
+          "h": 843
+        },
+        {
+          "x": 224,
+          "y": 172,
+          "w": 318,
+          "h": 842
+        },
+        {
+          "x": 224,
+          "y": 172,
+          "w": 319,
+          "h": 842
+        },
+        {
+          "x": 225,
+          "y": 172,
+          "w": 318,
+          "h": 842
+        },
+        {
+          "x": 226,
+          "y": 170,
+          "w": 316,
+          "h": 844
+        },
+        {
+          "x": 228,
+          "y": 169,
+          "w": 314,
+          "h": 845
+        },
+        {
+          "x": 228,
+          "y": 167,
+          "w": 314,
+          "h": 847
+        },
+        {
+          "x": 229,
+          "y": 167,
+          "w": 313,
+          "h": 847
+        },
+        {
+          "x": 229,
+          "y": 167,
+          "w": 313,
+          "h": 847
+        },
+        {
+          "x": 229,
+          "y": 167,
+          "w": 313,
+          "h": 847
+        },
+        {
+          "x": 229,
+          "y": 167,
+          "w": 313,
+          "h": 847
+        },
+        {
+          "x": 229,
+          "y": 168,
+          "w": 313,
+          "h": 846
+        },
+        {
+          "x": 229,
+          "y": 166,
+          "w": 313,
+          "h": 848
+        },
+        {
+          "x": 228,
+          "y": 162,
+          "w": 314,
+          "h": 852
+        },
+        {
+          "x": 228,
+          "y": 161,
+          "w": 314,
+          "h": 853
+        },
+        {
+          "x": 228,
+          "y": 161,
+          "w": 314,
+          "h": 852
+        },
+        {
+          "x": 227,
+          "y": 160,
+          "w": 315,
+          "h": 853
+        },
+        {
+          "x": 227,
+          "y": 160,
+          "w": 315,
+          "h": 853
+        },
+        {
+          "x": 227,
+          "y": 161,
+          "w": 315,
+          "h": 852
+        }
+      ],
+      "frameRects": [
+        {
+          "x": 0,
+          "y": 0,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_000",
+          "duration": 105,
+          "sourceFrameIndex": 0
+        },
+        {
+          "x": 798,
+          "y": 0,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_001",
+          "duration": 105,
+          "sourceFrameIndex": 1
+        },
+        {
+          "x": 1596,
+          "y": 0,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_002",
+          "duration": 105,
+          "sourceFrameIndex": 2
+        },
+        {
+          "x": 2394,
+          "y": 0,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_003",
+          "duration": 105,
+          "sourceFrameIndex": 3
+        },
+        {
+          "x": 3192,
+          "y": 0,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_004",
+          "duration": 105,
+          "sourceFrameIndex": 4
+        },
+        {
+          "x": 3990,
+          "y": 0,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_005",
+          "duration": 105,
+          "sourceFrameIndex": 5
+        },
+        {
+          "x": 0,
+          "y": 1198,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_006",
+          "duration": 105,
+          "sourceFrameIndex": 6
+        },
+        {
+          "x": 798,
+          "y": 1198,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_007",
+          "duration": 105,
+          "sourceFrameIndex": 7
+        },
+        {
+          "x": 1596,
+          "y": 1198,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_008",
+          "duration": 105,
+          "sourceFrameIndex": 8
+        },
+        {
+          "x": 2394,
+          "y": 1198,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_009",
+          "duration": 105,
+          "sourceFrameIndex": 9
+        },
+        {
+          "x": 3192,
+          "y": 1198,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_010",
+          "duration": 105,
+          "sourceFrameIndex": 10
+        },
+        {
+          "x": 3990,
+          "y": 1198,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_011",
+          "duration": 105,
+          "sourceFrameIndex": 11
+        },
+        {
+          "x": 0,
+          "y": 2396,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_012",
+          "duration": 105,
+          "sourceFrameIndex": 12
+        },
+        {
+          "x": 798,
+          "y": 2396,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_013",
+          "duration": 105,
+          "sourceFrameIndex": 13
+        },
+        {
+          "x": 1596,
+          "y": 2396,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_014",
+          "duration": 105,
+          "sourceFrameIndex": 14
+        },
+        {
+          "x": 2394,
+          "y": 2396,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_015",
+          "duration": 105,
+          "sourceFrameIndex": 15
+        },
+        {
+          "x": 3192,
+          "y": 2396,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_016",
+          "duration": 105,
+          "sourceFrameIndex": 16
+        },
+        {
+          "x": 3990,
+          "y": 2396,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_017",
+          "duration": 105,
+          "sourceFrameIndex": 17
+        },
+        {
+          "x": 0,
+          "y": 3594,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_018",
+          "duration": 105,
+          "sourceFrameIndex": 18
+        },
+        {
+          "x": 798,
+          "y": 3594,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_019",
+          "duration": 105,
+          "sourceFrameIndex": 19
+        },
+        {
+          "x": 1596,
+          "y": 3594,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_020",
+          "duration": 105,
+          "sourceFrameIndex": 20
+        },
+        {
+          "x": 2394,
+          "y": 3594,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_021",
+          "duration": 105,
+          "sourceFrameIndex": 21
+        },
+        {
+          "x": 3192,
+          "y": 3594,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_022",
+          "duration": 105,
+          "sourceFrameIndex": 22
+        },
+        {
+          "x": 3990,
+          "y": 3594,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_023",
+          "duration": 105,
+          "sourceFrameIndex": 23
+        },
+        {
+          "x": 0,
+          "y": 4792,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_024",
+          "duration": 105,
+          "sourceFrameIndex": 24
+        },
+        {
+          "x": 798,
+          "y": 4792,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_025",
+          "duration": 105,
+          "sourceFrameIndex": 25
+        },
+        {
+          "x": 1596,
+          "y": 4792,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_026",
+          "duration": 105,
+          "sourceFrameIndex": 26
+        },
+        {
+          "x": 2394,
+          "y": 4792,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_027",
+          "duration": 105,
+          "sourceFrameIndex": 27
+        },
+        {
+          "x": 3192,
+          "y": 4792,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_028",
+          "duration": 105,
+          "sourceFrameIndex": 28
+        },
+        {
+          "x": 3990,
+          "y": 4792,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_029",
+          "duration": 105,
+          "sourceFrameIndex": 29
+        },
+        {
+          "x": 0,
+          "y": 5990,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_030",
+          "duration": 105,
+          "sourceFrameIndex": 30
+        },
+        {
+          "x": 798,
+          "y": 5990,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_031",
+          "duration": 105,
+          "sourceFrameIndex": 31
+        },
+        {
+          "x": 1596,
+          "y": 5990,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_032",
+          "duration": 105,
+          "sourceFrameIndex": 32
+        },
+        {
+          "x": 2394,
+          "y": 5990,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_033",
+          "duration": 105,
+          "sourceFrameIndex": 33
+        },
+        {
+          "x": 3192,
+          "y": 5990,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_034",
+          "duration": 105,
+          "sourceFrameIndex": 34
+        },
+        {
+          "x": 3990,
+          "y": 5990,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_035",
+          "duration": 105,
+          "sourceFrameIndex": 35
+        }
+      ],
+      "movementSpeedMultipliers": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "mirroredWest": true
+    },
+    "talk_east_short_1": {
+      "src": "target/external_animation_v1/runtime/talk_east_short_1.png",
+      "sourceSheet": "target\\external_animation_v1\\unpacked\\talk_east_short_1\\sprite--9px-frames-16-rows-4-cols-4.png",
+      "metadataFile": "target\\external_animation_v1\\unpacked\\talk_east_short_1\\sprite--9px-frames-16-rows-4-cols-4.json",
+      "usesOriginalLudoLayout": true,
+      "sourcePreserved": true,
+      "runtimeSource": "unpacked-alpha-sheet",
+      "frameWidth": 798,
+      "frameHeight": 1198,
+      "sheetWidth": 3192,
+      "sheetHeight": 4792,
+      "frameCount": 16,
+      "sourceFrameCount": 16,
+      "frameStart": 0,
+      "frameEndTrim": 0,
+      "configuredFrameCount": null,
+      "fps": 12,
+      "loop": false,
+      "pingPong": false,
+      "role": "talk",
+      "initialFrame": 0,
+      "anchorX": 0.5,
+      "anchorY": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "baselineY": 1198,
+      "contentBounds": {
+        "x": 224,
+        "y": 160,
+        "w": 321,
+        "h": 853
+      },
+      "sourceContentBounds": {
+        "x": 224,
+        "y": 160,
+        "w": 321,
+        "h": 853
+      },
+      "sourceFrameContentBounds": [
+        {
+          "x": 228,
+          "y": 161,
+          "w": 315,
+          "h": 851
+        },
+        {
+          "x": 229,
+          "y": 160,
+          "w": 316,
+          "h": 852
+        },
+        {
+          "x": 227,
+          "y": 166,
+          "w": 317,
+          "h": 846
+        },
+        {
+          "x": 225,
+          "y": 171,
+          "w": 320,
+          "h": 840
+        },
+        {
+          "x": 224,
+          "y": 172,
+          "w": 319,
+          "h": 839
+        },
+        {
+          "x": 224,
+          "y": 171,
+          "w": 319,
+          "h": 840
+        },
+        {
+          "x": 225,
+          "y": 167,
+          "w": 317,
+          "h": 844
+        },
+        {
+          "x": 226,
+          "y": 166,
+          "w": 316,
+          "h": 846
+        },
+        {
+          "x": 225,
+          "y": 173,
+          "w": 317,
+          "h": 839
+        },
+        {
+          "x": 225,
+          "y": 174,
+          "w": 317,
+          "h": 838
+        },
+        {
+          "x": 225,
+          "y": 173,
+          "w": 317,
+          "h": 839
+        },
+        {
+          "x": 227,
+          "y": 167,
+          "w": 315,
+          "h": 845
+        },
+        {
+          "x": 227,
+          "y": 167,
+          "w": 315,
+          "h": 846
+        },
+        {
+          "x": 227,
+          "y": 164,
+          "w": 315,
+          "h": 849
+        },
+        {
+          "x": 227,
+          "y": 161,
+          "w": 315,
+          "h": 851
+        },
+        {
+          "x": 227,
+          "y": 161,
+          "w": 315,
+          "h": 851
+        }
+      ],
+      "sourceFrameRects": [
+        {
+          "x": 0,
+          "y": 0,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_000",
+          "duration": 117,
+          "sourceFrameIndex": 0
+        },
+        {
+          "x": 798,
+          "y": 0,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_001",
+          "duration": 117,
+          "sourceFrameIndex": 1
+        },
+        {
+          "x": 1596,
+          "y": 0,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_002",
+          "duration": 117,
+          "sourceFrameIndex": 2
+        },
+        {
+          "x": 2394,
+          "y": 0,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_003",
+          "duration": 117,
+          "sourceFrameIndex": 3
+        },
+        {
+          "x": 0,
+          "y": 1198,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_004",
+          "duration": 117,
+          "sourceFrameIndex": 4
+        },
+        {
+          "x": 798,
+          "y": 1198,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_005",
+          "duration": 117,
+          "sourceFrameIndex": 5
+        },
+        {
+          "x": 1596,
+          "y": 1198,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_006",
+          "duration": 117,
+          "sourceFrameIndex": 6
+        },
+        {
+          "x": 2394,
+          "y": 1198,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_007",
+          "duration": 117,
+          "sourceFrameIndex": 7
+        },
+        {
+          "x": 0,
+          "y": 2396,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_008",
+          "duration": 117,
+          "sourceFrameIndex": 8
+        },
+        {
+          "x": 798,
+          "y": 2396,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_009",
+          "duration": 117,
+          "sourceFrameIndex": 9
+        },
+        {
+          "x": 1596,
+          "y": 2396,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_010",
+          "duration": 117,
+          "sourceFrameIndex": 10
+        },
+        {
+          "x": 2394,
+          "y": 2396,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_011",
+          "duration": 117,
+          "sourceFrameIndex": 11
+        },
+        {
+          "x": 0,
+          "y": 3594,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_012",
+          "duration": 117,
+          "sourceFrameIndex": 12
+        },
+        {
+          "x": 798,
+          "y": 3594,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_013",
+          "duration": 117,
+          "sourceFrameIndex": 13
+        },
+        {
+          "x": 1596,
+          "y": 3594,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_014",
+          "duration": 117,
+          "sourceFrameIndex": 14
+        },
+        {
+          "x": 2394,
+          "y": 3594,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_015",
+          "duration": 117,
+          "sourceFrameIndex": 15
+        }
+      ],
+      "frameContentBounds": [
+        {
+          "x": 228,
+          "y": 161,
+          "w": 315,
+          "h": 851
+        },
+        {
+          "x": 229,
+          "y": 160,
+          "w": 316,
+          "h": 852
+        },
+        {
+          "x": 227,
+          "y": 166,
+          "w": 317,
+          "h": 846
+        },
+        {
+          "x": 225,
+          "y": 171,
+          "w": 320,
+          "h": 840
+        },
+        {
+          "x": 224,
+          "y": 172,
+          "w": 319,
+          "h": 839
+        },
+        {
+          "x": 224,
+          "y": 171,
+          "w": 319,
+          "h": 840
+        },
+        {
+          "x": 225,
+          "y": 167,
+          "w": 317,
+          "h": 844
+        },
+        {
+          "x": 226,
+          "y": 166,
+          "w": 316,
+          "h": 846
+        },
+        {
+          "x": 225,
+          "y": 173,
+          "w": 317,
+          "h": 839
+        },
+        {
+          "x": 225,
+          "y": 174,
+          "w": 317,
+          "h": 838
+        },
+        {
+          "x": 225,
+          "y": 173,
+          "w": 317,
+          "h": 839
+        },
+        {
+          "x": 227,
+          "y": 167,
+          "w": 315,
+          "h": 845
+        },
+        {
+          "x": 227,
+          "y": 167,
+          "w": 315,
+          "h": 846
+        },
+        {
+          "x": 227,
+          "y": 164,
+          "w": 315,
+          "h": 849
+        },
+        {
+          "x": 227,
+          "y": 161,
+          "w": 315,
+          "h": 851
+        },
+        {
+          "x": 227,
+          "y": 161,
+          "w": 315,
+          "h": 851
+        }
+      ],
+      "frameRects": [
+        {
+          "x": 0,
+          "y": 0,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_000",
+          "duration": 117,
+          "sourceFrameIndex": 0
+        },
+        {
+          "x": 798,
+          "y": 0,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_001",
+          "duration": 117,
+          "sourceFrameIndex": 1
+        },
+        {
+          "x": 1596,
+          "y": 0,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_002",
+          "duration": 117,
+          "sourceFrameIndex": 2
+        },
+        {
+          "x": 2394,
+          "y": 0,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_003",
+          "duration": 117,
+          "sourceFrameIndex": 3
+        },
+        {
+          "x": 0,
+          "y": 1198,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_004",
+          "duration": 117,
+          "sourceFrameIndex": 4
+        },
+        {
+          "x": 798,
+          "y": 1198,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_005",
+          "duration": 117,
+          "sourceFrameIndex": 5
+        },
+        {
+          "x": 1596,
+          "y": 1198,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_006",
+          "duration": 117,
+          "sourceFrameIndex": 6
+        },
+        {
+          "x": 2394,
+          "y": 1198,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_007",
+          "duration": 117,
+          "sourceFrameIndex": 7
+        },
+        {
+          "x": 0,
+          "y": 2396,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_008",
+          "duration": 117,
+          "sourceFrameIndex": 8
+        },
+        {
+          "x": 798,
+          "y": 2396,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_009",
+          "duration": 117,
+          "sourceFrameIndex": 9
+        },
+        {
+          "x": 1596,
+          "y": 2396,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_010",
+          "duration": 117,
+          "sourceFrameIndex": 10
+        },
+        {
+          "x": 2394,
+          "y": 2396,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_011",
+          "duration": 117,
+          "sourceFrameIndex": 11
+        },
+        {
+          "x": 0,
+          "y": 3594,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_012",
+          "duration": 117,
+          "sourceFrameIndex": 12
+        },
+        {
+          "x": 798,
+          "y": 3594,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_013",
+          "duration": 117,
+          "sourceFrameIndex": 13
+        },
+        {
+          "x": 1596,
+          "y": 3594,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_014",
+          "duration": 117,
+          "sourceFrameIndex": 14
+        },
+        {
+          "x": 2394,
+          "y": 3594,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_015",
+          "duration": 117,
+          "sourceFrameIndex": 15
+        }
+      ],
+      "movementSpeedMultipliers": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "mirroredWest": true
+    },
+    "reject_east_1": {
+      "src": "target/external_animation_v1/runtime/reject_east_1.png",
+      "sourceSheet": "target\\external_animation_v1\\unpacked\\reject_east_1\\sprite--9px-frames-36-rows-6-cols-6.png",
+      "metadataFile": "target\\external_animation_v1\\unpacked\\reject_east_1\\sprite--9px-frames-36-rows-6-cols-6.json",
+      "usesOriginalLudoLayout": true,
+      "sourcePreserved": true,
+      "runtimeSource": "unpacked-alpha-sheet",
+      "frameWidth": 798,
+      "frameHeight": 1198,
+      "sheetWidth": 4788,
+      "sheetHeight": 7188,
+      "frameCount": 36,
+      "sourceFrameCount": 36,
+      "frameStart": 0,
+      "frameEndTrim": 0,
+      "configuredFrameCount": null,
+      "fps": 20,
+      "loop": false,
+      "pingPong": false,
+      "role": "reject",
+      "initialFrame": 0,
+      "anchorX": 0.5,
+      "anchorY": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "baselineY": 1198,
+      "contentBounds": {
+        "x": 209,
+        "y": 155,
+        "w": 335,
+        "h": 861
+      },
+      "sourceContentBounds": {
+        "x": 209,
+        "y": 155,
+        "w": 335,
+        "h": 861
+      },
+      "sourceFrameContentBounds": [
+        {
+          "x": 227,
+          "y": 158,
+          "w": 313,
+          "h": 858
+        },
+        {
+          "x": 227,
+          "y": 158,
+          "w": 313,
+          "h": 858
+        },
+        {
+          "x": 227,
+          "y": 158,
+          "w": 313,
+          "h": 858
+        },
+        {
+          "x": 227,
+          "y": 158,
+          "w": 313,
+          "h": 858
+        },
+        {
+          "x": 227,
+          "y": 159,
+          "w": 313,
+          "h": 857
+        },
+        {
+          "x": 227,
+          "y": 158,
+          "w": 313,
+          "h": 858
+        },
+        {
+          "x": 226,
+          "y": 160,
+          "w": 314,
+          "h": 856
+        },
+        {
+          "x": 226,
+          "y": 160,
+          "w": 313,
+          "h": 856
+        },
+        {
+          "x": 223,
+          "y": 160,
+          "w": 316,
+          "h": 856
+        },
+        {
+          "x": 220,
+          "y": 159,
+          "w": 319,
+          "h": 857
+        },
+        {
+          "x": 217,
+          "y": 158,
+          "w": 322,
+          "h": 858
+        },
+        {
+          "x": 215,
+          "y": 157,
+          "w": 324,
+          "h": 857
+        },
+        {
+          "x": 212,
+          "y": 156,
+          "w": 327,
+          "h": 858
+        },
+        {
+          "x": 211,
+          "y": 156,
+          "w": 328,
+          "h": 858
+        },
+        {
+          "x": 210,
+          "y": 155,
+          "w": 329,
+          "h": 859
+        },
+        {
+          "x": 209,
+          "y": 157,
+          "w": 330,
+          "h": 857
+        },
+        {
+          "x": 209,
+          "y": 158,
+          "w": 330,
+          "h": 856
+        },
+        {
+          "x": 209,
+          "y": 159,
+          "w": 330,
+          "h": 855
+        },
+        {
+          "x": 211,
+          "y": 162,
+          "w": 328,
+          "h": 852
+        },
+        {
+          "x": 212,
+          "y": 164,
+          "w": 327,
+          "h": 850
+        },
+        {
+          "x": 220,
+          "y": 167,
+          "w": 319,
+          "h": 847
+        },
+        {
+          "x": 229,
+          "y": 166,
+          "w": 311,
+          "h": 848
+        },
+        {
+          "x": 232,
+          "y": 165,
+          "w": 308,
+          "h": 849
+        },
+        {
+          "x": 234,
+          "y": 164,
+          "w": 308,
+          "h": 850
+        },
+        {
+          "x": 235,
+          "y": 165,
+          "w": 308,
+          "h": 850
+        },
+        {
+          "x": 236,
+          "y": 165,
+          "w": 307,
+          "h": 849
+        },
+        {
+          "x": 237,
+          "y": 165,
+          "w": 306,
+          "h": 849
+        },
+        {
+          "x": 237,
+          "y": 165,
+          "w": 306,
+          "h": 851
+        },
+        {
+          "x": 237,
+          "y": 165,
+          "w": 307,
+          "h": 851
+        },
+        {
+          "x": 237,
+          "y": 164,
+          "w": 307,
+          "h": 852
+        },
+        {
+          "x": 237,
+          "y": 164,
+          "w": 307,
+          "h": 852
+        },
+        {
+          "x": 235,
+          "y": 162,
+          "w": 308,
+          "h": 854
+        },
+        {
+          "x": 234,
+          "y": 161,
+          "w": 309,
+          "h": 855
+        },
+        {
+          "x": 232,
+          "y": 159,
+          "w": 310,
+          "h": 857
+        },
+        {
+          "x": 231,
+          "y": 159,
+          "w": 311,
+          "h": 855
+        },
+        {
+          "x": 227,
+          "y": 158,
+          "w": 313,
+          "h": 856
+        }
+      ],
+      "sourceFrameRects": [
+        {
+          "x": 0,
+          "y": 0,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_000",
+          "duration": 101,
+          "sourceFrameIndex": 0
+        },
+        {
+          "x": 798,
+          "y": 0,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_001",
+          "duration": 101,
+          "sourceFrameIndex": 1
+        },
+        {
+          "x": 1596,
+          "y": 0,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_002",
+          "duration": 101,
+          "sourceFrameIndex": 2
+        },
+        {
+          "x": 2394,
+          "y": 0,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_003",
+          "duration": 101,
+          "sourceFrameIndex": 3
+        },
+        {
+          "x": 3192,
+          "y": 0,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_004",
+          "duration": 101,
+          "sourceFrameIndex": 4
+        },
+        {
+          "x": 3990,
+          "y": 0,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_005",
+          "duration": 101,
+          "sourceFrameIndex": 5
+        },
+        {
+          "x": 0,
+          "y": 1198,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_006",
+          "duration": 101,
+          "sourceFrameIndex": 6
+        },
+        {
+          "x": 798,
+          "y": 1198,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_007",
+          "duration": 101,
+          "sourceFrameIndex": 7
+        },
+        {
+          "x": 1596,
+          "y": 1198,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_008",
+          "duration": 101,
+          "sourceFrameIndex": 8
+        },
+        {
+          "x": 2394,
+          "y": 1198,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_009",
+          "duration": 101,
+          "sourceFrameIndex": 9
+        },
+        {
+          "x": 3192,
+          "y": 1198,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_010",
+          "duration": 101,
+          "sourceFrameIndex": 10
+        },
+        {
+          "x": 3990,
+          "y": 1198,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_011",
+          "duration": 101,
+          "sourceFrameIndex": 11
+        },
+        {
+          "x": 0,
+          "y": 2396,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_012",
+          "duration": 101,
+          "sourceFrameIndex": 12
+        },
+        {
+          "x": 798,
+          "y": 2396,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_013",
+          "duration": 101,
+          "sourceFrameIndex": 13
+        },
+        {
+          "x": 1596,
+          "y": 2396,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_014",
+          "duration": 101,
+          "sourceFrameIndex": 14
+        },
+        {
+          "x": 2394,
+          "y": 2396,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_015",
+          "duration": 101,
+          "sourceFrameIndex": 15
+        },
+        {
+          "x": 3192,
+          "y": 2396,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_016",
+          "duration": 101,
+          "sourceFrameIndex": 16
+        },
+        {
+          "x": 3990,
+          "y": 2396,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_017",
+          "duration": 101,
+          "sourceFrameIndex": 17
+        },
+        {
+          "x": 0,
+          "y": 3594,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_018",
+          "duration": 101,
+          "sourceFrameIndex": 18
+        },
+        {
+          "x": 798,
+          "y": 3594,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_019",
+          "duration": 101,
+          "sourceFrameIndex": 19
+        },
+        {
+          "x": 1596,
+          "y": 3594,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_020",
+          "duration": 101,
+          "sourceFrameIndex": 20
+        },
+        {
+          "x": 2394,
+          "y": 3594,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_021",
+          "duration": 101,
+          "sourceFrameIndex": 21
+        },
+        {
+          "x": 3192,
+          "y": 3594,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_022",
+          "duration": 101,
+          "sourceFrameIndex": 22
+        },
+        {
+          "x": 3990,
+          "y": 3594,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_023",
+          "duration": 101,
+          "sourceFrameIndex": 23
+        },
+        {
+          "x": 0,
+          "y": 4792,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_024",
+          "duration": 101,
+          "sourceFrameIndex": 24
+        },
+        {
+          "x": 798,
+          "y": 4792,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_025",
+          "duration": 101,
+          "sourceFrameIndex": 25
+        },
+        {
+          "x": 1596,
+          "y": 4792,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_026",
+          "duration": 101,
+          "sourceFrameIndex": 26
+        },
+        {
+          "x": 2394,
+          "y": 4792,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_027",
+          "duration": 101,
+          "sourceFrameIndex": 27
+        },
+        {
+          "x": 3192,
+          "y": 4792,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_028",
+          "duration": 101,
+          "sourceFrameIndex": 28
+        },
+        {
+          "x": 3990,
+          "y": 4792,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_029",
+          "duration": 101,
+          "sourceFrameIndex": 29
+        },
+        {
+          "x": 0,
+          "y": 5990,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_030",
+          "duration": 101,
+          "sourceFrameIndex": 30
+        },
+        {
+          "x": 798,
+          "y": 5990,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_031",
+          "duration": 101,
+          "sourceFrameIndex": 31
+        },
+        {
+          "x": 1596,
+          "y": 5990,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_032",
+          "duration": 101,
+          "sourceFrameIndex": 32
+        },
+        {
+          "x": 2394,
+          "y": 5990,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_033",
+          "duration": 101,
+          "sourceFrameIndex": 33
+        },
+        {
+          "x": 3192,
+          "y": 5990,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_034",
+          "duration": 101,
+          "sourceFrameIndex": 34
+        },
+        {
+          "x": 3990,
+          "y": 5990,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_035",
+          "duration": 101,
+          "sourceFrameIndex": 35
+        }
+      ],
+      "frameContentBounds": [
+        {
+          "x": 227,
+          "y": 158,
+          "w": 313,
+          "h": 858
+        },
+        {
+          "x": 227,
+          "y": 158,
+          "w": 313,
+          "h": 858
+        },
+        {
+          "x": 227,
+          "y": 158,
+          "w": 313,
+          "h": 858
+        },
+        {
+          "x": 227,
+          "y": 158,
+          "w": 313,
+          "h": 858
+        },
+        {
+          "x": 227,
+          "y": 159,
+          "w": 313,
+          "h": 857
+        },
+        {
+          "x": 227,
+          "y": 158,
+          "w": 313,
+          "h": 858
+        },
+        {
+          "x": 226,
+          "y": 160,
+          "w": 314,
+          "h": 856
+        },
+        {
+          "x": 226,
+          "y": 160,
+          "w": 313,
+          "h": 856
+        },
+        {
+          "x": 223,
+          "y": 160,
+          "w": 316,
+          "h": 856
+        },
+        {
+          "x": 220,
+          "y": 159,
+          "w": 319,
+          "h": 857
+        },
+        {
+          "x": 217,
+          "y": 158,
+          "w": 322,
+          "h": 858
+        },
+        {
+          "x": 215,
+          "y": 157,
+          "w": 324,
+          "h": 857
+        },
+        {
+          "x": 212,
+          "y": 156,
+          "w": 327,
+          "h": 858
+        },
+        {
+          "x": 211,
+          "y": 156,
+          "w": 328,
+          "h": 858
+        },
+        {
+          "x": 210,
+          "y": 155,
+          "w": 329,
+          "h": 859
+        },
+        {
+          "x": 209,
+          "y": 157,
+          "w": 330,
+          "h": 857
+        },
+        {
+          "x": 209,
+          "y": 158,
+          "w": 330,
+          "h": 856
+        },
+        {
+          "x": 209,
+          "y": 159,
+          "w": 330,
+          "h": 855
+        },
+        {
+          "x": 211,
+          "y": 162,
+          "w": 328,
+          "h": 852
+        },
+        {
+          "x": 212,
+          "y": 164,
+          "w": 327,
+          "h": 850
+        },
+        {
+          "x": 220,
+          "y": 167,
+          "w": 319,
+          "h": 847
+        },
+        {
+          "x": 229,
+          "y": 166,
+          "w": 311,
+          "h": 848
+        },
+        {
+          "x": 232,
+          "y": 165,
+          "w": 308,
+          "h": 849
+        },
+        {
+          "x": 234,
+          "y": 164,
+          "w": 308,
+          "h": 850
+        },
+        {
+          "x": 235,
+          "y": 165,
+          "w": 308,
+          "h": 850
+        },
+        {
+          "x": 236,
+          "y": 165,
+          "w": 307,
+          "h": 849
+        },
+        {
+          "x": 237,
+          "y": 165,
+          "w": 306,
+          "h": 849
+        },
+        {
+          "x": 237,
+          "y": 165,
+          "w": 306,
+          "h": 851
+        },
+        {
+          "x": 237,
+          "y": 165,
+          "w": 307,
+          "h": 851
+        },
+        {
+          "x": 237,
+          "y": 164,
+          "w": 307,
+          "h": 852
+        },
+        {
+          "x": 237,
+          "y": 164,
+          "w": 307,
+          "h": 852
+        },
+        {
+          "x": 235,
+          "y": 162,
+          "w": 308,
+          "h": 854
+        },
+        {
+          "x": 234,
+          "y": 161,
+          "w": 309,
+          "h": 855
+        },
+        {
+          "x": 232,
+          "y": 159,
+          "w": 310,
+          "h": 857
+        },
+        {
+          "x": 231,
+          "y": 159,
+          "w": 311,
+          "h": 855
+        },
+        {
+          "x": 227,
+          "y": 158,
+          "w": 313,
+          "h": 856
+        }
+      ],
+      "frameRects": [
+        {
+          "x": 0,
+          "y": 0,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_000",
+          "duration": 101,
+          "sourceFrameIndex": 0
+        },
+        {
+          "x": 798,
+          "y": 0,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_001",
+          "duration": 101,
+          "sourceFrameIndex": 1
+        },
+        {
+          "x": 1596,
+          "y": 0,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_002",
+          "duration": 101,
+          "sourceFrameIndex": 2
+        },
+        {
+          "x": 2394,
+          "y": 0,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_003",
+          "duration": 101,
+          "sourceFrameIndex": 3
+        },
+        {
+          "x": 3192,
+          "y": 0,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_004",
+          "duration": 101,
+          "sourceFrameIndex": 4
+        },
+        {
+          "x": 3990,
+          "y": 0,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_005",
+          "duration": 101,
+          "sourceFrameIndex": 5
+        },
+        {
+          "x": 0,
+          "y": 1198,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_006",
+          "duration": 101,
+          "sourceFrameIndex": 6
+        },
+        {
+          "x": 798,
+          "y": 1198,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_007",
+          "duration": 101,
+          "sourceFrameIndex": 7
+        },
+        {
+          "x": 1596,
+          "y": 1198,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_008",
+          "duration": 101,
+          "sourceFrameIndex": 8
+        },
+        {
+          "x": 2394,
+          "y": 1198,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_009",
+          "duration": 101,
+          "sourceFrameIndex": 9
+        },
+        {
+          "x": 3192,
+          "y": 1198,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_010",
+          "duration": 101,
+          "sourceFrameIndex": 10
+        },
+        {
+          "x": 3990,
+          "y": 1198,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_011",
+          "duration": 101,
+          "sourceFrameIndex": 11
+        },
+        {
+          "x": 0,
+          "y": 2396,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_012",
+          "duration": 101,
+          "sourceFrameIndex": 12
+        },
+        {
+          "x": 798,
+          "y": 2396,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_013",
+          "duration": 101,
+          "sourceFrameIndex": 13
+        },
+        {
+          "x": 1596,
+          "y": 2396,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_014",
+          "duration": 101,
+          "sourceFrameIndex": 14
+        },
+        {
+          "x": 2394,
+          "y": 2396,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_015",
+          "duration": 101,
+          "sourceFrameIndex": 15
+        },
+        {
+          "x": 3192,
+          "y": 2396,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_016",
+          "duration": 101,
+          "sourceFrameIndex": 16
+        },
+        {
+          "x": 3990,
+          "y": 2396,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_017",
+          "duration": 101,
+          "sourceFrameIndex": 17
+        },
+        {
+          "x": 0,
+          "y": 3594,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_018",
+          "duration": 101,
+          "sourceFrameIndex": 18
+        },
+        {
+          "x": 798,
+          "y": 3594,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_019",
+          "duration": 101,
+          "sourceFrameIndex": 19
+        },
+        {
+          "x": 1596,
+          "y": 3594,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_020",
+          "duration": 101,
+          "sourceFrameIndex": 20
+        },
+        {
+          "x": 2394,
+          "y": 3594,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_021",
+          "duration": 101,
+          "sourceFrameIndex": 21
+        },
+        {
+          "x": 3192,
+          "y": 3594,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_022",
+          "duration": 101,
+          "sourceFrameIndex": 22
+        },
+        {
+          "x": 3990,
+          "y": 3594,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_023",
+          "duration": 101,
+          "sourceFrameIndex": 23
+        },
+        {
+          "x": 0,
+          "y": 4792,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_024",
+          "duration": 101,
+          "sourceFrameIndex": 24
+        },
+        {
+          "x": 798,
+          "y": 4792,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_025",
+          "duration": 101,
+          "sourceFrameIndex": 25
+        },
+        {
+          "x": 1596,
+          "y": 4792,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_026",
+          "duration": 101,
+          "sourceFrameIndex": 26
+        },
+        {
+          "x": 2394,
+          "y": 4792,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_027",
+          "duration": 101,
+          "sourceFrameIndex": 27
+        },
+        {
+          "x": 3192,
+          "y": 4792,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_028",
+          "duration": 101,
+          "sourceFrameIndex": 28
+        },
+        {
+          "x": 3990,
+          "y": 4792,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_029",
+          "duration": 101,
+          "sourceFrameIndex": 29
+        },
+        {
+          "x": 0,
+          "y": 5990,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_030",
+          "duration": 101,
+          "sourceFrameIndex": 30
+        },
+        {
+          "x": 798,
+          "y": 5990,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_031",
+          "duration": 101,
+          "sourceFrameIndex": 31
+        },
+        {
+          "x": 1596,
+          "y": 5990,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_032",
+          "duration": 101,
+          "sourceFrameIndex": 32
+        },
+        {
+          "x": 2394,
+          "y": 5990,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_033",
+          "duration": 101,
+          "sourceFrameIndex": 33
+        },
+        {
+          "x": 3192,
+          "y": 5990,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_034",
+          "duration": 101,
+          "sourceFrameIndex": 34
+        },
+        {
+          "x": 3990,
+          "y": 5990,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_035",
+          "duration": 101,
           "sourceFrameIndex": 35
         }
       ],

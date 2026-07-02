@@ -7,7 +7,7 @@ export class MovementSystem {
     this.player = player;
   }
 
-  walkTo(point) {
+  walkTo(point, facingPoint = point) {
     const wasWalking = this.player.animation === "walk" && (this.player.target || this.player.walkPart === "start" || this.player.walkPart === "loop");
     const dx = point.x - this.player.position.x;
     const dy = point.y - this.player.position.y;
@@ -20,7 +20,7 @@ export class MovementSystem {
       this.player.stopAnimationStarted = false;
       return;
     }
-    this.player.facing = facingFromDelta(dx, dy, this.player);
+    this.player.facing = facingFromDelta(facingPoint.x - this.player.position.x, facingPoint.y - this.player.position.y, this.player);
     this.player.target = { ...point };
     this.player.animation = "walk";
     this.player.pendingStop = false;

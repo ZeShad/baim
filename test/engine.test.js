@@ -2,19 +2,20 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import { Localization } from "../src/engine/Localization.js";
 import { SaveSystem } from "../src/engine/SaveSystem.js";
-import { pointInPolygon, isWalkable } from "../src/engine/SceneGeometry.js";
+import { pointInPolygon, isWalkable, pointInWalkMask, nearestWalkablePointOnLine, nearestWalkablePoint, sceneScale } from "../src/engine/SceneGeometry.js";
 import { DEFAULT_SAVE } from "../src/engine/ids.js";
 import { characterHeight } from "../src/engine/CharacterRenderMath.js";
 import { facingFromDelta, MovementSystem, requestWalkStop, eastWestFallbackFacing, walkMotionMultiplierForFrame } from "../src/engine/MovementSystem.js";
 import { AnimationPlayer } from "../src/engine/AnimationPlayer.js";
 import { Game } from "../src/engine/Game.js";
-import { Renderer, stableExternalVisualBounds, stopRenderOffsetX } from "../src/engine/Renderer.js";
+import { Renderer, stableExternalVisualBounds, stopRenderOffsetX, stopRenderOffsetY } from "../src/engine/Renderer.js";
 import { strings } from "../src/content/localization/index.js";
 import { chapter1 } from "../src/content/chapter1/index.js";
 import { assetManifest } from "../src/content/art/assetManifest.js";
 import { CHARACTER_CUTOUT_MARGIN_RATIO, CHARACTER_SOURCE_SCALE } from "../src/content/art/characterAssetConfig.js";
 import { characterDefinitions } from "../src/content/art/characters.js";
 import { externalAnimationV1 } from "../src/content/art/externalAnimationV1.generated.js";
+import { distance } from "../src/engine/geometry.js";
 import { makePng } from "../tools/character-frame-utils.mjs";
 import {
   EXTERNAL_WALK_LOOP_MOTION_MAX,
@@ -55,11 +56,57 @@ test("chapter scenes define explicit walk polygons for production art", () => {
   }
 });
 
+test("apartment uses a raster walk mask for carpet and exit approach", () => {
+  const scene = chapter1.scenes.find((candidate) => candidate.id === "scene.chapter1.apartment");
+  assert.equal(scene.walkMask.width, 64);
+  assert.equal(scene.walkMask.height, 36);
+  assert.equal(pointInWalkMask(scene.walkMask, scene.playerStart), true);
+  assert.equal(isWalkable(scene, { x: 1060, y: 505 }), true);
+  assert.equal(isWalkable(scene, { x: 650, y: 360 }), false);
+  assert.equal(isWalkable(scene, { x: 1120, y: 390 }), false);
+  assert.equal(isWalkable(scene, { x: 120, y: 460 }), false);
+});
+
+test("apartment perspective scale is continuous across raster mask rows", () => {
+  const scene = chapter1.scenes.find((candidate) => candidate.id === "scene.chapter1.apartment");
+  const before = sceneScale(scene, { x: 650, y: 491 });
+  const after = sceneScale(scene, { x: 650, y: 493 });
+  assert.ok(after > before);
+  assert.ok(after - before < 0.01);
+  const farHeight = characterHeight(characterDefinitions["npc.bai_mitko"], scene, { x: 650, y: 430 });
+  const nearHeight = characterHeight(characterDefinitions["npc.bai_mitko"], scene, { x: 650, y: 600 });
+  assert.ok(nearHeight > farHeight);
+});
+
+test("walk mask line sampler finds the nearest direct approach before a blocked target", () => {
+  const scene = chapter1.scenes.find((candidate) => candidate.id === "scene.chapter1.apartment");
+  const approach = nearestWalkablePointOnLine(scene, { x: 650, y: 520 }, { x: 690, y: 250 });
+  assert.ok(approach);
+  assert.equal(isWalkable(scene, approach), true);
+  assert.ok(approach.y < 520);
+  assert.ok(approach.y >= 490);
+});
+
+test("walk mask nearest sampler finds an approach near blocked table clicks", () => {
+  const scene = chapter1.scenes.find((candidate) => candidate.id === "scene.chapter1.apartment");
+  const approach = nearestWalkablePoint(scene, { x: 315, y: 490 });
+  assert.ok(approach);
+  assert.equal(isWalkable(scene, approach), true);
+  assert.ok(approach.x < 430);
+  assert.ok(approach.y >= 500);
+});
+
 test("chapter scene movement speeds are tuned for external walk animation", () => {
   const speeds = Object.fromEntries(chapter1.scenes.map((scene) => [scene.id, scene.movementSpeed]));
   assert.equal(speeds["scene.chapter1.apartment"], 70);
   assert.equal(speeds["scene.chapter1.village_square"], 80);
   assert.equal(speeds["scene.chapter1.mehana"], 75);
+});
+
+test("runtime movement speed multiplier affects distance over time only", () => {
+  const game = Object.create(Game.prototype);
+  game.walkSpeedMultiplier = 1;
+  assert.equal(game.sceneMovementSpeed({ movementSpeed: 70 }), 109.375);
 });
 
 test("save system merges old saves with current defaults", () => {
@@ -107,15 +154,22 @@ test("Bai Mitko idle directions use walk-start animation frames instead of stati
 test("Bai Mitko external idle variants are generated for east and mirrored west", () => {
   const east = externalAnimationV1.idleVariants.east;
   const west = externalAnimationV1.idleVariants.west;
-  assert.equal(east.length, 5);
-  assert.equal(west.length, 5);
+  assert.equal(east.length, 6);
+  assert.equal(west.length, 6);
   assert.deepEqual(
     east.map((variant) => variant.slot),
-    ["external_idle_east_1", "external_idle_east_2", "external_idle_east_3", "external_idle_east_4", "external_idle_east_5"]
+    [
+      "external_idle_east_1",
+      "external_idle_east_2",
+      "external_idle_east_3",
+      "external_idle_east_4",
+      "external_idle_east_5",
+      "external_idle_east_6"
+    ]
   );
   assert.deepEqual(
     east.map((variant) => variant.pingPong),
-    [false, false, false, false, false]
+    [false, false, false, false, false, false]
   );
   assert.equal(east[0].role, "idle");
   assert.equal(east[0].loop, false);
@@ -125,9 +179,39 @@ test("Bai Mitko external idle variants are generated for east and mirrored west"
   assert.equal(east[2].frameCount, 36);
   assert.equal(east[3].frameCount, 36);
   assert.equal(east[4].frameCount, 36);
+  assert.equal(east[5].frameCount, 36);
   assert.equal(west[0].slot, "external_idle_east_1");
   assert.equal(west[0].mirrored, true);
   assert.equal(west[2].pingPong, false);
+});
+
+test("Bai Mitko external talk and reject animations are generated for east and mirrored west", () => {
+  assert.deepEqual(
+    externalAnimationV1.talkAnimations.east.singleWord.map((variant) => variant.slot),
+    ["external_talk_east_short_1"]
+  );
+  assert.deepEqual(
+    externalAnimationV1.talkAnimations.east.singleShortSentence.map((variant) => variant.slot),
+    ["external_talk_east_long_2"]
+  );
+  assert.deepEqual(
+    externalAnimationV1.talkAnimations.east.singleLongSentence.map((variant) => variant.slot),
+    ["external_talk_east_long_1"]
+  );
+  assert.deepEqual(
+    [
+      externalAnimationV1.talkAnimations.east.singleWord[0].fps,
+      externalAnimationV1.talkAnimations.east.singleShortSentence[0].fps,
+      externalAnimationV1.talkAnimations.east.singleLongSentence[0].fps
+    ],
+    [12, 12, 12]
+  );
+  assert.equal(externalAnimationV1.talkAnimations.east.singleWord[0].talkSemantic, "single_word");
+  assert.equal(externalAnimationV1.talkAnimations.east.singleShortSentence[0].talkSemantic, "single_short_sentence");
+  assert.equal(externalAnimationV1.talkAnimations.east.singleLongSentence[0].talkSemantic, "single_long_sentence");
+  assert.equal(externalAnimationV1.talkAnimations.west.singleWord[0].mirrored, true);
+  assert.equal(externalAnimationV1.rejectAnimations.east[0].slot, "external_reject_east_1");
+  assert.equal(externalAnimationV1.rejectAnimations.west[0].mirrored, true);
 });
 
 test("idle variants trigger after irregular idle delay and finish back to hold", () => {
@@ -149,9 +233,22 @@ test("idle variants trigger after irregular idle delay and finish back to hold",
   const game = Object.create(Game.prototype);
   game.player = player;
   game.characterVariant = "external_animation_v1";
-  game.updateIdleVariants(1);
+  const originalRandom = Math.random;
+  Math.random = () => 0.99;
+  try {
+    game.updateIdleVariants(1);
+  } finally {
+    Math.random = originalRandom;
+  }
   assert.ok(
-    ["external_idle_east_1", "external_idle_east_2", "external_idle_east_3", "external_idle_east_4", "external_idle_east_5"].includes(
+    [
+      "external_idle_east_1",
+      "external_idle_east_2",
+      "external_idle_east_3",
+      "external_idle_east_4",
+      "external_idle_east_5",
+      "external_idle_east_6"
+    ].includes(
       player.idleVariant.slot
     )
   );
@@ -161,7 +258,12 @@ test("idle variants trigger after irregular idle delay and finish back to hold",
       return true;
     }
   };
-  game.updateIdleVariants(1 / 60);
+  Math.random = () => 0.99;
+  try {
+    game.updateIdleVariants(1 / 60);
+  } finally {
+    Math.random = originalRandom;
+  }
   assert.equal(player.idleVariant, null);
   assert.ok(player.idleHoldFrame);
   assert.equal(player.idleHoldFrame.frameIndex, player.idleHoldFrame.frame.frameCount - 1);
@@ -547,6 +649,267 @@ test("clicking current idle position does not start walk or stop animation", () 
   assert.equal(player.stopAnimationStarted, false);
 });
 
+test("far target click walks to direct mask approach before running look action", () => {
+  const scene = chapter1.scenes.find((candidate) => candidate.id === "scene.chapter1.apartment");
+  const target = scene.interactables.find((candidate) => candidate.id === "hotspot.apartment.mirror");
+  const game = Object.create(Game.prototype);
+  game.currentScene = scene;
+  game.selectedVerb = "look";
+  game.player = {
+    position: { x: 650, y: 520 },
+    target: null,
+    animation: "idle",
+    facing: "west",
+    verticalDirectionBias: 1.6,
+    walkPartsByFacing: { east: {}, west: {} },
+    pendingInteraction: null
+  };
+  game.movement = {
+    walkTo(point) {
+      game.player.target = { ...point };
+      game.player.animation = "walk";
+    }
+  };
+  game.t = (key) => key;
+
+  game.handleTarget(target, { x: 900, y: 250 });
+
+  assert.ok(game.player.pendingInteraction);
+  assert.equal(game.player.facing, "west");
+  assert.equal(game.player.pendingInteraction.target.id, "hotspot.apartment.mirror");
+  assert.equal(game.player.pendingInteraction.verb, "look");
+  assert.deepEqual(game.player.pendingFacingPoint, { x: 900, y: 250 });
+  assert.equal(game.player.interactionDebug.kind, "target");
+  assert.deepEqual(game.player.interactionDebug.hand, { x: 900, y: 250 });
+  assert.deepEqual(game.player.interactionDebug.distancePoint, { x: 900, y: 250 });
+  assert.deepEqual(game.player.interactionDebug.reachOrigin, game.playerReachOriginPoint());
+  assert.ok(Math.abs(game.player.interactionDebug.reachDistance - distance(game.player.interactionDebug.reachOrigin, { x: 900, y: 250 })) < 0.001);
+  assert.deepEqual(game.player.interactionDebug.click, { x: 900, y: 250 });
+  assert.deepEqual(game.player.interactionDebug.feetGoal, { x: 810, y: 405 });
+  assert.deepEqual(game.player.interactionDebug.feet, game.player.target);
+  assert.equal(game.message, "");
+});
+
+test("table click approaches the table instead of stopping near current feet", () => {
+  const scene = chapter1.scenes.find((candidate) => candidate.id === "scene.chapter1.apartment");
+  const target = scene.interactables.find((candidate) => candidate.id === "hotspot.apartment.table");
+  const game = Object.create(Game.prototype);
+  game.currentScene = scene;
+  game.selectedVerb = "look";
+  game.player = {
+    position: { x: 910, y: 520 },
+    target: null,
+    animation: "idle",
+    facing: "east",
+    verticalDirectionBias: 1.6,
+    walkPartsByFacing: { east: {}, west: {} },
+    pendingInteraction: null
+  };
+  game.movement = {
+    walkTo(point) {
+      game.player.target = { ...point };
+      game.player.animation = "walk";
+    }
+  };
+  game.t = (key) => key;
+
+  game.handleTarget(target, { x: 315, y: 490 });
+
+  assert.equal(game.player.facing, "west");
+  assert.deepEqual(game.player.interactionDebug.hand, { x: 315, y: 490 });
+  assert.deepEqual(game.player.interactionDebug.distancePoint, { x: 315, y: 490 });
+  assert.deepEqual(game.player.interactionDebug.reachOrigin, game.playerReachOriginPoint());
+  assert.deepEqual(game.player.interactionDebug.feetGoal, { x: 405, y: 645 });
+  assert.ok(game.player.target.x >= 390);
+  assert.ok(game.player.target.x <= 440);
+  assert.ok(game.player.target.y >= 580);
+  assert.ok(distance(game.player.target, game.player.position) > 250);
+  assert.deepEqual(game.player.interactionDebug.click, { x: 315, y: 490 });
+});
+
+test("near object approach does not start tiny corrective walk", () => {
+  const scene = chapter1.scenes.find((candidate) => candidate.id === "scene.chapter1.apartment");
+  const target = scene.interactables.find((candidate) => candidate.id === "hotspot.apartment.mirror");
+  const game = Object.create(Game.prototype);
+  game.currentScene = scene;
+  game.selectedVerb = "look";
+  game.message = "previous";
+  game.player = {
+    position: { x: 990, y: 520 },
+    target: null,
+    animation: "idle",
+    facing: "west",
+    verticalDirectionBias: 1.6,
+    walkPartsByFacing: { east: {}, west: {} },
+    pendingInteraction: null,
+    animator: { play() {} }
+  };
+  game.movement = {
+    walkTo(point) {
+      game.walkedTo = { ...point };
+    }
+  };
+  game.usesExternalCharacterAnimation = () => false;
+  game.t = (key) => key;
+
+  game.handleTarget(target, { x: 900, y: 365 });
+
+  assert.equal(game.walkedTo, undefined);
+  assert.equal(game.player.pendingInteraction, null);
+  assert.equal(game.player.facing, "east");
+  assert.equal(game.message, "look.apartment.mirror");
+  assert.ok(distance(game.player.position, game.player.interactionDebug.feet) <= 80);
+});
+
+test("rect target approach uses click point as hand target and left-middle fallback without click", () => {
+  const target = { rect: { x: 640, y: 155, w: 140, h: 220 } };
+  const game = Object.create(Game.prototype);
+  assert.deepEqual(game.targetReachPoint(target, { x: 760, y: 320 }), { x: 760, y: 320 });
+  assert.deepEqual(game.targetReachPoint(target), { x: 682, y: 265 });
+});
+
+test("empty walkable click uses the clicked point as the feet pivot destination", () => {
+  const scene = chapter1.scenes.find((candidate) => candidate.id === "scene.chapter1.apartment");
+  const game = Object.create(Game.prototype);
+  game.currentScene = scene;
+  game.message = "previous action";
+  game.player = {
+    position: { x: 590, y: 520 },
+    target: null,
+    animation: "idle",
+    facing: "west",
+    verticalDirectionBias: 1.6,
+    walkPartsByFacing: { east: {}, west: {} },
+    pendingInteraction: { target: {} }
+  };
+  game.movement = {
+    walkTo(point) {
+      game.walkedTo = { ...point };
+    }
+  };
+  game.t = (key) => key;
+
+  game.handleWorldClick({ x: 650, y: 520 });
+
+  assert.deepEqual(game.walkedTo, { x: 650, y: 520 });
+  assert.equal(game.player.facing, "east");
+  assert.equal(game.message, "");
+  assert.deepEqual(game.player.interactionDebug, { kind: "move", feet: { x: 650, y: 520 } });
+  assert.equal(game.player.pendingInteraction, null);
+  assert.deepEqual(game.player.pendingFacingPoint, { x: 650, y: 520 });
+});
+
+test("finished empty move turns toward the requested walk point", () => {
+  const game = Object.create(Game.prototype);
+  game.player = {
+    position: { x: 650, y: 520 },
+    target: null,
+    animation: "idle",
+    facing: "east",
+    verticalDirectionBias: 1.6,
+    pendingFacingPoint: { x: 590, y: 520 }
+  };
+
+  game.resolvePendingFacingPoint();
+
+  assert.equal(game.player.pendingFacingPoint, null);
+  assert.equal(game.player.facing, "west");
+});
+
+test("pending target action runs after walk and stop animation complete", () => {
+  const scene = chapter1.scenes.find((candidate) => candidate.id === "scene.chapter1.apartment");
+  const target = scene.interactables.find((candidate) => candidate.id === "hotspot.apartment.mirror");
+  const game = Object.create(Game.prototype);
+  game.selectedVerb = "use";
+  game.player = {
+    position: { x: 650, y: 500 },
+    target: null,
+    animation: "idle",
+    facing: "west",
+    verticalDirectionBias: 1.6,
+    animator: { play() {} },
+    pendingInteraction: { target, verb: "look", hand: { x: 700, y: 500 }, approach: { x: 650, y: 500 } }
+  };
+  game.usesExternalCharacterAnimation = () => false;
+  game.t = (key) => key;
+
+  game.resolvePendingInteraction();
+
+  assert.equal(game.player.pendingInteraction, null);
+  assert.equal(game.selectedVerb, "use");
+  assert.equal(game.player.facing, "east");
+  assert.equal(game.message, "look.apartment.mirror");
+});
+
+test("target action turns toward hand point when no movement is needed", () => {
+  const scene = chapter1.scenes.find((candidate) => candidate.id === "scene.chapter1.apartment");
+  const target = scene.interactables.find((candidate) => candidate.id === "hotspot.apartment.mirror");
+  const game = Object.create(Game.prototype);
+  game.currentScene = scene;
+  game.selectedVerb = "look";
+  game.player = {
+    position: { x: 650, y: 500 },
+    target: null,
+    animation: "idle",
+    facing: "east",
+    verticalDirectionBias: 1.6,
+    walkPartsByFacing: { east: {}, west: {} },
+    animator: { play() {} },
+    pendingInteraction: null
+  };
+  game.usesExternalCharacterAnimation = () => false;
+  game.t = (key) => key;
+
+  game.player.facing = "west";
+  const reachablePoint = game.playerReachOriginPoint();
+  game.player.facing = "east";
+  game.handleTarget(target, reachablePoint);
+
+  assert.equal(game.player.pendingInteraction, null);
+  assert.equal(game.player.facing, "west");
+  assert.equal(game.message, "look.apartment.mirror");
+});
+
+test("footer status messages start talk or reject animation variants", () => {
+  const game = Object.create(Game.prototype);
+  game.usesExternalCharacterAnimation = () => true;
+  game.player = {
+    position: { x: 650, y: 500 },
+    target: null,
+    animation: "idle",
+    facing: "east",
+    idleVariant: { slot: "external_idle_east_1" },
+    idleVariantQueue: [{ slot: "external_idle_east_2" }],
+    animator: { played: null, play(animation, key) { this.played = { animation, key }; } }
+  };
+
+  game.setStatusMessage("short text");
+
+  assert.equal(game.message, "short text");
+  assert.equal(game.player.animation, "talk");
+  assert.equal(game.player.speechAnimation.slot, "external_talk_east_short_1");
+  assert.equal(game.player.idleVariant, null);
+  assert.deepEqual(game.player.idleVariantQueue, []);
+  assert.equal(game.player.animator.played.animation, "talk");
+
+  game.setStatusMessage("cannot", { reject: true });
+
+  assert.equal(game.player.animation, "reject");
+  assert.equal(game.player.speechAnimation.slot, "external_reject_east_1");
+});
+
+test("talk animation semantic heuristic classifies text shape", () => {
+  const game = Object.create(Game.prototype);
+
+  assert.equal(game.talkSemanticForMessage("Да."), "singleWord");
+  assert.equal(game.talkSemanticForMessage("Това няма да стане."), "singleShortSentence");
+  assert.equal(
+    game.talkSemanticForMessage("Това няма да стане, защото комисията първо трябва да назначи подкомисия за предварително усещане."),
+    "singleLongSentence"
+  );
+  assert.equal(game.talkSemanticForMessage("Първо това. После онова."), "singleLongSentence");
+});
+
 test("external idle pose uses walk start frame zero instead of stale walk frame", () => {
   const definition = characterDefinitions["npc.bai_mitko"];
   const player = {
@@ -756,11 +1119,16 @@ test("movement stop phase plays once and can finish into idle", () => {
 });
 
 test("stop render offset fades from configured value to zero", () => {
-  const frame = { role: "stop", frameCount: 15, initialFrame: 1, stopRenderOffsetXStart: -10 };
-  assert.equal(stopRenderOffsetX(frame, 1), -10);
-  assert.ok(Math.abs(stopRenderOffsetX(frame, 7) - -5.385) < 0.001);
+  const frame = { role: "stop", frameCount: 15, initialFrame: 1, stopRenderOffsetXStart: -8, stopRenderOffsetYStart: -6 };
+  assert.equal(stopRenderOffsetX(frame, 1), -8);
+  assert.ok(Math.abs(stopRenderOffsetX(frame, 3) - -4.923) < 0.001);
+  assert.equal(stopRenderOffsetX(frame, 7), 0);
   assert.equal(stopRenderOffsetX(frame, 14), 0);
-  assert.equal(stopRenderOffsetX(frame, 1, true), 10);
+  assert.equal(stopRenderOffsetX(frame, 1, true), 8);
+  assert.equal(stopRenderOffsetY(frame, 1), -6);
+  assert.ok(Math.abs(stopRenderOffsetY(frame, 3) - -3.692) < 0.001);
+  assert.equal(stopRenderOffsetY(frame, 7), 0);
+  assert.equal(stopRenderOffsetY(frame, 14), 0);
 });
 
 test("external animation chroma key converts green amount into soft alpha", () => {

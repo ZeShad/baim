@@ -7,11 +7,22 @@ export function stopRenderOffsetX(frame, frameIndex, mirrored = false) {
   const startOffset = Number(frame?.stopRenderOffsetXStart);
   if (!Number.isFinite(startOffset) || !frame || frame.role !== "stop") return 0;
   const startFrame = Math.max(0, Math.min(Number(frame.initialFrame) || 0, Math.max(0, frame.frameCount - 1)));
-  const endFrame = Math.max(startFrame + 1, frame.frameCount - 1);
+  const endFrame = Math.max(startFrame + 1, startFrame + (frame.frameCount - 1 - startFrame) * 0.4);
   const progress = Math.max(0, Math.min(1, (frameIndex - startFrame) / Math.max(1, endFrame - startFrame)));
   if (progress >= 1) return 0;
   const direction = mirrored ? -1 : 1;
   const offset = direction * startOffset * (1 - progress);
+  return offset === 0 ? 0 : offset;
+}
+
+export function stopRenderOffsetY(frame, frameIndex) {
+  const startOffset = Number(frame?.stopRenderOffsetYStart);
+  if (!Number.isFinite(startOffset) || !frame || frame.role !== "stop") return 0;
+  const startFrame = Math.max(0, Math.min(Number(frame.initialFrame) || 0, Math.max(0, frame.frameCount - 1)));
+  const endFrame = Math.max(startFrame + 1, startFrame + (frame.frameCount - 1 - startFrame) * 0.4);
+  const progress = Math.max(0, Math.min(1, (frameIndex - startFrame) / Math.max(1, endFrame - startFrame)));
+  if (progress >= 1) return 0;
+  const offset = startOffset * (1 - progress);
   return offset === 0 ? 0 : offset;
 }
 
@@ -108,8 +119,9 @@ export class Renderer {
         const width = frame.frameWidth * scale;
         const height = frame.frameHeight * scale;
         const renderOffsetX = stopRenderOffsetX(frame, frameIndex, mirrored);
+        const renderOffsetY = stopRenderOffsetY(frame, frameIndex);
         const drawX = state.x + renderOffsetX - width * (frame.anchorX ?? frame.anchor?.x ?? 0.5);
-        const drawY = state.baselineY - (frame.baselineY || frame.frameHeight) * scale;
+        const drawY = state.baselineY + renderOffsetY - (frame.baselineY || frame.frameHeight) * scale;
         const shadowWidth = (frame.contentBounds?.w || bounds.w) * scale;
         this.drawSimpleShadow(state.x, state.baselineY, shadowWidth);
         this.drawFrameImage(image, frameIndex, frame, bounds, drawX, drawY, width, height, mirrored);
@@ -122,7 +134,8 @@ export class Renderer {
           anchor: `${frame.anchorX ?? frame.anchor?.x ?? 0.5},${frame.anchorY ?? frame.anchor?.y ?? 1}`,
           width,
           height,
-          renderOffsetX
+          renderOffsetX,
+          renderOffsetY
         };
         if (state.showOverlays) this.drawSimpleOverlays(drawX, drawY, width, height, state.baselineY, sourceRect);
       } else {
@@ -230,7 +243,7 @@ export class Renderer {
       `canExitToStop: ${Boolean(state.canExitToStop)}`,
       `loop: ${frame ? Boolean(frame.loop) : false}`,
       `mirrored: ${mirrored}`,
-      `render offset x: ${(drawInfo.renderOffsetX || 0).toFixed(1)}`,
+      `render offset: ${(drawInfo.renderOffsetX || 0).toFixed(1)},${(drawInfo.renderOffsetY || 0).toFixed(1)}`,
       `draw: ${drawInfo.drawX.toFixed(1)},${drawInfo.drawY.toFixed(1)}`,
       `baselineY: ${drawInfo.baselineY}`,
       `anchor: ${drawInfo.anchor}`,
@@ -309,18 +322,22 @@ export class Renderer {
       ctx.strokeStyle = "rgba(102, 180, 255, 0.4)";
       ctx.strokeRect(0, zone.yMin, 1280, zone.yMax - zone.yMin);
     }
-    for (const polygon of scene.walkPolygons || []) {
-      ctx.beginPath();
-      polygon.points.forEach((point, index) => {
-        if (index === 0) ctx.moveTo(point.x, point.y);
-        else ctx.lineTo(point.x, point.y);
-      });
-      ctx.closePath();
-      ctx.fillStyle = "rgba(91, 214, 120, 0.12)";
-      ctx.fill();
-      ctx.strokeStyle = "rgba(91, 214, 120, 0.85)";
-      ctx.lineWidth = 2;
-      ctx.stroke();
+    if (scene.walkMask) {
+      this.drawWalkMask(scene);
+    } else {
+      for (const polygon of scene.walkPolygons || []) {
+        ctx.beginPath();
+        polygon.points.forEach((point, index) => {
+          if (index === 0) ctx.moveTo(point.x, point.y);
+          else ctx.lineTo(point.x, point.y);
+        });
+        ctx.closePath();
+        ctx.fillStyle = polygon.debugFill || "rgba(91, 214, 120, 0.12)";
+        ctx.fill();
+        ctx.strokeStyle = polygon.debugStroke || "rgba(91, 214, 120, 0.85)";
+        ctx.lineWidth = 2;
+        ctx.stroke();
+      }
     }
     for (const hotspot of [...scene.exits, ...scene.interactables, ...scene.npcs]) {
       const rect = hotspot.rect;
@@ -342,6 +359,65 @@ export class Renderer {
       ctx.font = "12px Arial";
       ctx.fillText(name, point.x + 8, point.y - 8);
     }
+    this.drawInteractionDebugPoints();
+    ctx.restore();
+  }
+
+  drawInteractionDebugPoints() {
+    const debug = this.game.player?.interactionDebug;
+    if (!debug) return;
+    const blink = Math.floor((performance.now ? performance.now() : Date.now()) / 260) % 2 === 0;
+    const alpha = blink ? 1 : 0.35;
+    if (debug.kind === "move" && debug.feet) {
+      this.drawDebugPoint(debug.feet, `feet ${Math.round(debug.feet.x)},${Math.round(debug.feet.y)}`, `rgba(83, 255, 126, ${alpha})`);
+      return;
+    }
+    if (debug.click) this.drawDebugPoint(debug.click, "click", `rgba(255, 255, 255, ${alpha * 0.85})`, 5);
+    if (debug.hand) this.drawDebugPoint(debug.hand, "hand reach", `rgba(255, 214, 64, ${alpha})`, 8);
+    if (debug.reachOrigin && debug.distancePoint) this.drawDebugLine(debug.reachOrigin, debug.distancePoint, `rgba(255, 108, 220, ${alpha * 0.55})`);
+    if (debug.reachOrigin) this.drawDebugPoint(debug.reachOrigin, "reach origin", `rgba(255, 108, 220, ${alpha})`, 7);
+    if (debug.distancePoint) {
+      const suffix = Number.isFinite(debug.reachDistance) ? ` ${Math.round(debug.reachDistance)}px` : "";
+      this.drawDebugPoint(debug.distancePoint, `reach target${suffix}`, `rgba(255, 108, 220, ${alpha})`, 11);
+    }
+    if (debug.feetGoal) this.drawDebugPoint(debug.feetGoal, "feet goal", `rgba(78, 170, 255, ${alpha * 0.55})`, 6);
+    if (debug.feet) this.drawDebugPoint(debug.feet, "feet approach", `rgba(83, 255, 126, ${alpha})`, 8);
+  }
+
+  drawDebugPoint(point, label, color, radius = 7) {
+    const { ctx } = this;
+    ctx.save();
+    ctx.strokeStyle = "rgba(0, 0, 0, 0.8)";
+    ctx.fillStyle = color;
+    ctx.lineWidth = 3;
+    ctx.beginPath();
+    ctx.arc(point.x, point.y, radius, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.moveTo(point.x - radius - 4, point.y);
+    ctx.lineTo(point.x + radius + 4, point.y);
+    ctx.moveTo(point.x, point.y - radius - 4);
+    ctx.lineTo(point.x, point.y + radius + 4);
+    ctx.stroke();
+    ctx.fillStyle = "rgba(0, 0, 0, 0.65)";
+    ctx.fillRect(point.x + 10, point.y - 18, Math.max(64, label.length * 7 + 10), 18);
+    ctx.fillStyle = "#fff3cf";
+    ctx.font = "12px Arial";
+    ctx.fillText(label, point.x + 15, point.y - 5);
+    ctx.restore();
+  }
+
+  drawDebugLine(from, to, color) {
+    const { ctx } = this;
+    ctx.save();
+    ctx.strokeStyle = color;
+    ctx.lineWidth = 2;
+    ctx.setLineDash([8, 6]);
+    ctx.beginPath();
+    ctx.moveTo(from.x, from.y);
+    ctx.lineTo(to.x, to.y);
+    ctx.stroke();
     ctx.restore();
   }
 
@@ -376,11 +452,12 @@ export class Renderer {
       ? Number.isInteger(spriteInfo.staticFrameIndex) ? spriteInfo.staticFrameIndex : this.game.player.animator.frameIndex % spriteInfo.frame.frameCount
       : 0;
     const renderOffsetX = stopRenderOffsetX(spriteInfo.frame, frameIndex, spriteInfo.mirrored);
+    const renderOffsetY = stopRenderOffsetY(spriteInfo.frame, frameIndex);
     const drawX = p.position.x + renderOffsetX - width * anchor.x;
     const baselineOffset = preserveFrameLayout && spriteInfo.frame
       ? stableBounds?.baselineY || spriteInfo.frame.baselineY || sourceHeight
       : spriteInfo.frame?.baselineY && boundsForSize ? spriteInfo.frame.baselineY - boundsForSize.y : sourceHeight * anchor.y;
-    const drawY = p.position.y - baselineOffset * scale + verticalOffset;
+    const drawY = p.position.y + renderOffsetY - baselineOffset * scale + verticalOffset;
     ctx.save();
     ctx.fillStyle = "rgba(0, 0, 0, 0.26)";
     ctx.beginPath();
@@ -410,14 +487,40 @@ export class Renderer {
     } else {
       ctx.drawImage(sprite, drawX, drawY, width, drawHeight);
     }
-    if (this.game.debugSceneGeometry || this.game.debugAnimation) this.drawCharacterDebug(p, drawX, drawY, width, drawHeight, visualHeight, spriteInfo.slot, spriteInfo.frame, spriteInfo.mirrored, renderOffsetX);
+    if (this.game.debugSceneGeometry || this.game.debugAnimation) this.drawCharacterDebug(p, drawX, drawY, width, drawHeight, visualHeight, spriteInfo.slot, spriteInfo.frame, spriteInfo.mirrored, renderOffsetX, renderOffsetY);
     ctx.restore();
+  }
+
+  drawWalkMask(scene) {
+    const mask = scene.walkMask;
+    if (!mask?.rows?.length) return;
+    const { ctx } = this;
+    const width = Math.max(1, Number(mask.width) || 1);
+    const height = Math.max(1, Number(mask.height) || 1);
+    const worldWidth = Math.max(1, Number(mask.worldWidth) || 1280);
+    const worldHeight = Math.max(1, Number(mask.worldHeight) || 720);
+    const cellWidth = worldWidth / width;
+    const cellHeight = worldHeight / height;
+    for (let y = 0; y < height; y += 1) {
+      const row = mask.rows[y] || "";
+      for (let x = 0; x < width; x += 1) {
+        const value = row[x] || ".";
+        const entry = mask.legend?.[value];
+        if (!entry?.walkable) continue;
+        ctx.fillStyle = entry.debugFill || "rgba(91, 214, 120, 0.12)";
+        ctx.fillRect(x * cellWidth, y * cellHeight, cellWidth, cellHeight);
+      }
+    }
   }
 
   resolveCharacterSprite(player, definition) {
     const animation = definition.animations[player.animation] || definition.animations.idle;
     const facing = player.facing || definition.render.defaultFacing;
     if (usesExternalWalkPose(player, definition) && player.animation !== "walk") {
+      if (player.speechAnimation?.slot) {
+        const image = this.game.assets.getCharacterImage(player.id, player.speechAnimation.slot);
+        return { image, slot: player.speechAnimation.slot, frame: player.speechAnimation, mirrored: Boolean(player.speechAnimation.mirrored) };
+      }
       if (player.idleVariant?.slot) {
         const image = this.game.assets.getCharacterImage(player.id, player.idleVariant.slot);
         return { image, slot: player.idleVariant.slot, frame: player.idleVariant, mirrored: Boolean(player.idleVariant.mirrored) };
@@ -577,7 +680,7 @@ export class Renderer {
     return frame.contentBounds || { x: 0, y: 0, w: frame.frameWidth, h: frame.frameHeight };
   }
 
-  drawCharacterDebug(player, drawX, drawY, width, height, sourceHeight, slot, frame, mirrored = false, renderOffsetX = 0) {
+  drawCharacterDebug(player, drawX, drawY, width, height, sourceHeight, slot, frame, mirrored = false, renderOffsetX = 0, renderOffsetY = 0) {
     const { ctx } = this;
     ctx.strokeStyle = "rgba(255, 80, 80, 0.9)";
     ctx.lineWidth = 2;
@@ -607,7 +710,7 @@ export class Renderer {
     ctx.fillText(`elapsed:${elapsed} loop:${frame ? Boolean(frame.loop) : "n/a"} finished:${animator.isFinished()} reset:${reset}`, drawX, drawY - 60);
     ctx.fillText(`pendingStop:${pendingStop} stopExitFrame:${stopExitFrame} canExitToStop:${canExit} stopping:${Boolean(player.movementStopping)} mirrored:${mirrored}`, drawX, drawY - 47);
     ctx.fillText(`moving:${Boolean(player.target)} stopStarted:${Boolean(player.stopAnimationStarted)} stopFinished:${Boolean(player.stopAnimationFinished)}`, drawX, drawY - 34);
-    ctx.fillText(`feet:${Math.round(player.position.x)},${Math.round(player.position.y)} h:${renderedHeight} scale:${scale} baseline:${frame?.baselineY || "n/a"} offsetX:${renderOffsetX.toFixed(1)}`, drawX, drawY - 21);
+    ctx.fillText(`feet:${Math.round(player.position.x)},${Math.round(player.position.y)} h:${renderedHeight} scale:${scale} baseline:${frame?.baselineY || "n/a"} offset:${renderOffsetX.toFixed(1)},${renderOffsetY.toFixed(1)}`, drawX, drawY - 21);
     ctx.fillText(`src:${sourceRect}`, drawX, drawY - 8);
     if (player.facingDebug) {
       const d = player.facingDebug;

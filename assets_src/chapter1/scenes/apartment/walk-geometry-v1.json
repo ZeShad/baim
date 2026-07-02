@@ -1,0 +1,57 @@
+{
+  "id": "walkmask.chapter1.apartment.floor_v1",
+  "sceneId": "scene.chapter1.apartment",
+  "sourceBackground": {
+    "path": "assets/chapter1/scenes/apartment/background.png",
+    "width": 1672,
+    "height": 941
+  },
+  "world": {
+    "width": 1280,
+    "height": 720
+  },
+  "raster": {
+    "width": 64,
+    "height": 36,
+    "cellSize": 20
+  },
+  "legend": {
+    ".": { "walkable": false, "debugFill": "rgba(0, 0, 0, 0)" },
+    "c": { "walkable": true, "role": "carpet_floor", "debugFill": "rgba(91, 214, 120, 0.18)" },
+    "e": { "walkable": true, "role": "exit_approach", "debugFill": "rgba(114, 188, 255, 0.2)" }
+  },
+  "shapes": [
+    {
+      "id": "walk.chapter1.apartment.main",
+      "cell": "c",
+      "role": "carpet_floor",
+      "debugFill": "rgba(91, 214, 120, 0.14)",
+      "debugStroke": "rgba(91, 214, 120, 0.9)",
+      "points": [
+        { "x": 118, "y": 784 },
+        { "x": 274, "y": 693 },
+        { "x": 444, "y": 653 },
+        { "x": 725, "y": 643 },
+        { "x": 1032, "y": 643 },
+        { "x": 1260, "y": 653 },
+        { "x": 1417, "y": 699 },
+        { "x": 1528, "y": 784 }
+      ]
+    },
+    {
+      "id": "walk.chapter1.apartment.door_approach",
+      "cell": "e",
+      "role": "exit_approach",
+      "debugFill": "rgba(114, 188, 255, 0.13)",
+      "debugStroke": "rgba(114, 188, 255, 0.9)",
+      "points": [
+        { "x": 1228, "y": 568 },
+        { "x": 1372, "y": 562 },
+        { "x": 1486, "y": 673 },
+        { "x": 1417, "y": 784 },
+        { "x": 1234, "y": 784 },
+        { "x": 1189, "y": 673 }
+      ]
+    }
+  ]
+}
