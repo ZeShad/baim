@@ -1,7 +1,7 @@
 import { DialogueSystem } from "./DialogueSystem.js";
 import { InventorySystem } from "./InventorySystem.js";
 import { Localization } from "./Localization.js";
-import { eastWestFallbackFacing, facingFromDelta, MovementSystem } from "./MovementSystem.js";
+import { eastWestFallbackFacing, facingFromDelta, motionMultiplierAtFrame, MovementSystem } from "./MovementSystem.js";
 import { QuestSystem } from "./QuestSystem.js";
 import { Renderer } from "./Renderer.js";
 import { SaveSystem } from "./SaveSystem.js";
@@ -1006,11 +1006,19 @@ node tools/build-external-runtime-staging.js</pre>
     }
 
     if (state.moving) {
-      if (state.mode === "start" && finished) this.setSimpleAnimMode("loop", { direction: state.direction, moving: true });
+      if (state.mode === "start" && finished) {
+        state.lastMoveMultiplier = 0;
+        state.lastMoveDx = 0;
+        this.setSimpleAnimMode("loop", { direction: state.direction, moving: true });
+        return;
+      }
       const activeFrame = this.simpleCurrentFrame();
-      const multipliers = activeFrame?.movementSpeedMultipliers || [];
-      const value = Number(multipliers[state.frameIndex % Math.max(1, multipliers.length)]);
-      const multiplier = Number.isFinite(value) && value >= 0 ? value : 1;
+      const multiplier = motionMultiplierAtFrame(activeFrame?.movementSpeedMultipliers, state.frameIndex, 1);
+      if (multiplier <= 0) {
+        state.lastMoveMultiplier = multiplier;
+        state.lastMoveDx = 0;
+        return;
+      }
       const direction = state.direction === "west" ? -1 : 1;
       const dx = direction * state.speed * multiplier * dt;
       state.lastMoveMultiplier = multiplier;

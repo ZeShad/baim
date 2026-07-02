@@ -29,6 +29,9 @@ export class MovementSystem {
     this.player.stopAnimationFinished = false;
     const parts = walkPartsForFacing(this.player);
     this.player.walkPart = wasWalking ? "loop" : parts?.start ? "start" : "loop";
+    if (!wasWalking && this.player.walkPart === "start" && parts?.start) {
+      syncAnimatorToWalkPartStart(this.player, parts.start);
+    }
   }
 
   update(dt) {
@@ -58,9 +61,11 @@ export class MovementSystem {
     }
     if (this.player.animation === "walk" && this.player.walkPart === "start" && this.player.animator?.isFinished()) {
       this.player.walkPart = "loop";
+      return;
     }
     const previous = { ...this.player.position };
     const motionMultiplier = walkMotionMultiplierForFrame(this.player);
+    if (motionMultiplier <= 0) return;
     this.player.position = moveToward(this.player.position, this.player.target, this.player.speed * motionMultiplier * dt);
     this.player.facing = facingFromDelta(this.player.position.x - previous.x, this.player.position.y - previous.y, this.player);
     if (this.player.position.x === this.player.target.x && this.player.position.y === this.player.target.y) {
@@ -74,6 +79,15 @@ export class MovementSystem {
       }
     }
   }
+}
+
+function syncAnimatorToWalkPartStart(player, frame) {
+  if (!player.animator || !frame) return;
+  const frameCount = Math.max(1, Number(frame.frameCount) || 1);
+  const initialFrame = Math.max(0, Math.min(Number(frame.initialFrame) || 0, frameCount - 1));
+  const fps = Number(frame.fps) || 1;
+  player.animator.frameIndex = initialFrame;
+  player.animator.elapsed = initialFrame / fps;
 }
 
 export function requestWalkStop(player) {
@@ -148,8 +162,14 @@ export function walkMotionMultiplierForFrame(player) {
   const part = player.walkPart || "loop";
   const multipliers = player.walkMotionMultipliersByFacing?.[fallbackFacing]?.[part] || player.walkMotionMultipliersByFacing?.[fallbackFacing] || player.walkMotionMultipliers;
   if (!Array.isArray(multipliers) || !multipliers.length || player.animation !== "walk") return 1;
-  const value = Number(multipliers[index % multipliers.length]);
-  return Number.isFinite(value) && value >= 0 ? value : 1;
+  return motionMultiplierAtFrame(multipliers, index, 0);
+}
+
+export function motionMultiplierAtFrame(multipliers, frameIndex, missingFrameFallback = 1) {
+  if (!Array.isArray(multipliers) || !multipliers.length) return missingFrameFallback;
+  const index = ((Math.trunc(Number(frameIndex) || 0) % multipliers.length) + multipliers.length) % multipliers.length;
+  const value = Number(multipliers[index]);
+  return Number.isFinite(value) && value >= 0 ? value : missingFrameFallback;
 }
 
 export function facingFromDelta(dx, dy, player) {

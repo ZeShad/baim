@@ -5,7 +5,7 @@ import { SaveSystem } from "../src/engine/SaveSystem.js";
 import { pointInPolygon, isWalkable, pointInWalkMask, nearestWalkablePointOnLine, nearestWalkablePoint, sceneScale } from "../src/engine/SceneGeometry.js";
 import { DEFAULT_SAVE } from "../src/engine/ids.js";
 import { characterHeight } from "../src/engine/CharacterRenderMath.js";
-import { facingFromDelta, MovementSystem, requestWalkStop, eastWestFallbackFacing, walkMotionMultiplierForFrame } from "../src/engine/MovementSystem.js";
+import { facingFromDelta, MovementSystem, requestWalkStop, eastWestFallbackFacing, motionMultiplierAtFrame, walkMotionMultiplierForFrame } from "../src/engine/MovementSystem.js";
 import { AnimationPlayer } from "../src/engine/AnimationPlayer.js";
 import { Game } from "../src/engine/Game.js";
 import { Renderer, stableExternalVisualBounds, stopRenderOffsetX, stopRenderOffsetY } from "../src/engine/Renderer.js";
@@ -327,7 +327,7 @@ test("east movement exposes start loop stop walk parts without mirroring metadat
   assert.equal(east.start.slot, "external_walk_east_start");
   assert.equal(east.loop.slot, "external_walk_east_loop");
   assert.equal(east.stop.slot, "external_walk_east_stop");
-  assert.equal(east.start.frameCount, 15);
+  assert.equal(east.start.frameCount, 16);
   assert.equal(east.loop.frameCount, 16);
   assert.equal(east.stop.frameCount, 14);
   assert.equal(east.start.initialFrame, 1);
@@ -341,6 +341,7 @@ test("east movement exposes start loop stop walk parts without mirroring metadat
   assert.equal(east.start.loop, false);
   assert.equal(east.loop.loop, true);
   assert.equal(east.stop.loop, false);
+  assert.deepEqual(east.start.movementSpeedMultipliers, [0, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1, 1, 1, 1, 1, 1, 1, 1]);
   assert.equal(Boolean(east.loop.mirrored), false);
 });
 
@@ -419,6 +420,9 @@ test("walk motion multiplier preserves explicit zero values", () => {
   assert.equal(walkMotionMultiplierForFrame(player), 0);
   player.animator.frameIndex = 1;
   assert.equal(walkMotionMultiplierForFrame(player), 0.5);
+  player.animator.frameIndex = 3;
+  assert.equal(walkMotionMultiplierForFrame(player), 0);
+  assert.equal(motionMultiplierAtFrame([0, undefined, 0.5], 1, 0), 0);
 });
 
 test("walk animation can play startup frames once before looping from configured frame", () => {
@@ -620,6 +624,104 @@ test("new walk from idle uses start part when available", () => {
   assert.equal(player.walkPart, "start");
 });
 
+test("new walk start movement uses start initial frame instead of stale animator frame", () => {
+  const player = {
+    position: { x: 0, y: 0 },
+    target: null,
+    speed: 100,
+    animation: "idle",
+    facing: "east",
+    walkPart: null,
+    pendingStop: false,
+    stopAnimationStarted: false,
+    stopAnimationFinished: false,
+    movementStopping: false,
+    animator: { frameIndex: 9, elapsed: 3, isFinished: () => false },
+    walkPartsByFacing: {
+      east: {
+        start: { frameCount: 4, fps: 4, loop: false, initialFrame: 0, movementSpeedMultipliers: [0, 0, 0, 0] },
+        loop: { frameCount: 4, fps: 4, loop: true, movementSpeedMultipliers: [1, 1, 1, 1] }
+      }
+    },
+    walkMotionMultipliersByFacing: {
+      east: {
+        start: [0, 0, 0, 0],
+        loop: [1, 1, 1, 1]
+      }
+    }
+  };
+  const movement = new MovementSystem(player);
+  movement.walkTo({ x: 200, y: 0 });
+  movement.update(0.5);
+
+  assert.equal(player.animator.frameIndex, 0);
+  assert.deepEqual(player.position, { x: 0, y: 0 });
+});
+
+test("finished zero-speed start frame does not borrow loop movement on the transition tick", () => {
+  const player = {
+    position: { x: 0, y: 0 },
+    target: { x: 200, y: 0 },
+    speed: 100,
+    animation: "walk",
+    facing: "east",
+    walkPart: "start",
+    pendingStop: false,
+    stopAnimationStarted: false,
+    stopAnimationFinished: false,
+    movementStopping: false,
+    animator: { frameIndex: 3, elapsed: 1, isFinished: () => true },
+    walkPartsByFacing: {
+      east: {
+        start: { frameCount: 4, fps: 4, loop: false, initialFrame: 0, movementSpeedMultipliers: [0, 0, 0, 0] },
+        loop: { frameCount: 4, fps: 4, loop: true, movementSpeedMultipliers: [1, 1, 1, 1] }
+      }
+    },
+    walkMotionMultipliersByFacing: {
+      east: {
+        start: [0, 0, 0, 0],
+        loop: [1, 1, 1, 1]
+      }
+    }
+  };
+  const movement = new MovementSystem(player);
+  movement.update(0.5);
+
+  assert.equal(player.walkPart, "loop");
+  assert.deepEqual(player.position, { x: 0, y: 0 });
+});
+
+test("simple animation start frame with zero multiplier does not change x", () => {
+  const game = Object.create(Game.prototype);
+  game.simpleAnim = {
+    mode: "start",
+    direction: "east",
+    moving: true,
+    x: 476.5,
+    speed: 120,
+    frameIndex: 1,
+    elapsed: 1 / 20,
+    lastMoveMultiplier: 0,
+    lastMoveDx: 0
+  };
+  game.simpleCurrentFrame = () => ({
+    frameCount: 16,
+    fps: 20,
+    loop: false,
+    movementSpeedMultipliers: Array.from({ length: 16 }, () => 0)
+  });
+  game.simpleAnimFps = Game.prototype.simpleAnimFps;
+  game.setSimpleAnimMode = (mode) => { game.simpleAnim.mode = mode; };
+  game.updateSimpleSequence = () => {};
+
+  game.updateSimpleAnim(1 / 20);
+
+  assert.equal(game.simpleAnim.mode, "start");
+  assert.equal(game.simpleAnim.lastMoveMultiplier, 0);
+  assert.equal(game.simpleAnim.lastMoveDx, 0);
+  assert.equal(game.simpleAnim.x, 476.5);
+});
+
 test("clicking current idle position does not start walk or stop animation", () => {
   const player = {
     position: { x: 100, y: 80 },
@@ -675,7 +777,7 @@ test("far target click walks to direct mask approach before running look action"
   game.handleTarget(target, { x: 900, y: 250 });
 
   assert.ok(game.player.pendingInteraction);
-  assert.equal(game.player.facing, "west");
+  assert.equal(game.player.facing, "east");
   assert.equal(game.player.pendingInteraction.target.id, "hotspot.apartment.mirror");
   assert.equal(game.player.pendingInteraction.verb, "look");
   assert.deepEqual(game.player.pendingFacingPoint, { x: 900, y: 250 });
@@ -756,7 +858,7 @@ test("near object approach does not start tiny corrective walk", () => {
 
   assert.equal(game.walkedTo, undefined);
   assert.equal(game.player.pendingInteraction, null);
-  assert.equal(game.player.facing, "east");
+  assert.equal(game.player.facing, "west");
   assert.equal(game.message, "look.apartment.mirror");
   assert.ok(distance(game.player.position, game.player.interactionDebug.feet) <= 80);
 });
@@ -1119,14 +1221,14 @@ test("movement stop phase plays once and can finish into idle", () => {
 });
 
 test("stop render offset fades from configured value to zero", () => {
-  const frame = { role: "stop", frameCount: 15, initialFrame: 1, stopRenderOffsetXStart: -8, stopRenderOffsetYStart: -6 };
+  const frame = { role: "stop", frameCount: 15, initialFrame: 1, stopRenderOffsetXStart: -8, stopRenderOffsetYStart: 0 };
   assert.equal(stopRenderOffsetX(frame, 1), -8);
   assert.ok(Math.abs(stopRenderOffsetX(frame, 3) - -4.923) < 0.001);
   assert.equal(stopRenderOffsetX(frame, 7), 0);
   assert.equal(stopRenderOffsetX(frame, 14), 0);
   assert.equal(stopRenderOffsetX(frame, 1, true), 8);
-  assert.equal(stopRenderOffsetY(frame, 1), -6);
-  assert.ok(Math.abs(stopRenderOffsetY(frame, 3) - -3.692) < 0.001);
+  assert.equal(stopRenderOffsetY(frame, 1), 0);
+  assert.equal(stopRenderOffsetY(frame, 3), 0);
   assert.equal(stopRenderOffsetY(frame, 7), 0);
   assert.equal(stopRenderOffsetY(frame, 14), 0);
 });

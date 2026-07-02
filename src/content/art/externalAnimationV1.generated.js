@@ -38,9 +38,9 @@ export const externalAnimationV1 = {
         "frameHeight": 1198,
         "sheetWidth": 3192,
         "sheetHeight": 4792,
-        "frameCount": 15,
+        "frameCount": 16,
         "sourceFrameCount": 16,
-        "frameStart": 1,
+        "frameStart": 0,
         "frameEndTrim": 0,
         "configuredFrameCount": null,
         "fps": 20,
@@ -313,6 +313,12 @@ export const externalAnimationV1 = {
         ],
         "frameContentBounds": [
           {
+            "x": 227,
+            "y": 158,
+            "w": 313,
+            "h": 858
+          },
+          {
             "x": 221,
             "y": 158,
             "w": 318,
@@ -404,6 +410,15 @@ export const externalAnimationV1 = {
           }
         ],
         "frameRects": [
+          {
+            "x": 0,
+            "y": 0,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_000",
+            "duration": 65,
+            "sourceFrameIndex": 0
+          },
           {
             "x": 798,
             "y": 0,
@@ -542,20 +557,21 @@ export const externalAnimationV1 = {
         ],
         "movementSpeedMultipliers": [
           0,
-          0,
-          0,
-          0.384,
-          0.388,
-          0.392,
-          0.399,
-          0.406,
-          0.415,
-          0.478,
-          0.551,
-          0.613,
-          0.711,
-          0.89,
-          1.2
+          0.3,
+          0.4,
+          0.5,
+          0.6,
+          0.7,
+          0.8,
+          0.9,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1
         ],
         "mirroredWest": true,
         "slot": "external_walk_east_start"
@@ -1131,7 +1147,7 @@ export const externalAnimationV1 = {
         "pingPong": false,
         "role": "stop",
         "stopRenderOffsetXStart": -8,
-        "stopRenderOffsetYStart": -6,
+        "stopRenderOffsetYStart": 0,
         "initialFrame": 1,
         "anchorX": 0.5,
         "anchorY": 1,
@@ -1642,9 +1658,9 @@ export const externalAnimationV1 = {
         "frameHeight": 1198,
         "sheetWidth": 3192,
         "sheetHeight": 4792,
-        "frameCount": 15,
+        "frameCount": 16,
         "sourceFrameCount": 16,
-        "frameStart": 1,
+        "frameStart": 0,
         "frameEndTrim": 0,
         "configuredFrameCount": null,
         "fps": 20,
@@ -1917,6 +1933,12 @@ export const externalAnimationV1 = {
         ],
         "frameContentBounds": [
           {
+            "x": 227,
+            "y": 158,
+            "w": 313,
+            "h": 858
+          },
+          {
             "x": 221,
             "y": 158,
             "w": 318,
@@ -2008,6 +2030,15 @@ export const externalAnimationV1 = {
           }
         ],
         "frameRects": [
+          {
+            "x": 0,
+            "y": 0,
+            "w": 798,
+            "h": 1198,
+            "name": "frame_000",
+            "duration": 65,
+            "sourceFrameIndex": 0
+          },
           {
             "x": 798,
             "y": 0,
@@ -2146,20 +2177,21 @@ export const externalAnimationV1 = {
         ],
         "movementSpeedMultipliers": [
           0,
-          0,
-          0,
-          0.384,
-          0.388,
-          0.392,
-          0.399,
-          0.406,
-          0.415,
-          0.478,
-          0.551,
-          0.613,
-          0.711,
-          0.89,
-          1.2
+          0.3,
+          0.4,
+          0.5,
+          0.6,
+          0.7,
+          0.8,
+          0.9,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1
         ],
         "mirroredWest": true,
         "slot": "external_walk_east_start",
@@ -2739,7 +2771,7 @@ export const externalAnimationV1 = {
         "pingPong": false,
         "role": "stop",
         "stopRenderOffsetXStart": -8,
-        "stopRenderOffsetYStart": -6,
+        "stopRenderOffsetYStart": 0,
         "initialFrame": 1,
         "anchorX": 0.5,
         "anchorY": 1,
@@ -24111,9 +24143,9 @@ export const externalAnimationV1 = {
       "frameHeight": 1198,
       "sheetWidth": 3192,
       "sheetHeight": 4792,
-      "frameCount": 15,
+      "frameCount": 16,
       "sourceFrameCount": 16,
-      "frameStart": 1,
+      "frameStart": 0,
       "frameEndTrim": 0,
       "configuredFrameCount": null,
       "fps": 20,
@@ -24386,6 +24418,12 @@ export const externalAnimationV1 = {
       ],
       "frameContentBounds": [
         {
+          "x": 227,
+          "y": 158,
+          "w": 313,
+          "h": 858
+        },
+        {
           "x": 221,
           "y": 158,
           "w": 318,
@@ -24477,6 +24515,15 @@ export const externalAnimationV1 = {
         }
       ],
       "frameRects": [
+        {
+          "x": 0,
+          "y": 0,
+          "w": 798,
+          "h": 1198,
+          "name": "frame_000",
+          "duration": 65,
+          "sourceFrameIndex": 0
+        },
         {
           "x": 798,
           "y": 0,
@@ -24615,20 +24662,21 @@ export const externalAnimationV1 = {
       ],
       "movementSpeedMultipliers": [
         0,
-        0,
-        0,
-        0.384,
-        0.388,
-        0.392,
-        0.399,
-        0.406,
-        0.415,
-        0.478,
-        0.551,
-        0.613,
-        0.711,
-        0.89,
-        1.2
+        0.3,
+        0.4,
+        0.5,
+        0.6,
+        0.7,
+        0.8,
+        0.9,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
       ],
       "mirroredWest": true
     },
@@ -25202,7 +25250,7 @@ export const externalAnimationV1 = {
       "pingPong": false,
       "role": "stop",
       "stopRenderOffsetXStart": -8,
-      "stopRenderOffsetYStart": -6,
+      "stopRenderOffsetYStart": 0,
       "initialFrame": 1,
       "anchorX": 0.5,
       "anchorY": 1,

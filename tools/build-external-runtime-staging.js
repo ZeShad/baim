@@ -72,9 +72,13 @@ for (const [key, config] of Object.entries(selection.animations || {})) {
   const frameContentBounds = frameRects.map((rect) => alphaBoundsRect(sourceSheet, rect) || { x: 0, y: 0, w: rect.w, h: rect.h });
   const contentBounds = unionBounds(frameContentBounds) || { x: 0, y: 0, w: info.frameWidth, h: info.frameHeight };
   const role = roleFromKey(key);
-  const movementSpeedMultipliers = role === "idle" || role === "talk" || role === "reject"
-    ? Array.from({ length: frameRects.length }, () => 0)
-    : externalWalkMotionCurve(role, frameRects.length, frameStart);
+  const configuredMovementSpeedMultipliers = Array.isArray(config.movementSpeedMultipliers)
+    ? normalizedMovementSpeedMultipliers(config.movementSpeedMultipliers, frameRects.length)
+    : null;
+  const movementSpeedMultipliers = configuredMovementSpeedMultipliers
+    || (role === "idle" || role === "talk" || role === "reject"
+      ? Array.from({ length: frameRects.length }, () => 0)
+      : externalWalkMotionCurve(role, frameRects.length, frameStart));
   const configuredInitialFrame = config.initialFrame ?? (role === "idle" || role === "talk" || role === "reject" ? 0 : 1);
   const initialFrame = Math.max(0, Math.min(Number(configuredInitialFrame) || 0, Math.max(0, frameRects.length - 1)));
   const fps = Number(config.fps) || (role === "idle" ? EXTERNAL_IDLE_DEFAULT_FPS : EXTERNAL_WALK_DEFAULT_FPS);
@@ -227,6 +231,15 @@ function normalizedFrameIndex(value, frameCount) {
   const numeric = Number(value);
   if (!Number.isFinite(numeric)) return 0;
   return ((Math.trunc(numeric) % count) + count) % count;
+}
+
+function normalizedMovementSpeedMultipliers(values, frameCount) {
+  const output = values.map((value) => {
+    const numeric = Number(value);
+    return Number.isFinite(numeric) && numeric >= 0 ? numeric : 0;
+  });
+  while (output.length < frameCount) output.push(output.length ? output[output.length - 1] : 0);
+  return output.slice(0, frameCount);
 }
 
 ensureDir(dirname(GENERATED_MODULE));
