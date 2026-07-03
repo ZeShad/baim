@@ -11,11 +11,6 @@ const rawScenes = [
     walkPolygons: apartmentWalkGeometry.walkPolygons,
     walkMask: apartmentWalkGeometry.walkMask,
     perspectiveScale: { horizonY: 430, bottomY: 600, far: 0.76, near: 1.12 },
-    depthZones: [
-      { id: "depth.apartment.rear", yMin: 430, yMax: 492, scaleMin: 0.76, scaleMax: 0.88 },
-      { id: "depth.apartment.mid", yMin: 492, yMax: 545, scaleMin: 0.88, scaleMax: 1.02 },
-      { id: "depth.apartment.front", yMin: 545, yMax: 600, scaleMin: 1.02, scaleMax: 1.12 }
-    ],
     anchors: {
       door: { x: 1115, y: 500 },
       mirror: { x: 690, y: 420 },
@@ -118,7 +113,7 @@ const rawScenes = [
         ]
       }
     ],
-    depthZones: [{ id: "depth.square.main", yMin: 415, yMax: 590, scaleMin: 0.7, scaleMax: 1.1 }],
+    perspectiveScale: { horizonY: 415, bottomY: 590, far: 0.7, near: 1.1 },
     anchors: {
       baiMitkoSpawn: { x: 300, y: 540 },
       babaBench: { x: 520, y: 455 },
@@ -226,7 +221,7 @@ const rawScenes = [
         ]
       }
     ],
-    depthZones: [{ id: "depth.mehana.main", yMin: 415, yMax: 590, scaleMin: 0.8, scaleMax: 1.12 }],
+    perspectiveScale: { horizonY: 415, bottomY: 590, far: 0.8, near: 1.12 },
     anchors: {
       tonyTable: { x: 900, y: 505 },
       bar: { x: 620, y: 500 },

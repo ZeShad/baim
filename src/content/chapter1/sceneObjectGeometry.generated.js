@@ -211,6 +211,27 @@ export const apartmentObjectGeometry = {
           "y": 310
         }
       ]
+    },
+    "window": {
+      "id": "window",
+      "polygon": [
+        {
+          "x": 384,
+          "y": 323
+        },
+        {
+          "x": 167,
+          "y": 349
+        },
+        {
+          "x": 148,
+          "y": 75
+        },
+        {
+          "x": 375,
+          "y": 94
+        }
+      ]
     }
   }
 };

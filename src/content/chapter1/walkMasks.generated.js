@@ -20,13 +20,8 @@ export const apartmentWalkGeometry = {
       },
       "c": {
         "walkable": true,
-        "role": "carpet_floor",
+        "role": "walkable_floor",
         "debugFill": "rgba(91, 214, 120, 0.18)"
-      },
-      "e": {
-        "walkable": true,
-        "role": "exit_approach",
-        "debugFill": "rgba(114, 188, 255, 0.2)"
       }
     },
     "rows": [

@@ -50,8 +50,8 @@ export function stableExternalVisualBounds(definition) {
 }
 
 export function sceneZIndexForPoint(scene, point) {
-  const horizonY = Number(scene?.perspectiveScale?.horizonY ?? scene?.depthZones?.[0]?.yMin ?? 0);
-  const bottomY = Number(scene?.perspectiveScale?.bottomY ?? scene?.depthZones?.at(-1)?.yMax ?? 720);
+  const horizonY = Number(scene?.perspectiveScale?.horizonY ?? 0);
+  const bottomY = Number(scene?.perspectiveScale?.bottomY ?? 720);
   const t = clamp(((point?.y ?? bottomY) - horizonY) / Math.max(1, bottomY - horizonY), 0, 1);
   return 100 - t * 100;
 }
@@ -358,12 +358,6 @@ export class Renderer {
   drawSceneGeometry(scene) {
     const { ctx } = this;
     ctx.save();
-    for (const zone of scene.depthZones || []) {
-      ctx.fillStyle = "rgba(102, 180, 255, 0.08)";
-      ctx.fillRect(0, zone.yMin, 1280, zone.yMax - zone.yMin);
-      ctx.strokeStyle = "rgba(102, 180, 255, 0.4)";
-      ctx.strokeRect(0, zone.yMin, 1280, zone.yMax - zone.yMin);
-    }
     if (scene.walkMask) {
       this.drawWalkMask(scene);
     } else {

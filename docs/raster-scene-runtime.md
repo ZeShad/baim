@@ -46,7 +46,7 @@ deterministic and must not invent or regenerate masks.
 
 Every production scene should use a low-resolution raster `walkMask`.
 
-- Walkable cells are authored as mask values such as `c` or `e`.
+- Walkable cells are authored as simple mask values such as `c`; `.` is blocked.
 - Blocked cells are `.`.
 - Clicking a walkable point routes through the mask grid with A*.
 - The result is smoothed by line-of-sight checks through the same mask.

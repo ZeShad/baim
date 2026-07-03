@@ -39,7 +39,7 @@ Scene geometry is data, not drawn into the background:
   Bai Mitko movement.
 - `walkPolygons`: legacy/debug authoring context only; do not use polygons as the production
   movement system for new scenes.
-- `depthZones`: y-range based scaling and sorting.
+- `perspectiveScale`: continuous horizon-to-front scaling and z sorting.
 - `hotspots`: clickable polygons or rectangles.
 - `exits`: transition areas.
 - `anchors`: named stage positions for dialogue, puzzles, and cutscenes.

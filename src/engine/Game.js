@@ -10,7 +10,7 @@ import { AnimationPlayer } from "./AnimationPlayer.js";
 import { AssetLoader } from "./AssetLoader.js";
 import { characterHeight } from "./CharacterRenderMath.js";
 import { DEFAULT_SAVE, LANGUAGES, VERBS } from "./ids.js";
-import { findTargetAt, findWalkPath, isWalkable, nearestWalkablePoint, walkPathDistance } from "./SceneGeometry.js";
+import { findTargetAt, findWalkPath, isWalkable, nearestReachableWalkablePoint, nearestWalkablePoint, walkPathDistance } from "./SceneGeometry.js";
 import { distance } from "./geometry.js";
 import { strings } from "../content/localization/index.js";
 import { chapter1 } from "../content/chapter1/index.js";
@@ -487,14 +487,18 @@ export class Game {
       return;
     }
     this.player.pendingInteraction = null;
-    if (isWalkable(this.currentScene, point)) {
+    const destination = isWalkable(this.currentScene, point)
+      ? point
+      : nearestReachableWalkablePoint(this.currentScene, this.player.position, point);
+    if (destination) {
       this.facePoint(point);
       this.player.pendingFacingPoint = { ...point };
       this.player.interactionDebug = {
         kind: "move",
-        feet: { ...point }
+        click: { ...point },
+        feet: { ...destination }
       };
-      this.walkToPoint(point);
+      this.walkToPoint(destination, point);
       this.clearStatusMessage();
     }
   }

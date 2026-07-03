@@ -63,6 +63,36 @@ export function nearestWalkablePoint(scene, point) {
   return best ? { ...best.point } : null;
 }
 
+export function nearestReachableWalkablePoint(scene, from, point) {
+  if (!point) return null;
+  if (isWalkable(scene, point) && findWalkPath(scene, from, point).length) return { ...point };
+  if (!scene?.walkMask?.rows?.length) return nearestWalkablePoint(scene, point);
+  const mask = scene.walkMask;
+  const start = nearestWalkableCell(mask, from);
+  if (!start) return null;
+  const target = pointToMaskCell(mask, point);
+  const width = Math.max(1, Number(mask.width) || 1);
+  const height = Math.max(1, Number(mask.height) || 1);
+  const visited = new Set();
+  const queue = [target];
+  visited.add(cellKey(target));
+  while (queue.length) {
+    const cell = queue.shift();
+    if (isWalkableCell(mask, cell)) {
+      const path = findWalkMaskCellPath(mask, start, cell);
+      if (path.length) return cellCenter(mask, cell);
+    }
+    for (const next of allNeighborCells(cell)) {
+      if (next.x < 0 || next.y < 0 || next.x >= width || next.y >= height) continue;
+      const key = cellKey(next);
+      if (visited.has(key)) continue;
+      visited.add(key);
+      queue.push(next);
+    }
+  }
+  return null;
+}
+
 export function findWalkPath(scene, from, to) {
   if (!scene?.walkMask?.rows?.length) return isWalkable(scene, to) ? [{ ...to }] : [];
   const mask = scene.walkMask;
@@ -75,6 +105,17 @@ export function findWalkPath(scene, from, to) {
   points[0] = { ...from };
   points[points.length - 1] = { ...to };
   return smoothWalkPath(scene, points);
+}
+
+function allNeighborCells(cell) {
+  const result = [];
+  for (let dy = -1; dy <= 1; dy += 1) {
+    for (let dx = -1; dx <= 1; dx += 1) {
+      if (dx === 0 && dy === 0) continue;
+      result.push({ x: cell.x + dx, y: cell.y + dy });
+    }
+  }
+  return result;
 }
 
 export function walkPathDistance(from, path) {
@@ -250,15 +291,10 @@ function nearestWalkablePointInMask(mask, point) {
 }
 
 export function sceneScale(scene, point) {
-  if (scene.perspectiveScale) {
-    const zone = scene.perspectiveScale;
-    const t = clamp((point.y - zone.horizonY) / Math.max(1, zone.bottomY - zone.horizonY), 0, 1);
-    return zone.far + t * (zone.near - zone.far);
-  }
-  const zone = scene.depthZones?.find((candidate) => point.y >= candidate.yMin && point.y <= candidate.yMax);
+  const zone = scene.perspectiveScale;
   if (!zone) return 1;
-  const t = (point.y - zone.yMin) / Math.max(1, zone.yMax - zone.yMin);
-  return zone.scaleMin + clamp(t, 0, 1) * (zone.scaleMax - zone.scaleMin);
+  const t = clamp((point.y - zone.horizonY) / Math.max(1, zone.bottomY - zone.horizonY), 0, 1);
+  return zone.far + t * (zone.near - zone.far);
 }
 
 export function findTargetAt(scene, point) {

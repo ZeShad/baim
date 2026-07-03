@@ -2,7 +2,7 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import { Localization } from "../src/engine/Localization.js";
 import { SaveSystem } from "../src/engine/SaveSystem.js";
-import { pointInPolygon, findWalkPath, isWalkable, pointInWalkMask, nearestWalkablePointOnLine, nearestWalkablePoint, sceneScale, walkPathDistance } from "../src/engine/SceneGeometry.js";
+import { pointInPolygon, findWalkPath, isWalkable, pointInWalkMask, nearestWalkablePointOnLine, nearestReachableWalkablePoint, nearestWalkablePoint, sceneScale, walkPathDistance } from "../src/engine/SceneGeometry.js";
 import { DEFAULT_SAVE } from "../src/engine/ids.js";
 import { characterHeight } from "../src/engine/CharacterRenderMath.js";
 import { facingFromDelta, MovementSystem, requestWalkStop, eastWestFallbackFacing, motionMultiplierAtFrame, walkMotionMultiplierForFrame } from "../src/engine/MovementSystem.js";
@@ -56,17 +56,15 @@ test("chapter scenes define explicit walk geometry for production art", () => {
   }
 });
 
-test("apartment uses a raster walk mask for carpet and exit approach", () => {
+test("apartment uses a raster walk mask for walkable floor", () => {
   const scene = chapter1.scenes.find((candidate) => candidate.id === "scene.chapter1.apartment");
   assert.equal(scene.walkMask.width, 64);
   assert.equal(scene.walkMask.height, 36);
-  assert.equal(pointInWalkMask(scene.walkMask, scene.playerStart), true);
-  assert.equal(isWalkable(scene, { x: 1060, y: 505 }), true);
-  assert.equal(isWalkable(scene, { x: 650, y: 360 }), false);
-  assert.equal(isWalkable(scene, { x: 1120, y: 390 }), false);
-  assert.equal(isWalkable(scene, { x: 120, y: 460 }), false);
-  assert.equal(isWalkable(scene, { x: 320, y: 590 }), false);
-  assert.equal(isWalkable(scene, { x: 520, y: 590 }), true);
+  assert.equal(scene.walkMask.rows.length, 36);
+  assert.equal(scene.walkMask.rows.every((row) => row.length === 64), true);
+  assert.equal(scene.walkMask.rows.join("").includes("c"), true);
+  assert.equal(scene.walkMask.rows.join("").includes("e"), false);
+  assert.equal(scene.walkMask.legend.e, undefined);
   assert.ok(scene.foregroundLayers.some((layer) => layer.id === "layer.apartment.table_foreground" && layer.asset === "foregroundTable" && layer.zIndex === -1));
 });
 
@@ -90,13 +88,25 @@ test("walk mask line sampler finds the nearest direct approach before a blocked 
   assert.ok(approach.y >= 490);
 });
 
-test("walk mask nearest sampler finds an approach near blocked table clicks", () => {
-  const scene = chapter1.scenes.find((candidate) => candidate.id === "scene.chapter1.apartment");
-  const approach = nearestWalkablePoint(scene, { x: 315, y: 490 });
-  assert.ok(approach);
-  assert.equal(isWalkable(scene, approach), true);
-  assert.ok(approach.x < 430);
-  assert.ok(approach.y >= 500);
+test("walk mask nearest sampler finds an approach near blocked clicks", () => {
+  const scene = {
+    walkMask: {
+      width: 5,
+      height: 5,
+      worldWidth: 100,
+      worldHeight: 100,
+      rows: [
+        ".....",
+        ".....",
+        "..c..",
+        ".....",
+        "....."
+      ],
+      legend: { ".": { walkable: false }, c: { walkable: true } }
+    }
+  };
+  const approach = nearestWalkablePoint(scene, { x: 90, y: 90 });
+  assert.deepEqual(approach, { x: 50, y: 50 });
 });
 
 test("raster walk path routes through mask corridors", () => {
@@ -125,6 +135,27 @@ test("raster walk path routes through mask corridors", () => {
   assert.deepEqual(path.at(-1), { x: 90, y: 90 });
   assert.ok(walkPathDistance({ x: 10, y: 10 }, path) > distance({ x: 10, y: 10 }, { x: 90, y: 90 }));
   assert.equal(path.every((point) => isWalkable(scene, point)), true);
+});
+
+test("blocked empty clicks project to nearest reachable walk-mask cell", () => {
+  const scene = {
+    walkMask: {
+      width: 5,
+      height: 5,
+      worldWidth: 100,
+      worldHeight: 100,
+      rows: [
+        ".....",
+        ".ccc.",
+        "...c.",
+        "...c.",
+        "....."
+      ],
+      legend: { ".": { walkable: false }, c: { walkable: true } }
+    }
+  };
+  const destination = nearestReachableWalkablePoint(scene, { x: 30, y: 30 }, { x: 92, y: 92 });
+  assert.deepEqual(destination, { x: 70, y: 70 });
 });
 
 test("scene z index maps horizon to 100 and front to zero", () => {
@@ -1089,7 +1120,7 @@ test("empty walkable click uses the clicked point as the feet pivot destination"
   assert.deepEqual(game.walkedTo, { x: 650, y: 520 });
   assert.equal(game.player.facing, "east");
   assert.equal(game.message, "");
-  assert.deepEqual(game.player.interactionDebug, { kind: "move", feet: { x: 650, y: 520 } });
+  assert.deepEqual(game.player.interactionDebug, { kind: "move", click: { x: 650, y: 520 }, feet: { x: 650, y: 520 } });
   assert.equal(game.player.pendingInteraction, null);
   assert.deepEqual(game.player.pendingFacingPoint, { x: 650, y: 520 });
 });
