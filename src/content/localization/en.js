@@ -18,6 +18,7 @@ export const en = {
   "ui.meter.suspicion": "Suspicion",
   "ui.meter.public_mood": "Public Mood",
   "ui.hint": "Left click: act. Right click: change verb. Esc: pause.",
+  "npc.bai_mitko.name": "Bai Mitko",
 
   "verb.look": "Look",
   "verb.talk": "Talk",

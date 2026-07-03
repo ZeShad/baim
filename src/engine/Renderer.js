@@ -3,6 +3,8 @@ import { characterHeight } from "./CharacterRenderMath.js";
 import { canExitToStop, eastWestFallbackFacing, stopExitFrameForPlayer } from "./MovementSystem.js";
 import { externalAnimationV1 } from "../content/art/externalAnimationV1.generated.js";
 
+const PLAYER_SHADOW_FULL_SIZE_Y_OFFSET = -4;
+
 export function stopRenderOffsetX(frame, frameIndex, mirrored = false) {
   const startOffset = Number(frame?.stopRenderOffsetXStart);
   if (!Number.isFinite(startOffset) || !frame || frame.role !== "stop") return 0;
@@ -514,7 +516,9 @@ export class Renderer {
     ctx.fillStyle = "rgba(0, 0, 0, 0.26)";
     ctx.beginPath();
     const shadowWidth = (stableBounds?.w || boundsForSize?.w || sourceWidth) * scale;
-    ctx.ellipse(p.position.x, p.position.y + 2, shadowWidth * 0.3, Math.max(6, height * 0.035), 0, 0, Math.PI * 2);
+    const fullSizeHeight = definition.render.sceneHeights?.[this.game.currentScene.id]?.near || definition.gameHeight || height;
+    const shadowOffsetY = PLAYER_SHADOW_FULL_SIZE_Y_OFFSET * (height / Math.max(1, fullSizeHeight));
+    ctx.ellipse(p.position.x, p.position.y + 2 + shadowOffsetY, shadowWidth * 0.3, Math.max(6, height * 0.035), 0, 0, Math.PI * 2);
     ctx.fill();
     if (spriteInfo.frame) {
       if (p.animation === "walk") {
@@ -907,7 +911,6 @@ export class Renderer {
     ctx.fillStyle = "#f2e5cf";
     ctx.font = "16px Arial";
     ctx.fillText(`${this.game.t("ui.verb")}: ${this.game.t(`verb.${this.game.selectedVerb}`)}`, 360, 632);
-    ctx.fillText(this.game.message, 360, 662);
 
     let x = 760;
     ctx.font = "14px Arial";

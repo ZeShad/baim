@@ -18,6 +18,7 @@ export const bg = {
   "ui.meter.suspicion": "Подозрение",
   "ui.meter.public_mood": "Народно настроение",
   "ui.hint": "Ляв бутон: действие. Десен бутон: сменя действие. Esc: пауза.",
+  "npc.bai_mitko.name": "Бай Митко",
 
   "verb.look": "Виж",
   "verb.talk": "Говори",

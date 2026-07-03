@@ -54,6 +54,8 @@ export class Game {
     this.walkSpeedMultiplier = this.readNumberParam("walkSpeed", 1);
     this.selectedVerb = VERBS.LOOK;
     this.message = this.t("ui.hint");
+    this.speechBubble = null;
+    this.speechBubbleSequence = 0;
     this.currentScene = this.resolveInitialScene();
     this.player = {
       id: "npc.bai_mitko",
@@ -421,13 +423,23 @@ export class Game {
 
   clearStatusMessage() {
     this.message = "";
+    this.speechBubble = null;
     this.player.speechAnimation = null;
     this.player.speaking = false;
+    if (this.uiRoot) this.renderUi();
   }
 
   setStatusMessage(message, options = {}) {
     this.message = message;
+    this.speechBubble = message
+      ? {
+          id: `speech-${++this.speechBubbleSequence}`,
+          text: message,
+          tone: options.reject ? "reject" : "talk"
+        }
+      : null;
     this.startSpeechAnimationForMessage(message, options);
+    if (this.uiRoot) this.renderUi();
   }
 
   startSpeechAnimationForMessage(message, options = {}) {
@@ -775,6 +787,7 @@ export class Game {
     if (this.menuOpen) this.uiRoot.appendChild(this.createMenu());
     if (this.paused) this.uiRoot.appendChild(this.createPause());
     if (dialogueNode) this.uiRoot.appendChild(this.createDialogue(dialogueNode));
+    if (this.speechBubble && !this.menuOpen && !this.paused && !dialogueNode) this.uiRoot.appendChild(this.createSpeechBubble());
     this.uiRoot.appendChild(this.createTopBar());
   }
 
@@ -789,6 +802,41 @@ export class Game {
       button("EN", () => this.setLanguage("en"))
     );
     return bar;
+  }
+
+  createSpeechBubble() {
+    const position = this.speechBubblePosition();
+    const bubble = element("div", `speech-bubble tail-${position.tailSide} ${this.speechBubble.tone === "reject" ? "reject" : ""}`);
+    bubble.dataset.speechId = this.speechBubble.id;
+    bubble.style.left = `${position.left}%`;
+    bubble.style.top = `${position.top}%`;
+    bubble.innerHTML = `
+      <div class="speech-blobs">
+        <div class="speech-blob-top"></div>
+        <div class="speech-blob-bottom"></div>
+        <svg class="speech-tail" viewBox="0 0 132 82" aria-hidden="true" focusable="false">
+          <path d="M130 7 C105 10 85 19 68 34 C51 49 35 61 4 78 C20 56 28 38 34 16 C51 26 73 27 96 18 C110 13 121 9 130 7 Z"></path>
+        </svg>
+        <div class="speech-text"></div>
+      </div>
+      <div class="speech-speaker">${escapeHtml(this.t("npc.bai_mitko.name"))}</div>
+    `;
+    bubble.querySelector(".speech-text").textContent = this.speechBubble.text;
+    return bubble;
+  }
+
+  speechBubblePosition() {
+    const definition = this.characterDefinitions?.["npc.bai_mitko"] || characterDefinitions["npc.bai_mitko"];
+    const height = characterHeight(definition, this.currentScene, this.player.position);
+    const facing = eastWestFallbackFacing(this.player.facing) || "east";
+    const side = facing === "west" ? -1 : 1;
+    const mouth = {
+      x: this.player.position.x + side * height * 0.18,
+      y: this.player.position.y - height * 0.68
+    };
+    const x = clampNumber(((mouth.x + side * height * 0.48) / 1280) * 100, 22, 78);
+    const y = clampNumber(((mouth.y - height * 0.23) / 720) * 100, 12, 56);
+    return { left: x, top: y, tailSide: side > 0 ? "left" : "right" };
   }
 
   createMenu() {
@@ -1258,4 +1306,16 @@ function button(label, onClick) {
   node.textContent = label;
   node.addEventListener("click", onClick);
   return node;
+}
+
+function clampNumber(value, min, max) {
+  return Math.max(min, Math.min(max, value));
+}
+
+function escapeHtml(value) {
+  return String(value || "")
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;");
 }

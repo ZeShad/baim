@@ -1196,7 +1196,7 @@ test("target action turns toward hand point when no movement is needed", () => {
   assert.equal(game.message, "look.apartment.mirror");
 });
 
-test("footer status messages start talk or reject animation variants", () => {
+test("speech bubble messages start talk or reject animation variants", () => {
   const game = Object.create(Game.prototype);
   game.usesExternalCharacterAnimation = () => true;
   game.player = {
