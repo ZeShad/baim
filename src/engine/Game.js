@@ -33,6 +33,8 @@ const TARGET_REACH_ORIGIN_SIDE_RATIO = 0.14;
 export const SHORT_WALK_PATH_DISTANCE = 400;
 const TALK_SINGLE_WORD_MAX_CHARS = 18;
 const TALK_LONG_SENTENCE_MIN_CHARS = 72;
+const SPEECH_BUBBLE_WEST_OFFSET_X_FULL_SIZE = 40;
+const SPEECH_BUBBLE_WEST_OFFSET_Y_FULL_SIZE = -15;
 
 export class Game {
   constructor(canvas, uiRoot) {
@@ -808,14 +810,18 @@ export class Game {
     const position = this.speechBubblePosition();
     const bubble = element("div", `speech-bubble tail-${position.tailSide} ${this.speechBubble.tone === "reject" ? "reject" : ""}`);
     bubble.dataset.speechId = this.speechBubble.id;
-    bubble.style.left = `${position.left}%`;
+    if (position.right != null) {
+      bubble.style.right = `${position.right}%`;
+    } else {
+      bubble.style.left = `${position.left}%`;
+    }
     bubble.style.top = `${position.top}%`;
     bubble.innerHTML = `
       <div class="speech-blobs">
         <div class="speech-blob-top"></div>
         <div class="speech-blob-bottom"></div>
         <svg class="speech-tail" viewBox="0 0 132 82" aria-hidden="true" focusable="false">
-          <path d="M130 7 C105 10 85 19 68 34 C51 49 35 61 4 78 C20 56 28 38 34 16 C51 26 73 27 96 18 C110 13 121 9 130 7 Z"></path>
+          <path d="M130 7 C105 10 85 19 68 34 C49 51 31 65 0 82 C19 57 27 38 34 16 C51 26 73 27 96 18 C110 13 121 9 130 7 Z"></path>
         </svg>
         <div class="speech-text"></div>
       </div>
@@ -834,9 +840,18 @@ export class Game {
       x: this.player.position.x + side * height * 0.18,
       y: this.player.position.y - height * 0.68
     };
-    const x = clampNumber(((mouth.x + side * height * 0.48) / 1280) * 100, 22, 78);
-    const y = clampNumber(((mouth.y - height * 0.23) / 720) * 100, 12, 56);
-    return { left: x, top: y, tailSide: side > 0 ? "left" : "right" };
+    const fullSizeHeight =
+      definition.render.sceneHeights?.[this.currentScene.id]?.near || definition.gameHeight || height;
+    const renderScale = height / Math.max(1, fullSizeHeight);
+    const westOffsetX = facing === "west" ? SPEECH_BUBBLE_WEST_OFFSET_X_FULL_SIZE * renderScale : 0;
+    const westOffsetY = facing === "west" ? SPEECH_BUBBLE_WEST_OFFSET_Y_FULL_SIZE * renderScale : 0;
+    const top = clampNumber(((mouth.y - height * 0.55 + westOffsetY) / 720) * 100, 4, 58);
+    if (facing === "west") {
+      const bubbleRight = clampNumber(mouth.x + westOffsetX - height * 0.08, 220, 1180);
+      return { right: ((1280 - bubbleRight) / 1280) * 100, top, tailSide: "right" };
+    }
+    const left = clampNumber(((mouth.x + height * 0.16) / 1280) * 100, 2, 78);
+    return { left, top, tailSide: "left" };
   }
 
   createMenu() {
