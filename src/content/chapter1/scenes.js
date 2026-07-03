@@ -1,6 +1,7 @@
 import { apartmentWalkGeometry } from "./walkMasks.generated.js";
+import { apartmentObjectGeometry } from "./sceneObjectGeometry.generated.js";
 
-export const scenes = [
+const rawScenes = [
   {
     id: "scene.chapter1.apartment",
     titleKey: "scene.chapter1.apartment.title",
@@ -21,6 +22,13 @@ export const scenes = [
       table: { x: 415, y: 510 },
       baiMitkoSpawn: { x: 650, y: 520 }
     },
+    foregroundLayers: [
+      {
+        id: "layer.apartment.table_foreground",
+        asset: "foregroundTable",
+        zIndex: -1
+      }
+    ],
     exits: [
       {
         id: "exit.apartment.to_square",
@@ -266,3 +274,29 @@ export const scenes = [
     ]
   }
 ];
+
+export const scenes = applySceneObjectGeometry(rawScenes, {
+  [apartmentObjectGeometry.sceneId]: apartmentObjectGeometry
+});
+
+function applySceneObjectGeometry(scenes, geometryBySceneId) {
+  return scenes.map((scene) => {
+    const geometry = geometryBySceneId[scene.id];
+    if (!geometry?.objects) return scene;
+    return {
+      ...scene,
+      exits: applyObjectGeometry(scene.exits, geometry.objects),
+      interactables: applyObjectGeometry(scene.interactables, geometry.objects),
+      npcs: applyObjectGeometry(scene.npcs, geometry.objects)
+    };
+  });
+}
+
+function applyObjectGeometry(objects = [], geometryByObjectId) {
+  return objects
+    .filter((object) => geometryByObjectId[object.id])
+    .map((object) => {
+      const geometry = geometryByObjectId[object.id];
+      return geometry?.polygon ? { ...object, polygon: geometry.polygon } : object;
+    });
+}

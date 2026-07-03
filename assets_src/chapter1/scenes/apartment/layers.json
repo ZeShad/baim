@@ -1,0 +1,19 @@
+{
+  "sceneId": "scene.chapter1.apartment",
+  "sourceBackground": "assets/chapter1/scenes/apartment/background.png",
+  "zScale": {
+    "frontmost": 0,
+    "horizon": 100
+  },
+  "layers": [
+    {
+      "id": "layer.apartment.table_foreground",
+      "enabled": true,
+      "source": "assets/chapter1/scenes/apartment/background.png",
+      "output": "assets/chapter1/scenes/apartment/foreground-table.png",
+      "width": 1280,
+      "height": 720,
+      "zIndex": -1
+    }
+  ]
+}

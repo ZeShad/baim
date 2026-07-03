@@ -5,11 +5,12 @@ import { eastWestFallbackFacing, facingFromDelta, motionMultiplierAtFrame, Movem
 import { QuestSystem } from "./QuestSystem.js";
 import { Renderer } from "./Renderer.js";
 import { SaveSystem } from "./SaveSystem.js";
+import { SceneEditor } from "./SceneEditor.js";
 import { AnimationPlayer } from "./AnimationPlayer.js";
 import { AssetLoader } from "./AssetLoader.js";
 import { characterHeight } from "./CharacterRenderMath.js";
 import { DEFAULT_SAVE, LANGUAGES, VERBS } from "./ids.js";
-import { findTargetAt, isWalkable, nearestWalkablePoint } from "./SceneGeometry.js";
+import { findTargetAt, findWalkPath, isWalkable, nearestWalkablePoint, walkPathDistance } from "./SceneGeometry.js";
 import { distance } from "./geometry.js";
 import { strings } from "../content/localization/index.js";
 import { chapter1 } from "../content/chapter1/index.js";
@@ -29,6 +30,7 @@ const TARGET_HAND_TO_FEET_X = 90;
 const TARGET_HAND_TO_FEET_Y = 155;
 const TARGET_REACH_ORIGIN_HEIGHT_RATIO = 0.58;
 const TARGET_REACH_ORIGIN_SIDE_RATIO = 0.14;
+export const SHORT_WALK_PATH_DISTANCE = 400;
 const TALK_SINGLE_WORD_MAX_CHARS = 18;
 const TALK_LONG_SENTENCE_MIN_CHARS = 72;
 
@@ -43,6 +45,7 @@ export class Game {
     this.debugSceneGeometry = this.readDebugGeometrySetting();
     this.animLab = this.readBooleanParam("animLab");
     this.simpleAnimTest = this.readBooleanParam("simpleAnimTest");
+    this.editMode = this.readBooleanParam("edit");
     this.debugAnimation = this.readBooleanParam("debugAnimation");
     this.characterVariant = this.readCharacterVariant();
     this.characterDefinitions = characterDefinitions;
@@ -56,6 +59,8 @@ export class Game {
       id: "npc.bai_mitko",
       position: { ...this.currentScene.playerStart },
       target: null,
+      walkPath: [],
+      shortWalk: false,
       pendingInteraction: null,
       pendingFacingPoint: null,
       interactionDebug: null,
@@ -91,8 +96,9 @@ export class Game {
     this.dialogue = new DialogueSystem(this.content.dialogues, this.localization, (effect) => this.applyDialogueEffect(effect));
     this.movement = new MovementSystem(this.player);
     this.renderer = new Renderer(canvas, this);
+    this.sceneEditor = this.editMode ? new SceneEditor(this) : null;
     const params = new URLSearchParams(globalThis.location?.search || "");
-    this.menuOpen = !this.simpleAnimTest && !this.animLab && !this.devHome && params.get("play") !== "1" && !params.has("scene") && !params.has("debugGeometry");
+    this.menuOpen = !this.editMode && !this.simpleAnimTest && !this.animLab && !this.devHome && params.get("play") !== "1" && !params.has("scene") && !params.has("debugGeometry");
     this.paused = false;
     this.lastTime = 0;
     this.bindInput();
@@ -140,12 +146,24 @@ export class Game {
   bindInput() {
     this.canvas.addEventListener("contextmenu", (event) => {
       event.preventDefault();
+      if (this.editMode) return;
       this.cycleVerb();
     });
     this.canvas.addEventListener("pointerdown", (event) => {
       if (this.simpleAnimTest) return;
+      if (this.editMode) {
+        this.sceneEditor?.handlePointerDown(event, this.renderer.screenToWorld(event.clientX, event.clientY));
+        return;
+      }
       if (event.button !== 0 || this.menuOpen || this.paused || this.dialogue.current) return;
       this.handleWorldClick(this.renderer.screenToWorld(event.clientX, event.clientY));
+    });
+    this.canvas.addEventListener("pointermove", (event) => {
+      if (!this.editMode) return;
+      this.sceneEditor?.handlePointerMove(event, this.renderer.screenToWorld(event.clientX, event.clientY));
+    });
+    window.addEventListener("pointerup", () => {
+      if (this.editMode) this.sceneEditor?.handlePointerUp();
     });
     window.addEventListener("keydown", (event) => {
       if (event.key === "Escape") {
@@ -170,6 +188,7 @@ export class Game {
   }
 
   readDebugGeometrySetting() {
+    if (this.readBooleanParam("edit")) return true;
     return this.readBooleanParam("debugGeometry");
   }
 
@@ -380,7 +399,7 @@ export class Game {
     if (params.get("play") === "1") return false;
     if (params.get("dev") === "0") return false;
     if (params.get("dev") === "1") return true;
-    if (params.has("simpleAnimTest") || params.has("animLab") || params.has("scene") || params.has("debugGeometry") || params.has("characterVariant")) return false;
+    if (params.has("simpleAnimTest") || params.has("animLab") || params.has("edit") || params.has("scene") || params.has("debugGeometry") || params.has("characterVariant")) return false;
     return true;
   }
 
@@ -475,7 +494,7 @@ export class Game {
         kind: "move",
         feet: { ...point }
       };
-      this.movement.walkTo(point);
+      this.walkToPoint(point);
       this.clearStatusMessage();
     }
   }
@@ -519,7 +538,7 @@ export class Game {
       hand: reachPoint,
       approach
     };
-    this.movement.walkTo(approach, reachPoint);
+    this.walkToPoint(approach, reachPoint);
     this.clearStatusMessage();
     return true;
   }
@@ -584,6 +603,14 @@ export class Game {
   facePoint(point) {
     if (!point) return;
     this.player.facing = facingFromDelta(point.x - this.player.position.x, point.y - this.player.position.y, this.player);
+  }
+
+  walkToPoint(point, facingPoint = point) {
+    const path = findWalkPath(this.currentScene, this.player.position, point);
+    const route = path.length ? path : [{ ...point }];
+    const routeDistance = walkPathDistance(this.player.position, route);
+    const shortWalk = routeDistance > 0 && routeDistance <= SHORT_WALK_PATH_DISTANCE;
+    this.movement.walkTo(point, facingPoint, route, { shortWalk });
   }
 
   performTargetAction(target) {
@@ -684,6 +711,8 @@ export class Game {
     this.state.currentSceneId = sceneId;
     this.player.position = { ...(position || this.currentScene.playerStart) };
     this.player.target = null;
+    this.player.walkPath = [];
+    this.player.shortWalk = false;
     this.player.pendingInteraction = null;
     this.player.pendingFacingPoint = null;
     this.player.interactionDebug = null;
@@ -712,6 +741,8 @@ export class Game {
     this.quests = new QuestSystem(this.content.quests, this.state);
     this.player.position = { ...this.currentScene.playerStart };
     this.player.target = null;
+    this.player.walkPath = [];
+    this.player.shortWalk = false;
     this.player.pendingInteraction = null;
     this.player.pendingFacingPoint = null;
     this.player.interactionDebug = null;
@@ -732,6 +763,10 @@ export class Game {
     }
     const dialogueNode = this.dialogue.getNode();
     this.uiRoot.innerHTML = "";
+    if (this.editMode) {
+      if (this.sceneEditor) this.uiRoot.appendChild(this.sceneEditor.createPanel());
+      return;
+    }
     if (this.devHome) this.uiRoot.appendChild(this.createDevHome());
     if (this.menuOpen) this.uiRoot.appendChild(this.createMenu());
     if (this.paused) this.uiRoot.appendChild(this.createPause());
@@ -775,9 +810,10 @@ export class Game {
       <div class="dev-status-list">
         <div class="dev-status">
           <strong>External Animation v1</strong>
-          <span>active Bai Mitko animation import path. East start/loop/stop only; west mirrors east. North/south/diagonals deferred.</span>
+          <span>active Bai Mitko animation import path. East start/loop/short/stop only; west mirrors east. North/south/diagonals deferred.</span>
           <a href="./?animLab=1">Open animLab external section</a>
           <a href="./?simpleAnimTest=1">Open simple animation test</a>
+          <a href="./?edit=1&scene=scene.chapter1.apartment">Open scene geometry editor</a>
           <a href="./?play=1">Play with External Animation v1</a>
         </div>
       </div>
@@ -788,6 +824,7 @@ node tools/build-external-runtime-staging.js</pre>
       <div class="dev-links">
         <a href="./?animLab=1">Animation Lab</a>
         <a href="./?simpleAnimTest=1">Simple Animation Test</a>
+        <a href="./?edit=1&scene=scene.chapter1.apartment">Scene Geometry Editor</a>
         <a href="./?play=1">Play External Animation v1</a>
         <a href="./target/external_animation_v1/previews/walk_east_start.gif">Walk East Start GIF</a>
         <a href="./target/external_animation_v1/previews/walk_east_loop.gif">Walk East Loop GIF</a>
@@ -805,7 +842,7 @@ node tools/build-external-runtime-staging.js</pre>
   createSimpleAnimState() {
     return {
       x: 180,
-      baselineY: 600,
+      baselineY: 550,
       direction: "east",
       mode: "idle",
       moving: false,
@@ -813,6 +850,7 @@ node tools/build-external-runtime-staging.js</pre>
       frameIndex: 0,
       speed: 60,
       fpsOverride: 0,
+      background: "checker",
       showOverlays: this.readSimpleAnimOverlaySetting(),
       pendingStop: false,
       stopExitFrame: this.readSimpleStopExitFrame(),
@@ -871,6 +909,7 @@ node tools/build-external-runtime-staging.js</pre>
   simpleCurrentFrame() {
     if (this.simpleAnim.mode === "start") return this.simpleWalkPart("start");
     if (this.simpleAnim.mode === "loop") return this.simpleWalkPart("loop");
+    if (this.simpleAnim.mode === "short") return this.simpleWalkPart("short");
     if (this.simpleAnim.mode === "stop") return this.simpleWalkPart("stop");
     if (this.simpleAnim.mode === "idle") return this.simpleIdleFrame();
     if (this.simpleAnim.mode?.startsWith("talk_") || this.simpleAnim.mode?.startsWith("reject_")) return this.simpleActionFrame(this.simpleAnim.mode);
@@ -1055,6 +1094,7 @@ node tools/build-external-runtime-staging.js</pre>
   renderSimpleAnimControls() {
     const start = this.simpleWalkPart("start");
     const loop = this.simpleWalkPart("loop");
+    const short = this.simpleWalkPart("short");
     const stop = this.simpleWalkPart("stop");
     const talkShort = this.simpleActionFrame("talk_east_short_1");
     const talkLong1 = this.simpleActionFrame("talk_east_long_1");
@@ -1073,6 +1113,7 @@ node tools/build-external-runtime-staging.js</pre>
       <div class="simple-anim-row">
         <button data-action="start" ${start ? "" : "disabled"}>Play East Start</button>
         <button data-action="loop" ${loop ? "" : "disabled"}>Play East Loop</button>
+        <button data-action="short" ${short ? "" : "disabled"}>Play East Short</button>
         <button data-action="stop-part" ${stop ? "" : "disabled"}>Play East Stop</button>
         <button data-action="full-east" ${start && loop && stop ? "" : "disabled"}>Play Full East Sequence</button>
         <button data-action="full-west" ${start && loop && stop ? "" : "disabled"}>Play Full West Sequence</button>
@@ -1086,6 +1127,13 @@ node tools/build-external-runtime-staging.js</pre>
       <div class="simple-anim-row">
         <button data-action="clear-cache">Clear Cache + Reload</button>
       </div>
+      <div class="simple-anim-row">
+        <button data-bg="checker">Checker</button>
+        <button data-bg="light">Light</button>
+        <button data-bg="gray">Gray</button>
+        <button data-bg="dark">Dark</button>
+        <button data-bg="green">Green</button>
+      </div>
       <label>movement speed <input data-control="speed" type="range" min="0" max="220" step="1" value="${this.simpleAnim.speed}"> <span>${this.simpleAnim.speed}px/s</span></label>
       <label>fps override <input data-control="fps" type="range" min="0" max="20" step="1" value="${this.simpleAnim.fpsOverride}"> <span>${this.simpleAnim.fpsOverride || "16 default"}</span></label>
       <label>stop exit frame <input data-control="stop-exit-frame" type="number" min="0" step="1" value="${this.simpleAnim.stopExitFrame}"> <span>${this.normalizedSimpleStopExitFrame(loop)}</span></label>
@@ -1093,6 +1141,12 @@ node tools/build-external-runtime-staging.js</pre>
     `;
     panel.addEventListener("click", (event) => {
       const action = event.target?.dataset?.action;
+      const background = event.target?.dataset?.bg;
+      if (background) {
+        this.simpleAnim.background = background;
+        this.renderUi();
+        return;
+      }
       if (!action) return;
       if (action === "reset") this.resetSimpleAnim();
       if (action === "idle-east") this.setSimpleAnimMode("idle", { direction: "east", moving: false });

@@ -7,6 +7,7 @@ export const assetManifest = {
     "scene.chapter1.apartment": {
       background: "assets/chapter1/scenes/apartment/background.png",
       foreground: "assets/chapter1/scenes/apartment/foreground.webp",
+      foregroundTable: "assets/chapter1/scenes/apartment/foreground-table.png",
       geometry: "assets/chapter1/scenes/apartment/scene.geometry.json"
     },
     "scene.chapter1.village_square": {

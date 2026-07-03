@@ -49,6 +49,13 @@ export function stableExternalVisualBounds(definition) {
   };
 }
 
+export function sceneZIndexForPoint(scene, point) {
+  const horizonY = Number(scene?.perspectiveScale?.horizonY ?? scene?.depthZones?.[0]?.yMin ?? 0);
+  const bottomY = Number(scene?.perspectiveScale?.bottomY ?? scene?.depthZones?.at(-1)?.yMax ?? 720);
+  const t = clamp(((point?.y ?? bottomY) - horizonY) / Math.max(1, bottomY - horizonY), 0, 1);
+  return 100 - t * 100;
+}
+
 export class Renderer {
   constructor(canvas, game) {
     this.canvas = canvas;
@@ -79,8 +86,9 @@ export class Renderer {
     const scene = this.game.currentScene;
     ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
     const hasRealBackground = this.drawBackground(scene);
-    if (this.game.debugSceneGeometry || !hasRealBackground) this.drawSceneGeometry(scene);
-    this.drawActors([this.game.player]);
+    this.drawSceneZLayers(scene, this.game.editMode ? [] : [this.game.player]);
+    if (this.game.editMode) this.game.sceneEditor?.draw(ctx);
+    else if (this.game.debugSceneGeometry || !hasRealBackground) this.drawSceneGeometry(scene);
     this.drawHud();
   }
 
@@ -88,12 +96,21 @@ export class Renderer {
     const { ctx } = this;
     const state = this.game.simpleAnim;
     ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-    ctx.fillStyle = "#d7d2c8";
+    const backgrounds = {
+      checker: "#d7d2c8",
+      light: "#f2eee5",
+      gray: "#8d8a82",
+      dark: "#2d2b27",
+      green: "#86a37e"
+    };
+    ctx.fillStyle = backgrounds[state.background] || backgrounds.checker;
     ctx.fillRect(0, 0, 1280, 720);
-    ctx.fillStyle = "rgba(255,255,255,0.35)";
-    for (let y = 0; y < 720; y += 32) {
-      for (let x = 0; x < 1280; x += 32) {
-        if ((x / 32 + y / 32) % 2 === 0) ctx.fillRect(x, y, 32, 32);
+    if (state.background === "checker") {
+      ctx.fillStyle = "rgba(255,255,255,0.35)";
+      for (let y = 0; y < 720; y += 32) {
+        for (let x = 0; x < 1280; x += 32) {
+          if ((x / 32 + y / 32) % 2 === 0) ctx.fillRect(x, y, 32, 32);
+        }
       }
     }
     ctx.strokeStyle = "#736a5e";
@@ -251,15 +268,19 @@ export class Renderer {
       `slot: ${slot}`
     ];
     if (state.pendingStop) lines.push(`Stop requested, waiting for loop exit frame ${this.game.normalizedSimpleStopExitFrame()}.`);
+    ctx.save();
+    ctx.translate(520, 8);
+    ctx.scale(0.5, 0.5);
     ctx.fillStyle = "rgba(20, 18, 14, 0.78)";
-    ctx.fillRect(6, 6, 430, 406 + warnings.length * 18);
+    ctx.fillRect(0, 0, 430, 406 + warnings.length * 18);
     ctx.fillStyle = "#f5ead5";
     ctx.font = "14px Consolas, monospace";
-    lines.forEach((line, index) => ctx.fillText(line, 18, 30 + index * 18));
+    lines.forEach((line, index) => ctx.fillText(line, 12, 24 + index * 18));
     if (warnings.length) {
       ctx.fillStyle = "#ff6c5d";
-      warnings.forEach((warning, index) => ctx.fillText(`warning: ${warning}`, 18, 422 + index * 18));
+      warnings.forEach((warning, index) => ctx.fillText(`warning: ${warning}`, 12, 416 + index * 18));
     }
+    ctx.restore();
   }
 
   drawBackground(scene) {
@@ -290,6 +311,27 @@ export class Renderer {
     ctx.font = "18px Arial";
     ctx.fillText("Painted background placeholder: replace with 1280x720 or 2560x1440 art", 36, 84);
     return false;
+  }
+
+  drawSceneZLayers(scene, actors) {
+    const entries = [
+      ...actors.map((actor) => ({ kind: "actor", actor, zIndex: sceneZIndexForPoint(scene, actor.position) })),
+      ...(scene.foregroundLayers || []).map((layer) => ({ kind: "layer", layer, zIndex: Number(layer.zIndex) }))
+    ].sort((a, b) => {
+      const az = Number.isFinite(a.zIndex) ? a.zIndex : 100;
+      const bz = Number.isFinite(b.zIndex) ? b.zIndex : 100;
+      return bz - az;
+    });
+    for (const entry of entries) {
+      if (entry.kind === "actor") this.drawPlayer(entry.actor);
+      else this.drawSceneRasterLayer(scene, entry.layer);
+    }
+  }
+
+  drawSceneRasterLayer(scene, layer) {
+    const image = this.game.assets.getSceneImage(scene.id, layer.asset);
+    if (!this.game.assets.isLoaded(image)) return;
+    this.ctx.drawImage(image, 0, 0, 1280, 720);
   }
 
   logArtStatus(sceneId, path, status, usingPlaceholder) {
@@ -339,28 +381,44 @@ export class Renderer {
         ctx.stroke();
       }
     }
-    for (const hotspot of [...scene.exits, ...scene.interactables, ...scene.npcs]) {
-      const rect = hotspot.rect;
-      ctx.strokeStyle = hotspot.kind === "exit" ? "rgba(114, 188, 255, 0.85)" : "rgba(255, 214, 102, 0.8)";
-      ctx.lineWidth = 2;
-      ctx.strokeRect(rect.x, rect.y, rect.w, rect.h);
-      ctx.fillStyle = "rgba(0, 0, 0, 0.45)";
-      ctx.fillRect(rect.x, rect.y - 24, Math.max(110, rect.w), 22);
-      ctx.fillStyle = "#fff3cf";
-      ctx.font = "14px Arial";
-      ctx.fillText(this.game.t(hotspot.nameKey), rect.x + 6, rect.y - 8);
-    }
-    for (const [name, point] of Object.entries(scene.anchors || {})) {
-      ctx.fillStyle = "rgba(255, 89, 89, 0.95)";
-      ctx.beginPath();
-      ctx.arc(point.x, point.y, 5, 0, Math.PI * 2);
-      ctx.fill();
-      ctx.fillStyle = "#fff3cf";
-      ctx.font = "12px Arial";
-      ctx.fillText(name, point.x + 8, point.y - 8);
+    if (!this.game.editMode) {
+      for (const hotspot of [...scene.exits, ...scene.interactables, ...scene.npcs]) {
+        const bounds = this.targetBounds(hotspot);
+        if (!bounds) continue;
+        ctx.strokeStyle = hotspot.kind === "exit" ? "rgba(114, 188, 255, 0.85)" : "rgba(255, 214, 102, 0.8)";
+        ctx.lineWidth = 2;
+        if (hotspot.polygon?.length) {
+          ctx.beginPath();
+          hotspot.polygon.forEach((point, index) => {
+            if (index === 0) ctx.moveTo(point.x, point.y);
+            else ctx.lineTo(point.x, point.y);
+          });
+          ctx.closePath();
+          ctx.stroke();
+        } else {
+          ctx.strokeRect(bounds.x, bounds.y, bounds.w, bounds.h);
+        }
+        ctx.fillStyle = "rgba(0, 0, 0, 0.45)";
+        ctx.fillRect(bounds.x, bounds.y - 24, Math.max(110, bounds.w), 22);
+        ctx.fillStyle = "#fff3cf";
+        ctx.font = "14px Arial";
+        ctx.fillText(this.game.t(hotspot.nameKey), bounds.x + 6, bounds.y - 8);
+      }
     }
     this.drawInteractionDebugPoints();
     ctx.restore();
+  }
+
+  targetBounds(target) {
+    if (target.rect) return target.rect;
+    if (!target.polygon?.length) return null;
+    const xs = target.polygon.map((point) => point.x);
+    const ys = target.polygon.map((point) => point.y);
+    const minX = Math.min(...xs);
+    const minY = Math.min(...ys);
+    const maxX = Math.max(...xs);
+    const maxY = Math.max(...ys);
+    return { x: minX, y: minY, w: maxX - minX, h: maxY - minY };
   }
 
   drawInteractionDebugPoints() {

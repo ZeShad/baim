@@ -18,21 +18,21 @@
       "frameEndTrim": 0,
       "movementSpeedMultipliers": [
         0,
-        0.3,
-        0.4,
-        0.5,
+        0,
+        0,
+        0,
+        0,
         0.6,
         0.7,
+        0.3,
+        0.4,
         0.8,
-        0.9,
         1,
         1,
-        1,
-        1,
-        1,
-        1,
-        1,
-        1
+        0.7,
+        0.6,
+        0.5,
+        0.4
       ]
     },
     "walk_east_loop": {
@@ -60,6 +60,14 @@
         1,
         1.022
       ]
+    },
+    "walk_east_short": {
+      "use": true,
+      "source": "bai-mitko-walk-east-short.zip",
+      "loop": true,
+      "frameStart": 0,
+      "frameEndTrim": 0,
+      "fps": 20
     },
     "walk_east_stop": {
       "use": true,
@@ -169,6 +177,7 @@
   "mirrors": {
     "walk_west_start": "mirror walk_east_start",
     "walk_west_loop": "mirror walk_east_loop",
+    "walk_west_short": "mirror walk_east_short",
     "walk_west_stop": "mirror walk_east_stop",
     "idle_west_1": "mirror idle_east_1",
     "idle_west_2": "mirror idle_east_2",

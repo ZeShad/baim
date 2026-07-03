@@ -6,6 +6,8 @@
   "scripts": {
     "dev": "node tools/dev-server.mjs",
     "build:walkmasks": "node tools/build-walk-masks.js",
+    "build:object-geometry": "node tools/build-scene-object-geometry.js",
+    "build:scene-layers": "node tools/build-scene-layers.js",
     "build:characters": "node tools/build-character-chroma-assets.js",
     "test": "node --test test/engine.test.js"
   },

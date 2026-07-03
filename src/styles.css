@@ -264,3 +264,57 @@ button:hover {
 .simple-anim-controls input[type="range"] {
   width: min(360px, 45vw);
 }
+
+.scene-editor {
+  left: 14px;
+  top: 14px;
+  width: min(360px, calc(100vw - 28px));
+  padding: 12px;
+  display: grid;
+  gap: 8px;
+  pointer-events: auto;
+  background: rgba(20, 18, 14, 0.9);
+}
+
+.scene-editor.right {
+  left: auto;
+  right: 14px;
+}
+
+.scene-editor-title {
+  font-weight: 700;
+}
+
+.scene-editor label {
+  display: grid;
+  gap: 4px;
+  font-size: 12px;
+  color: #d9cbb5;
+}
+
+.scene-editor select {
+  min-height: 32px;
+  border: 1px solid #a78b5c;
+  background: #221b13;
+  color: #f5ead5;
+}
+
+.scene-editor-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.scene-editor-actions button {
+  flex: 1;
+  min-height: 32px;
+}
+
+.scene-editor-help,
+.scene-editor-status {
+  font-size: 12px;
+  line-height: 1.35;
+}
+
+.scene-editor-status {
+  color: #f0d38e;
+}

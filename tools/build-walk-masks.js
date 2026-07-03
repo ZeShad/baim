@@ -14,59 +14,14 @@ function readJson(path) {
   return JSON.parse(readFileSync(path, "utf8"));
 }
 
-function pointInPolygon(point, polygon) {
-  let inside = false;
-  for (let i = 0, j = polygon.length - 1; i < polygon.length; j = i++) {
-    const xi = polygon[i].x;
-    const yi = polygon[i].y;
-    const xj = polygon[j].x;
-    const yj = polygon[j].y;
-    const intersects = yi > point.y !== yj > point.y && point.x < ((xj - xi) * (point.y - yi)) / (yj - yi) + xi;
-    if (intersects) inside = !inside;
-  }
-  return inside;
-}
-
-function scalePoint(point, source, world) {
-  return {
-    x: Math.round((point.x / source.width) * world.width),
-    y: Math.round((point.y / source.height) * world.height)
-  };
-}
-
 function buildGeometry(source) {
   const world = source.world;
   const background = source.sourceBackground;
   const raster = source.raster;
-  const rows = [];
-  for (let y = 0; y < raster.height; y += 1) {
-    let row = "";
-    for (let x = 0; x < raster.width; x += 1) {
-      const worldPoint = {
-        x: ((x + 0.5) / raster.width) * world.width,
-        y: ((y + 0.5) / raster.height) * world.height
-      };
-      const sourcePoint = {
-        x: (worldPoint.x / world.width) * background.width,
-        y: (worldPoint.y / world.height) * background.height
-      };
-      let cell = ".";
-      for (const shape of source.shapes) {
-        if (pointInPolygon(sourcePoint, shape.points)) cell = shape.cell || cell;
-      }
-      row += cell;
-    }
-    rows.push(row);
-  }
+  const rows = normalizeRows(source);
 
   return {
-    walkPolygons: source.shapes.map((shape) => ({
-      id: shape.id,
-      role: shape.role,
-      debugFill: shape.debugFill,
-      debugStroke: shape.debugStroke,
-      points: shape.points.map((point) => scalePoint(point, background, world))
-    })),
+    walkPolygons: [],
     walkMask: {
       id: source.id,
       sourceBackground: source.sourceBackground,
@@ -79,6 +34,18 @@ function buildGeometry(source) {
       rows
     }
   };
+}
+
+function normalizeRows(source) {
+  const raster = source.raster;
+  const rows = raster.rows;
+  if (!Array.isArray(rows) || !rows.length) throw new Error(`${source.id} raster.rows is required`);
+  if (rows.length !== raster.height) throw new Error(`${source.id} raster.rows height ${rows.length} does not match ${raster.height}`);
+  return rows.map((row, index) => {
+    if (typeof row !== "string") throw new Error(`${source.id} raster.rows[${index}] must be a string`);
+    if (row.length !== raster.width) throw new Error(`${source.id} raster.rows[${index}] width ${row.length} does not match ${raster.width}`);
+    return row;
+  });
 }
 
 const generated = {};

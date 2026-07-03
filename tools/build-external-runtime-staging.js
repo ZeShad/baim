@@ -1,9 +1,11 @@
 import { dirname, join } from "node:path";
-import { copyFileSync, writeFileSync } from "node:fs";
+import { copyFileSync, existsSync, writeFileSync } from "node:fs";
 import {
+  INPUT_DIR,
   REPORTS_DIR,
   RUNTIME_DIR,
   SELECTION_PATH,
+  UNPACKED_DIR,
   animationFolders,
   alphaBounds,
   ensureDir,
@@ -14,6 +16,7 @@ import {
   inspectAnimationFolder,
   readJson,
   readPng,
+  unpackZip,
   writeJson
 } from "./external-animation-utils.mjs";
 
@@ -22,6 +25,7 @@ const GENERATED_MODULE = "src/content/art/externalAnimationV1.generated.js";
 ensureExternalAnimationDirs();
 
 const selection = readJson(SELECTION_PATH);
+refreshSelectedUnpackedFolders(selection);
 const folders = new Map(animationFolders().map((folder) => [folder.key, folder]));
 const report = [];
 const generated = {
@@ -39,6 +43,15 @@ const generated = {
   rejectAnimations: { east: [], west: [] },
   animations: {}
 };
+
+function refreshSelectedUnpackedFolders(selection) {
+  for (const [key, config] of Object.entries(selection.animations || {})) {
+    if (!config.use || !config.source) continue;
+    const zipPath = join(INPUT_DIR, config.source);
+    if (!existsSync(zipPath)) continue;
+    unpackZip(zipPath, join(UNPACKED_DIR, key));
+  }
+}
 
 for (const [key, config] of Object.entries(selection.animations || {})) {
   if (!config.use) {
@@ -181,6 +194,7 @@ function roleFromKey(key) {
   if (key.startsWith("talk_")) return "talk";
   if (key.startsWith("reject_")) return "reject";
   if (key.endsWith("_start")) return "start";
+  if (key.endsWith("_short")) return "short";
   if (key.endsWith("_loop")) return "loop";
   if (key.endsWith("_stop")) return "stop";
   return "loop";

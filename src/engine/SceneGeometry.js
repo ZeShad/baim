@@ -63,6 +63,166 @@ export function nearestWalkablePoint(scene, point) {
   return best ? { ...best.point } : null;
 }
 
+export function findWalkPath(scene, from, to) {
+  if (!scene?.walkMask?.rows?.length) return isWalkable(scene, to) ? [{ ...to }] : [];
+  const mask = scene.walkMask;
+  const start = nearestWalkableCell(mask, from);
+  const goal = nearestWalkableCell(mask, to);
+  if (!start || !goal) return [];
+  const cells = findWalkMaskCellPath(mask, start, goal);
+  if (!cells.length) return [];
+  const points = cells.map((cell) => cellCenter(mask, cell));
+  points[0] = { ...from };
+  points[points.length - 1] = { ...to };
+  return smoothWalkPath(scene, points);
+}
+
+export function walkPathDistance(from, path) {
+  if (!from || !Array.isArray(path) || !path.length) return 0;
+  let total = 0;
+  let previous = from;
+  for (const point of path) {
+    if (!point) continue;
+    total += Math.hypot(point.x - previous.x, point.y - previous.y);
+    previous = point;
+  }
+  return total;
+}
+
+function findWalkMaskCellPath(mask, start, goal) {
+  const open = new Map();
+  const closed = new Set();
+  const startKey = cellKey(start);
+  open.set(startKey, { cell: start, g: 0, f: cellDistance(start, goal), previous: null });
+  while (open.size) {
+    let currentKey = null;
+    let current = null;
+    for (const [key, value] of open) {
+      if (!current || value.f < current.f) {
+        currentKey = key;
+        current = value;
+      }
+    }
+    if (!current) break;
+    open.delete(currentKey);
+    if (current.cell.x === goal.x && current.cell.y === goal.y) return unwindCellPath(current);
+    closed.add(currentKey);
+    for (const neighbor of walkableNeighbors(mask, current.cell)) {
+      const key = cellKey(neighbor);
+      if (closed.has(key)) continue;
+      const stepCost = cellDistance(current.cell, neighbor);
+      const g = current.g + stepCost;
+      const existing = open.get(key);
+      if (existing && existing.g <= g) continue;
+      open.set(key, { cell: neighbor, g, f: g + cellDistance(neighbor, goal), previous: current });
+    }
+  }
+  return [];
+}
+
+function unwindCellPath(node) {
+  const cells = [];
+  let current = node;
+  while (current) {
+    cells.push(current.cell);
+    current = current.previous;
+  }
+  return cells.reverse();
+}
+
+function walkableNeighbors(mask, cell) {
+  const result = [];
+  for (let dy = -1; dy <= 1; dy += 1) {
+    for (let dx = -1; dx <= 1; dx += 1) {
+      if (dx === 0 && dy === 0) continue;
+      const next = { x: cell.x + dx, y: cell.y + dy };
+      if (!isWalkableCell(mask, next)) continue;
+      if (dx !== 0 && dy !== 0 && (!isWalkableCell(mask, { x: cell.x + dx, y: cell.y }) || !isWalkableCell(mask, { x: cell.x, y: cell.y + dy }))) continue;
+      result.push(next);
+    }
+  }
+  return result;
+}
+
+function smoothWalkPath(scene, points) {
+  if (points.length <= 2) return points;
+  const smoothed = [points[0]];
+  let anchor = 0;
+  while (anchor < points.length - 1) {
+    let next = points.length - 1;
+    while (next > anchor + 1 && !lineIsWalkable(scene, points[anchor], points[next])) next -= 1;
+    smoothed.push(points[next]);
+    anchor = next;
+  }
+  return smoothed;
+}
+
+function lineIsWalkable(scene, from, to) {
+  const dx = to.x - from.x;
+  const dy = to.y - from.y;
+  const distance = Math.hypot(dx, dy);
+  const steps = Math.max(1, Math.ceil(distance / 8));
+  for (let index = 0; index <= steps; index += 1) {
+    const t = index / steps;
+    if (!isWalkable(scene, { x: from.x + dx * t, y: from.y + dy * t })) return false;
+  }
+  return true;
+}
+
+function nearestWalkableCell(mask, point) {
+  const cell = pointToMaskCell(mask, point);
+  if (isWalkableCell(mask, cell)) return cell;
+  const width = Math.max(1, Number(mask.width) || 1);
+  const height = Math.max(1, Number(mask.height) || 1);
+  let best = null;
+  for (let y = 0; y < height; y += 1) {
+    for (let x = 0; x < width; x += 1) {
+      const candidate = { x, y };
+      if (!isWalkableCell(mask, candidate)) continue;
+      const distance = cellDistance(cell, candidate);
+      if (!best || distance < best.distance) best = { cell: candidate, distance };
+    }
+  }
+  return best?.cell || null;
+}
+
+function pointToMaskCell(mask, point) {
+  const width = Math.max(1, Number(mask.width) || 1);
+  const height = Math.max(1, Number(mask.height) || 1);
+  const worldWidth = Math.max(1, Number(mask.worldWidth) || 1280);
+  const worldHeight = Math.max(1, Number(mask.worldHeight) || 720);
+  return {
+    x: clamp(Math.floor(((point?.x ?? 0) / worldWidth) * width), 0, width - 1),
+    y: clamp(Math.floor(((point?.y ?? 0) / worldHeight) * height), 0, height - 1)
+  };
+}
+
+function cellCenter(mask, cell) {
+  const worldWidth = Math.max(1, Number(mask.worldWidth) || 1280);
+  const worldHeight = Math.max(1, Number(mask.worldHeight) || 720);
+  return {
+    x: (cell.x + 0.5) * (worldWidth / Math.max(1, Number(mask.width) || 1)),
+    y: (cell.y + 0.5) * (worldHeight / Math.max(1, Number(mask.height) || 1))
+  };
+}
+
+function isWalkableCell(mask, cell) {
+  const width = Math.max(1, Number(mask.width) || 1);
+  const height = Math.max(1, Number(mask.height) || 1);
+  if (cell.x < 0 || cell.y < 0 || cell.x >= width || cell.y >= height) return false;
+  const value = mask.rows?.[cell.y]?.[cell.x] || ".";
+  const entry = mask.legend?.[value];
+  return entry ? Boolean(entry.walkable) : value !== ".";
+}
+
+function cellKey(cell) {
+  return `${cell.x},${cell.y}`;
+}
+
+function cellDistance(a, b) {
+  return Math.hypot(a.x - b.x, a.y - b.y);
+}
+
 function nearestWalkablePointInMask(mask, point) {
   const width = Math.max(1, Number(mask.width) || 1);
   const height = Math.max(1, Number(mask.height) || 1);

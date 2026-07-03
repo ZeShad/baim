@@ -2,13 +2,13 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import { Localization } from "../src/engine/Localization.js";
 import { SaveSystem } from "../src/engine/SaveSystem.js";
-import { pointInPolygon, isWalkable, pointInWalkMask, nearestWalkablePointOnLine, nearestWalkablePoint, sceneScale } from "../src/engine/SceneGeometry.js";
+import { pointInPolygon, findWalkPath, isWalkable, pointInWalkMask, nearestWalkablePointOnLine, nearestWalkablePoint, sceneScale, walkPathDistance } from "../src/engine/SceneGeometry.js";
 import { DEFAULT_SAVE } from "../src/engine/ids.js";
 import { characterHeight } from "../src/engine/CharacterRenderMath.js";
 import { facingFromDelta, MovementSystem, requestWalkStop, eastWestFallbackFacing, motionMultiplierAtFrame, walkMotionMultiplierForFrame } from "../src/engine/MovementSystem.js";
 import { AnimationPlayer } from "../src/engine/AnimationPlayer.js";
-import { Game } from "../src/engine/Game.js";
-import { Renderer, stableExternalVisualBounds, stopRenderOffsetX, stopRenderOffsetY } from "../src/engine/Renderer.js";
+import { Game, SHORT_WALK_PATH_DISTANCE } from "../src/engine/Game.js";
+import { Renderer, sceneZIndexForPoint, stableExternalVisualBounds, stopRenderOffsetX, stopRenderOffsetY } from "../src/engine/Renderer.js";
 import { strings } from "../src/content/localization/index.js";
 import { chapter1 } from "../src/content/chapter1/index.js";
 import { assetManifest } from "../src/content/art/assetManifest.js";
@@ -49,9 +49,9 @@ test("scene polygon geometry detects walkable space", () => {
   assert.equal(pointInPolygon({ x: 120, y: 50 }, square), false);
 });
 
-test("chapter scenes define explicit walk polygons for production art", () => {
+test("chapter scenes define explicit walk geometry for production art", () => {
   for (const scene of chapter1.scenes) {
-    assert.ok(scene.walkPolygons.length > 0, `${scene.id} needs walk polygons`);
+    assert.ok(scene.walkMask?.rows?.length || scene.walkPolygons.length > 0, `${scene.id} needs walk geometry`);
     assert.equal(isWalkable(scene, scene.playerStart), true);
   }
 });
@@ -65,6 +65,9 @@ test("apartment uses a raster walk mask for carpet and exit approach", () => {
   assert.equal(isWalkable(scene, { x: 650, y: 360 }), false);
   assert.equal(isWalkable(scene, { x: 1120, y: 390 }), false);
   assert.equal(isWalkable(scene, { x: 120, y: 460 }), false);
+  assert.equal(isWalkable(scene, { x: 320, y: 590 }), false);
+  assert.equal(isWalkable(scene, { x: 520, y: 590 }), true);
+  assert.ok(scene.foregroundLayers.some((layer) => layer.id === "layer.apartment.table_foreground" && layer.asset === "foregroundTable" && layer.zIndex === -1));
 });
 
 test("apartment perspective scale is continuous across raster mask rows", () => {
@@ -94,6 +97,41 @@ test("walk mask nearest sampler finds an approach near blocked table clicks", ()
   assert.equal(isWalkable(scene, approach), true);
   assert.ok(approach.x < 430);
   assert.ok(approach.y >= 500);
+});
+
+test("raster walk path routes through mask corridors", () => {
+  const scene = {
+    walkMask: {
+      width: 5,
+      height: 5,
+      worldWidth: 100,
+      worldHeight: 100,
+      legend: {
+        ".": { walkable: false },
+        "c": { walkable: true }
+      },
+      rows: [
+        "ccccc",
+        "c...c",
+        "ccc.c",
+        "c...c",
+        "ccccc"
+      ]
+    }
+  };
+  const path = findWalkPath(scene, { x: 10, y: 10 }, { x: 90, y: 90 });
+  assert.ok(path.length > 2);
+  assert.deepEqual(path[0], { x: 10, y: 10 });
+  assert.deepEqual(path.at(-1), { x: 90, y: 90 });
+  assert.ok(walkPathDistance({ x: 10, y: 10 }, path) > distance({ x: 10, y: 10 }, { x: 90, y: 90 }));
+  assert.equal(path.every((point) => isWalkable(scene, point)), true);
+});
+
+test("scene z index maps horizon to 100 and front to zero", () => {
+  const scene = chapter1.scenes.find((candidate) => candidate.id === "scene.chapter1.apartment");
+  assert.equal(sceneZIndexForPoint(scene, { x: 0, y: 430 }), 100);
+  assert.equal(sceneZIndexForPoint(scene, { x: 0, y: 515 }), 50);
+  assert.equal(sceneZIndexForPoint(scene, { x: 0, y: 600 }), 0);
 });
 
 test("chapter scene movement speeds are tuned for external walk animation", () => {
@@ -319,42 +357,50 @@ test("character cutouts use the shared 15 percent source margin", () => {
   assert.equal(CHARACTER_CUTOUT_MARGIN_RATIO, 0.15);
 });
 
-test("east movement exposes start loop stop walk parts without mirroring metadata", () => {
+test("east movement exposes start loop short stop walk parts without mirroring metadata", () => {
   const player = { facing: "south", verticalDirectionBias: 1.6 };
   assert.equal(facingFromDelta(100, 0, player), "east");
 
   const east = characterDefinitions["npc.bai_mitko"].animations.walk.parts.east;
   assert.equal(east.start.slot, "external_walk_east_start");
   assert.equal(east.loop.slot, "external_walk_east_loop");
+  assert.equal(east.short.slot, "external_walk_east_short");
   assert.equal(east.stop.slot, "external_walk_east_stop");
   assert.equal(east.start.frameCount, 16);
   assert.equal(east.loop.frameCount, 16);
+  assert.equal(east.short.frameCount, 16);
   assert.equal(east.stop.frameCount, 14);
   assert.equal(east.start.initialFrame, 1);
   assert.equal(east.loop.initialFrame, 1);
+  assert.equal(east.short.initialFrame, 1);
   assert.equal(east.stop.initialFrame, 1);
   assert.equal(east.start.fps, 20);
   assert.equal(east.loop.fps, 20);
+  assert.equal(east.short.fps, 20);
   assert.equal(east.stop.fps, 20);
   assert.equal(east.start.sourceFrameRects[0].sourceFrameIndex, 0);
   assert.equal(east.loop.stopExitFrame, 0);
   assert.equal(east.start.loop, false);
   assert.equal(east.loop.loop, true);
+  assert.equal(east.short.loop, true);
   assert.equal(east.stop.loop, false);
-  assert.deepEqual(east.start.movementSpeedMultipliers, [0, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1, 1, 1, 1, 1, 1, 1, 1]);
+  assert.deepEqual(east.start.movementSpeedMultipliers, [0, 0, 0, 0, 0, 0.6, 0.7, 0.3, 0.4, 0.8, 1, 1, 0.7, 0.6, 0.5, 0.4]);
+  assert.deepEqual(east.short.movementSpeedMultipliers, east.loop.movementSpeedMultipliers);
   assert.equal(Boolean(east.loop.mirrored), false);
 });
 
-test("west movement mirrors the external east start loop stop parts", () => {
+test("west movement mirrors the external east start loop short stop parts", () => {
   const player = { facing: "south", verticalDirectionBias: 1.6 };
   assert.equal(facingFromDelta(-100, 0, player), "west");
 
   const west = characterDefinitions["npc.bai_mitko"].animations.walk.parts.west;
   assert.equal(west.start.slot, "external_walk_east_start");
   assert.equal(west.loop.slot, "external_walk_east_loop");
+  assert.equal(west.short.slot, "external_walk_east_short");
   assert.equal(west.stop.slot, "external_walk_east_stop");
   assert.equal(west.start.mirrored, true);
   assert.equal(west.loop.mirrored, true);
+  assert.equal(west.short.mirrored, true);
   assert.equal(west.stop.mirrored, true);
   assert.equal(west.loop.mirrorSource, "east");
 });
@@ -624,6 +670,152 @@ test("new walk from idle uses start part when available", () => {
   assert.equal(player.walkPart, "start");
 });
 
+test("short walk uses short loop and skips stop animation when destination is reached", () => {
+  const player = {
+    position: { x: 0, y: 0 },
+    target: null,
+    speed: 100,
+    animation: "idle",
+    facing: "west",
+    walkPart: null,
+    shortWalk: false,
+    idleHoldFrame: { slot: "external_walk_east_stop", mirrored: true, frameIndex: 0, frame: { frameCount: 1 } },
+    idleVariant: { slot: "external_idle_east_1" },
+    idleVariantQueue: [{ slot: "external_idle_east_2" }],
+    pendingStop: false,
+    stopAnimationStarted: false,
+    stopAnimationFinished: false,
+    movementStopping: false,
+    walkPartsByFacing: {
+      east: {
+        start: { frameCount: 3, fps: 3, loop: false },
+        short: { frameCount: 4, fps: 4, loop: true },
+        loop: { frameCount: 4, fps: 4, loop: true },
+        stop: { frameCount: 3, fps: 3, loop: false }
+      }
+    }
+  };
+  const movement = new MovementSystem(player);
+  movement.walkTo({ x: 20, y: 0 }, { x: 20, y: 0 }, [{ x: 0, y: 0 }, { x: 20, y: 0 }], { shortWalk: true });
+  assert.equal(player.walkPart, "short");
+  assert.equal(player.facing, "east");
+  assert.equal(player.idleHoldFrame, null);
+  assert.equal(player.idleVariant, null);
+  assert.deepEqual(player.idleVariantQueue, []);
+
+  movement.update(1);
+  assert.equal(player.animation, "idle");
+  assert.equal(player.walkPart, null);
+  assert.equal(player.shortWalk, false);
+  assert.equal(player.facing, "east");
+  assert.equal(player.idleHoldFrame, null);
+  assert.equal(player.stopAnimationStarted, false);
+});
+
+test("game chooses short walk from routed path distance threshold", () => {
+  const game = Object.create(Game.prototype);
+  game.currentScene = {};
+  game.player = {
+    position: { x: 0, y: 0 },
+    facing: "east"
+  };
+  let captured = null;
+  game.movement = {
+    walkTo(point, facingPoint, path, options) {
+      captured = { point, facingPoint, path, options };
+    }
+  };
+
+  game.walkToPoint({ x: SHORT_WALK_PATH_DISTANCE - 10, y: 0 });
+  assert.equal(captured.options.shortWalk, true);
+  assert.ok(walkPathDistance(game.player.position, captured.path) <= SHORT_WALK_PATH_DISTANCE);
+
+  game.walkToPoint({ x: SHORT_WALK_PATH_DISTANCE + 10, y: 0 });
+  assert.equal(captured.options.shortWalk, false);
+});
+
+test("reclicking during short walk uses current routed distance only", () => {
+  const game = Object.create(Game.prototype);
+  game.currentScene = {};
+  game.player = {
+    position: { x: 60, y: 0 },
+    facing: "east",
+    shortWalk: true
+  };
+  let captured = null;
+  game.movement = {
+    walkTo(point, facingPoint, path, options) {
+      captured = { point, facingPoint, path, options };
+    }
+  };
+
+  game.walkToPoint({ x: 100, y: 0 });
+  assert.equal(captured.options.shortWalk, true);
+
+  game.walkToPoint({ x: 111, y: 0 });
+  assert.equal(captured.options.shortWalk, true);
+});
+
+test("active short walk does not switch into full walk on a long retarget", () => {
+  const player = {
+    position: { x: 60, y: 0 },
+    target: { x: 100, y: 0 },
+    speed: 100,
+    animation: "walk",
+    facing: "east",
+    walkPart: "short",
+    shortWalk: true,
+    pendingStop: false,
+    stopAnimationStarted: false,
+    stopAnimationFinished: false,
+    movementStopping: false,
+    animator: { frameIndex: 9, elapsed: 2, isFinished: () => false },
+    walkPartsByFacing: {
+      east: {
+        start: { frameCount: 3, fps: 3, loop: false, initialFrame: 0 },
+        short: { frameCount: 4, fps: 4, loop: true },
+        loop: { frameCount: 4, fps: 4, loop: true },
+        stop: { frameCount: 3, fps: 3, loop: false }
+      }
+    }
+  };
+  const movement = new MovementSystem(player);
+  movement.walkTo({ x: 110, y: 0 }, { x: 110, y: 0 }, [{ x: 110, y: 0 }], { shortWalk: false });
+
+  assert.equal(player.shortWalk, true);
+  assert.equal(player.walkPart, "short");
+  assert.equal(player.animator.frameIndex, 9);
+});
+
+test("active full walk does not switch into short walk on a short retarget", () => {
+  const player = {
+    position: { x: 60, y: 0 },
+    target: { x: 500, y: 0 },
+    speed: 100,
+    animation: "walk",
+    facing: "east",
+    walkPart: "start",
+    shortWalk: false,
+    pendingStop: false,
+    stopAnimationStarted: false,
+    stopAnimationFinished: false,
+    movementStopping: false,
+    walkPartsByFacing: {
+      east: {
+        start: { frameCount: 3, fps: 3, loop: false },
+        short: { frameCount: 4, fps: 4, loop: true },
+        loop: { frameCount: 4, fps: 4, loop: true },
+        stop: { frameCount: 3, fps: 3, loop: false }
+      }
+    }
+  };
+  const movement = new MovementSystem(player);
+  movement.walkTo({ x: 80, y: 0 }, { x: 80, y: 0 }, [{ x: 80, y: 0 }], { shortWalk: true });
+
+  assert.equal(player.shortWalk, false);
+  assert.equal(player.walkPart, "loop");
+});
+
 test("new walk start movement uses start initial frame instead of stale animator frame", () => {
   const player = {
     position: { x: 0, y: 0 },
@@ -824,7 +1016,8 @@ test("table click approaches the table instead of stopping near current feet", (
   assert.deepEqual(game.player.interactionDebug.feetGoal, { x: 405, y: 645 });
   assert.ok(game.player.target.x >= 390);
   assert.ok(game.player.target.x <= 440);
-  assert.ok(game.player.target.y >= 580);
+  assert.ok(game.player.target.y >= 560);
+  assert.ok(game.player.target.y <= 580);
   assert.ok(distance(game.player.target, game.player.position) > 250);
   assert.deepEqual(game.player.interactionDebug.click, { x: 315, y: 490 });
 });

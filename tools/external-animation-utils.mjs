@@ -745,7 +745,7 @@ export function walkMotionCurve(frameCount) {
 
 export function externalWalkMotionCurve(role, frameCount, sourceStartFrame = 0) {
   if (role === "start") return externalWalkStartMotionCurve(frameCount, sourceStartFrame);
-  if (role === "loop") return externalWalkLoopMotionCurve(frameCount, sourceStartFrame);
+  if (role === "loop" || role === "short") return externalWalkLoopMotionCurve(frameCount, sourceStartFrame);
   return externalWalkRawMotionCurve(role, frameCount, sourceStartFrame).map((value) =>
     Number((EXTERNAL_WALK_STATIC_MOTION_MULTIPLIER + (value - 1) * EXTERNAL_WALK_FRAME_MOTION_WEIGHT).toFixed(3))
   );

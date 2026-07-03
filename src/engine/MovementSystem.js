@@ -7,30 +7,43 @@ export class MovementSystem {
     this.player = player;
   }
 
-  walkTo(point, facingPoint = point) {
-    const wasWalking = this.player.animation === "walk" && (this.player.target || this.player.walkPart === "start" || this.player.walkPart === "loop");
-    const dx = point.x - this.player.position.x;
-    const dy = point.y - this.player.position.y;
+  walkTo(point, facingPoint = point, path = null, options = {}) {
+    const wasWalking = this.player.animation === "walk" && (this.player.target || this.player.walkPart === "start" || this.player.walkPart === "loop" || this.player.walkPart === "short");
+    const wasShortWalk = Boolean(this.player.shortWalk) || this.player.walkPart === "short";
+    const waypoints = Array.isArray(path) && path.length ? path.map((waypoint) => ({ ...waypoint })) : [{ ...point }];
+    while (waypoints.length > 1 && pointDistance(this.player.position, waypoints[0]) <= WALK_TARGET_EPSILON) waypoints.shift();
+    const firstPoint = waypoints.shift() || { ...point };
+    const finalPoint = waypoints.length ? waypoints.at(-1) : firstPoint;
+    const dx = finalPoint.x - this.player.position.x;
+    const dy = finalPoint.y - this.player.position.y;
     if (!wasWalking && Math.hypot(dx, dy) <= WALK_TARGET_EPSILON) {
       this.player.target = null;
+      this.player.walkPath = [];
       this.player.animation = this.player.speaking ? "talk" : "idle";
       this.player.walkPart = null;
+      this.player.shortWalk = false;
       this.player.pendingStop = false;
       this.player.movementStopping = false;
       this.player.stopAnimationStarted = false;
       return;
     }
-    this.player.facing = facingFromDelta(facingPoint.x - this.player.position.x, facingPoint.y - this.player.position.y, this.player);
-    this.player.target = { ...point };
+    this.player.idleHoldFrame = null;
+    this.player.idleVariant = null;
+    this.player.idleVariantQueue = [];
+    this.player.facing = facingFromDelta(firstPoint.x - this.player.position.x, firstPoint.y - this.player.position.y, this.player);
+    this.player.target = { ...firstPoint };
+    this.player.walkPath = waypoints;
     this.player.animation = "walk";
+    const isActiveFullWalk = wasWalking && !wasShortWalk;
+    this.player.shortWalk = wasShortWalk || (Boolean(options.shortWalk) && !isActiveFullWalk);
     this.player.pendingStop = false;
     this.player.movementStopping = false;
     this.player.stopAnimationStarted = false;
     this.player.stopAnimationFinished = false;
     const parts = walkPartsForFacing(this.player);
-    this.player.walkPart = wasWalking ? "loop" : parts?.start ? "start" : "loop";
-    if (!wasWalking && this.player.walkPart === "start" && parts?.start) {
-      syncAnimatorToWalkPartStart(this.player, parts.start);
+    this.player.walkPart = this.player.shortWalk && parts?.short ? "short" : wasWalking ? "loop" : parts?.start ? "start" : "loop";
+    if (!wasWalking && (this.player.walkPart === "start" || this.player.walkPart === "short")) {
+      syncAnimatorToWalkPartStart(this.player, parts?.[this.player.walkPart]);
     }
   }
 
@@ -46,6 +59,7 @@ export class MovementSystem {
         this.player.pendingStop = false;
         this.player.animation = this.player.speaking ? "talk" : "idle";
         this.player.walkPart = null;
+        this.player.shortWalk = false;
         return;
       }
       if (this.player.pendingStop) {
@@ -57,6 +71,7 @@ export class MovementSystem {
       }
       this.player.animation = this.player.speaking ? "talk" : "idle";
       this.player.walkPart = null;
+      this.player.shortWalk = false;
       return;
     }
     if (this.player.animation === "walk" && this.player.walkPart === "start" && this.player.animator?.isFinished()) {
@@ -69,16 +84,31 @@ export class MovementSystem {
     this.player.position = moveToward(this.player.position, this.player.target, this.player.speed * motionMultiplier * dt);
     this.player.facing = facingFromDelta(this.player.position.x - previous.x, this.player.position.y - previous.y, this.player);
     if (this.player.position.x === this.player.target.x && this.player.position.y === this.player.target.y) {
+      if (this.player.walkPath?.length) {
+        this.player.target = this.player.walkPath.shift();
+        return;
+      }
       this.player.target = null;
+      this.player.walkPath = [];
       const parts = walkPartsForFacing(this.player);
-      if (parts?.stop) {
+      if (this.player.shortWalk) {
+        this.player.animation = this.player.speaking ? "talk" : "idle";
+        this.player.walkPart = null;
+        this.player.shortWalk = false;
+        this.player.idleHoldFrame = null;
+      } else if (parts?.stop) {
         requestWalkStop(this.player);
       } else {
         this.player.animation = "idle";
         this.player.walkPart = null;
+        this.player.shortWalk = false;
       }
     }
   }
+}
+
+function pointDistance(a, b) {
+  return Math.hypot((b?.x ?? 0) - (a?.x ?? 0), (b?.y ?? 0) - (a?.y ?? 0));
 }
 
 function syncAnimatorToWalkPartStart(player, frame) {
@@ -94,13 +124,17 @@ export function requestWalkStop(player) {
   const parts = walkPartsForFacing(player);
   if (!parts?.stop) {
     player.target = null;
+    player.walkPath = [];
     player.animation = player.speaking ? "talk" : "idle";
     player.walkPart = null;
+    player.shortWalk = false;
     player.pendingStop = false;
     return;
   }
   player.target = null;
+  player.walkPath = [];
   player.animation = "walk";
+  player.shortWalk = false;
   player.walkPart = player.walkPart === "start" ? "start" : "loop";
   player.pendingStop = true;
   player.movementStopping = true;

@@ -35,11 +35,17 @@ Use separate layers when a character must walk behind or in front of an object:
 
 Scene geometry is data, not drawn into the background:
 
-- `walkPolygons`: where Bai Mitko can walk.
+- `walkMask`: the production navigation surface. Use low-resolution raster masks and A* routing for
+  Bai Mitko movement.
+- `walkPolygons`: legacy/debug authoring context only; do not use polygons as the production
+  movement system for new scenes.
 - `depthZones`: y-range based scaling and sorting.
 - `hotspots`: clickable polygons or rectangles.
 - `exits`: transition areas.
 - `anchors`: named stage positions for dialogue, puzzles, and cutscenes.
+
+See `docs/raster-scene-runtime.md` for the fixed runtime model: raster walk masks, raster foreground
+layers, and `0` frontmost / `100` horizon z ordering.
 
 ## Character Animation
 
