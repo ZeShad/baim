@@ -84,8 +84,8 @@ test("walk mask line sampler finds the nearest direct approach before a blocked 
   const approach = nearestWalkablePointOnLine(scene, { x: 650, y: 520 }, { x: 690, y: 250 });
   assert.ok(approach);
   assert.equal(isWalkable(scene, approach), true);
-  assert.ok(approach.y < 520);
-  assert.ok(approach.y >= 490);
+  assert.equal(Math.round(approach.x), 650);
+  assert.equal(Math.round(approach.y), 520);
 });
 
 test("walk mask nearest sampler finds an approach near blocked clicks", () => {
