@@ -72,6 +72,17 @@ target/external_animation_v1/runtime/
 
 When Bai Mitko has no active authored animation for the current state, the renderer holds frame 0 of the current-direction walk-start animation.
 
+## Basic Animation And Speech Style Milestone
+
+As of 2026-07-04, the first practical Bai Mitko runtime animation/style baseline is in place.
+
+- Bai Mitko runtime rendering is animation-first; static still pose images are not part of the active character path.
+- East-facing animation sheets are the authored source for the current walk/talk/idle work, and west remains mirrored from east.
+- Speech bubbles are DOM-rendered above the canvas and use measured text dimensions instead of fixed guessed sizes.
+- Speech bubble placement is anchored from a calculated tail endpoint near Bai Mitko's mouth, with debug geometry available for tuning the tail target and measured bubble rectangle.
+- Bubble text overflow is intentionally hidden for this first pass; later work can add smarter clipping, paging, or screen-edge fitting.
+- North/south character animation and complete bubble polish remain deferred until the east/west baseline is stable.
+
 The model sheet remains source direction:
 
 ```text

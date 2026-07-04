@@ -33,8 +33,14 @@ const TARGET_REACH_ORIGIN_SIDE_RATIO = 0.14;
 export const SHORT_WALK_PATH_DISTANCE = 400;
 const TALK_SINGLE_WORD_MAX_CHARS = 18;
 const TALK_LONG_SENTENCE_MIN_CHARS = 72;
+const SPEECH_BUBBLE_MAX_WIDTH_PX = 350;
+const SPEECH_BUBBLE_VIEWPORT_MARGIN_X_PX = 20;
+const SPEECH_BUBBLE_MAX_HEIGHT_PX = 200;
+const SPEECH_BUBBLE_MAX_HEIGHT_VIEWPORT_RATIO = 0.6;
 const SPEECH_BUBBLE_WEST_OFFSET_X_FULL_SIZE = 40;
-const SPEECH_BUBBLE_WEST_OFFSET_Y_FULL_SIZE = -15;
+const SPEECH_BUBBLE_WEST_OFFSET_Y_FULL_SIZE = -75;
+const SPEECH_BUBBLE_WEST_TAIL_END_FROM_RIGHT_PX = 72;
+const SPEECH_BUBBLE_TAIL_END_FROM_BOTTOM_PX = 26;
 
 export class Game {
   constructor(canvas, uiRoot) {
@@ -437,9 +443,12 @@ export class Game {
       ? {
           id: `speech-${++this.speechBubbleSequence}`,
           text: message,
-          tone: options.reject ? "reject" : "talk"
+          tone: options.reject ? "reject" : "talk",
+          metrics: null,
+          debug: null
         }
       : null;
+    if (this.speechBubble) this.speechBubble.metrics = this.measureSpeechBubble(message);
     this.startSpeechAnimationForMessage(message, options);
     if (this.uiRoot) this.renderUi();
   }
@@ -807,15 +816,16 @@ export class Game {
   }
 
   createSpeechBubble() {
+    if (!this.speechBubble.metrics) this.speechBubble.metrics = this.measureSpeechBubble(this.speechBubble.text);
     const position = this.speechBubblePosition();
     const bubble = element("div", `speech-bubble tail-${position.tailSide} ${this.speechBubble.tone === "reject" ? "reject" : ""}`);
     bubble.dataset.speechId = this.speechBubble.id;
-    if (position.right != null) {
-      bubble.style.right = `${position.right}%`;
-    } else {
-      bubble.style.left = `${position.left}%`;
-    }
-    bubble.style.top = `${position.top}%`;
+    if (position.right != null) bubble.style.right = `${position.right}%`;
+    else bubble.style.left = `${position.left}%`;
+    bubble.style.bottom = `${position.bottom}%`;
+    bubble.style.width = `${position.width}px`;
+    bubble.style.maxWidth = `${position.maxWidth}px`;
+    bubble.style.maxHeight = `${position.maxHeight}px`;
     bubble.innerHTML = `
       <div class="speech-blobs">
         <div class="speech-blob-top"></div>
@@ -831,6 +841,45 @@ export class Game {
     return bubble;
   }
 
+  measureSpeechBubble(text) {
+    if (typeof window === "undefined" || typeof document === "undefined") {
+      return { width: SPEECH_BUBBLE_MAX_WIDTH_PX, height: 120, maxWidth: SPEECH_BUBBLE_MAX_WIDTH_PX, maxHeight: SPEECH_BUBBLE_MAX_HEIGHT_PX };
+    }
+    const maxWidth = Math.max(
+      120,
+      Math.min(SPEECH_BUBBLE_MAX_WIDTH_PX, (window.innerWidth || SPEECH_BUBBLE_MAX_WIDTH_PX) - SPEECH_BUBBLE_VIEWPORT_MARGIN_X_PX)
+    );
+    const maxHeight = Math.max(
+      80,
+      Math.min(SPEECH_BUBBLE_MAX_HEIGHT_PX, (window.innerHeight || 720) * SPEECH_BUBBLE_MAX_HEIGHT_VIEWPORT_RATIO)
+    );
+    if (!this.uiRoot) return { width: maxWidth, height: 120, maxWidth, maxHeight };
+    const probe = element("div", "speech-bubble speech-measure tail-right");
+    probe.style.width = `${maxWidth}px`;
+    probe.style.maxWidth = `${maxWidth}px`;
+    probe.style.maxHeight = `${maxHeight}px`;
+    probe.innerHTML = `
+      <div class="speech-blobs">
+        <div class="speech-blob-top"></div>
+        <div class="speech-blob-bottom"></div>
+        <svg class="speech-tail" viewBox="0 0 132 82" aria-hidden="true" focusable="false">
+          <path d="M130 7 C105 10 85 19 68 34 C49 51 31 65 0 82 C19 57 27 38 34 16 C51 26 73 27 96 18 C110 13 121 9 130 7 Z"></path>
+        </svg>
+        <div class="speech-text"></div>
+      </div>
+    `;
+    probe.querySelector(".speech-text").textContent = text;
+    this.uiRoot.appendChild(probe);
+    const rect = probe.getBoundingClientRect();
+    probe.remove();
+    return {
+      width: Math.ceil(Math.min(maxWidth, Math.max(1, rect.width))),
+      height: Math.ceil(Math.min(maxHeight, Math.max(1, rect.height))),
+      maxWidth,
+      maxHeight
+    };
+  }
+
   speechBubblePosition() {
     const definition = this.characterDefinitions?.["npc.bai_mitko"] || characterDefinitions["npc.bai_mitko"];
     const height = characterHeight(definition, this.currentScene, this.player.position);
@@ -843,15 +892,54 @@ export class Game {
     const fullSizeHeight =
       definition.render.sceneHeights?.[this.currentScene.id]?.near || definition.gameHeight || height;
     const renderScale = height / Math.max(1, fullSizeHeight);
-    const westOffsetX = facing === "west" ? SPEECH_BUBBLE_WEST_OFFSET_X_FULL_SIZE * renderScale : 0;
-    const westOffsetY = facing === "west" ? SPEECH_BUBBLE_WEST_OFFSET_Y_FULL_SIZE * renderScale : 0;
-    const top = clampNumber(((mouth.y - height * 0.55 + westOffsetY) / 720) * 100, 4, 58);
+    const speechOffsetX = SPEECH_BUBBLE_WEST_OFFSET_X_FULL_SIZE * renderScale * (facing === "west" ? 1 : -1);
+    const speechOffsetY = SPEECH_BUBBLE_WEST_OFFSET_Y_FULL_SIZE * renderScale;
+    const metrics = this.speechBubble?.metrics || { width: 350, height: 120, maxWidth: SPEECH_BUBBLE_MAX_WIDTH_PX, maxHeight: SPEECH_BUBBLE_MAX_HEIGHT_PX };
+    const canvasRect = this.canvas.getBoundingClientRect();
+    const cssToWorldX = this.canvas.width / Math.max(1, canvasRect.width || this.canvas.width);
+    const cssToWorldY = this.canvas.height / Math.max(1, canvasRect.height || this.canvas.height);
+    const bubbleWidthWorld = metrics.width * cssToWorldX;
+    const bubbleHeightWorld = metrics.height * cssToWorldY;
+    const tailEnd = {
+      x: mouth.x + speechOffsetX,
+      y: mouth.y + speechOffsetY
+    };
+    const tailOffsetXWorld = SPEECH_BUBBLE_WEST_TAIL_END_FROM_RIGHT_PX * cssToWorldX;
+    const tailOffsetYWorld = SPEECH_BUBBLE_TAIL_END_FROM_BOTTOM_PX * cssToWorldY;
+    const bottomWorld = 720 - tailEnd.y + tailOffsetYWorld;
     if (facing === "west") {
-      const bubbleRight = clampNumber(mouth.x + westOffsetX - height * 0.08, 220, 1180);
-      return { right: ((1280 - bubbleRight) / 1280) * 100, top, tailSide: "right" };
+      const leftWorld = tailEnd.x - bubbleWidthWorld + tailOffsetXWorld;
+      const rightWorld = 1280 - (leftWorld + bubbleWidthWorld);
+      const topWorld = 720 - bottomWorld - bubbleHeightWorld;
+      this.speechBubble.debug = {
+        tailEnd,
+        bubbleRect: { x: leftWorld, y: topWorld, w: bubbleWidthWorld, h: bubbleHeightWorld },
+        metrics
+      };
+      return {
+        right: (rightWorld / 1280) * 100,
+        bottom: (bottomWorld / 720) * 100,
+        width: metrics.width,
+        maxWidth: metrics.maxWidth,
+        maxHeight: metrics.maxHeight,
+        tailSide: "right"
+      };
     }
-    const left = clampNumber(((mouth.x + height * 0.16) / 1280) * 100, 2, 78);
-    return { left, top, tailSide: "left" };
+    const leftWorld = tailEnd.x - tailOffsetXWorld;
+    const topWorld = 720 - bottomWorld - bubbleHeightWorld;
+    this.speechBubble.debug = {
+      tailEnd,
+      bubbleRect: { x: leftWorld, y: topWorld, w: bubbleWidthWorld, h: bubbleHeightWorld },
+      metrics
+    };
+    return {
+      left: (leftWorld / 1280) * 100,
+      bottom: (bottomWorld / 720) * 100,
+      width: metrics.width,
+      maxWidth: metrics.maxWidth,
+      maxHeight: metrics.maxHeight,
+      tailSide: "left"
+    };
   }
 
   createMenu() {

@@ -402,6 +402,7 @@ export class Renderer {
       }
     }
     this.drawInteractionDebugPoints();
+    this.drawSpeechBubbleDebug();
     ctx.restore();
   }
 
@@ -436,6 +437,24 @@ export class Renderer {
     }
     if (debug.feetGoal) this.drawDebugPoint(debug.feetGoal, "feet goal", `rgba(78, 170, 255, ${alpha * 0.55})`, 6);
     if (debug.feet) this.drawDebugPoint(debug.feet, "feet approach", `rgba(83, 255, 126, ${alpha})`, 8);
+  }
+
+  drawSpeechBubbleDebug() {
+    const debug = this.game.speechBubble?.debug;
+    if (!debug) return;
+    const { ctx } = this;
+    if (debug.bubbleRect) {
+      ctx.save();
+      ctx.strokeStyle = "rgba(255, 242, 112, 0.9)";
+      ctx.lineWidth = 2;
+      ctx.setLineDash([8, 5]);
+      ctx.strokeRect(debug.bubbleRect.x, debug.bubbleRect.y, debug.bubbleRect.w, debug.bubbleRect.h);
+      ctx.restore();
+    }
+    if (debug.tailEnd) {
+      const label = debug.metrics ? `speech tail ${Math.round(debug.metrics.width)}x${Math.round(debug.metrics.height)}` : "speech tail";
+      this.drawDebugPoint(debug.tailEnd, label, "rgba(255, 242, 112, 0.95)", 9);
+    }
   }
 
   drawDebugPoint(point, label, color, radius = 7) {
