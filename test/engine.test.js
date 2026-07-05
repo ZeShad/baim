@@ -66,6 +66,7 @@ test("apartment uses a raster walk mask for walkable floor", () => {
   assert.equal(scene.walkMask.rows.join("").includes("e"), false);
   assert.equal(scene.walkMask.legend.e, undefined);
   assert.ok(scene.foregroundLayers.some((layer) => layer.id === "layer.apartment.table_foreground" && layer.asset === "foregroundTable" && layer.zIndex === -1));
+  assert.ok(scene.foregroundLayers.some((layer) => layer.id === "layer.apartment.bills_on_table" && layer.asset === "billsOnTable" && layer.zIndex === -2 && layer.top === 385 && layer.left === 390));
 });
 
 test("apartment perspective scale is continuous across raster mask rows", () => {
@@ -1222,6 +1223,45 @@ test("speech bubble messages start talk or reject animation variants", () => {
 
   assert.equal(game.player.animation, "reject");
   assert.equal(game.player.speechAnimation.slot, "external_reject_east_1");
+});
+
+test("speech bubble defers during walking and appears when idle", () => {
+  const game = Object.create(Game.prototype);
+  game.usesExternalCharacterAnimation = () => true;
+  game.renderUi = () => {};
+  game.measureSpeechBubble = () => ({ width: 220, height: 90, maxWidth: 350, maxHeight: 200 });
+  game.player = {
+    position: { x: 650, y: 500 },
+    target: { x: 700, y: 500 },
+    animation: "walk",
+    facing: "east",
+    speaking: true,
+    speechAnimation: { slot: "external_talk_east_short_1" },
+    idleVariant: null,
+    idleVariantQueue: [],
+    animator: { played: null, play(animation, key) { this.played = { animation, key }; } }
+  };
+  game.message = "old";
+  game.speechBubble = { text: "old", phase: "visible" };
+  game.pendingSpeechBubble = null;
+  game.speechBubbleSequence = 0;
+
+  game.setStatusMessage("after walk");
+
+  assert.equal(game.speechBubble, null);
+  assert.equal(game.message, "");
+  assert.deepEqual(game.pendingSpeechBubble, { message: "after walk", options: {} });
+  assert.equal(game.player.speaking, false);
+  assert.equal(game.player.speechAnimation, null);
+
+  game.player.target = null;
+  game.player.animation = "idle";
+  game.updateSpeechBubble(0.1);
+
+  assert.equal(game.pendingSpeechBubble, null);
+  assert.equal(game.speechBubble.text, "after walk");
+  assert.equal(game.player.animation, "talk");
+  assert.equal(game.player.animator.played.animation, "talk");
 });
 
 test("talk animation semantic heuristic classifies text shape", () => {

@@ -9,7 +9,8 @@ const port = Number(process.env.PORT || 5173);
 const editorScenes = {
   "scene.chapter1.apartment": {
     walkGeometryPath: "assets_src/chapter1/scenes/apartment/walk-geometry-v1.json",
-    objectGeometryPath: "assets_src/chapter1/scenes/apartment/object-geometry-v1.json"
+    objectGeometryPath: "assets_src/chapter1/scenes/apartment/object-geometry-v1.json",
+    layerPath: "assets_src/chapter1/scenes/apartment/layers.json"
   }
 };
 
@@ -67,10 +68,13 @@ function handleEditorSave(req, res) {
       if (!config) throw new Error(`Scene is not editor-configured: ${payload.sceneId}`);
       validateWalkGeometry(payload.walkGeometry);
       validateObjectGeometry(payload.objectGeometry);
+      validateLayerSource(payload.layerSource);
       writeKnownJson(config.walkGeometryPath, payload.walkGeometry);
       writeKnownJson(config.objectGeometryPath, payload.objectGeometry);
+      writeKnownJson(config.layerPath, payload.layerSource);
       runBuild("tools/build-walk-masks.js");
       runBuild("tools/build-scene-object-geometry.js");
+      runBuild("tools/build-scene-layer-runtime.js");
       json(res, 200, { ok: true, sceneId: payload.sceneId });
     } catch (error) {
       json(res, 400, { ok: false, error: error.message });
@@ -107,6 +111,18 @@ function validateObjectGeometry(value) {
     if (!Array.isArray(object.polygon) || object.polygon.length < 3) throw new Error(`${object.id} polygon needs at least 3 points`);
     for (const point of object.polygon) {
       if (!Number.isFinite(Number(point?.x)) || !Number.isFinite(Number(point?.y))) throw new Error(`${object.id} polygon point must have x/y`);
+    }
+  }
+}
+
+function validateLayerSource(value) {
+  if (!Array.isArray(value?.layers)) throw new Error("layerSource.layers is required");
+  for (const layer of value.layers) {
+    if (!layer.id) throw new Error("layer id is required");
+    if (layer.enabled !== false && !layer.asset) throw new Error(`${layer.id} asset is required`);
+    if (!Number.isFinite(Number(layer.zIndex))) throw new Error(`${layer.id} zIndex must be a number`);
+    for (const key of ["top", "left", "right", "bottom", "width", "height"]) {
+      if (layer[key] !== undefined && !Number.isFinite(Number(layer[key]))) throw new Error(`${layer.id} ${key} must be a number`);
     }
   }
 }

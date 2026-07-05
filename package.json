@@ -8,6 +8,7 @@
     "build:walkmasks": "node tools/build-walk-masks.js",
     "build:object-geometry": "node tools/build-scene-object-geometry.js",
     "build:scene-layers": "node tools/build-scene-layers.js",
+    "build:scene-layer-runtime": "node tools/build-scene-layer-runtime.js",
     "build:characters": "node tools/build-character-chroma-assets.js",
     "test": "node --test test/engine.test.js"
   },

@@ -333,7 +333,23 @@ export class Renderer {
   drawSceneRasterLayer(scene, layer) {
     const image = this.game.assets.getSceneImage(scene.id, layer.asset);
     if (!this.game.assets.isLoaded(image)) return;
-    this.ctx.drawImage(image, 0, 0, 1280, 720);
+    const rect = this.sceneLayerRect(layer, image);
+    this.ctx.drawImage(image, rect.x, rect.y, rect.w, rect.h);
+  }
+
+  sceneLayerRect(layer, image) {
+    const width = Number(layer.width) || image.naturalWidth || image.width || 1280;
+    const height = Number(layer.height) || image.naturalHeight || image.height || 720;
+    const hasRight = Number.isFinite(Number(layer.right));
+    const hasBottom = Number.isFinite(Number(layer.bottom));
+    const left = Number.isFinite(Number(layer.left)) ? Number(layer.left) : null;
+    const top = Number.isFinite(Number(layer.top)) ? Number(layer.top) : null;
+    return {
+      x: left ?? (hasRight ? 1280 - Number(layer.right) - width : 0),
+      y: top ?? (hasBottom ? 720 - Number(layer.bottom) - height : 0),
+      w: width,
+      h: height
+    };
   }
 
   logArtStatus(sceneId, path, status, usingPlaceholder) {

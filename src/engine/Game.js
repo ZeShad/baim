@@ -41,6 +41,10 @@ const SPEECH_BUBBLE_WEST_OFFSET_X_FULL_SIZE = 40;
 const SPEECH_BUBBLE_WEST_OFFSET_Y_FULL_SIZE = -75;
 const SPEECH_BUBBLE_WEST_TAIL_END_FROM_RIGHT_PX = 72;
 const SPEECH_BUBBLE_TAIL_END_FROM_BOTTOM_PX = 26;
+const SPEECH_BUBBLE_FADE_SECONDS = 0.3;
+const SPEECH_BUBBLE_MIN_VISIBLE_SECONDS = 1.4;
+const SPEECH_BUBBLE_MAX_VISIBLE_SECONDS = 6;
+const SPEECH_BUBBLE_CHARS_PER_SECOND = 18;
 
 export class Game {
   constructor(canvas, uiRoot) {
@@ -63,6 +67,7 @@ export class Game {
     this.selectedVerb = VERBS.LOOK;
     this.message = this.t("ui.hint");
     this.speechBubble = null;
+    this.pendingSpeechBubble = null;
     this.speechBubbleSequence = 0;
     this.currentScene = this.resolveInitialScene();
     this.player = {
@@ -148,6 +153,7 @@ export class Game {
       this.player.animator.play(this.player.animation, this.currentAnimationKey());
       this.player.animator.update(dt);
       this.updateSpeechAnimationHold();
+      this.updateSpeechBubble(dt);
     }
     this.renderer.draw();
     requestAnimationFrame((next) => this.tick(next));
@@ -431,13 +437,18 @@ export class Game {
 
   clearStatusMessage() {
     this.message = "";
-    this.speechBubble = null;
-    this.player.speechAnimation = null;
-    this.player.speaking = false;
-    if (this.uiRoot) this.renderUi();
+    this.pendingSpeechBubble = null;
+    if (this.speechBubble) this.hideSpeechBubble(true);
+    else if (this.uiRoot) this.renderUi();
   }
 
   setStatusMessage(message, options = {}) {
+    if (this.player.target || this.player.animation === "walk") {
+      this.hideSpeechBubble(true);
+      this.pendingSpeechBubble = message ? { message, options: { ...options } } : null;
+      return;
+    }
+    this.pendingSpeechBubble = null;
     this.message = message;
     this.speechBubble = message
       ? {
@@ -445,12 +456,68 @@ export class Game {
           text: message,
           tone: options.reject ? "reject" : "talk",
           metrics: null,
-          debug: null
+          debug: null,
+          elapsed: 0,
+          visibleSeconds: this.speechBubbleVisibleSeconds(message),
+          phase: "in"
         }
       : null;
     if (this.speechBubble) this.speechBubble.metrics = this.measureSpeechBubble(message);
     this.startSpeechAnimationForMessage(message, options);
     if (this.uiRoot) this.renderUi();
+  }
+
+  speechBubbleVisibleSeconds(message) {
+    const normalized = String(message || "").trim();
+    const punctuationBonus = (normalized.match(/[.!?…]/g)?.length || 0) * 0.18;
+    const readingSeconds = normalized.length / SPEECH_BUBBLE_CHARS_PER_SECOND + punctuationBonus;
+    return clampNumber(readingSeconds, SPEECH_BUBBLE_MIN_VISIBLE_SECONDS, SPEECH_BUBBLE_MAX_VISIBLE_SECONDS);
+  }
+
+  updateSpeechBubble(dt) {
+    if (!this.speechBubble && this.pendingSpeechBubble && !this.player.target && this.player.animation === "idle") {
+      const pending = this.pendingSpeechBubble;
+      this.pendingSpeechBubble = null;
+      this.setStatusMessage(pending.message, pending.options);
+      return;
+    }
+    if (!this.speechBubble) return;
+    if (this.player.target || this.player.animation === "walk") {
+      this.hideSpeechBubble(true);
+      return;
+    }
+    this.speechBubble.elapsed += dt;
+    if (this.speechBubble.phase === "in" && this.speechBubble.elapsed >= SPEECH_BUBBLE_FADE_SECONDS) {
+      this.speechBubble.phase = "visible";
+    }
+    if (this.speechBubble.phase !== "out" && this.speechBubble.elapsed >= this.speechBubble.visibleSeconds) {
+      this.hideSpeechBubble();
+    }
+    if (this.speechBubble?.phase === "out" && this.speechBubble.elapsed >= this.speechBubble.visibleSeconds + SPEECH_BUBBLE_FADE_SECONDS) {
+      this.speechBubble = null;
+      this.message = "";
+      this.renderUi();
+    }
+  }
+
+  hideSpeechBubble(immediate = false) {
+    if (!this.speechBubble) return;
+    if (immediate) {
+      this.speechBubble = null;
+      this.pendingSpeechBubble = null;
+      this.message = "";
+      this.player.speaking = false;
+      this.player.speechAnimation = null;
+      if (!this.player.target && this.player.animation !== "walk") {
+        this.player.animation = "idle";
+      }
+      this.renderUi();
+      return;
+    }
+    if (this.speechBubble.phase !== "out") {
+      this.speechBubble.phase = "out";
+      this.renderUi();
+    }
   }
 
   startSpeechAnimationForMessage(message, options = {}) {
@@ -637,6 +704,7 @@ export class Game {
     const route = path.length ? path : [{ ...point }];
     const routeDistance = walkPathDistance(this.player.position, route);
     const shortWalk = routeDistance > 0 && routeDistance <= SHORT_WALK_PATH_DISTANCE;
+    this.hideSpeechBubble(true);
     this.movement.walkTo(point, facingPoint, route, { shortWalk });
   }
 
@@ -818,7 +886,7 @@ export class Game {
   createSpeechBubble() {
     if (!this.speechBubble.metrics) this.speechBubble.metrics = this.measureSpeechBubble(this.speechBubble.text);
     const position = this.speechBubblePosition();
-    const bubble = element("div", `speech-bubble tail-${position.tailSide} ${this.speechBubble.tone === "reject" ? "reject" : ""}`);
+    const bubble = element("div", `speech-bubble tail-${position.tailSide} phase-${this.speechBubble.phase} ${this.speechBubble.tone === "reject" ? "reject" : ""}`);
     bubble.dataset.speechId = this.speechBubble.id;
     if (position.right != null) bubble.style.right = `${position.right}%`;
     else bubble.style.left = `${position.left}%`;

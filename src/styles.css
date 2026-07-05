@@ -146,6 +146,15 @@ button:hover {
   pointer-events: none;
   color: #4b3625;
   filter: drop-shadow(0 14px 22px rgba(0, 0, 0, 0.34));
+  opacity: 1;
+}
+
+.speech-bubble.phase-in {
+  animation: speech-fade-in 300ms ease-out both;
+}
+
+.speech-bubble.phase-out {
+  animation: speech-fade-out 300ms ease-in both;
 }
 
 .speech-blobs {
@@ -270,6 +279,24 @@ button:hover {
   }
   to {
     transform: rotate(-0.45deg) scale(0.985);
+  }
+}
+
+@keyframes speech-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes speech-fade-out {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
   }
 }
 
@@ -445,11 +472,29 @@ button:hover {
   color: #d9cbb5;
 }
 
-.scene-editor select {
+.scene-editor select,
+.scene-editor input {
   min-height: 32px;
   border: 1px solid #a78b5c;
   background: #221b13;
   color: #f5ead5;
+  padding: 0 5px;
+}
+
+.scene-editor-layer-position {
+  color: #d9f7ff;
+  font-size: 12px;
+  line-height: 1.35;
+}
+
+.scene-editor-layer-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 6px;
+}
+
+.scene-editor-layer-grid input {
+  max-width: 81px;
 }
 
 .scene-editor-actions {

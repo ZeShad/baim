@@ -33,6 +33,19 @@ Use separate layers when a character must walk behind or in front of an object:
 - `foreground`: occluders such as tables, door frames, counters, smoke, hanging signs.
 - `lighting`: optional soft overlays if the scene needs mood changes.
 
+Layer and prop extraction is a manual production step when precision matters. AI-generated or
+approved base art is acceptable as the starting point, but exact clipped props, z-order occluders,
+sprite/video animation frames, removable objects, and later audio/music cues must be reviewed and
+integrated manually. Do not rely on automatic AI clipping for final scene layers when Bai Mitko can
+walk behind the object or when the object can be taken, removed, hidden, or animated.
+
+Runtime layer placement uses `top`, `left`, `right`, and `bottom` in the `1280x720` logical canvas.
+Defaults are `top: 0` and `left: 0`; use `right` or `bottom` for layers that should align to those
+scene edges. Layer placement and z-order are authored in
+`assets_src/chapter1/scenes/<scene>/layers.json` and compiled into
+`src/content/chapter1/sceneLayers.generated.js`; `src/content/chapter1/scenes.js` should only import
+the generated scene layer metadata. See `docs/raster-scene-runtime.md`.
+
 Scene geometry is data, not drawn into the background:
 
 - `walkMask`: the production navigation surface. Use low-resolution raster masks and A* routing for

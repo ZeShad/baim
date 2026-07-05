@@ -1,7 +1,8 @@
 const EDITOR_SCENES = {
   "scene.chapter1.apartment": {
     walkGeometryPath: "assets_src/chapter1/scenes/apartment/walk-geometry-v1.json",
-    objectGeometryPath: "assets_src/chapter1/scenes/apartment/object-geometry-v1.json"
+    objectGeometryPath: "assets_src/chapter1/scenes/apartment/object-geometry-v1.json",
+    layerPath: "assets_src/chapter1/scenes/apartment/layers.json"
   }
 };
 
@@ -17,8 +18,10 @@ export class SceneEditor {
     this.panelSide = "left";
     this.walkSource = null;
     this.objectSource = null;
+    this.layerSource = null;
     this.rows = [];
     this.selectedObjectId = null;
+    this.selectedLayerId = null;
     this.drag = null;
     this.painting = null;
     this.load();
@@ -39,6 +42,10 @@ export class SceneEditor {
     }));
   }
 
+  get layers() {
+    return (this.layerSource?.layers || []).filter((layer) => layer.enabled !== false);
+  }
+
   async load() {
     if (!this.config) {
       this.status = `No editor source configured for ${this.game.currentScene.id}`;
@@ -47,14 +54,17 @@ export class SceneEditor {
     }
     try {
       const suffix = `?editor=${Date.now()}`;
-      const [walkSource, objectSource] = await Promise.all([
+      const [walkSource, objectSource, layerSource] = await Promise.all([
         fetch(this.config.walkGeometryPath + suffix).then((response) => response.json()),
-        fetch(this.config.objectGeometryPath + suffix).then((response) => response.json())
+        fetch(this.config.objectGeometryPath + suffix).then((response) => response.json()),
+        fetch(this.config.layerPath + suffix).then((response) => response.json())
       ]);
       this.walkSource = walkSource;
       this.objectSource = objectSource;
+      this.layerSource = layerSource;
       this.rows = walkSource.raster.rows.slice();
       this.selectedObjectId = this.objects[0]?.id || null;
+      this.selectedLayerId = this.layers[0]?.id || null;
       this.applyToRuntime();
       this.status = "Editor ready";
     } catch (error) {
@@ -68,12 +78,15 @@ export class SceneEditor {
     panel.className = "panel scene-editor";
     if (this.panelSide === "right") panel.classList.add("right");
     const objectOptions = this.objects.map((object) => `<option value="${escapeHtml(object.id)}"${object.id === this.selectedObjectId ? " selected" : ""}>${escapeHtml(displayObjectId(object.id))}</option>`).join("");
+    const layerOptions = this.layers.map((layer) => `<option value="${escapeHtml(layer.id)}"${layer.id === this.selectedLayerId ? " selected" : ""}>${escapeHtml(displayLayerId(layer.id))}</option>`).join("");
+    const selectedLayer = this.selectedLayer();
     panel.innerHTML = `
       <div class="scene-editor-title">Scene Edit Mode</div>
       <label>Tool
         <select data-editor="mode">
           <option value="walk"${this.mode === "walk" ? " selected" : ""}>Walkable raster</option>
           <option value="objects"${this.mode === "objects" ? " selected" : ""}>Object polygons</option>
+          <option value="layers"${this.mode === "layers" ? " selected" : ""}>Layer positions</option>
         </select>
       </label>
       ${this.mode === "walk" ? `<label>Walk cell
@@ -84,6 +97,22 @@ export class SceneEditor {
       ${this.mode === "objects" ? `<label>Object
         <select data-editor="object">${objectOptions}</select>
       </label>` : ""}
+      ${this.mode === "layers" ? `<label>Layer
+        <select data-editor="layer">${layerOptions}</select>
+      </label>
+      <label>Z position
+        <input data-editor="layer-z" type="number" step="0.1" value="${escapeHtml(selectedLayer?.zIndex ?? 0)}">
+      </label>
+      <div class="scene-editor-layer-grid">
+        ${["left", "top", "right", "bottom"].map((key) => `<label>${key}<input data-editor="layer-field" data-field="${key}" type="number" step="1" value="${escapeHtml(layerFieldValue(selectedLayer, key))}"></label>`).join("")}
+      </div>
+      <div class="scene-editor-layer-position">${escapeHtml(layerPositionText(selectedLayer))}</div>
+      <div class="scene-editor-actions">
+        <button type="button" data-editor="layer-nudge" data-dx="-1" data-dy="0">x-1</button>
+        <button type="button" data-editor="layer-nudge" data-dx="1" data-dy="0">x+1</button>
+        <button type="button" data-editor="layer-nudge" data-dx="0" data-dy="-1">y-1</button>
+        <button type="button" data-editor="layer-nudge" data-dx="0" data-dy="1">y+1</button>
+      </div>` : ""}
       <div class="scene-editor-actions">
         <button type="button" data-editor="dock">${this.panelSide === "left" ? "Move Right" : "Move Left"}</button>
         <button type="button" data-editor="save">Save JSON</button>
@@ -100,6 +129,7 @@ export class SceneEditor {
     panel.addEventListener("pointermove", (event) => event.stopPropagation());
     panel.addEventListener("pointerup", (event) => event.stopPropagation());
     panel.addEventListener("click", (event) => event.stopPropagation());
+    panel.addEventListener("wheel", (event) => event.stopPropagation(), { passive: true });
     panel.addEventListener("contextmenu", (event) => {
       event.preventDefault();
       event.stopPropagation();
@@ -107,6 +137,7 @@ export class SceneEditor {
     panel.querySelector('[data-editor="mode"]').addEventListener("change", (event) => {
       this.mode = event.target.value;
       if (this.mode === "objects" && !this.selectedObjectId) this.selectedObjectId = this.objects[0]?.id || null;
+      if (this.mode === "layers" && !this.selectedLayerId) this.selectedLayerId = this.layers[0]?.id || null;
       this.game.renderUi();
     });
     panel.querySelector('[data-editor="cell"]')?.addEventListener("change", (event) => {
@@ -115,6 +146,40 @@ export class SceneEditor {
     panel.querySelector('[data-editor="object"]')?.addEventListener("change", (event) => {
       this.selectedObjectId = event.target.value;
       this.game.renderUi();
+    });
+    panel.querySelector('[data-editor="layer"]')?.addEventListener("change", (event) => {
+      this.selectedLayerId = event.target.value;
+      this.game.renderUi();
+    });
+    panel.querySelector('[data-editor="layer-z"]')?.addEventListener("change", (event) => {
+      const layer = this.selectedLayer();
+      const zIndex = Number(event.target.value);
+      if (!layer || !Number.isFinite(zIndex)) return;
+      layer.zIndex = zIndex;
+      this.applyLayersToRuntime();
+      this.game.renderUi();
+    });
+    panel.querySelectorAll('[data-editor="layer-field"]').forEach((input) => {
+      input.addEventListener("change", () => {
+        const layer = this.selectedLayer();
+        if (!layer) return;
+        const field = input.dataset.field;
+        if (input.value.trim() === "") delete layer[field];
+        else {
+          const value = Number(input.value);
+          if (Number.isFinite(value)) layer[field] = value;
+        }
+        this.applyLayersToRuntime();
+        this.game.renderUi();
+      });
+      input.addEventListener("wheel", (event) => this.handleLayerNumberWheel(event, input));
+    });
+    panel.querySelector('[data-editor="layer-z"]')?.addEventListener("wheel", (event) => this.handleLayerNumberWheel(event, event.currentTarget));
+    panel.querySelectorAll('[data-editor="layer-nudge"]').forEach((button) => {
+      button.addEventListener("click", () => {
+        this.moveSelectedLayer(Number(button.dataset.dx || 0), Number(button.dataset.dy || 0));
+        this.game.renderUi();
+      });
     });
     panel.querySelector('[data-editor="dock"]').addEventListener("click", () => {
       this.panelSide = this.panelSide === "left" ? "right" : "left";
@@ -137,18 +202,27 @@ export class SceneEditor {
 
   helpText() {
     if (this.mode === "walk") return "Left drag paints walk cells. Right drag erases cells. Rows are saved as strings.";
+    if (this.mode === "layers") return "Drag the selected layer. Use the nudge buttons for exact one-pixel placement. Z: lower is more front.";
     return "Left drag moves vertices. Left click an edge inserts a vertex. Left click elsewhere appends. Right click a vertex removes it.";
   }
 
   handlePointerDown(event, point) {
     if (!this.config || event.button > 2) return false;
     if (this.mode === "walk") return this.handleWalkPointerDown(event, point);
+    if (this.mode === "layers") return this.handleLayerPointerDown(event, point);
     return this.handleObjectPointerDown(event, point);
   }
 
   handlePointerMove(event, point) {
     if (this.painting) {
       this.paintCell(point, this.painting.cell);
+      return true;
+    }
+    if (this.drag?.kind === "layer") {
+      const dx = point.x - this.drag.last.x;
+      const dy = point.y - this.drag.last.y;
+      this.moveSelectedLayer(dx, dy, false);
+      this.drag.last = point;
       return true;
     }
     if (this.drag) {
@@ -202,6 +276,13 @@ export class SceneEditor {
     return true;
   }
 
+  handleLayerPointerDown(event, point) {
+    if (event.button === 2) return true;
+    if (!this.selectedLayer() && this.layers.length) this.selectedLayerId = this.layers[0].id;
+    this.drag = { kind: "layer", last: point };
+    return true;
+  }
+
   paintCell(point, value) {
     const mask = this.game.currentScene.walkMask;
     const width = this.walkSource?.raster?.width || mask.width;
@@ -249,6 +330,7 @@ export class SceneEditor {
       const object = this.runtimeObject(entry.id);
       if (object && entry.polygon?.length) object.polygon = entry.polygon.map(roundPoint);
     }
+    this.applyLayersToRuntime();
   }
 
   runtimeObject(id) {
@@ -302,13 +384,46 @@ export class SceneEditor {
     if (this.game.currentScene.walkMask) this.game.currentScene.walkMask.rows = this.rows.slice();
   }
 
+  selectedLayer() {
+    return this.layers.find((layer) => layer.id === this.selectedLayerId) || null;
+  }
+
+  moveSelectedLayer(dx, dy, snap = true) {
+    const layer = this.selectedLayer();
+    if (!layer) return;
+    moveLayerAxis(layer, "left", "right", dx);
+    moveLayerAxis(layer, "top", "bottom", dy);
+    if (snap) {
+      for (const key of ["top", "left", "right", "bottom"]) {
+        if (Number.isFinite(Number(layer[key]))) layer[key] = Math.round(Number(layer[key]));
+      }
+    }
+    this.applyLayersToRuntime();
+  }
+
+  applyLayersToRuntime() {
+    if (!this.layerSource) return;
+    this.game.currentScene.foregroundLayers = this.layers.map(runtimeLayerFromSource);
+  }
+
+  handleLayerNumberWheel(event, input) {
+    if (document.activeElement !== input) input.focus();
+    event.preventDefault();
+    event.stopPropagation();
+    const steps = event.ctrlKey ? 10 : 1;
+    if (event.deltaY < 0) input.stepUp(steps);
+    else input.stepDown(steps);
+    input.dispatchEvent(new Event("change", { bubbles: true }));
+  }
+
   async save() {
-    if (!this.config || !this.walkSource || !this.objectSource) return;
+    if (!this.config || !this.walkSource || !this.objectSource || !this.layerSource) return;
     this.walkSource.raster.rows = this.rows.slice();
     this.objectSource.objects = this.objectSource.objects.map((object) => ({
       id: object.id,
       polygon: (object.polygon || []).map(roundPoint)
     }));
+    this.layerSource.layers = this.layerSource.layers.map(cleanLayerSource);
     this.status = "Saving...";
     this.game.renderUi();
     try {
@@ -318,7 +433,8 @@ export class SceneEditor {
         body: JSON.stringify({
           sceneId: this.game.currentScene.id,
           walkGeometry: this.walkSource,
-          objectGeometry: this.objectSource
+          objectGeometry: this.objectSource,
+          layerSource: this.layerSource
         })
       });
       const text = await response.text();
@@ -327,7 +443,7 @@ export class SceneEditor {
         result = JSON.parse(text);
       } catch {
         if (response.status === 404) {
-          throw new Error("editor save endpoint not found; restart the dev server or open the editor from the current server port");
+          throw new Error("editor save endpoint not found on this running server; restart the dev server so tools/dev-server.mjs is the process on this port");
         }
         throw new Error(text || "save failed with non-JSON response");
       }
@@ -343,6 +459,7 @@ export class SceneEditor {
     if (!this.config) return;
     if (this.mode === "walk") this.drawWalkGrid(ctx);
     if (this.mode === "objects") this.drawObjectPolygons(ctx);
+    if (this.mode === "layers") this.drawLayerBounds(ctx);
   }
 
   drawWalkGrid(ctx) {
@@ -412,6 +529,32 @@ export class SceneEditor {
     }
     ctx.restore();
   }
+
+  drawLayerBounds(ctx) {
+    const layer = this.selectedLayer();
+    if (!layer && this.layers.length) {
+      this.selectedLayerId = this.layers[0].id;
+      return;
+    }
+    if (!layer) return;
+    const runtimeLayer = runtimeLayerFromSource(layer);
+    const image = this.game.assets.getSceneImage(this.game.currentScene.id, runtimeLayer.asset);
+    const rect = this.game.renderer.sceneLayerRect(runtimeLayer, image);
+    ctx.save();
+    ctx.fillStyle = "rgba(96, 219, 255, 0.12)";
+    ctx.strokeStyle = "rgba(96, 219, 255, 0.95)";
+    ctx.lineWidth = 3;
+    ctx.setLineDash([10, 6]);
+    ctx.fillRect(rect.x, rect.y, rect.width, rect.height);
+    ctx.strokeRect(rect.x, rect.y, rect.width, rect.height);
+    ctx.setLineDash([]);
+    ctx.fillStyle = "rgba(0, 0, 0, 0.72)";
+    ctx.fillRect(rect.x, Math.max(0, rect.y - 26), Math.min(520, Math.max(260, rect.width)), 26);
+    ctx.fillStyle = "#d9f7ff";
+    ctx.font = "20px sans-serif";
+    ctx.fillText(`${displayLayerId(layer.id)} z:${Number(layer.zIndex).toFixed(1)} ${layerPositionText(layer)}`, rect.x + 8, Math.max(22, rect.y - 7));
+    ctx.restore();
+  }
 }
 
 function rectToPolygon(rect) {
@@ -471,6 +614,60 @@ function displayObjectId(id) {
   if (value.startsWith("hotspot.apartment.")) return value.slice("hotspot.apartment.".length);
   if (value.startsWith("npc.")) return value.slice("npc.".length);
   return value;
+}
+
+function displayLayerId(id) {
+  return String(id || "").replace(/^layer\.apartment\./, "");
+}
+
+function layerPositionText(layer) {
+  if (!layer) return "No layer selected";
+  const parts = [];
+  for (const key of ["left", "top", "right", "bottom", "width", "height"]) {
+    if (Number.isFinite(Number(layer[key]))) parts.push(`${key}:${Number(layer[key]).toFixed(0)}`);
+  }
+  return parts.length ? parts.join(" ") : "left:0 top:0";
+}
+
+function layerFieldValue(layer, key) {
+  return Number.isFinite(Number(layer?.[key])) ? Number(layer[key]) : "";
+}
+
+function moveLayerAxis(layer, startKey, endKey, delta) {
+  const hasStart = Number.isFinite(Number(layer[startKey]));
+  const hasEnd = Number.isFinite(Number(layer[endKey]));
+  if (hasStart || !hasEnd) layer[startKey] = roundNumber((hasStart ? Number(layer[startKey]) : 0) + delta);
+  else layer[endKey] = roundNumber(Number(layer[endKey]) - delta);
+}
+
+function runtimeLayerFromSource(layer) {
+  const result = {
+    id: layer.id,
+    asset: layer.asset,
+    zIndex: Number(layer.zIndex)
+  };
+  for (const key of ["top", "left", "right", "bottom", "width", "height"]) {
+    if (Number.isFinite(Number(layer[key]))) result[key] = Number(layer[key]);
+  }
+  if (!Number.isFinite(Number(result.top)) && !Number.isFinite(Number(result.bottom))) result.top = 0;
+  if (!Number.isFinite(Number(result.left)) && !Number.isFinite(Number(result.right))) result.left = 0;
+  return result;
+}
+
+function cleanLayerSource(layer) {
+  const result = { ...layer };
+  for (const key of ["top", "left", "right", "bottom", "width", "height", "zIndex"]) {
+    if (result[key] === "" || result[key] === null) delete result[key];
+    else if (Number.isFinite(Number(result[key]))) result[key] = roundNumber(Number(result[key]));
+  }
+  if (!Number.isFinite(Number(result.zIndex))) result.zIndex = 0;
+  if (!Number.isFinite(Number(result.top)) && !Number.isFinite(Number(result.bottom))) result.top = 0;
+  if (!Number.isFinite(Number(result.left)) && !Number.isFinite(Number(result.right))) result.left = 0;
+  return result;
+}
+
+function roundNumber(value) {
+  return Math.round(value * 1000) / 1000;
 }
 
 function normalizeObjectCode(value) {

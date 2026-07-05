@@ -1,5 +1,6 @@
 import { apartmentWalkGeometry } from "./walkMasks.generated.js";
 import { apartmentObjectGeometry } from "./sceneObjectGeometry.generated.js";
+import { sceneLayerGeometry } from "./sceneLayers.generated.js";
 
 const rawScenes = [
   {
@@ -17,13 +18,7 @@ const rawScenes = [
       table: { x: 415, y: 510 },
       baiMitkoSpawn: { x: 650, y: 520 }
     },
-    foregroundLayers: [
-      {
-        id: "layer.apartment.table_foreground",
-        asset: "foregroundTable",
-        zIndex: -1
-      }
-    ],
+    foregroundLayers: sceneLayerGeometry["scene.chapter1.apartment"]?.foregroundLayers || [],
     exits: [
       {
         id: "exit.apartment.to_square",

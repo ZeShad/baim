@@ -9,11 +9,23 @@
     {
       "id": "layer.apartment.table_foreground",
       "enabled": true,
+      "asset": "foregroundTable",
       "source": "assets/chapter1/scenes/apartment/background.png",
       "output": "assets/chapter1/scenes/apartment/foreground-table.png",
       "width": 1280,
       "height": 720,
-      "zIndex": -1
+      "zIndex": -1,
+      "top": 0,
+      "left": 0
+    },
+    {
+      "id": "layer.apartment.bills_on_table",
+      "enabled": true,
+      "asset": "billsOnTable",
+      "output": "assets/chapter1/scenes/apartment/bills-on-table.png",
+      "zIndex": -2,
+      "top": 387,
+      "left": 299
     }
   ]
 }
