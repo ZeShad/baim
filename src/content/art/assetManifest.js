@@ -10,6 +10,7 @@ export const assetManifest = {
       foregroundTable: "assets/chapter1/scenes/apartment/foreground-table.png",
       billsOnTable: "assets/chapter1/scenes/apartment/bills-on-table.png",
       windowOpen: "assets/chapter1/scenes/apartment/window-open.png",
+      windowOpenBack: "assets/chapter1/scenes/apartment/window-open-0.png",
       geometry: "assets/chapter1/scenes/apartment/scene.geometry.json"
     },
     "scene.chapter1.village_square": {

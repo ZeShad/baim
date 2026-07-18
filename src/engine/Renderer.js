@@ -361,8 +361,16 @@ export class Renderer {
   }
 
   sceneLayerVisible(layer) {
-    if (!layer?.visibleWhenFlag) return true;
-    return Boolean(this.game.state?.flags?.[layer.visibleWhenFlag]);
+    if (layer?.visibleWhenFlag && !this.game.state?.flags?.[layer.visibleWhenFlag]) return false;
+    if (layer?.visibleDuringAction) {
+      const condition = layer.visibleDuringAction;
+      const action = this.game.player?.actionAnimation;
+      const frameIndex = Number(this.game.player?.animator?.frameIndex) || 0;
+      if (this.game.player?.animation !== "action") return false;
+      if (action?.actionName !== condition.actionName) return false;
+      if (frameIndex < Number(condition.fromFrame || 0)) return false;
+    }
+    return true;
   }
 
   drawSceneRasterLayer(scene, layer) {

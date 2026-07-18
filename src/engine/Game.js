@@ -118,7 +118,7 @@ export class Game {
     this.menuOpen = !this.editMode && !this.simpleAnimTest && !this.animLab && !this.devHome && params.get("play") !== "1" && !params.has("scene") && !params.has("debugGeometry");
     this.paused = false;
     this.lastTime = 0;
-    this.bindInput();
+    this.inputBound = false;
     this.renderUi();
   }
 
@@ -126,7 +126,15 @@ export class Game {
     return this.localization.t(key, replacements);
   }
 
-  start() {
+  async start() {
+    await Promise.all([
+      this.assets.preloadAllCharacterAssets(),
+      this.assets.preloadSceneAssets(this.currentScene.id)
+    ]);
+    if (!this.inputBound) {
+      this.bindInput();
+      this.inputBound = true;
+    }
     requestAnimationFrame((time) => this.tick(time));
   }
 
@@ -952,11 +960,15 @@ export class Game {
     this.renderUi();
   }
 
-  changeScene(sceneId, position) {
+  async changeScene(sceneId, position) {
     if (!this.content.scenes[sceneId]) {
       this.message = this.t("msg.scene_not_ready");
       return;
     }
+    const sceneLoadToken = Symbol(sceneId);
+    this.sceneLoadToken = sceneLoadToken;
+    await this.assets.preloadSceneAssets(sceneId);
+    if (this.sceneLoadToken !== sceneLoadToken) return;
     this.currentScene = this.content.scenes[sceneId];
     this.state.currentSceneId = sceneId;
     this.player.position = { ...(position || this.currentScene.playerStart) };

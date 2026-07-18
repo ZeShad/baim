@@ -36,6 +36,12 @@ function runtimeLayer(layer, sourcePath) {
   copyNumber(layer, result, "right");
   copyNumber(layer, result, "bottom");
   if (layer.visibleWhenFlag) result.visibleWhenFlag = String(layer.visibleWhenFlag);
+  if (layer.visibleDuringAction) {
+    result.visibleDuringAction = {
+      actionName: String(layer.visibleDuringAction.actionName || ""),
+      fromFrame: Math.max(0, Math.floor(Number(layer.visibleDuringAction.fromFrame) || 0))
+    };
+  }
   if (!hasNumber(result, "top") && !hasNumber(result, "bottom")) result.top = 0;
   if (!hasNumber(result, "left") && !hasNumber(result, "right")) result.left = 0;
   return result;

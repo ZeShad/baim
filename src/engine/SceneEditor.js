@@ -921,6 +921,7 @@ function runtimeLayerFromSource(layer) {
     zIndex: Number(layer.zIndex)
   };
   if (layer.visibleWhenFlag) result.visibleWhenFlag = String(layer.visibleWhenFlag);
+  if (layer.visibleDuringAction) result.visibleDuringAction = structuredClone(layer.visibleDuringAction);
   for (const key of ["top", "left", "right", "bottom"]) {
     if (Number.isFinite(Number(layer[key]))) result[key] = Number(layer[key]);
   }

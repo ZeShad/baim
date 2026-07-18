@@ -28,6 +28,19 @@
       "left": 199
     },
     {
+      "id": "layer.apartment.window_open_back",
+      "enabled": true,
+      "asset": "windowOpenBack",
+      "output": "assets/chapter1/scenes/apartment/window-open-0.png",
+      "zIndex": 100,
+      "top": 51,
+      "left": 150,
+      "visibleDuringAction": {
+        "actionName": "opensWindow",
+        "fromFrame": 10
+      }
+    },
+    {
       "id": "layer.apartment.window_open",
       "enabled": true,
       "asset": "windowOpen",

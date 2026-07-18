@@ -17,6 +17,7 @@ import { CHARACTER_CUTOUT_MARGIN_RATIO, CHARACTER_SOURCE_SCALE } from "../src/co
 import { characterDefinitions } from "../src/content/art/characters.js";
 import { externalAnimationV1 } from "../src/content/art/externalAnimationV1.generated.js";
 import { distance } from "../src/engine/geometry.js";
+import { imageAssetPaths } from "../src/engine/AssetLoader.js";
 import { makePng } from "../tools/character-frame-utils.mjs";
 import {
   EXTERNAL_WALK_LOOP_MOTION_MAX,
@@ -25,6 +26,58 @@ import {
   externalWalkMotionCurve,
   externalWalkRawMotionCurve
 } from "../tools/external-animation-utils.mjs";
+
+test("animation asset discovery includes every raster character slot without manifest metadata", () => {
+  const paths = imageAssetPaths(assetManifest.characters["npc.bai_mitko"]);
+  assert.ok(paths.length > 1);
+  assert.ok(paths.includes(assetManifest.characters["npc.bai_mitko"].external_opens_window));
+  assert.ok(paths.every((path) => /\.(?:png|webp)$/i.test(path)));
+  assert.equal(paths.includes(assetManifest.characters["npc.bai_mitko"].type), false);
+});
+
+test("scene preload discovery includes action-timed and persistent raster layers", () => {
+  const paths = imageAssetPaths(assetManifest.scenes["scene.chapter1.apartment"]);
+  assert.ok(paths.includes(assetManifest.scenes["scene.chapter1.apartment"].windowOpenBack));
+  assert.ok(paths.includes(assetManifest.scenes["scene.chapter1.apartment"].windowOpen));
+});
+
+test("game start waits for character sprites and current scene layers before input and rendering", async () => {
+  const game = Object.create(Game.prototype);
+  let releaseCharacterAssets;
+  let releaseSceneAssets;
+  let inputBindings = 0;
+  let animationFrames = 0;
+  game.player = { id: "npc.bai_mitko" };
+  game.currentScene = { id: "scene.chapter1.apartment" };
+  game.inputBound = false;
+  game.assets = {
+    preloadAllCharacterAssets() {
+      return new Promise((resolve) => { releaseCharacterAssets = resolve; });
+    },
+    preloadSceneAssets() {
+      return new Promise((resolve) => { releaseSceneAssets = resolve; });
+    }
+  };
+  game.bindInput = () => { inputBindings += 1; };
+  game.tick = () => {};
+  const originalRequestAnimationFrame = globalThis.requestAnimationFrame;
+  globalThis.requestAnimationFrame = () => { animationFrames += 1; };
+  try {
+    const starting = game.start();
+    await Promise.resolve();
+    assert.equal(inputBindings, 0);
+    assert.equal(animationFrames, 0);
+    releaseCharacterAssets([]);
+    await Promise.resolve();
+    assert.equal(inputBindings, 0);
+    releaseSceneAssets([]);
+    await starting;
+    assert.equal(inputBindings, 1);
+    assert.equal(animationFrames, 1);
+  } finally {
+    globalThis.requestAnimationFrame = originalRequestAnimationFrame;
+  }
+});
 
 test("localization returns Bulgarian and English strings from stable keys", () => {
   const l10n = new Localization(strings, "bg");
@@ -74,6 +127,13 @@ test("apartment uses a raster walk mask for walkable floor", () => {
     && layer.left === 150
     && layer.top === 51
     && layer.visibleWhenFlag === "apartmentWindowOpen"));
+  assert.ok(scene.foregroundLayers.some((layer) => layer.id === "layer.apartment.window_open_back"
+    && layer.asset === "windowOpenBack"
+    && layer.zIndex === 100
+    && layer.left === 150
+    && layer.top === 51
+    && layer.visibleDuringAction.actionName === "opensWindow"
+    && layer.visibleDuringAction.fromFrame === 10));
 });
 
 test("apartment perspective scale is continuous across raster mask rows", () => {
@@ -351,6 +411,20 @@ test("stateful scene layers stay hidden until their save flag is set", () => {
   renderer.game.state.flags.apartmentWindowOpen = true;
   assert.equal(renderer.sceneLayerVisible(layer), true);
   assert.equal(renderer.sceneLayerVisible({}), true);
+});
+
+test("action-timed scene layers appear on their configured animation frame only", () => {
+  const renderer = Object.create(Renderer.prototype);
+  const layer = { visibleDuringAction: { actionName: "opensWindow", fromFrame: 10 } };
+  renderer.game = {
+    state: { flags: {} },
+    player: { animation: "action", actionAnimation: { actionName: "opensWindow" }, animator: { frameIndex: 9 } }
+  };
+  assert.equal(renderer.sceneLayerVisible(layer), false);
+  renderer.game.player.animator.frameIndex = 10;
+  assert.equal(renderer.sceneLayerVisible(layer), true);
+  renderer.game.player.animation = "idle";
+  assert.equal(renderer.sceneLayerVisible(layer), false);
 });
 
 test("action completion reveals and persists its stateful scene layer flag", () => {

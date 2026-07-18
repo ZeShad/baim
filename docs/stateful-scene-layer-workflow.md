@@ -3,6 +3,9 @@
 Use a stateful scene layer when an interaction permanently changes part of a painted scene, but the
 replacement art should remain a transparent, pixel-aligned overlay rather than a new full background.
 
+Layers may also be action-timed. `visibleDuringAction` reveals a temporary backing layer at an exact authored
+animation frame and hides it again when the action ends.
+
 The Chapter 1 open window uses this workflow. The existing table and bills overlays use the same scene-layer
 renderer without a visibility condition.
 
@@ -37,6 +40,22 @@ For `layer.apartment.window_open`, the 307x307 PNG matches at `left: 150`, `top:
 
 `zIndex: 100` is the scene horizon: the layer draws immediately in front of the background and behind actors
 with a lower depth value. Omit `visibleWhenFlag` for an always-visible layer.
+
+For a temporary action backing layer, use:
+
+```json
+{
+  "id": "layer.apartment.window_open_back",
+  "asset": "windowOpenBack",
+  "zIndex": 100,
+  "top": 51,
+  "left": 150,
+  "visibleDuringAction": { "actionName": "opensWindow", "fromFrame": 10 }
+}
+```
+
+Frame indices are zero-based. This layer is absent through frame 9, appears when frame 10 becomes active,
+and disappears when the action ends. A persistent `visibleWhenFlag` layer can replace it in the same render.
 
 3. Add `flagOnComplete` to the gameplay action sequence that reveals the layer:
 
