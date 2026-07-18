@@ -2,13 +2,14 @@ import { externalAnimationV1 } from "./externalAnimationV1.generated.js";
 
 export const assetManifest = {
   baseResolution: { width: 1280, height: 720 },
-  productionResolution: { width: 2560, height: 1440 },
+  runtimeSceneResolution: { width: 1280, height: 720 },
   scenes: {
     "scene.chapter1.apartment": {
       background: "assets/chapter1/scenes/apartment/background.png",
       foreground: "assets/chapter1/scenes/apartment/foreground.webp",
       foregroundTable: "assets/chapter1/scenes/apartment/foreground-table.png",
       billsOnTable: "assets/chapter1/scenes/apartment/bills-on-table.png",
+      windowOpen: "assets/chapter1/scenes/apartment/window-open.png",
       geometry: "assets/chapter1/scenes/apartment/scene.geometry.json"
     },
     "scene.chapter1.village_square": {

@@ -1,8 +1,19 @@
+import { externalAnimationV1 } from "../content/art/externalAnimationV1.generated.js";
+
 const EDITOR_SCENES = {
   "scene.chapter1.apartment": {
     walkGeometryPath: "assets_src/chapter1/scenes/apartment/walk-geometry-v1.json",
     objectGeometryPath: "assets_src/chapter1/scenes/apartment/object-geometry-v1.json",
-    layerPath: "assets_src/chapter1/scenes/apartment/layers.json"
+    layerPath: "assets_src/chapter1/scenes/apartment/layers.json",
+    actionAnimationPath: "assets_src/characters/bai_mitko/external_animation_v1/external-animation-selection.json",
+    actions: [
+      {
+        id: "opens_window",
+        label: "Open window",
+        sceneObjectId: "window",
+        verb: "look"
+      }
+    ]
   }
 };
 
@@ -19,11 +30,14 @@ export class SceneEditor {
     this.walkSource = null;
     this.objectSource = null;
     this.layerSource = null;
+    this.actionAnimationSource = null;
+    this.selectedActionId = null;
     this.rows = [];
     this.selectedObjectId = null;
     this.selectedLayerId = null;
     this.drag = null;
     this.painting = null;
+    this.hoverPoint = null;
     this.load();
   }
 
@@ -54,17 +68,22 @@ export class SceneEditor {
     }
     try {
       const suffix = `?editor=${Date.now()}`;
-      const [walkSource, objectSource, layerSource] = await Promise.all([
+      const [walkSource, objectSource, layerSource, actionAnimationSource] = await Promise.all([
         fetch(this.config.walkGeometryPath + suffix).then((response) => response.json()),
         fetch(this.config.objectGeometryPath + suffix).then((response) => response.json()),
-        fetch(this.config.layerPath + suffix).then((response) => response.json())
+        fetch(this.config.layerPath + suffix).then((response) => response.json()),
+        this.config.actionAnimationPath
+          ? fetch(this.config.actionAnimationPath + suffix).then((response) => response.json())
+          : Promise.resolve(null)
       ]);
       this.walkSource = walkSource;
       this.objectSource = objectSource;
       this.layerSource = layerSource;
+      this.actionAnimationSource = actionAnimationSource;
       this.rows = walkSource.raster.rows.slice();
       this.selectedObjectId = this.objects[0]?.id || null;
       this.selectedLayerId = this.layers[0]?.id || null;
+      this.selectedActionId = this.config.actions?.[0]?.id || null;
       this.applyToRuntime();
       this.status = "Editor ready";
     } catch (error) {
@@ -80,6 +99,9 @@ export class SceneEditor {
     const objectOptions = this.objects.map((object) => `<option value="${escapeHtml(object.id)}"${object.id === this.selectedObjectId ? " selected" : ""}>${escapeHtml(displayObjectId(object.id))}</option>`).join("");
     const layerOptions = this.layers.map((layer) => `<option value="${escapeHtml(layer.id)}"${layer.id === this.selectedLayerId ? " selected" : ""}>${escapeHtml(displayLayerId(layer.id))}</option>`).join("");
     const selectedLayer = this.selectedLayer();
+    const actionOptions = (this.config.actions || []).map((action) => `<option value="${escapeHtml(action.id)}"${action.id === this.selectedActionId ? " selected" : ""}>${escapeHtml(action.label || action.id)}</option>`).join("");
+    const selectedAction = this.selectedActionDefinition();
+    const selectedActionConfig = this.selectedActionAnimationConfig();
     panel.innerHTML = `
       <div class="scene-editor-title">Scene Edit Mode</div>
       <label>Tool
@@ -87,13 +109,15 @@ export class SceneEditor {
           <option value="walk"${this.mode === "walk" ? " selected" : ""}>Walkable raster</option>
           <option value="objects"${this.mode === "objects" ? " selected" : ""}>Object polygons</option>
           <option value="layers"${this.mode === "layers" ? " selected" : ""}>Layer positions</option>
+          <option value="actions"${this.mode === "actions" ? " selected" : ""}>Actions</option>
         </select>
       </label>
       ${this.mode === "walk" ? `<label>Walk cell
         <select data-editor="cell">
           ${this.walkCellOptions()}
         </select>
-      </label>` : ""}
+      </label>
+      <div class="scene-editor-raster-position">${escapeHtml(this.walkRasterPositionText())}</div>` : ""}
       ${this.mode === "objects" ? `<label>Object
         <select data-editor="object">${objectOptions}</select>
       </label>` : ""}
@@ -113,6 +137,23 @@ export class SceneEditor {
         <button type="button" data-editor="layer-nudge" data-dx="0" data-dy="-1">y-1</button>
         <button type="button" data-editor="layer-nudge" data-dx="0" data-dy="1">y+1</button>
       </div>` : ""}
+      ${this.mode === "actions" ? `<label>Action
+        <select data-editor="action">${actionOptions}</select>
+      </label>
+      <div class="scene-editor-actions">
+        <button type="button" data-editor="execute-action">Execute</button>
+        <button type="button" data-editor="fit-action">Auto-fit</button>
+      </div>
+      <div class="scene-editor-action-grid">
+        <label>FPS<input data-editor="action-field" data-field="fps" type="number" step="1" value="${escapeHtml(selectedActionConfig?.fps ?? "")}"></label>
+        <label>Scale<input data-editor="action-field" data-field="scale" type="number" step="0.001" value="${escapeHtml(selectedActionConfig?.scale ?? 1)}"></label>
+        <label>offsetX<input data-editor="action-field" data-field="offsetX" type="number" step="1" value="${escapeHtml(selectedActionConfig?.offsetX ?? 0)}"></label>
+        <label>offsetY<input data-editor="action-field" data-field="offsetY" type="number" step="1" value="${escapeHtml(selectedActionConfig?.offsetY ?? 0)}"></label>
+      </div>
+      <label>Per-frame offsets JSON
+        <textarea data-editor="action-offsets" rows="8" spellcheck="false">${escapeHtml(formatOffsetsForEdit(selectedActionConfig?.offsets))}</textarea>
+      </label>
+      <div class="scene-editor-action-note">${escapeHtml(actionEditorText(selectedAction, selectedActionConfig))}</div>` : ""}
       <div class="scene-editor-actions">
         <button type="button" data-editor="dock">${this.panelSide === "left" ? "Move Right" : "Move Left"}</button>
         <button type="button" data-editor="save">Save JSON</button>
@@ -138,6 +179,7 @@ export class SceneEditor {
       this.mode = event.target.value;
       if (this.mode === "objects" && !this.selectedObjectId) this.selectedObjectId = this.objects[0]?.id || null;
       if (this.mode === "layers" && !this.selectedLayerId) this.selectedLayerId = this.layers[0]?.id || null;
+      if (this.mode === "actions" && !this.selectedActionId) this.selectedActionId = this.config.actions?.[0]?.id || null;
       this.game.renderUi();
     });
     panel.querySelector('[data-editor="cell"]')?.addEventListener("change", (event) => {
@@ -149,6 +191,10 @@ export class SceneEditor {
     });
     panel.querySelector('[data-editor="layer"]')?.addEventListener("change", (event) => {
       this.selectedLayerId = event.target.value;
+      this.game.renderUi();
+    });
+    panel.querySelector('[data-editor="action"]')?.addEventListener("change", (event) => {
+      this.selectedActionId = event.target.value;
       this.game.renderUi();
     });
     panel.querySelector('[data-editor="layer-z"]')?.addEventListener("change", (event) => {
@@ -175,6 +221,14 @@ export class SceneEditor {
       input.addEventListener("wheel", (event) => this.handleLayerNumberWheel(event, input));
     });
     panel.querySelector('[data-editor="layer-z"]')?.addEventListener("wheel", (event) => this.handleLayerNumberWheel(event, event.currentTarget));
+    panel.querySelectorAll('[data-editor="action-field"]').forEach((input) => {
+      input.addEventListener("change", () => this.updateActionField(input));
+      input.addEventListener("input", () => this.updateActionField(input, { quiet: true }));
+      input.addEventListener("wheel", (event) => this.handleActionNumberWheel(event, input));
+    });
+    panel.querySelector('[data-editor="action-offsets"]')?.addEventListener("change", (event) => this.updateActionOffsets(event.currentTarget));
+    panel.querySelector('[data-editor="execute-action"]')?.addEventListener("click", () => this.executeSelectedAction());
+    panel.querySelector('[data-editor="fit-action"]')?.addEventListener("click", () => this.fitSelectedAction());
     panel.querySelectorAll('[data-editor="layer-nudge"]').forEach((button) => {
       button.addEventListener("click", () => {
         this.moveSelectedLayer(Number(button.dataset.dx || 0), Number(button.dataset.dy || 0));
@@ -203,19 +257,27 @@ export class SceneEditor {
   helpText() {
     if (this.mode === "walk") return "Left drag paints walk cells. Right drag erases cells. Rows are saved as strings.";
     if (this.mode === "layers") return "Drag the selected layer. Use the nudge buttons for exact one-pixel placement. Z: lower is more front.";
+    if (this.mode === "actions") return "Edit action animation render tuning. Save rebuilds generated animation metadata; hard reload to test the rebuilt module.";
     return "Left drag moves vertices. Left click an edge inserts a vertex. Left click elsewhere appends. Right click a vertex removes it.";
   }
 
   handlePointerDown(event, point) {
     if (!this.config || event.button > 2) return false;
+    if (this.mode === "actions") return false;
     if (this.mode === "walk") return this.handleWalkPointerDown(event, point);
     if (this.mode === "layers") return this.handleLayerPointerDown(event, point);
     return this.handleObjectPointerDown(event, point);
   }
 
+  shouldRenderPlayer() {
+    return this.mode === "actions";
+  }
+
   handlePointerMove(event, point) {
+    this.hoverPoint = point;
     if (this.painting) {
       this.paintCell(point, this.painting.cell);
+      this.game.renderUi();
       return true;
     }
     if (this.drag?.kind === "layer") {
@@ -233,12 +295,18 @@ export class SceneEditor {
       }
       return true;
     }
+    if (this.mode === "walk") this.game.renderUi();
     return false;
   }
 
   handlePointerUp() {
     this.painting = null;
     this.drag = null;
+  }
+
+  handlePointerLeave() {
+    this.hoverPoint = null;
+    if (this.mode === "walk") this.game.renderUi();
   }
 
   handleWalkPointerDown(event, point) {
@@ -284,15 +352,32 @@ export class SceneEditor {
   }
 
   paintCell(point, value) {
+    const cell = this.walkRasterCell(point);
+    if (!cell) return;
+    const { x, y, width } = cell;
+    const valueToWrite = String(value || ".").charAt(0);
+    const row = this.rows[y] || ".".repeat(width);
+    this.rows[y] = row.slice(0, x) + valueToWrite + row.slice(x + 1);
+    this.applyWalkRowsToRuntime();
+  }
+
+  walkRasterPositionText() {
+    const cell = this.walkRasterCell(this.hoverPoint);
+    if (!cell) return "Raster: outside";
+    const value = this.rows[cell.y]?.[cell.x] || ".";
+    return `Raster: x ${cell.x}, y ${cell.y}, cell ${value}`;
+  }
+
+  walkRasterCell(point) {
+    if (!point) return null;
     const mask = this.game.currentScene.walkMask;
+    if (!mask) return null;
     const width = this.walkSource?.raster?.width || mask.width;
     const height = this.walkSource?.raster?.height || mask.height;
     const x = Math.floor((point.x / mask.worldWidth) * width);
     const y = Math.floor((point.y / mask.worldHeight) * height);
-    if (x < 0 || y < 0 || x >= width || y >= height) return;
-    const row = this.rows[y] || ".".repeat(width);
-    this.rows[y] = row.slice(0, x) + value + row.slice(x + 1);
-    this.applyWalkRowsToRuntime();
+    if (x < 0 || y < 0 || x >= width || y >= height) return null;
+    return { x, y, width, height };
   }
 
   selectedPolygon() {
@@ -406,6 +491,120 @@ export class SceneEditor {
     this.game.currentScene.foregroundLayers = this.layers.map(runtimeLayerFromSource);
   }
 
+  selectedActionDefinition() {
+    return (this.config.actions || []).find((action) => action.id === this.selectedActionId) || null;
+  }
+
+  selectedActionAnimationConfig() {
+    const id = this.selectedActionId;
+    return id ? this.actionAnimationSource?.animations?.[id] || null : null;
+  }
+
+  ensureSelectedActionAnimationConfig() {
+    const id = this.selectedActionId;
+    if (!id || !this.actionAnimationSource?.animations) return null;
+    this.actionAnimationSource.animations[id] ||= {};
+    return this.actionAnimationSource.animations[id];
+  }
+
+  updateActionField(input, options = {}) {
+    const config = this.ensureSelectedActionAnimationConfig();
+    if (!config) return;
+    const field = input.dataset.field;
+    const text = input.value.trim();
+    if (!text) delete config[field];
+    else {
+      const value = Number(text);
+      if (!Number.isFinite(value)) return;
+      config[field] = field === "fps" ? Math.max(1, Math.round(value)) : roundNumber(value);
+    }
+    this.applySelectedActionTuningToRuntime();
+    if (!options.quiet) this.status = "Action tuning updated live; Save JSON to persist and rebuild.";
+    if (!options.quiet) this.game.renderUi();
+  }
+
+  updateActionOffsets(input) {
+    const config = this.ensureSelectedActionAnimationConfig();
+    if (!config) return;
+    const text = input.value.trim();
+    try {
+      if (!text) delete config.offsets;
+      else config.offsets = JSON.parse(text);
+      this.applySelectedActionTuningToRuntime();
+      this.status = "Action offsets updated; Save JSON to rebuild.";
+    } catch (error) {
+      this.status = `Invalid offsets JSON: ${error.message}`;
+    }
+    this.game.renderUi();
+  }
+
+  applySelectedActionTuningToRuntime() {
+    const action = this.selectedActionDefinition();
+    const config = this.selectedActionAnimationConfig();
+    if (!action || !config) return;
+    const actionName = config.action || action.animation || "opensWindow";
+    for (const facing of ["east", "west"]) {
+      const frames = externalAnimationV1.actionAnimations?.[facing]?.[actionName] || [];
+      for (const frame of frames) applyActionTuningToFrame(frame, config);
+    }
+    if (this.game.player.actionAnimation?.actionName === actionName) applyActionTuningToFrame(this.game.player.actionAnimation, config);
+    this.game.player.animator.fpsOverride = this.game.currentAnimationFps?.();
+  }
+
+  handleActionNumberWheel(event, input) {
+    if (document.activeElement !== input) input.focus();
+    event.preventDefault();
+    event.stopPropagation();
+    const steps = event.ctrlKey ? 10 : 1;
+    if (event.deltaY < 0) input.stepUp(steps);
+    else input.stepDown(steps);
+    input.dispatchEvent(new Event("change", { bubbles: true }));
+  }
+
+  executeSelectedAction() {
+    const action = this.selectedActionDefinition();
+    if (!action) return;
+    const target = this.runtimeObject(action.sceneObjectId);
+    const sequence = target?.actions?.[action.verb];
+    if (!target || !sequence) {
+      this.status = `Action target not found: ${action.sceneObjectId}.${action.verb}`;
+      this.game.renderUi();
+      return;
+    }
+    const approach = this.game.actionSequenceApproachPoint?.(sequence);
+    if (approach) this.game.player.position = { ...approach };
+    this.game.player.target = null;
+    this.game.player.walkPath = [];
+    this.game.player.pendingInteraction = null;
+    this.game.player.pendingFacingPoint = null;
+    this.game.hideSpeechBubble?.(true);
+    this.game.startInteractionActionSequence(target, action.verb, sequence);
+    this.status = `Executed ${action.label || action.id}`;
+    this.game.renderUi();
+  }
+
+  async fitSelectedAction() {
+    if (!this.selectedActionId) return;
+    this.status = `Fitting ${this.selectedActionId}...`;
+    this.game.renderUi();
+    try {
+      const response = await fetch("/__editor/fit-action", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ actionId: this.selectedActionId })
+      });
+      const result = await response.json();
+      if (!response.ok) throw new Error(result.error || "auto-fit failed");
+      const fit = result.report;
+      await this.load();
+      this.mode = "actions";
+      this.status = `Auto-fit ${this.selectedActionId}: scale ${fit.best.animationScale}, offset ${fit.best.offsetX},${fit.best.offsetY}, score ${fit.best.score}. Hard reload to use rebuilt metadata.`;
+    } catch (error) {
+      this.status = `Auto-fit failed: ${error.message}`;
+    }
+    this.game.renderUi();
+  }
+
   handleLayerNumberWheel(event, input) {
     if (document.activeElement !== input) input.focus();
     event.preventDefault();
@@ -434,7 +633,9 @@ export class SceneEditor {
           sceneId: this.game.currentScene.id,
           walkGeometry: this.walkSource,
           objectGeometry: this.objectSource,
-          layerSource: this.layerSource
+          layerSource: this.layerSource,
+          actionAnimationPath: this.config.actionAnimationPath,
+          actionAnimationSource: this.actionAnimationSource
         })
       });
       const text = await response.text();
@@ -448,7 +649,12 @@ export class SceneEditor {
         throw new Error(text || "save failed with non-JSON response");
       }
       if (!response.ok) throw new Error(result.error || "save failed");
-      this.status = `Saved ${result.sceneId}`;
+      if (this.mode === "actions" && !result.actionAnimationSaved) {
+        throw new Error("action animation was not saved by this server process; restart the dev server window");
+      }
+      this.status = this.mode === "actions"
+        ? `Saved ${result.sceneId}; rebuilt action animation metadata. Hard reload to test persisted module.`
+        : `Saved ${result.sceneId}`;
     } catch (error) {
       this.status = `Save failed: ${error.message}`;
     }
@@ -601,7 +807,7 @@ function distanceToSegment(point, a, b) {
 }
 
 function escapeHtml(value) {
-  return String(value || "")
+  return String(value ?? "")
     .replaceAll("&", "&amp;")
     .replaceAll("<", "&lt;")
     .replaceAll(">", "&gt;")
@@ -633,6 +839,74 @@ function layerFieldValue(layer, key) {
   return Number.isFinite(Number(layer?.[key])) ? Number(layer[key]) : "";
 }
 
+function formatOffsetsForEdit(offsets) {
+  if (!Array.isArray(offsets) || !offsets.length) return "";
+  return JSON.stringify(offsets, null, 2);
+}
+
+function actionEditorText(action, config) {
+  if (!action) return "No action selected";
+  if (!config) return "No animation config found for this action.";
+  const parts = [
+    `source:${config.source || "n/a"}`,
+    `fps:${config.fps ?? "default"}`,
+    `scale:${config.scale ?? 1}`,
+    `offset:${config.offsetX ?? 0},${config.offsetY ?? 0}`
+  ];
+  if (Array.isArray(config.offsets)) parts.push(`frame offsets:${config.offsets.length}`);
+  else parts.push("frame offsets:default zero");
+  return parts.join(" ");
+}
+
+function applyActionTuningToFrame(frame, config) {
+  if (!frame || !config) return;
+  for (const field of ["fps", "scale", "offsetX", "offsetY", "flipX", "flipXWest"]) {
+    if (config[field] === undefined) continue;
+    if (field === "flipXWest") {
+      if (frame.mirrored) frame.flipX = config.flipXWest;
+      continue;
+    }
+    frame[field] = config[field];
+  }
+  if (Array.isArray(config.offsets)) frame.offsets = normalizeEditorOffsets(config.offsets, frame.frameCount || config.offsets.length || 1);
+}
+
+function normalizeEditorOffsets(offsets, frameCount) {
+  const count = Math.max(1, Number(frameCount) || 1);
+  const anchors = [];
+  for (let index = 0; index < Math.min(offsets.length, count); index += 1) {
+    const value = normalizeEditorOffsetValue(offsets[index]);
+    if (value) anchors.push({ index, value });
+  }
+  if (!anchors.length) return Array.from({ length: count }, () => ({ x: 0, y: 0 }));
+  return Array.from({ length: count }, (_, index) => {
+    const exact = anchors.find((anchor) => anchor.index === index);
+    if (exact) return exact.value;
+    const previous = [...anchors].reverse().find((anchor) => anchor.index < index);
+    const next = anchors.find((anchor) => anchor.index > index);
+    if (!previous && next) return next.value;
+    if (previous && !next) return previous.value;
+    if (!previous || !next) return { x: 0, y: 0 };
+    const t = (index - previous.index) / Math.max(1, next.index - previous.index);
+    return {
+      x: roundNumber(previous.value.x + (next.value.x - previous.value.x) * t),
+      y: roundNumber(previous.value.y + (next.value.y - previous.value.y) * t)
+    };
+  });
+}
+
+function normalizeEditorOffsetValue(value) {
+  if (value === null || value === undefined) return null;
+  if (Array.isArray(value)) {
+    const x = Number(value[0]);
+    const y = Number(value[1]);
+    return Number.isFinite(x) && Number.isFinite(y) ? { x: roundNumber(x), y: roundNumber(y) } : null;
+  }
+  const x = Number(value.x);
+  const y = Number(value.y);
+  return Number.isFinite(x) && Number.isFinite(y) ? { x: roundNumber(x), y: roundNumber(y) } : null;
+}
+
 function moveLayerAxis(layer, startKey, endKey, delta) {
   const hasStart = Number.isFinite(Number(layer[startKey]));
   const hasEnd = Number.isFinite(Number(layer[endKey]));
@@ -646,7 +920,8 @@ function runtimeLayerFromSource(layer) {
     asset: layer.asset,
     zIndex: Number(layer.zIndex)
   };
-  for (const key of ["top", "left", "right", "bottom", "width", "height"]) {
+  if (layer.visibleWhenFlag) result.visibleWhenFlag = String(layer.visibleWhenFlag);
+  for (const key of ["top", "left", "right", "bottom"]) {
     if (Number.isFinite(Number(layer[key]))) result[key] = Number(layer[key]);
   }
   if (!Number.isFinite(Number(result.top)) && !Number.isFinite(Number(result.bottom))) result.top = 0;

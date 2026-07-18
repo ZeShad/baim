@@ -11,7 +11,7 @@ export class SaveSystem {
     const raw = this.storage.getItem(this.key);
     if (!raw) return structuredClone(DEFAULT_SAVE);
     try {
-      return { ...structuredClone(DEFAULT_SAVE), ...JSON.parse(raw) };
+      return migrateSave({ ...structuredClone(DEFAULT_SAVE), ...JSON.parse(raw) });
     } catch {
       return structuredClone(DEFAULT_SAVE);
     }
@@ -26,4 +26,17 @@ export class SaveSystem {
     if (this.storage) this.storage.removeItem(this.key);
     return structuredClone(DEFAULT_SAVE);
   }
+}
+
+function migrateSave(save) {
+  const oldStarterInventory = ["item.accordion", "item.unpaid_bills", "item.empty_envelope"];
+  if (
+    Array.isArray(save.inventory)
+    && save.inventory.length === oldStarterInventory.length
+    && oldStarterInventory.every((itemId) => save.inventory.includes(itemId))
+    && !save.hasUnpaidBills
+  ) {
+    return { ...save, inventory: [] };
+  }
+  return save;
 }

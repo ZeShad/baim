@@ -7,17 +7,23 @@ export const sceneLayerGeometry = {
         "id": "layer.apartment.table_foreground",
         "asset": "foregroundTable",
         "zIndex": -1,
-        "top": 0,
-        "left": 0,
-        "width": 1280,
-        "height": 720
+        "top": 389,
+        "left": 104
       },
       {
         "id": "layer.apartment.bills_on_table",
         "asset": "billsOnTable",
         "zIndex": -2,
-        "top": 387,
-        "left": 299
+        "top": 390,
+        "left": 199
+      },
+      {
+        "id": "layer.apartment.window_open",
+        "asset": "windowOpen",
+        "zIndex": 100,
+        "top": 51,
+        "left": 150,
+        "visibleWhenFlag": "apartmentWindowOpen"
       }
     ]
   }

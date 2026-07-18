@@ -28,6 +28,29 @@ export function stopRenderOffsetY(frame, frameIndex) {
   return offset === 0 ? 0 : offset;
 }
 
+export function animationRenderScale(frame) {
+  const scale = Number(frame?.scale);
+  return Number.isFinite(scale) && scale > 0 ? scale : 1;
+}
+
+export function animationRenderOffset(frame, frameIndex, mirrored = false) {
+  const globalX = Number.isFinite(Number(frame?.offsetX)) ? Number(frame.offsetX) : 0;
+  const globalY = Number.isFinite(Number(frame?.offsetY)) ? Number(frame.offsetY) : 0;
+  const perFrame = Array.isArray(frame?.offsets) ? frame.offsets[frameIndex] : null;
+  const frameX = Number.isFinite(Number(perFrame?.x)) ? Number(perFrame.x) : 0;
+  const frameY = Number.isFinite(Number(perFrame?.y)) ? Number(perFrame.y) : 0;
+  const direction = mirrored ? -1 : 1;
+  return {
+    x: direction * (globalX + frameX),
+    y: globalY + frameY
+  };
+}
+
+export function animationRenderMirrored(frame, mirrored = false) {
+  if (typeof frame?.flipX === "boolean") return frame.flipX;
+  return Boolean(mirrored);
+}
+
 function usesExternalWalkPose(player, definition) {
   return player?.id === "npc.bai_mitko" && definition?.animationSource === "external_animation_v1";
 }
@@ -88,7 +111,10 @@ export class Renderer {
     const scene = this.game.currentScene;
     ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
     const hasRealBackground = this.drawBackground(scene);
-    this.drawSceneZLayers(scene, this.game.editMode ? [] : [this.game.player]);
+    const actors = !this.game.editMode || this.game.sceneEditor?.shouldRenderPlayer()
+      ? [this.game.player]
+      : [];
+    this.drawSceneZLayers(scene, actors);
     if (this.game.editMode) this.game.sceneEditor?.draw(ctx);
     else if (this.game.debugSceneGeometry || !hasRealBackground) this.drawSceneGeometry(scene);
     this.drawHud();
@@ -134,16 +160,18 @@ export class Renderer {
       if (frame) {
         const frameIndex = state.frameIndex % Math.max(1, frame.frameCount);
         const bounds = this.frameContentBounds(frame, frameIndex);
-        const scale = 500 / frame.frameHeight;
+        const scale = (500 / frame.frameHeight) * animationRenderScale(frame);
         const width = frame.frameWidth * scale;
         const height = frame.frameHeight * scale;
-        const renderOffsetX = stopRenderOffsetX(frame, frameIndex, mirrored);
-        const renderOffsetY = stopRenderOffsetY(frame, frameIndex);
+        const frameMirrored = animationRenderMirrored(frame, mirrored);
+        const renderOffset = animationRenderOffset(frame, frameIndex, frameMirrored);
+        const renderOffsetX = stopRenderOffsetX(frame, frameIndex, frameMirrored) + renderOffset.x;
+        const renderOffsetY = stopRenderOffsetY(frame, frameIndex) + renderOffset.y;
         const drawX = state.x + renderOffsetX - width * (frame.anchorX ?? frame.anchor?.x ?? 0.5);
         const drawY = state.baselineY + renderOffsetY - (frame.baselineY || frame.frameHeight) * scale;
         const shadowWidth = (frame.contentBounds?.w || bounds.w) * scale;
         this.drawSimpleShadow(state.x, state.baselineY, shadowWidth);
-        this.drawFrameImage(image, frameIndex, frame, bounds, drawX, drawY, width, height, mirrored);
+        this.drawFrameImage(image, frameIndex, frame, bounds, drawX, drawY, width, height, frameMirrored);
         const sourceRect = this.frameSourceRect(frame, frameIndex, bounds);
         drawInfo = {
           drawX,
@@ -291,7 +319,7 @@ export class Renderer {
     const background = this.game.assets.getSceneImage(scene.id, "background");
     if (this.game.assets.isLoaded(background)) {
       this.logArtStatus(scene.id, path, "loaded", false);
-      ctx.drawImage(background, 0, 0, 1280, 720);
+      ctx.drawImage(background, 0, 0);
       return true;
     }
 
@@ -311,14 +339,16 @@ export class Renderer {
     ctx.font = "700 32px Arial";
     ctx.fillText(this.game.t(scene.titleKey), 36, 54);
     ctx.font = "18px Arial";
-    ctx.fillText("Painted background placeholder: replace with 1280x720 or 2560x1440 art", 36, 84);
+    ctx.fillText("Painted background placeholder: replace with 1280x720 runtime art", 36, 84);
     return false;
   }
 
   drawSceneZLayers(scene, actors) {
     const entries = [
       ...actors.map((actor) => ({ kind: "actor", actor, zIndex: sceneZIndexForPoint(scene, actor.position) })),
-      ...(scene.foregroundLayers || []).map((layer) => ({ kind: "layer", layer, zIndex: Number(layer.zIndex) }))
+      ...(scene.foregroundLayers || [])
+        .filter((layer) => this.sceneLayerVisible(layer))
+        .map((layer) => ({ kind: "layer", layer, zIndex: Number(layer.zIndex) }))
     ].sort((a, b) => {
       const az = Number.isFinite(a.zIndex) ? a.zIndex : 100;
       const bz = Number.isFinite(b.zIndex) ? b.zIndex : 100;
@@ -330,16 +360,21 @@ export class Renderer {
     }
   }
 
+  sceneLayerVisible(layer) {
+    if (!layer?.visibleWhenFlag) return true;
+    return Boolean(this.game.state?.flags?.[layer.visibleWhenFlag]);
+  }
+
   drawSceneRasterLayer(scene, layer) {
     const image = this.game.assets.getSceneImage(scene.id, layer.asset);
     if (!this.game.assets.isLoaded(image)) return;
     const rect = this.sceneLayerRect(layer, image);
-    this.ctx.drawImage(image, rect.x, rect.y, rect.w, rect.h);
+    this.ctx.drawImage(image, rect.x, rect.y);
   }
 
   sceneLayerRect(layer, image) {
-    const width = Number(layer.width) || image.naturalWidth || image.width || 1280;
-    const height = Number(layer.height) || image.naturalHeight || image.height || 720;
+    const width = image?.naturalWidth || image?.width || 1280;
+    const height = image?.naturalHeight || image?.height || 720;
     const hasRight = Number.isFinite(Number(layer.right));
     const hasBottom = Number.isFinite(Number(layer.bottom));
     const left = Number.isFinite(Number(layer.left)) ? Number(layer.left) : null;
@@ -348,7 +383,9 @@ export class Renderer {
       x: left ?? (hasRight ? 1280 - Number(layer.right) - width : 0),
       y: top ?? (hasBottom ? 720 - Number(layer.bottom) - height : 0),
       w: width,
-      h: height
+      h: height,
+      width,
+      height
     };
   }
 
@@ -531,7 +568,8 @@ export class Renderer {
     const sourceHeight = preserveFrameLayout && spriteInfo.frame ? spriteInfo.frame.frameHeight : boundsForSize?.h || spriteInfo.frame?.frameHeight || sprite.height;
     const stableBounds = preserveFrameLayout && usesExternalWalkPose(p, definition) ? stableExternalVisualBounds(definition) : null;
     const visualHeight = stableBounds?.h || (preserveFrameLayout ? sourceHeight : boundsForSize?.h || sourceHeight);
-    const scale = height / visualHeight;
+    const animationScale = animationRenderScale(spriteInfo.frame);
+    const scale = (height / visualHeight) * animationScale;
     const width = sourceWidth * scale;
     const drawHeight = sourceHeight * scale;
     const anchor = spriteInfo.frame?.anchor || definition.render.anchor;
@@ -540,8 +578,10 @@ export class Renderer {
     const frameIndex = spriteInfo.frame
       ? Number.isInteger(spriteInfo.staticFrameIndex) ? spriteInfo.staticFrameIndex : this.game.player.animator.frameIndex % spriteInfo.frame.frameCount
       : 0;
-    const renderOffsetX = stopRenderOffsetX(spriteInfo.frame, frameIndex, spriteInfo.mirrored);
-    const renderOffsetY = stopRenderOffsetY(spriteInfo.frame, frameIndex);
+    const mirrored = animationRenderMirrored(spriteInfo.frame, spriteInfo.mirrored);
+    const renderOffset = animationRenderOffset(spriteInfo.frame, frameIndex, mirrored);
+    const renderOffsetX = stopRenderOffsetX(spriteInfo.frame, frameIndex, mirrored) + renderOffset.x;
+    const renderOffsetY = stopRenderOffsetY(spriteInfo.frame, frameIndex) + renderOffset.y;
     const drawX = p.position.x + renderOffsetX - width * anchor.x;
     const baselineOffset = preserveFrameLayout && spriteInfo.frame
       ? stableBounds?.baselineY || spriteInfo.frame.baselineY || sourceHeight
@@ -568,8 +608,8 @@ export class Renderer {
       const bounds = preserveFrameLayout
         ? { x: 0, y: 0, w: spriteInfo.frame.frameWidth, h: spriteInfo.frame.frameHeight }
         : this.frameContentBounds(spriteInfo.frame, frameIndex);
-      this.drawFrameImage(sprite, frameIndex, spriteInfo.frame, bounds, drawX, drawY, width, drawHeight, spriteInfo.mirrored);
-    } else if (spriteInfo.mirrored) {
+      this.drawFrameImage(sprite, frameIndex, spriteInfo.frame, bounds, drawX, drawY, width, drawHeight, mirrored);
+    } else if (mirrored) {
       ctx.save();
       ctx.translate(drawX + width, 0);
       ctx.scale(-1, 1);
@@ -578,7 +618,7 @@ export class Renderer {
     } else {
       ctx.drawImage(sprite, drawX, drawY, width, drawHeight);
     }
-    if (this.game.debugSceneGeometry || this.game.debugAnimation) this.drawCharacterDebug(p, drawX, drawY, width, drawHeight, visualHeight, spriteInfo.slot, spriteInfo.frame, spriteInfo.mirrored, renderOffsetX, renderOffsetY);
+    if (this.game.debugSceneGeometry || this.game.debugAnimation) this.drawCharacterDebug(p, drawX, drawY, width, drawHeight, visualHeight, spriteInfo.slot, spriteInfo.frame, mirrored, renderOffsetX, renderOffsetY);
     ctx.restore();
   }
 
@@ -608,6 +648,10 @@ export class Renderer {
     const animation = definition.animations[player.animation] || definition.animations.idle;
     const facing = player.facing || definition.render.defaultFacing;
     if (usesExternalWalkPose(player, definition) && player.animation !== "walk") {
+      if (player.actionAnimation?.slot) {
+        const image = this.game.assets.getCharacterImage(player.id, player.actionAnimation.slot);
+        return { image, slot: player.actionAnimation.slot, frame: player.actionAnimation, mirrored: Boolean(player.actionAnimation.mirrored) };
+      }
       if (player.speechAnimation?.slot) {
         const image = this.game.assets.getCharacterImage(player.id, player.speechAnimation.slot);
         return { image, slot: player.speechAnimation.slot, frame: player.speechAnimation, mirrored: Boolean(player.speechAnimation.mirrored) };
@@ -937,7 +981,7 @@ export class Renderer {
   drawHud() {
     const { ctx } = this;
     const state = this.game.state;
-    ctx.fillStyle = "rgba(23, 20, 16, 0.92)";
+    ctx.fillStyle = "rgba(23, 20, 16, 0.64)";
     ctx.fillRect(0, 600, 1280, 120);
     this.drawMeter(28, 620, this.game.t("ui.meter.influence"), state.influence, "#69b6ff");
     this.drawMeter(28, 650, this.game.t("ui.meter.suspicion"), state.suspicion, "#e36767");
@@ -950,7 +994,7 @@ export class Renderer {
     let x = 760;
     ctx.font = "14px Arial";
     for (const item of this.game.inventory.list()) {
-      ctx.fillStyle = "rgba(239, 224, 189, 0.12)";
+      ctx.fillStyle = "rgba(239, 224, 189, 0.08)";
       ctx.fillRect(x, 620, 104, 70);
       ctx.strokeStyle = "#967d52";
       ctx.strokeRect(x, 620, 104, 70);

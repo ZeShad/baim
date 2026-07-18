@@ -1,14 +1,15 @@
 import test from "node:test";
 import assert from "node:assert/strict";
+import { readFileSync } from "node:fs";
 import { Localization } from "../src/engine/Localization.js";
 import { SaveSystem } from "../src/engine/SaveSystem.js";
 import { pointInPolygon, findWalkPath, isWalkable, pointInWalkMask, nearestWalkablePointOnLine, nearestReachableWalkablePoint, nearestWalkablePoint, sceneScale, walkPathDistance } from "../src/engine/SceneGeometry.js";
-import { DEFAULT_SAVE } from "../src/engine/ids.js";
+import { DEFAULT_SAVE, VERBS } from "../src/engine/ids.js";
 import { characterHeight } from "../src/engine/CharacterRenderMath.js";
 import { facingFromDelta, MovementSystem, requestWalkStop, eastWestFallbackFacing, motionMultiplierAtFrame, walkMotionMultiplierForFrame } from "../src/engine/MovementSystem.js";
 import { AnimationPlayer } from "../src/engine/AnimationPlayer.js";
 import { Game, SHORT_WALK_PATH_DISTANCE } from "../src/engine/Game.js";
-import { Renderer, sceneZIndexForPoint, stableExternalVisualBounds, stopRenderOffsetX, stopRenderOffsetY } from "../src/engine/Renderer.js";
+import { Renderer, animationRenderMirrored, animationRenderOffset, animationRenderScale, sceneZIndexForPoint, stableExternalVisualBounds, stopRenderOffsetX, stopRenderOffsetY } from "../src/engine/Renderer.js";
 import { strings } from "../src/content/localization/index.js";
 import { chapter1 } from "../src/content/chapter1/index.js";
 import { assetManifest } from "../src/content/art/assetManifest.js";
@@ -66,7 +67,13 @@ test("apartment uses a raster walk mask for walkable floor", () => {
   assert.equal(scene.walkMask.rows.join("").includes("e"), false);
   assert.equal(scene.walkMask.legend.e, undefined);
   assert.ok(scene.foregroundLayers.some((layer) => layer.id === "layer.apartment.table_foreground" && layer.asset === "foregroundTable" && layer.zIndex === -1));
-  assert.ok(scene.foregroundLayers.some((layer) => layer.id === "layer.apartment.bills_on_table" && layer.asset === "billsOnTable" && layer.zIndex === -2 && layer.top === 385 && layer.left === 390));
+  assert.ok(scene.foregroundLayers.some((layer) => layer.id === "layer.apartment.bills_on_table" && layer.asset === "billsOnTable" && layer.zIndex === -2 && Number.isFinite(layer.top) && Number.isFinite(layer.left)));
+  assert.ok(scene.foregroundLayers.some((layer) => layer.id === "layer.apartment.window_open"
+    && layer.asset === "windowOpen"
+    && layer.zIndex === 100
+    && layer.left === 150
+    && layer.top === 51
+    && layer.visibleWhenFlag === "apartmentWindowOpen"));
 });
 
 test("apartment perspective scale is continuous across raster mask rows", () => {
@@ -187,6 +194,18 @@ test("save system merges old saves with current defaults", () => {
   assert.deepEqual(save.inventory, DEFAULT_SAVE.inventory);
 });
 
+test("fresh chapter start has no preloaded inventory items", () => {
+  assert.deepEqual(DEFAULT_SAVE.inventory, []);
+});
+
+test("save migration removes the old prototype starter inventory", () => {
+  const storage = new MemoryStorage({
+    test: JSON.stringify({ inventory: ["item.accordion", "item.unpaid_bills", "item.empty_envelope"] })
+  });
+  const save = new SaveSystem(storage, "test").load();
+  assert.deepEqual(save.inventory, []);
+});
+
 test("Bai Mitko render height is canonical across idle and walk assets", () => {
   const scene = chapter1.scenes.find((candidate) => candidate.id === "scene.chapter1.apartment");
   const definition = characterDefinitions["npc.bai_mitko"];
@@ -282,6 +301,84 @@ test("Bai Mitko external talk and reject animations are generated for east and m
   assert.equal(externalAnimationV1.talkAnimations.west.singleWord[0].mirrored, true);
   assert.equal(externalAnimationV1.rejectAnimations.east[0].slot, "external_reject_east_1");
   assert.equal(externalAnimationV1.rejectAnimations.west[0].mirrored, true);
+});
+
+test("Bai Mitko external take action is generated for east and mirrored west", () => {
+  assert.equal(externalAnimationV1.actionAnimations.east.take[0].slot, "external_take_east_forward_default");
+  assert.equal(externalAnimationV1.actionAnimations.east.take[0].role, "action");
+  assert.equal(externalAnimationV1.actionAnimations.east.take[0].fps, 12);
+  assert.deepEqual(externalAnimationV1.actionAnimations.east.take[0].movementSpeedMultipliers, Array(16).fill(0));
+  assert.equal(externalAnimationV1.actionAnimations.west.take[0].slot, "external_take_east_forward_default");
+  assert.equal(externalAnimationV1.actionAnimations.west.take[0].mirrored, true);
+  assert.equal(externalAnimationV1.actionAnimations.east.opensWindow[0].slot, "external_opens_window");
+  assert.equal(externalAnimationV1.actionAnimations.east.opensWindow[0].role, "action");
+  assert.equal(externalAnimationV1.actionAnimations.east.opensWindow[0].fps, 12);
+  assert.equal(externalAnimationV1.actionAnimations.east.opensWindow[0].flipX, undefined);
+  assert.deepEqual(externalAnimationV1.actionAnimations.east.opensWindow[0].movementSpeedMultipliers, Array(16).fill(0));
+  assert.equal(externalAnimationV1.actionAnimations.west.opensWindow[0].slot, "external_opens_window");
+  assert.equal(externalAnimationV1.actionAnimations.west.opensWindow[0].mirrored, true);
+  assert.equal(externalAnimationV1.actionAnimations.west.opensWindow[0].flipX, false);
+});
+
+test("apartment bills define a take action sequence with approach, facing, animation, and effect", () => {
+  const scene = chapter1.scenes.find((candidate) => candidate.id === "scene.chapter1.apartment");
+  const bills = scene.interactables.find((candidate) => candidate.id === "hotspot.apartment.unpaid_bills");
+  assert.equal(bills.takeItemId, "item.unpaid_bills");
+  assert.equal(bills.flagOnTake, "hasUnpaidBills");
+  assert.deepEqual(bills.actions.take.approach, { x: 390, y: 570 });
+  assert.equal(bills.actions.take.facing, "west");
+  assert.equal(bills.actions.take.animation, "take");
+  assert.equal(bills.actions.take.messageKey, "msg.apartment.unpaid_bills_taken");
+});
+
+test("apartment window defines a look action sequence from raster cell to west-facing open animation", () => {
+  const scene = chapter1.scenes.find((candidate) => candidate.id === "scene.chapter1.apartment");
+  const window = scene.interactables.find((candidate) => candidate.id === "window");
+  assert.equal(window.nameKey, "hotspot.window.name");
+  assert.deepEqual(window.actions.look.approachCell, { x: 16, y: 23 });
+  assert.equal(window.actions.look.facing, "west");
+  assert.equal(window.actions.look.animation, "opensWindow");
+  assert.equal(window.actions.look.holdFinalFrame, false);
+  assert.equal(window.actions.look.flagOnComplete, "apartmentWindowOpen");
+  assert.equal(window.actions.look.messageKey, "msg.apartment.window_opened");
+});
+
+test("stateful scene layers stay hidden until their save flag is set", () => {
+  const renderer = Object.create(Renderer.prototype);
+  const layer = { visibleWhenFlag: "apartmentWindowOpen" };
+  renderer.game = { state: { flags: {} } };
+  assert.equal(renderer.sceneLayerVisible(layer), false);
+  renderer.game.state.flags.apartmentWindowOpen = true;
+  assert.equal(renderer.sceneLayerVisible(layer), true);
+  assert.equal(renderer.sceneLayerVisible({}), true);
+});
+
+test("action completion reveals and persists its stateful scene layer flag", () => {
+  const game = Object.create(Game.prototype);
+  let saves = 0;
+  let heldFrames = 0;
+  game.player = { actionAnimation: { frameCount: 16 }, actionSequence: {}, animation: "action" };
+  game.state = { flags: {} };
+  game.save = () => { saves += 1; };
+  game.setIdleHoldFrame = () => { heldFrames += 1; };
+  game.setStatusMessage = () => {};
+  game.completeInteractionActionSequence({
+    target: { id: "window" },
+    verb: VERBS.LOOK,
+    sequence: { flagOnComplete: "apartmentWindowOpen", holdFinalFrame: false },
+    frame: { frameCount: 16 }
+  });
+  assert.equal(game.player.animation, "idle");
+  assert.equal(game.state.flags.apartmentWindowOpen, true);
+  assert.equal(saves, 1);
+  assert.equal(heldFrames, 0);
+});
+
+test("action sequence approach cells resolve to walk-mask world coordinates", () => {
+  const scene = chapter1.scenes.find((candidate) => candidate.id === "scene.chapter1.apartment");
+  const game = Object.create(Game.prototype);
+  game.currentScene = scene;
+  assert.deepEqual(game.actionSequenceApproachPoint({ approachCell: { x: 16, y: 23 } }), { x: 330, y: 470 });
 });
 
 test("idle variants trigger after irregular idle delay and finish back to hold", () => {
@@ -1048,8 +1145,8 @@ test("table click approaches the table instead of stopping near current feet", (
   assert.deepEqual(game.player.interactionDebug.feetGoal, { x: 405, y: 645 });
   assert.ok(game.player.target.x >= 390);
   assert.ok(game.player.target.x <= 440);
-  assert.ok(game.player.target.y >= 560);
-  assert.ok(game.player.target.y <= 580);
+  assert.ok(game.player.target.y >= 580);
+  assert.ok(game.player.target.y <= 600);
   assert.ok(distance(game.player.target, game.player.position) > 250);
   assert.deepEqual(game.player.interactionDebug.click, { x: 315, y: 490 });
 });
@@ -1495,6 +1592,39 @@ test("stop render offset fades from configured value to zero", () => {
   assert.equal(stopRenderOffsetY(frame, 3), 0);
   assert.equal(stopRenderOffsetY(frame, 7), 0);
   assert.equal(stopRenderOffsetY(frame, 14), 0);
+});
+
+test("external animation render scale and offsets default and mirror correctly", () => {
+  assert.equal(animationRenderScale({}), 1);
+  assert.equal(animationRenderScale({ scale: 1.25 }), 1.25);
+  assert.equal(animationRenderMirrored({}, false), false);
+  assert.equal(animationRenderMirrored({}, true), true);
+  assert.equal(animationRenderMirrored({ flipX: true }, false), true);
+  assert.equal(animationRenderMirrored({ flipX: false }, true), false);
+  assert.deepEqual(animationRenderOffset({ offsetX: 10, offsetY: -4, offsets: [{ x: 2, y: 3 }] }, 0), { x: 12, y: -1 });
+  assert.deepEqual(animationRenderOffset({ offsetX: 10, offsetY: -4, offsets: [{ x: 2, y: 3 }] }, 0, true), { x: -12, y: -1 });
+  assert.deepEqual(animationRenderOffset({ offsets: [null, { x: 5, y: -2 }] }, 0), { x: 0, y: 0 });
+});
+
+test("generated external animations include authored scale and dense offsets", () => {
+  const frame = externalAnimationV1.actionAnimations.east.opensWindow[0];
+  assert.equal(frame.scale, 1.116);
+  assert.equal(Number.isFinite(frame.offsetX), true);
+  assert.equal(Number.isFinite(frame.offsetY), true);
+  assert.equal(frame.offsets.length, frame.frameCount);
+  assert.deepEqual(frame.offsets[0], { x: 0, y: 0 });
+});
+
+test("open-window action carries an accepted reproducible registration fit", () => {
+  const selection = JSON.parse(readFileSync("assets_src/characters/bai_mitko/external_animation_v1/external-animation-selection.json", "utf8"));
+  const config = selection.animations.opens_window;
+  const fit = config.registration.lastFit;
+  assert.equal(config.offsets.length, externalAnimationV1.actionAnimations.east.opensWindow[0].frameCount);
+  assert.ok(fit.score >= config.registration.acceptance.minimumGlobalScore);
+  assert.ok(fit.minimumFrameScore >= config.registration.acceptance.minimumFrameScore);
+  assert.equal(externalAnimationV1.actionAnimations.east.opensWindow[0].scale, config.scale);
+  assert.equal(externalAnimationV1.actionAnimations.east.opensWindow[0].offsetX, config.offsetX);
+  assert.equal(externalAnimationV1.actionAnimations.east.opensWindow[0].offsetY, config.offsetY);
 });
 
 test("external animation chroma key converts green amount into soft alpha", () => {

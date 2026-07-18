@@ -10,6 +10,8 @@
     "build:scene-layers": "node tools/build-scene-layers.js",
     "build:scene-layer-runtime": "node tools/build-scene-layer-runtime.js",
     "build:characters": "node tools/build-character-chroma-assets.js",
+    "fit:action": "node tools/register-external-action.mjs",
+    "verify:action-render": "node tools/verify-action-render.mjs",
     "test": "node --test test/engine.test.js"
   },
   "dependencies": {
@@ -18,6 +20,7 @@
     "sharp": "^0.35.2"
   },
   "devDependencies": {
+    "@techstark/opencv-js": "^5.0.0-release.1",
     "playwright": "^1.61.1"
   }
 }

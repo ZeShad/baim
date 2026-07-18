@@ -17,16 +17,20 @@ body {
 }
 
 #app {
-  position: relative;
-  width: 100vw;
-  height: 100vh;
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  width: 1280px;
+  height: 720px;
   background: #111;
+  transform-origin: center center;
+  transform: translate(-50%, -50%) scale(var(--app-scale, 1));
 }
 
 #game {
   display: block;
-  width: 100vw;
-  height: 100vh;
+  width: 1280px;
+  height: 720px;
   image-rendering: auto;
 }
 
@@ -52,10 +56,18 @@ button:hover {
 .top-bar {
   position: absolute;
   top: 14px;
+  left: 14px;
   right: 14px;
   display: flex;
+  justify-content: space-between;
   gap: 6px;
   pointer-events: auto;
+}
+
+.top-bar-left,
+.top-bar-right {
+  display: flex;
+  gap: 6px;
 }
 
 .top-bar button {
@@ -481,7 +493,8 @@ button:hover {
   padding: 0 5px;
 }
 
-.scene-editor-layer-position {
+.scene-editor-layer-position,
+.scene-editor-raster-position {
   color: #d9f7ff;
   font-size: 12px;
   line-height: 1.35;
@@ -493,8 +506,33 @@ button:hover {
   gap: 6px;
 }
 
-.scene-editor-layer-grid input {
+.scene-editor-layer-grid input,
+.scene-editor-action-grid input {
   max-width: 81px;
+}
+
+.scene-editor-action-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 6px;
+}
+
+.scene-editor textarea {
+  min-height: 112px;
+  max-height: 220px;
+  resize: vertical;
+  border: 1px solid #a78b5c;
+  background: #221b13;
+  color: #f5ead5;
+  padding: 6px;
+  font-family: Consolas, "Liberation Mono", monospace;
+  font-size: 12px;
+}
+
+.scene-editor-action-note {
+  color: #d9f7ff;
+  font-size: 12px;
+  line-height: 1.35;
 }
 
 .scene-editor-actions {

@@ -48,6 +48,7 @@ export class MovementSystem {
   }
 
   update(dt) {
+    if (this.player.animation === "action") return;
     if (!this.player.target) {
       if (this.player.animation === "walk" && this.player.walkPart === "stop" && !this.player.animator?.isFinished()) {
         this.player.movementStopping = true;

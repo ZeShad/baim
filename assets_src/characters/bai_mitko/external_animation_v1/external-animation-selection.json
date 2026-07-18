@@ -172,6 +172,149 @@
       "loop": false,
       "frameStart": 0,
       "frameEndTrim": 0
+    },
+    "take_east_forward_default": {
+      "use": true,
+      "source": "bai-mitko-take-east-forward-default.zip",
+      "loop": false,
+      "frameStart": 0,
+      "frameEndTrim": 0,
+      "fps": 12,
+      "action": "take"
+    },
+    "opens_window": {
+      "use": true,
+      "source": "bai-mitko-opens-window.zip",
+      "loop": false,
+      "frameStart": 0,
+      "frameEndTrim": 0,
+      "fps": 12,
+      "action": "opensWindow",
+      "scale": 1.116,
+      "flipXWest": false,
+      "registration": {
+        "referenceProvider": "background",
+        "sceneId": "scene.chapter1.apartment",
+        "sceneObjectId": "window",
+        "verb": "look",
+        "referenceFrame": 0,
+        "stabilizationRoi": {
+          "x": 275,
+          "y": 690,
+          "w": 330,
+          "h": 440
+        },
+        "stabilizationFixture": "bai_mitko_lower_body",
+        "sceneMarkerRects": [
+          {
+            "x": 185,
+            "y": 75,
+            "w": 58,
+            "h": 650
+          },
+          {
+            "x": 185,
+            "y": 75,
+            "w": 255,
+            "h": 95
+          },
+          {
+            "x": 398,
+            "y": 75,
+            "w": 42,
+            "h": 355
+          }
+        ],
+        "sceneSearchRect": {
+          "x": 105,
+          "y": 35,
+          "w": 330,
+          "h": 390
+        },
+        "scaleRange": {
+          "min": 1.02,
+          "max": 1.16,
+          "step": 0.002
+        },
+        "acceptance": {
+          "minimumGlobalScore": 0.9,
+          "minimumFrameScore": 0.9
+        },
+        "lastFit": {
+          "version": 1,
+          "score": 0.975637,
+          "minimumFrameScore": 0.949677,
+          "report": "target/external_animation_v1/registration/opens_window/scene-registration-report.json"
+        }
+      },
+      "offsetY": -48.036,
+      "offsets": [
+        [
+          0,
+          0
+        ],
+        [
+          1.429,
+          0
+        ],
+        [
+          4.645,
+          0
+        ],
+        [
+          6.075,
+          0
+        ],
+        [
+          12.149,
+          0
+        ],
+        [
+          14.294,
+          0
+        ],
+        [
+          18.224,
+          0
+        ],
+        [
+          19.654,
+          0
+        ],
+        [
+          22.512,
+          0
+        ],
+        [
+          23.942,
+          0
+        ],
+        [
+          27.158,
+          0
+        ],
+        [
+          30.374,
+          0
+        ],
+        [
+          31.446,
+          0
+        ],
+        [
+          34.662,
+          0
+        ],
+        [
+          36.448,
+          0
+        ],
+        [
+          36.448,
+          0
+        ]
+      ],
+      "offsetX": 6.825
     }
   },
   "mirrors": {
@@ -188,6 +331,8 @@
     "talk_west_long_1": "mirror talk_east_long_1",
     "talk_west_long_2": "mirror talk_east_long_2",
     "talk_west_short_1": "mirror talk_east_short_1",
-    "reject_west_1": "mirror reject_east_1"
+    "reject_west_1": "mirror reject_east_1",
+    "take_west_forward_default": "mirror take_east_forward_default",
+    "opens_window_west": "mirror opens_window"
   }
 }

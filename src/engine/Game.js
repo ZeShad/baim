@@ -100,6 +100,8 @@ export class Game {
       idleVariantQueue: [],
       idleHoldFrame: null,
       idleVariantTimer: this.randomIdleVariantDelay(),
+      actionAnimation: null,
+      actionSequence: null,
       speechAnimation: null,
       speaking: false,
       animator: new AnimationPlayer(this.characterDefinitions["npc.bai_mitko"])
@@ -152,6 +154,7 @@ export class Game {
       this.player.animator.pingPongOverride = this.currentAnimationPingPong();
       this.player.animator.play(this.player.animation, this.currentAnimationKey());
       this.player.animator.update(dt);
+      this.updateActionSequence();
       this.updateSpeechAnimationHold();
       this.updateSpeechBubble(dt);
     }
@@ -177,6 +180,9 @@ export class Game {
     this.canvas.addEventListener("pointermove", (event) => {
       if (!this.editMode) return;
       this.sceneEditor?.handlePointerMove(event, this.renderer.screenToWorld(event.clientX, event.clientY));
+    });
+    this.canvas.addEventListener("pointerleave", () => {
+      if (this.editMode) this.sceneEditor?.handlePointerLeave();
     });
     window.addEventListener("pointerup", () => {
       if (this.editMode) this.sceneEditor?.handlePointerUp();
@@ -312,7 +318,13 @@ export class Game {
     return this.player.speechAnimation || null;
   }
 
+  currentActionAnimationFrame() {
+    return this.player.actionAnimation || null;
+  }
+
   currentAnimationFps() {
+    const action = this.currentActionAnimationFrame();
+    if (action) return action.fps;
     const speech = this.currentSpeechAnimationFrame();
     if (speech) return speech.fps;
     const idleVariant = this.currentIdleVariantFrame();
@@ -335,6 +347,10 @@ export class Game {
   }
 
   currentAnimationKey() {
+    if (this.player.animation === "action") {
+      const action = this.currentActionAnimationFrame();
+      return `${action?.slot || "action"}:action:${this.player.facing || "east"}`;
+    }
     if (this.player.animation === "walk") {
       const facing = eastWestFallbackFacing(this.player.facing) || this.player.facing || "south";
       const part = this.player.walkPart || "loop";
@@ -352,6 +368,8 @@ export class Game {
   }
 
   currentAnimationFrameCount() {
+    const action = this.currentActionAnimationFrame();
+    if (action) return action.frameCount || null;
     const speech = this.currentSpeechAnimationFrame();
     if (speech) return speech.frameCount || null;
     const idleVariant = this.currentIdleVariantFrame();
@@ -361,6 +379,8 @@ export class Game {
   }
 
   currentAnimationLoopStartFrame() {
+    const action = this.currentActionAnimationFrame();
+    if (action) return action.loopStartFrame ?? null;
     const speech = this.currentSpeechAnimationFrame();
     if (speech) return speech.loopStartFrame ?? null;
     const idleVariant = this.currentIdleVariantFrame();
@@ -370,6 +390,8 @@ export class Game {
   }
 
   currentAnimationInitialFrame() {
+    const action = this.currentActionAnimationFrame();
+    if (action) return action.initialFrame ?? null;
     const speech = this.currentSpeechAnimationFrame();
     if (speech) return speech.initialFrame ?? null;
     const idleVariant = this.currentIdleVariantFrame();
@@ -379,6 +401,8 @@ export class Game {
   }
 
   currentAnimationLoop() {
+    const action = this.currentActionAnimationFrame();
+    if (action) return Boolean(action.loop);
     const speech = this.currentSpeechAnimationFrame();
     if (speech) return Boolean(speech.loop);
     const idleVariant = this.currentIdleVariantFrame();
@@ -389,6 +413,8 @@ export class Game {
   }
 
   currentAnimationPingPong() {
+    const action = this.currentActionAnimationFrame();
+    if (action) return Boolean(action.pingPong);
     const speech = this.currentSpeechAnimationFrame();
     if (speech) return Boolean(speech.pingPong);
     const idleVariant = this.currentIdleVariantFrame();
@@ -443,7 +469,7 @@ export class Game {
   }
 
   setStatusMessage(message, options = {}) {
-    if (this.player.target || this.player.animation === "walk") {
+    if (this.player.target || this.player.animation === "walk" || this.player.animation === "action") {
       this.hideSpeechBubble(true);
       this.pendingSpeechBubble = message ? { message, options: { ...options } } : null;
       return;
@@ -482,7 +508,7 @@ export class Game {
       return;
     }
     if (!this.speechBubble) return;
-    if (this.player.target || this.player.animation === "walk") {
+    if (this.player.target || this.player.animation === "walk" || this.player.animation === "action") {
       this.hideSpeechBubble(true);
       return;
     }
@@ -521,7 +547,7 @@ export class Game {
   }
 
   startSpeechAnimationForMessage(message, options = {}) {
-    if (!this.usesExternalCharacterAnimation() || !message || this.player.target || this.player.animation === "walk") return;
+    if (!this.usesExternalCharacterAnimation() || !message || this.player.target || this.player.animation === "walk" || this.player.animation === "action") return;
     const frame = options.reject ? this.randomRejectAnimation() : this.talkAnimationForMessage(message);
     if (!frame) return;
     this.player.speechAnimation = frame;
@@ -570,6 +596,98 @@ export class Game {
     return pool[Math.floor(Math.random() * pool.length)];
   }
 
+  actionSequenceForTarget(target, verb) {
+    return target?.actions?.[verb] || null;
+  }
+
+  actionAnimationForSequence(sequence) {
+    const actionName = sequence?.animation || sequence?.action;
+    if (!actionName) return null;
+    const facing = eastWestFallbackFacing(sequence.facing || this.player.facing) || "east";
+    const byFacing = externalAnimationV1.actionAnimations?.[facing] || externalAnimationV1.actionAnimations?.east || {};
+    return this.randomAnimationFrame(byFacing[actionName] || []);
+  }
+
+  actionSequenceApproachPoint(sequence) {
+    if (sequence?.approach) return { ...sequence.approach };
+    if (!sequence?.approachCell) return null;
+    const mask = this.currentScene?.walkMask;
+    if (!mask) return null;
+    const width = Math.max(1, Number(mask.width) || 1);
+    const height = Math.max(1, Number(mask.height) || 1);
+    const worldWidth = Math.max(1, Number(mask.worldWidth) || 1280);
+    const worldHeight = Math.max(1, Number(mask.worldHeight) || 720);
+    const x = Math.max(0, Math.min(width - 1, Math.floor(Number(sequence.approachCell.x) || 0)));
+    const y = Math.max(0, Math.min(height - 1, Math.floor(Number(sequence.approachCell.y) || 0)));
+    return {
+      x: (x + 0.5) * (worldWidth / width),
+      y: (y + 0.5) * (worldHeight / height)
+    };
+  }
+
+  startInteractionActionSequence(target, verb, sequence) {
+    if (verb === VERBS.TAKE && target.takeItemId && this.inventory.has(target.takeItemId)) {
+      this.setStatusMessage(this.t("msg.already_taken"), { reject: true });
+      return true;
+    }
+    if (sequence.facing) this.player.facing = sequence.facing;
+    else if (sequence.facingPoint) this.facePoint(sequence.facingPoint);
+    const frame = this.actionAnimationForSequence(sequence);
+    if (!frame) {
+      this.completeInteractionActionSequence({ target, verb, sequence, frame: null });
+      return true;
+    }
+    this.hideSpeechBubble(true);
+    this.player.actionSequence = { target, verb, sequence, frame };
+    this.player.actionAnimation = frame;
+    this.player.speechAnimation = null;
+    this.player.speaking = false;
+    this.player.idleVariant = null;
+    this.player.idleVariantQueue = [];
+    this.player.idleHoldFrame = null;
+    this.player.animation = "action";
+    this.syncAnimatorToAnimationFrame(frame);
+    return true;
+  }
+
+  updateActionSequence() {
+    if (!this.player.actionSequence || this.player.animation !== "action") return;
+    if (!this.player.animator?.isFinished()) return;
+    this.completeInteractionActionSequence();
+  }
+
+  completeInteractionActionSequence(actionSequence = this.player.actionSequence) {
+    if (!actionSequence) return;
+    const frame = this.player.actionAnimation || actionSequence.frame;
+    this.player.actionSequence = null;
+    this.player.actionAnimation = null;
+    if (frame && actionSequence.sequence?.holdFinalFrame !== false) {
+      this.setIdleHoldFrame(frame, Math.max(0, (frame.frameCount || 1) - 1));
+    }
+    this.player.animation = "idle";
+    const flagOnComplete = actionSequence.sequence?.flagOnComplete;
+    if (flagOnComplete) {
+      this.state.flags ||= {};
+      this.state.flags[flagOnComplete] = true;
+      this.save();
+    }
+    if (actionSequence.verb === VERBS.TAKE && actionSequence.target?.takeItemId) {
+      this.takeTarget(actionSequence.target, { messageKey: actionSequence.sequence?.messageKey });
+      return;
+    }
+    const messageKey = actionSequence.sequence?.messageKey;
+    if (messageKey) this.setStatusMessage(this.t(messageKey));
+  }
+
+  syncAnimatorToAnimationFrame(frame) {
+    if (!this.player.animator || !frame) return;
+    const frameCount = Math.max(1, Number(frame.frameCount) || 1);
+    const initialFrame = Math.max(0, Math.min(Number(frame.initialFrame) || 0, frameCount - 1));
+    const fps = Number(frame.fps) || 1;
+    this.player.animator.frameIndex = initialFrame;
+    this.player.animator.elapsed = initialFrame / fps;
+  }
+
   handleWorldClick(point) {
     const target = findTargetAt(this.currentScene, point);
     if (target) {
@@ -600,6 +718,39 @@ export class Game {
 
   shouldApproachTargetBeforeAction(target, clickPoint = null) {
     if (target.kind === "exit") return false;
+    const actionSequence = this.actionSequenceForTarget(target, this.selectedVerb);
+    const actionApproach = this.actionSequenceApproachPoint(actionSequence);
+    if (actionApproach) {
+      const rawApproach = actionApproach;
+      const approach = nearestWalkablePoint(this.currentScene, rawApproach)
+        || nearestReachableWalkablePoint(this.currentScene, this.player.position, rawApproach);
+      const reachPoint = actionSequence.facingPoint || clickPoint || this.targetReachPoint(target, clickPoint) || rawApproach;
+      if (actionSequence.facing) this.player.facing = actionSequence.facing;
+      else this.facePoint(reachPoint);
+      this.player.interactionDebug = {
+        kind: "target",
+        targetId: target.id,
+        click: clickPoint ? { ...clickPoint } : null,
+        hand: { ...reachPoint },
+        reachOrigin: this.playerReachOriginPoint(),
+        distancePoint: { ...reachPoint },
+        reachDistance: distance(this.playerReachOriginPoint(), reachPoint),
+        feetGoal: rawApproach,
+        feet: approach ? { ...approach } : null
+      };
+      if (!approach || distance(this.player.position, approach) <= TARGET_APPROACH_FEET_CANCEL_DISTANCE) return false;
+      this.player.pendingFacingPoint = { ...reachPoint };
+      this.player.pendingInteraction = {
+        target,
+        verb: this.selectedVerb,
+        hand: reachPoint,
+        approach,
+        actionSequence
+      };
+      this.walkToPoint(approach, reachPoint);
+      this.clearStatusMessage();
+      return true;
+    }
     const reachPoint = this.targetReachPoint(target, clickPoint);
     if (!reachPoint) return false;
     this.facePoint(reachPoint);
@@ -651,7 +802,7 @@ export class Game {
     if (pending.hand) this.facePoint(pending.hand);
     const previousVerb = this.selectedVerb;
     this.selectedVerb = pending.verb;
-    this.performTargetAction(pending.target);
+    this.performTargetAction(pending.target, pending.actionSequence);
     this.selectedVerb = previousVerb;
   }
 
@@ -705,14 +856,18 @@ export class Game {
     const routeDistance = walkPathDistance(this.player.position, route);
     const shortWalk = routeDistance > 0 && routeDistance <= SHORT_WALK_PATH_DISTANCE;
     this.hideSpeechBubble(true);
+    this.player.actionSequence = null;
+    this.player.actionAnimation = null;
     this.movement.walkTo(point, facingPoint, route, { shortWalk });
   }
 
-  performTargetAction(target) {
+  performTargetAction(target, forcedActionSequence = null) {
     if (target.kind === "exit") {
       this.changeScene(target.targetSceneId, target.targetPosition);
       return;
     }
+    const actionSequence = forcedActionSequence || this.actionSequenceForTarget(target, this.selectedVerb);
+    if (actionSequence && this.startInteractionActionSequence(target, this.selectedVerb, actionSequence)) return;
     if (this.selectedVerb === VERBS.LOOK) {
       this.setStatusMessage(this.t(target.lookKey || target.nameKey));
       return;
@@ -738,14 +893,14 @@ export class Game {
     this.setStatusMessage(this.t("msg.no_use"), { reject: true });
   }
 
-  takeTarget(target) {
+  takeTarget(target, options = {}) {
     if (this.inventory.has(target.takeItemId)) {
       this.setStatusMessage(this.t("msg.already_taken"), { reject: true });
       return;
     }
     this.inventory.add(target.takeItemId);
     if (target.flagOnTake) this.state[target.flagOnTake] = true;
-    this.setStatusMessage(this.t("msg.taken"));
+    this.setStatusMessage(this.t(options.messageKey || "msg.taken"));
     this.save();
   }
 
@@ -847,6 +1002,13 @@ export class Game {
     this.renderUi();
   }
 
+  confirmResetAndReload() {
+    const confirmed = globalThis.confirm?.(this.t("ui.reset_confirm")) ?? false;
+    if (!confirmed) return;
+    this.reset();
+    globalThis.location?.reload();
+  }
+
   renderUi() {
     if (this.simpleAnimTest) {
       this.renderSimpleAnimControls();
@@ -872,7 +1034,12 @@ export class Game {
 
   createTopBar() {
     const bar = element("div", "top-bar");
-    bar.append(
+    const left = element("div", "top-bar-left");
+    const right = element("div", "top-bar-right");
+    left.append(
+      button(this.t("ui.reset"), () => this.confirmResetAndReload())
+    );
+    right.append(
       button(this.t("verb.look"), () => (this.selectedVerb = VERBS.LOOK)),
       button(this.t("verb.talk"), () => (this.selectedVerb = VERBS.TALK)),
       button(this.t("verb.use"), () => (this.selectedVerb = VERBS.USE)),
@@ -880,6 +1047,7 @@ export class Game {
       button("BG", () => this.setLanguage("bg")),
       button("EN", () => this.setLanguage("en"))
     );
+    bar.append(left, right);
     return bar;
   }
 

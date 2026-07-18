@@ -40,6 +40,7 @@ const generated = {
     east: { singleWord: [], singleShortSentence: [], singleLongSentence: [] },
     west: { singleWord: [], singleShortSentence: [], singleLongSentence: [] }
   },
+  actionAnimations: { east: {}, west: {} },
   rejectAnimations: { east: [], west: [] },
   animations: {}
 };
@@ -89,10 +90,10 @@ for (const [key, config] of Object.entries(selection.animations || {})) {
     ? normalizedMovementSpeedMultipliers(config.movementSpeedMultipliers, frameRects.length)
     : null;
   const movementSpeedMultipliers = configuredMovementSpeedMultipliers
-    || (role === "idle" || role === "talk" || role === "reject"
+    || (role === "idle" || role === "talk" || role === "reject" || role === "action"
       ? Array.from({ length: frameRects.length }, () => 0)
       : externalWalkMotionCurve(role, frameRects.length, frameStart));
-  const configuredInitialFrame = config.initialFrame ?? (role === "idle" || role === "talk" || role === "reject" ? 0 : 1);
+  const configuredInitialFrame = config.initialFrame ?? (role === "idle" || role === "talk" || role === "reject" || role === "action" ? 0 : 1);
   const initialFrame = Math.max(0, Math.min(Number(configuredInitialFrame) || 0, Math.max(0, frameRects.length - 1)));
   const fps = Number(config.fps) || (role === "idle" ? EXTERNAL_IDLE_DEFAULT_FPS : EXTERNAL_WALK_DEFAULT_FPS);
   const stopExitFrame = role === "loop" ? normalizedFrameIndex(config.stopExitFrame ?? 0, frameRects.length) : undefined;
@@ -102,6 +103,14 @@ for (const [key, config] of Object.entries(selection.animations || {})) {
   const stopRenderOffsetYStart = role === "stop" && Number.isFinite(Number(config.stopRenderOffsetYStart))
     ? Number(config.stopRenderOffsetYStart)
     : undefined;
+  const scale = Number.isFinite(Number(config.scale)) && Number(config.scale) > 0 ? Number(config.scale) : 1;
+  const offsetX = Number.isFinite(Number(config.offsetX)) ? Number(config.offsetX) : 0;
+  const offsetY = Number.isFinite(Number(config.offsetY)) ? Number(config.offsetY) : 0;
+  const offsets = Array.isArray(config.offsets)
+    ? normalizedFrameOffsets(config.offsets, frameRects.length)
+    : undefined;
+  const flipX = typeof config.flipX === "boolean" ? config.flipX : undefined;
+  const flipXWest = typeof config.flipXWest === "boolean" ? config.flipXWest : undefined;
   const metadata = {
     src: `target/external_animation_v1/runtime/${key}.png`,
     sourceSheet: info.sheetImage,
@@ -137,6 +146,11 @@ for (const [key, config] of Object.entries(selection.animations || {})) {
     frameContentBounds,
     frameRects,
     movementSpeedMultipliers,
+    scale,
+    offsetX,
+    offsetY,
+    ...(offsets === undefined ? {} : { offsets }),
+    ...(flipX === undefined ? {} : { flipX }),
     mirroredWest: true
   };
 
@@ -156,6 +170,18 @@ for (const [key, config] of Object.entries(selection.animations || {})) {
     const rejectVariant = { ...metadata, slot, rejectKey: key };
     generated.rejectAnimations.east.push(rejectVariant);
     generated.rejectAnimations.west.push({ ...rejectVariant, mirrored: true, mirrorSource: "east" });
+  } else if (metadata.role === "action") {
+    const actionName = config.action || actionNameFromKey(key) || "default";
+    const actionVariant = { ...metadata, slot, actionKey: key, actionName };
+    generated.actionAnimations.east[actionName] ||= [];
+    generated.actionAnimations.west[actionName] ||= [];
+    generated.actionAnimations.east[actionName].push(actionVariant);
+    generated.actionAnimations.west[actionName].push({
+      ...actionVariant,
+      ...(flipXWest === undefined ? {} : { flipX: flipXWest }),
+      mirrored: true,
+      mirrorSource: "east"
+    });
   } else {
     generated.walkParts.east[metadata.role] = { ...metadata, slot };
     generated.walkParts.west[metadata.role] = { ...metadata, slot, mirrored: true, mirrorSource: "east" };
@@ -181,6 +207,11 @@ for (const [key, config] of Object.entries(selection.animations || {})) {
     ...(stopRenderOffsetYStart === undefined ? {} : { stopRenderOffsetYStart }),
     initialFrame,
     movementSpeedMultipliers,
+    scale,
+    offsetX,
+    offsetY,
+    ...(offsets === undefined ? {} : { offsets }),
+    ...(flipX === undefined ? {} : { flipX }),
     frameWidth: metadata.frameWidth,
     frameHeight: metadata.frameHeight,
     sheetWidth: metadata.sheetWidth,
@@ -193,11 +224,18 @@ function roleFromKey(key) {
   if (key.startsWith("idle_")) return "idle";
   if (key.startsWith("talk_")) return "talk";
   if (key.startsWith("reject_")) return "reject";
+  if (actionNameFromKey(key)) return "action";
   if (key.endsWith("_start")) return "start";
   if (key.endsWith("_short")) return "short";
   if (key.endsWith("_loop")) return "loop";
   if (key.endsWith("_stop")) return "stop";
   return "loop";
+}
+
+function actionNameFromKey(key) {
+  if (key.startsWith("take_")) return "take";
+  if (key === "opens_window" || key.startsWith("opens_window_")) return "opensWindow";
+  return null;
 }
 
 function normalizeTalkSemantic(value, legacyLength) {
@@ -254,6 +292,60 @@ function normalizedMovementSpeedMultipliers(values, frameCount) {
   });
   while (output.length < frameCount) output.push(output.length ? output[output.length - 1] : 0);
   return output.slice(0, frameCount);
+}
+
+function normalizedFrameOffsets(values, frameCount) {
+  const count = Math.max(0, Number(frameCount) || 0);
+  const anchors = [];
+  if (Array.isArray(values)) {
+    values.slice(0, count).forEach((value, index) => {
+      const offset = normalizeOffsetValue(value);
+      if (offset) anchors.push({ index, ...offset });
+    });
+  }
+  if (!anchors.length) return Array.from({ length: count }, () => ({ x: 0, y: 0 }));
+  const output = [];
+  for (let index = 0; index < count; index += 1) {
+    const exact = anchors.find((anchor) => anchor.index === index);
+    if (exact) {
+      output.push({ x: exact.x, y: exact.y });
+      continue;
+    }
+    const previous = anchors.filter((anchor) => anchor.index < index).at(-1);
+    const next = anchors.find((anchor) => anchor.index > index);
+    if (!previous && !next) {
+      output.push({ x: 0, y: 0 });
+    } else if (!previous) {
+      output.push({ x: next.x, y: next.y });
+    } else if (!next) {
+      output.push({ x: previous.x, y: previous.y });
+    } else {
+      const t = (index - previous.index) / Math.max(1, next.index - previous.index);
+      output.push({
+        x: round3(previous.x + (next.x - previous.x) * t),
+        y: round3(previous.y + (next.y - previous.y) * t)
+      });
+    }
+  }
+  return output;
+}
+
+function normalizeOffsetValue(value) {
+  if (Array.isArray(value)) {
+    const x = Number(value[0]);
+    const y = Number(value[1]);
+    return Number.isFinite(x) && Number.isFinite(y) ? { x, y } : null;
+  }
+  if (value && typeof value === "object") {
+    const x = Number(value.x);
+    const y = Number(value.y);
+    return Number.isFinite(x) && Number.isFinite(y) ? { x, y } : null;
+  }
+  return null;
+}
+
+function round3(value) {
+  return Math.round(value * 1000) / 1000;
 }
 
 ensureDir(dirname(GENERATED_MODULE));

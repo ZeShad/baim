@@ -15,8 +15,8 @@
       "width": 1280,
       "height": 720,
       "zIndex": -1,
-      "top": 0,
-      "left": 0
+      "top": 389,
+      "left": 104
     },
     {
       "id": "layer.apartment.bills_on_table",
@@ -24,8 +24,18 @@
       "asset": "billsOnTable",
       "output": "assets/chapter1/scenes/apartment/bills-on-table.png",
       "zIndex": -2,
-      "top": 387,
-      "left": 299
+      "top": 390,
+      "left": 199
+    },
+    {
+      "id": "layer.apartment.window_open",
+      "enabled": true,
+      "asset": "windowOpen",
+      "output": "assets/chapter1/scenes/apartment/window-open.png",
+      "zIndex": 100,
+      "top": 51,
+      "left": 150,
+      "visibleWhenFlag": "apartmentWindowOpen"
     }
   ]
 }

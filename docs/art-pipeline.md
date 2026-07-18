@@ -10,8 +10,12 @@ backgrounds, depth metadata, object layers, and character animation assets.
 - Inspired by 90s LucasArts staging: strong silhouettes, theatrical camera angles, readable props.
 - Balkan provincial satire: dusty streets, bureaucratic beige, old posters, cheap plastic textures,
   smoke-yellowed interiors, absurd official signage.
-- Output target: `1280x720` logical canvas, with production backgrounds authored at `2560x1440`
-  where possible and downsampled by the browser.
+- Runtime scene target: `1280x720` logical canvas.
+- Source/background generation target: keep the highest useful original image under `assets_src/`;
+  AI tools may produce different source resolutions.
+- Runtime backgrounds and runtime scene layers under `assets/chapter1/scenes/` must be prepared at
+  their final canvas-space pixel size before integration. The renderer draws them 1:1 and does not
+  scale them to fit.
 
 ## Scene Construction
 
@@ -44,7 +48,8 @@ Defaults are `top: 0` and `left: 0`; use `right` or `bottom` for layers that sho
 scene edges. Layer placement and z-order are authored in
 `assets_src/chapter1/scenes/<scene>/layers.json` and compiled into
 `src/content/chapter1/sceneLayers.generated.js`; `src/content/chapter1/scenes.js` should only import
-the generated scene layer metadata. See `docs/raster-scene-runtime.md`.
+the generated scene layer metadata. Runtime layers are drawn at their natural PNG size; do not use
+metadata to scale them. See `docs/raster-scene-runtime.md`.
 
 Scene geometry is data, not drawn into the background:
 
@@ -88,6 +93,8 @@ The active Bai Mitko production path starts from the approved model sheet:
   pass.
 - Use clean green-background source images for the active cutout/removal pipeline.
 - Keep source images under `assets_src/characters/` and cleaned runtime images under `assets/`.
+- Character sprite sheets and atlases keep their authored/runtime atlas resolution. Do not force
+  character sprites into `1280x720`; Bai Mitko is scaled in context by the runtime character renderer.
 - Source-to-runtime character cutouts use a deterministic canvas transform: remove green, scale the
   whole source canvas by `CHARACTER_SOURCE_SCALE = 0.6`, then add
   `CHARACTER_CUTOUT_MARGIN_RATIO = 0.15` transparent canvas margin on all sides. Do not crop to each

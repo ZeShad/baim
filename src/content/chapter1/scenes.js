@@ -31,11 +31,21 @@ const rawScenes = [
     ],
     interactables: [
       {
-        id: "hotspot.apartment.wallpaper",
+        id: "window",
         kind: "hotspot",
-        nameKey: "hotspot.wallpaper.name",
-        rect: { x: 25, y: 35, w: 410, h: 245 },
-        lookKey: "look.apartment.wallpaper"
+        nameKey: "hotspot.window.name",
+        rect: { x: 145, y: 75, w: 240, h: 280 },
+        lookKey: "look.apartment.window",
+        actions: {
+          look: {
+            approachCell: { x: 16, y: 23 },
+            facing: "west",
+            animation: "opensWindow",
+            holdFinalFrame: false,
+            flagOnComplete: "apartmentWindowOpen",
+            messageKey: "msg.apartment.window_opened"
+          }
+        }
       },
       {
         id: "hotspot.apartment.accordion",
@@ -49,7 +59,17 @@ const rawScenes = [
         kind: "hotspot",
         nameKey: "item.unpaid_bills.name",
         rect: { x: 265, y: 375, w: 245, h: 95 },
-        lookKey: "item.unpaid_bills.desc"
+        lookKey: "item.unpaid_bills.desc",
+        takeItemId: "item.unpaid_bills",
+        flagOnTake: "hasUnpaidBills",
+        actions: {
+          take: {
+            approach: { x: 390, y: 570 },
+            facing: "west",
+            animation: "take",
+            messageKey: "msg.apartment.unpaid_bills_taken"
+          }
+        }
       },
       {
         id: "hotspot.apartment.mirror",

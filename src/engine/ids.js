@@ -17,7 +17,7 @@ export const DEFAULT_SAVE = {
   influence: 0,
   suspicion: 0,
   publicMood: 50,
-  inventory: ["item.accordion", "item.unpaid_bills", "item.empty_envelope"],
+  inventory: [],
   hasFakeDiploma: false,
   hasSunflowerOil: false,
   hasRakia: false,

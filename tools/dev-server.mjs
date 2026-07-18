@@ -10,7 +10,8 @@ const editorScenes = {
   "scene.chapter1.apartment": {
     walkGeometryPath: "assets_src/chapter1/scenes/apartment/walk-geometry-v1.json",
     objectGeometryPath: "assets_src/chapter1/scenes/apartment/object-geometry-v1.json",
-    layerPath: "assets_src/chapter1/scenes/apartment/layers.json"
+    layerPath: "assets_src/chapter1/scenes/apartment/layers.json",
+    actionAnimationPath: "assets_src/characters/bai_mitko/external_animation_v1/external-animation-selection.json"
   }
 };
 
@@ -27,13 +28,17 @@ const types = {
 
 createServer((req, res) => {
   const url = new URL(req.url || "/", `http://localhost:${port}`);
-  if (req.method === "OPTIONS" && url.pathname === "/__editor/save-scene-geometry") {
+  if (req.method === "OPTIONS" && ["/__editor/save-scene-geometry", "/__editor/fit-action"].includes(url.pathname)) {
     res.writeHead(204, editorCorsHeaders());
     res.end();
     return;
   }
   if (req.method === "POST" && url.pathname === "/__editor/save-scene-geometry") {
     handleEditorSave(req, res);
+    return;
+  }
+  if (req.method === "POST" && url.pathname === "/__editor/fit-action") {
+    handleActionFit(req, res);
     return;
   }
   const requested = decodeURIComponent(url.pathname === "/" ? "/index.html" : url.pathname);
@@ -69,13 +74,39 @@ function handleEditorSave(req, res) {
       validateWalkGeometry(payload.walkGeometry);
       validateObjectGeometry(payload.objectGeometry);
       validateLayerSource(payload.layerSource);
+      if (payload.actionAnimationSource) validateActionAnimationSource(payload.actionAnimationSource);
       writeKnownJson(config.walkGeometryPath, payload.walkGeometry);
       writeKnownJson(config.objectGeometryPath, payload.objectGeometry);
       writeKnownJson(config.layerPath, payload.layerSource);
+      if (payload.actionAnimationSource && config.actionAnimationPath) writeKnownJson(config.actionAnimationPath, payload.actionAnimationSource);
       runBuild("tools/build-walk-masks.js");
       runBuild("tools/build-scene-object-geometry.js");
       runBuild("tools/build-scene-layer-runtime.js");
-      json(res, 200, { ok: true, sceneId: payload.sceneId });
+      if (payload.actionAnimationSource && config.actionAnimationPath) runBuild("tools/build-external-runtime-staging.js");
+      json(res, 200, {
+        ok: true,
+        sceneId: payload.sceneId,
+        actionAnimationSaved: Boolean(payload.actionAnimationSource && config.actionAnimationPath)
+      });
+    } catch (error) {
+      json(res, 400, { ok: false, error: error.message });
+    }
+  });
+}
+
+function handleActionFit(req, res) {
+  let body = "";
+  req.setEncoding("utf8");
+  req.on("data", (chunk) => { body += chunk; });
+  req.on("end", () => {
+    try {
+      const payload = JSON.parse(body || "{}");
+      const actionId = String(payload.actionId || "");
+      if (!/^[a-z0-9_]+$/.test(actionId)) throw new Error("Invalid action animation ID");
+      const result = spawnSync(process.execPath, ["tools/register-external-action.mjs", actionId, "--write"], { cwd: root, encoding: "utf8" });
+      if (result.status !== 0) throw new Error(result.stderr || result.stdout || "action registration failed");
+      runBuild("tools/build-external-runtime-staging.js");
+      json(res, 200, { ok: true, report: JSON.parse(result.stdout) });
     } catch (error) {
       json(res, 400, { ok: false, error: error.message });
     }
@@ -124,6 +155,34 @@ function validateLayerSource(value) {
     for (const key of ["top", "left", "right", "bottom", "width", "height"]) {
       if (layer[key] !== undefined && !Number.isFinite(Number(layer[key]))) throw new Error(`${layer.id} ${key} must be a number`);
     }
+  }
+}
+
+function validateActionAnimationSource(value) {
+  if (!value || typeof value !== "object") throw new Error("actionAnimationSource must be an object");
+  if (!value.animations || typeof value.animations !== "object") throw new Error("actionAnimationSource.animations is required");
+  for (const [key, animation] of Object.entries(value.animations)) {
+    if (!animation || typeof animation !== "object") throw new Error(`${key} animation config must be an object`);
+    for (const field of ["fps", "scale", "offsetX", "offsetY"]) {
+      if (animation[field] !== undefined && !Number.isFinite(Number(animation[field]))) throw new Error(`${key}.${field} must be a number`);
+    }
+    if (animation.offsets !== undefined) validateAnimationOffsets(key, animation.offsets);
+  }
+}
+
+function validateAnimationOffsets(key, offsets) {
+  if (!Array.isArray(offsets)) throw new Error(`${key}.offsets must be an array`);
+  for (let index = 0; index < offsets.length; index += 1) {
+    const entry = offsets[index];
+    if (entry === null) continue;
+    if (Array.isArray(entry)) {
+      if (entry.length < 2 || !Number.isFinite(Number(entry[0])) || !Number.isFinite(Number(entry[1]))) {
+        throw new Error(`${key}.offsets[${index}] must be [x, y]`);
+      }
+      continue;
+    }
+    if (typeof entry === "object" && Number.isFinite(Number(entry.x)) && Number.isFinite(Number(entry.y))) continue;
+    throw new Error(`${key}.offsets[${index}] must be null, [x,y], or {x,y}`);
   }
 }
 

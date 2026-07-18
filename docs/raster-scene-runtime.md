@@ -33,9 +33,9 @@ Layer position fields are explicit runtime placement controls:
 - `top`, `left`, `right`, and `bottom` are measured in the `1280x720` logical canvas space.
 - Defaults are `top: 0` and `left: 0`.
 - Use `right` instead of `left`, or `bottom` instead of `top`, when a manually clipped layer should stay aligned to that side of the scene.
-- `width` and `height` are optional. If omitted, the image's natural pixel size is used.
-- Full-canvas layers should use `top: 0, left: 0` and a `1280x720` alpha image.
-- Trimmed prop layers, such as removable papers on a table, should use their natural image size and explicit placement.
+- Layer images are drawn 1:1 at their natural PNG size. Runtime metadata must not scale them.
+- Full-canvas layers must be prepared as `1280x720` alpha images before they are put under `assets/`.
+- Trimmed prop layers, such as removable papers on a table, keep their natural trimmed image size and explicit placement.
 
 For Bai Mitko's apartment, the current layer categories are:
 
@@ -76,6 +76,18 @@ If a manual black/white mask is provided, `node tools/build-scene-layers.js` can
 background pixels through that mask into an alpha PNG under `assets/`. The build step must stay
 deterministic and must not invent or regenerate masks.
 
+## Runtime Resolution Contract
+
+Scene source assets and runtime scene assets intentionally have different contracts:
+
+- `assets_src/` keeps the available full-resolution source image for backgrounds and manual editing.
+- `assets/chapter1/scenes/<scene>/background.png` is runtime-ready and must be exactly `1280x720`.
+- Full-canvas runtime layers are exactly `1280x720`.
+- Trimmed runtime layers keep their natural PNG dimensions and are positioned in `1280x720` scene coordinates.
+- The renderer draws backgrounds and layers 1:1. It does not scale them to the canvas.
+- Character animation sheets are exempt from this scene-size rule; they keep their authored sprite
+  sheet resolution and are scaled by the character renderer.
+
 ## Walk Routing
 
 Every production scene should use a low-resolution raster `walkMask`.
@@ -89,3 +101,51 @@ Every production scene should use a low-resolution raster `walkMask`.
 
 This gives adventure-game behavior: Bai Mitko walks around blocked floor regions instead of moving in
 a straight line through furniture or foreground props.
+
+## Interaction Action Sequences
+
+Object verbs can define reusable action sequences in scene content. Use this when a verb needs more
+than an immediate text response, for example taking an item from a specific side of a table.
+
+Example:
+
+```js
+actions: {
+  take: {
+    approach: { x: 390, y: 570 },
+    facing: "west",
+    animation: "take",
+    messageKey: "msg.apartment.unpaid_bills_taken"
+  }
+}
+```
+
+Runtime order:
+
+1. Resolve the clicked object and selected verb.
+2. If `actions[verb].approach` exists, route Bai Mitko to that feet position through the walk mask.
+3. When the route finishes, force `facing` when provided.
+4. Play the generated external action animation from `externalAnimationV1.actionAnimations`.
+5. After the animation finishes, apply the normal verb effect, such as adding `takeItemId`.
+6. Show `messageKey` after the action has completed, so speech does not start while walking or acting.
+
+Action animation ZIPs are imported through the same external animation pipeline as walk, idle, talk,
+and reject animations. Keys starting with `take_`, plus named actions such as `opens_window`, are
+generated as role `action` with zero movement multipliers and mirrored west variants.
+
+External animation selection entries may also define render tuning next to `movementSpeedMultipliers`:
+
+```json
+{
+  "scale": 1,
+  "offsetX": 0,
+  "offsetY": 0,
+  "offsets": [[0, 0], null, [6, 3]]
+}
+```
+
+- `scale` defaults to `1` and scales only the rendered animation, not Bai Mitko's feet pivot.
+- `offsetX` and `offsetY` default to `0` and apply to the rendered animation globally.
+- `offsets` is optional per-frame `[x, y]` or `{ "x": 0, "y": 0 }` data.
+- Missing or `null` offset entries are linearly interpolated between authored offset frames during the build step.
+- West mirrored animations invert the final X offset automatically.

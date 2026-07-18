@@ -28,8 +28,17 @@ Use AI-assisted concept art plus paintover/cleanup.
 Production scene resolution:
 
 - Logical game canvas: `1280x720`
-- Source painting: `2560x1440`
-- Optional ultra source for marketing/key art: `3840x2160`
+- Runtime scene background in `assets/`: exactly `1280x720`
+- Runtime full-canvas scene layers in `assets/`: exactly `1280x720`
+- Trimmed runtime prop/foreground layers in `assets/`: natural trimmed PNG size, placed in
+  `1280x720` canvas coordinates
+- Source paintings in `assets_src/`: keep the available/full generated or edited resolution
+- Optional ultra source for marketing/key art: keep separately under `assets_src/`
+
+The browser renderer draws scene backgrounds and scene layers 1:1. It does not scale a generated
+background down at runtime and does not stretch foreground layers to the canvas. Any new background
+request must include a runtime preparation step that resizes/crops/pads the approved source to
+`1280x720` before placing it under `assets/chapter1/scenes/<scene>/background.png`.
 
 Each scene should be delivered as:
 
@@ -71,6 +80,10 @@ the whole source canvas by `CHARACTER_SOURCE_SCALE = 0.6`, then add the shared
 to its silhouette; matching source canvases must keep matching runtime canvas size and stable sprite
 placement. Conversion tools must not create new Bai Mitko poses or directions unless explicitly
 requested.
+
+Character sprite sheets and animation atlases are not normalized to scene canvas size. Keep their
+authored atlas resolution and let the runtime character renderer scale Bai Mitko by scene depth and
+character constants.
 
 Existing Ludo.ai ZIP exports remain under `assets_src/characters/bai_mitko/external_animation_v1/`
 as deferred review/import material. Do not treat them as the current character-design authority.
