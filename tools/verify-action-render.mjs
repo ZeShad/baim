@@ -9,7 +9,10 @@ mkdirSync(outputDir, { recursive: true });
 const browser = await chromium.launch({ headless: true });
 const page = await browser.newPage({ viewport: { width: 1280, height: 720 }, deviceScaleFactor: 1 });
 await page.goto(`${baseUrl}/?edit=1&scene=scene.chapter1.apartment&characterVariant=external_animation_v1&animationFit=1`, { waitUntil: "networkidle" });
-await page.waitForFunction(() => window.__comradeCandidateAnimationFit?.game?.sceneEditor?.actionAnimationSource);
+await page.waitForFunction(() => {
+  const game = window.__comradeCandidateAnimationFit?.game;
+  return game?.inputBound && game?.sceneEditor?.actionAnimationSource;
+});
 const info = await page.evaluate((requestedActionKey) => {
   const game = window.__comradeCandidateAnimationFit.game;
   const editor = game.sceneEditor;
@@ -35,10 +38,22 @@ for (let frameIndex = 0; frameIndex < info.frameCount; frameIndex += 1) {
   await page.evaluate((index) => {
     const game = window.__comradeCandidateAnimationFit.game;
     game.player.animator.frameIndex = index;
+    if (index < game.player.actionAnimation.frameCount - 1) game.updateActionSequence();
     game.renderer.draw();
   }, frameIndex);
   await canvas.screenshot({ path: join(outputDir, `frame-${String(frameIndex).padStart(3, "0")}.png`) });
 }
-writeFileSync(join(outputDir, "report.json"), `${JSON.stringify({ actionKey, ...info, frames: info.frameCount }, null, 2)}\n`);
+const transition = await page.evaluate(() => {
+  const game = window.__comradeCandidateAnimationFit.game;
+  game.completeInteractionActionSequence();
+  game.renderer.draw();
+  return {
+    animation: game.player.animation,
+    frameIndex: game.player.animator.frameIndex,
+    slot: game.player.speechAnimation?.slot || game.player.idleHoldFrame?.slot || null
+  };
+});
+await canvas.screenshot({ path: join(outputDir, "transition-after-action.png") });
+writeFileSync(join(outputDir, "report.json"), `${JSON.stringify({ actionKey, ...info, frames: info.frameCount, transition }, null, 2)}\n`);
 await browser.close();
-console.log(JSON.stringify({ actionKey, ...info, outputDir }, null, 2));
+console.log(JSON.stringify({ actionKey, ...info, transition, outputDir }, null, 2));

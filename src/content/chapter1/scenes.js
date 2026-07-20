@@ -1,5 +1,5 @@
-import { apartmentWalkGeometry } from "./walkMasks.generated.js";
-import { apartmentObjectGeometry } from "./sceneObjectGeometry.generated.js";
+import { apartmentWalkGeometry, villageSquareWalkGeometry } from "./walkMasks.generated.js";
+import { apartmentObjectGeometry, villageSquareObjectGeometry } from "./sceneObjectGeometry.generated.js";
 import { sceneLayerGeometry } from "./sceneLayers.generated.js";
 
 const rawScenes = [
@@ -8,7 +8,7 @@ const rawScenes = [
     titleKey: "scene.chapter1.apartment.title",
     palette: { sky: "#4d6f86", wall: "#735f49", floor: "#2f2a23" },
     movementSpeed: 70,
-    playerStart: { x: 650, y: 520 },
+    playerStart: { x: 1000, y: 565 },
     walkPolygons: apartmentWalkGeometry.walkPolygons,
     walkMask: apartmentWalkGeometry.walkMask,
     perspectiveScale: { horizonY: 430, bottomY: 600, far: 0.76, near: 1.12 },
@@ -16,7 +16,7 @@ const rawScenes = [
       door: { x: 1115, y: 500 },
       mirror: { x: 690, y: 420 },
       table: { x: 415, y: 510 },
-      baiMitkoSpawn: { x: 650, y: 520 }
+      baiMitkoSpawn: { x: 1000, y: 565 }
     },
     foregroundLayers: sceneLayerGeometry["scene.chapter1.apartment"]?.foregroundLayers || [],
     exits: [
@@ -39,10 +39,12 @@ const rawScenes = [
         actions: {
           look: {
             approachCell: { x: 16, y: 23 },
+            requireExactApproach: true,
             facing: "west",
             animation: "opensWindow",
             holdFinalFrame: false,
             flagOnComplete: "apartmentWindowOpen",
+            skipAnimationWhenFlag: "apartmentWindowOpen",
             messageKey: "msg.apartment.window_opened"
           }
         }
@@ -61,12 +63,15 @@ const rawScenes = [
         rect: { x: 265, y: 375, w: 245, h: 95 },
         lookKey: "item.unpaid_bills.desc",
         takeItemId: "item.unpaid_bills",
+        hiddenWhenItemOwned: "item.unpaid_bills",
         flagOnTake: "hasUnpaidBills",
         actions: {
           take: {
             approach: { x: 390, y: 570 },
+            requireExactApproach: true,
             facing: "west",
             animation: "take",
+            effectFrame: 8,
             messageKey: "msg.apartment.unpaid_bills_taken"
           }
         }
@@ -115,20 +120,9 @@ const rawScenes = [
     palette: { sky: "#829aa1", wall: "#8a7657", floor: "#48443a" },
     movementSpeed: 80,
     playerStart: { x: 300, y: 540 },
-    walkPolygons: [
-      {
-        id: "walk.chapter1.square.main",
-        points: [
-          { x: 65, y: 455 },
-          { x: 375, y: 420 },
-          { x: 705, y: 418 },
-          { x: 1095, y: 470 },
-          { x: 1215, y: 585 },
-          { x: 80, y: 585 }
-        ]
-      }
-    ],
-    perspectiveScale: { horizonY: 415, bottomY: 590, far: 0.7, near: 1.1 },
+    walkPolygons: villageSquareWalkGeometry.walkPolygons,
+    walkMask: villageSquareWalkGeometry.walkMask,
+    perspectiveScale: { horizonY: 415, bottomY: 590, far: 0.4, near: 1.1 },
     anchors: {
       baiMitkoSpawn: { x: 300, y: 540 },
       babaBench: { x: 520, y: 455 },
@@ -138,6 +132,7 @@ const rawScenes = [
       mehanaDoor: { x: 120, y: 465 },
       municipalityDoor: { x: 965, y: 450 }
     },
+    foregroundLayers: sceneLayerGeometry["scene.chapter1.village_square"]?.foregroundLayers || [],
     exits: [
       {
         id: "exit.square.to_apartment",
@@ -145,7 +140,7 @@ const rawScenes = [
         nameKey: "exit.to_apartment",
         rect: { x: 10, y: 485, w: 190, h: 100 },
         targetSceneId: "scene.chapter1.apartment",
-        targetPosition: { x: 1060, y: 505 }
+        targetPosition: { x: 1000, y: 565 }
       },
       {
         id: "exit.square.to_mehana",
@@ -286,7 +281,8 @@ const rawScenes = [
 ];
 
 export const scenes = applySceneObjectGeometry(rawScenes, {
-  [apartmentObjectGeometry.sceneId]: apartmentObjectGeometry
+  [apartmentObjectGeometry.sceneId]: apartmentObjectGeometry,
+  [villageSquareObjectGeometry.sceneId]: villageSquareObjectGeometry
 });
 
 function applySceneObjectGeometry(scenes, geometryBySceneId) {

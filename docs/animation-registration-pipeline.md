@@ -21,6 +21,8 @@ The fitter consumes an RGBA reference canvas. The source of that canvas is repla
   layers and stateful props immediately before the action begins.
 - `asset`: set `referencePath` to a named prop/layer render when an action must register to one isolated
   runtime layer.
+- `character`: render a canonical character animation/frame at the action position and register the action
+  against that pose. Use this for character-only actions such as take, where no scene pixels exist in the clip.
 
 The algorithm must not contain apartment or Chapter 1 assumptions. A fit specification uses stable scene,
 object, action, and fixture IDs.
@@ -49,6 +51,11 @@ Each authored action may declare registration metadata in the external-animation
 ROIs use source-frame pixels and are authored approximations, not final offsets. They identify stable evidence
 and exclude moving limbs, transparent padding, and unrelated generated pixels.
 
+`referenceFrame` selects the action frame used for global execution/transition registration. When the best
+visible transition fixture differs from the best stabilization fixture, set `stabilizationReferenceFrame`
+separately. For example, a take clip can register its final frame to the idle head while still stabilizing all
+frames against frame 0 using the lower body.
+
 ## Adding A New Ludo Action
 
 1. Put the Ludo ZIP in `assets_src/characters/bai_mitko/external_animation_v1/input/` and add the animation
@@ -58,6 +65,8 @@ and exclude moving limbs, transparent padding, and unrelated generated pixels.
 3. Add a `registration` block. `stabilizationRoi` covers stable character pixels; `sceneMarkerRects` cover
    only retained scene evidence; `sceneSearchRect` limits the expected object area; `scaleRange` is a narrow
    plausible range rather than a final guessed value.
+   Set `requireExactApproach: true` on the gameplay action sequence whenever the registered fit depends on
+   the authored actor position. This bypasses the normal hand-reach shortcut and walks to the fit anchor.
 4. Run `npm run fit:action -- <animation_id> --write`, or open `?edit=1`, select **Actions**, and press
    **Auto-fit**.
 5. Inspect `target/external_animation_v1/registration/<animation_id>/`: the marker overlay, full action on

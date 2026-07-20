@@ -3,7 +3,7 @@ import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import { Localization } from "../src/engine/Localization.js";
 import { SaveSystem } from "../src/engine/SaveSystem.js";
-import { pointInPolygon, findWalkPath, isWalkable, pointInWalkMask, nearestWalkablePointOnLine, nearestReachableWalkablePoint, nearestWalkablePoint, sceneScale, walkPathDistance } from "../src/engine/SceneGeometry.js";
+import { pointInPolygon, findTargetAt, findWalkPath, isWalkable, pointInWalkMask, nearestWalkablePointOnLine, nearestReachableWalkablePoint, nearestWalkablePoint, sceneScale, walkPathDistance } from "../src/engine/SceneGeometry.js";
 import { DEFAULT_SAVE, VERBS } from "../src/engine/ids.js";
 import { characterHeight } from "../src/engine/CharacterRenderMath.js";
 import { facingFromDelta, MovementSystem, requestWalkStop, eastWestFallbackFacing, motionMultiplierAtFrame, walkMotionMultiplierForFrame } from "../src/engine/MovementSystem.js";
@@ -41,10 +41,20 @@ test("scene preload discovery includes action-timed and persistent raster layers
   assert.ok(paths.includes(assetManifest.scenes["scene.chapter1.apartment"].windowOpen));
 });
 
-test("game start waits for character sprites and current scene layers before input and rendering", async () => {
+test("inventory preload discovery includes every authored high-resolution item icon", () => {
+  const paths = Object.values(assetManifest.items).flatMap((itemAssets) => imageAssetPaths(itemAssets));
+  assert.deepEqual(paths.sort(), [
+    assetManifest.items["item.accordion"].icon,
+    assetManifest.items["item.empty_envelope"].icon,
+    assetManifest.items["item.unpaid_bills"].icon
+  ].sort());
+});
+
+test("game start waits for character sprites, scene layers, and item icons before input and rendering", async () => {
   const game = Object.create(Game.prototype);
   let releaseCharacterAssets;
   let releaseSceneAssets;
+  let releaseItemAssets;
   let inputBindings = 0;
   let animationFrames = 0;
   game.player = { id: "npc.bai_mitko" };
@@ -56,6 +66,9 @@ test("game start waits for character sprites and current scene layers before inp
     },
     preloadSceneAssets() {
       return new Promise((resolve) => { releaseSceneAssets = resolve; });
+    },
+    preloadAllItemAssets() {
+      return new Promise((resolve) => { releaseItemAssets = resolve; });
     }
   };
   game.bindInput = () => { inputBindings += 1; };
@@ -71,6 +84,9 @@ test("game start waits for character sprites and current scene layers before inp
     await Promise.resolve();
     assert.equal(inputBindings, 0);
     releaseSceneAssets([]);
+    await Promise.resolve();
+    assert.equal(inputBindings, 0);
+    releaseItemAssets([]);
     await starting;
     assert.equal(inputBindings, 1);
     assert.equal(animationFrames, 1);
@@ -92,6 +108,14 @@ test("localization falls back to English before returning the key", () => {
   assert.equal(l10n.t("missing.key"), "missing.key");
 });
 
+test("localization preserves conversational message arrays and applies replacements per beat", () => {
+  const l10n = new Localization({
+    bg: { "msg.sequence": ["Първо, {name}.", "После."] },
+    en: { "msg.sequence": ["First, {name}.", "Then."] }
+  }, "bg");
+  assert.deepEqual(l10n.t("msg.sequence", { name: "Митко" }), ["Първо, Митко.", "После."]);
+});
+
 test("scene polygon geometry detects walkable space", () => {
   const square = [
     { x: 0, y: 0 },
@@ -103,6 +127,14 @@ test("scene polygon geometry detects walkable space", () => {
   assert.equal(pointInPolygon({ x: 120, y: 50 }, square), false);
 });
 
+test("scene hit testing excludes unavailable collected targets and can reach objects behind them", () => {
+  const collected = { id: "collected", rect: { x: 0, y: 0, w: 20, h: 20 } };
+  const behind = { id: "behind", rect: { x: 0, y: 0, w: 20, h: 20 } };
+  const scene = { npcs: [], interactables: [collected, behind], exits: [] };
+  assert.equal(findTargetAt(scene, { x: 10, y: 10 }).id, "collected");
+  assert.equal(findTargetAt(scene, { x: 10, y: 10 }, (target) => target.id !== "collected").id, "behind");
+});
+
 test("chapter scenes define explicit walk geometry for production art", () => {
   for (const scene of chapter1.scenes) {
     assert.ok(scene.walkMask?.rows?.length || scene.walkPolygons.length > 0, `${scene.id} needs walk geometry`);
@@ -112,6 +144,8 @@ test("chapter scenes define explicit walk geometry for production art", () => {
 
 test("apartment uses a raster walk mask for walkable floor", () => {
   const scene = chapter1.scenes.find((candidate) => candidate.id === "scene.chapter1.apartment");
+  assert.deepEqual(scene.playerStart, { x: 1000, y: 565 });
+  assert.deepEqual(scene.anchors.baiMitkoSpawn, scene.playerStart);
   assert.equal(scene.walkMask.width, 64);
   assert.equal(scene.walkMask.height, 36);
   assert.equal(scene.walkMask.rows.length, 36);
@@ -120,7 +154,12 @@ test("apartment uses a raster walk mask for walkable floor", () => {
   assert.equal(scene.walkMask.rows.join("").includes("e"), false);
   assert.equal(scene.walkMask.legend.e, undefined);
   assert.ok(scene.foregroundLayers.some((layer) => layer.id === "layer.apartment.table_foreground" && layer.asset === "foregroundTable" && layer.zIndex === -1));
-  assert.ok(scene.foregroundLayers.some((layer) => layer.id === "layer.apartment.bills_on_table" && layer.asset === "billsOnTable" && layer.zIndex === -2 && Number.isFinite(layer.top) && Number.isFinite(layer.left)));
+  assert.ok(scene.foregroundLayers.some((layer) => layer.id === "layer.apartment.bills_on_table"
+    && layer.asset === "billsOnTable"
+    && layer.zIndex === -2
+    && Number.isFinite(layer.top)
+    && Number.isFinite(layer.left)
+    && layer.hiddenWhenItemOwned === "item.unpaid_bills"));
   assert.ok(scene.foregroundLayers.some((layer) => layer.id === "layer.apartment.window_open"
     && layer.asset === "windowOpen"
     && layer.zIndex === 100
@@ -134,6 +173,30 @@ test("apartment uses a raster walk mask for walkable floor", () => {
     && layer.top === 51
     && layer.visibleDuringAction.actionName === "opensWindow"
     && layer.visibleDuringAction.fromFrame === 10));
+});
+
+test("village square uses the shared raster, object, and layer scene pipeline", () => {
+  const scene = chapter1.scenes.find((candidate) => candidate.id === "scene.chapter1.village_square");
+  assert.equal(scene.walkMask.width, 64);
+  assert.equal(scene.walkMask.height, 36);
+  assert.equal(scene.walkMask.rows.length, 36);
+  assert.equal(scene.walkMask.rows.every((row) => row.length === 64), true);
+  assert.equal(scene.walkMask.rows.join("").includes("c"), true);
+  assert.deepEqual(scene.foregroundLayers, []);
+  for (const object of [...scene.exits, ...scene.interactables, ...scene.npcs]) {
+    assert.ok(object.polygon?.length >= 3, `${object.id} needs generated editor geometry`);
+  }
+});
+
+test("village square depth scaling shrinks Bai Mitko at the distant bench without changing foreground size", () => {
+  const scene = chapter1.scenes.find((candidate) => candidate.id === "scene.chapter1.village_square");
+  const definition = characterDefinitions["npc.bai_mitko"];
+  const benchHeight = characterHeight(definition, scene, scene.anchors.babaBench);
+  const foregroundHeight = characterHeight(definition, scene, { x: 640, y: scene.perspectiveScale.bottomY });
+  assert.ok(benchHeight >= 150 && benchHeight <= 155);
+  assert.equal(foregroundHeight, 300);
+  assert.equal(sceneScale(scene, { x: 640, y: scene.perspectiveScale.horizonY }), 0.4);
+  assert.equal(sceneScale(scene, { x: 640, y: scene.perspectiveScale.bottomY }), 1.1);
 });
 
 test("apartment perspective scale is continuous across raster mask rows", () => {
@@ -238,6 +301,14 @@ test("chapter scene movement speeds are tuned for external walk animation", () =
   assert.equal(speeds["scene.chapter1.apartment"], 70);
   assert.equal(speeds["scene.chapter1.village_square"], 80);
   assert.equal(speeds["scene.chapter1.mehana"], 75);
+});
+
+test("returning from the square places Bai Mitko on the apartment door rug", () => {
+  const square = chapter1.scenes.find((scene) => scene.id === "scene.chapter1.village_square");
+  const apartment = chapter1.scenes.find((scene) => scene.id === "scene.chapter1.apartment");
+  const returnExit = square.exits.find((exit) => exit.id === "exit.square.to_apartment");
+
+  assert.deepEqual(returnExit.targetPosition, apartment.anchors.baiMitkoSpawn);
 });
 
 test("runtime movement speed multiplier affects distance over time only", () => {
@@ -384,10 +455,13 @@ test("apartment bills define a take action sequence with approach, facing, anima
   const scene = chapter1.scenes.find((candidate) => candidate.id === "scene.chapter1.apartment");
   const bills = scene.interactables.find((candidate) => candidate.id === "hotspot.apartment.unpaid_bills");
   assert.equal(bills.takeItemId, "item.unpaid_bills");
+  assert.equal(bills.hiddenWhenItemOwned, "item.unpaid_bills");
   assert.equal(bills.flagOnTake, "hasUnpaidBills");
   assert.deepEqual(bills.actions.take.approach, { x: 390, y: 570 });
+  assert.equal(bills.actions.take.requireExactApproach, true);
   assert.equal(bills.actions.take.facing, "west");
   assert.equal(bills.actions.take.animation, "take");
+  assert.equal(bills.actions.take.effectFrame, 8);
   assert.equal(bills.actions.take.messageKey, "msg.apartment.unpaid_bills_taken");
 });
 
@@ -396,10 +470,12 @@ test("apartment window defines a look action sequence from raster cell to west-f
   const window = scene.interactables.find((candidate) => candidate.id === "window");
   assert.equal(window.nameKey, "hotspot.window.name");
   assert.deepEqual(window.actions.look.approachCell, { x: 16, y: 23 });
+  assert.equal(window.actions.look.requireExactApproach, true);
   assert.equal(window.actions.look.facing, "west");
   assert.equal(window.actions.look.animation, "opensWindow");
   assert.equal(window.actions.look.holdFinalFrame, false);
   assert.equal(window.actions.look.flagOnComplete, "apartmentWindowOpen");
+  assert.equal(window.actions.look.skipAnimationWhenFlag, "apartmentWindowOpen");
   assert.equal(window.actions.look.messageKey, "msg.apartment.window_opened");
 });
 
@@ -411,6 +487,16 @@ test("stateful scene layers stay hidden until their save flag is set", () => {
   renderer.game.state.flags.apartmentWindowOpen = true;
   assert.equal(renderer.sceneLayerVisible(layer), true);
   assert.equal(renderer.sceneLayerVisible({}), true);
+});
+
+test("collectible scene layers hide as soon as their item is owned", () => {
+  const renderer = Object.create(Renderer.prototype);
+  const owned = new Set();
+  const layer = { hiddenWhenItemOwned: "item.unpaid_bills" };
+  renderer.game = { state: { flags: {} }, inventory: { has: (itemId) => owned.has(itemId) } };
+  assert.equal(renderer.sceneLayerVisible(layer), true);
+  owned.add("item.unpaid_bills");
+  assert.equal(renderer.sceneLayerVisible(layer), false);
 });
 
 test("action-timed scene layers appear on their configured animation frame only", () => {
@@ -446,6 +532,38 @@ test("action completion reveals and persists its stateful scene layer flag", () 
   assert.equal(game.state.flags.apartmentWindowOpen, true);
   assert.equal(saves, 1);
   assert.equal(heldFrames, 0);
+});
+
+test("take action applies inventory and layer state on its configured contact frame", () => {
+  const game = Object.create(Game.prototype);
+  const owned = new Set();
+  let saves = 0;
+  const actionSequence = {
+    target: { takeItemId: "item.unpaid_bills", flagOnTake: "hasUnpaidBills" },
+    verb: VERBS.TAKE,
+    sequence: { effectFrame: 8 }
+  };
+  game.inventory = {
+    has: (itemId) => owned.has(itemId),
+    add: (itemId) => owned.add(itemId)
+  };
+  game.state = {};
+  game.save = () => { saves += 1; };
+  game.player = {
+    animation: "action",
+    actionSequence,
+    animator: { frameIndex: 7, isFinished: () => false }
+  };
+
+  game.updateActionSequence();
+  assert.equal(owned.has("item.unpaid_bills"), false);
+  game.player.animator.frameIndex = 8;
+  game.updateActionSequence();
+  assert.equal(owned.has("item.unpaid_bills"), true);
+  assert.equal(game.state.hasUnpaidBills, true);
+  assert.equal(saves, 1);
+  game.updateActionSequence();
+  assert.equal(saves, 1);
 });
 
 test("action sequence approach cells resolve to walk-mask world coordinates", () => {
@@ -1259,6 +1377,65 @@ test("near object approach does not start tiny corrective walk", () => {
   assert.ok(distance(game.player.position, game.player.interactionDebug.feet) <= 80);
 });
 
+test("registered action requiring exact approach walks to its anchor even from hand reach", () => {
+  const scene = chapter1.scenes.find((candidate) => candidate.id === "scene.chapter1.apartment");
+  const target = scene.interactables.find((candidate) => candidate.id === "window");
+  const game = Object.create(Game.prototype);
+  game.currentScene = scene;
+  game.selectedVerb = "look";
+  game.player = {
+    position: { x: 350, y: 470 },
+    target: null,
+    animation: "idle",
+    facing: "west",
+    pendingInteraction: null
+  };
+  game.walkToPoint = (point, facingPoint) => {
+    game.walkedTo = { ...point };
+    game.walkFacingPoint = { ...facingPoint };
+  };
+  game.clearStatusMessage = () => {};
+
+  const shouldApproach = game.shouldApproachTargetBeforeAction(target, { x: 300, y: 250 });
+
+  assert.equal(shouldApproach, true);
+  assert.deepEqual(game.walkedTo, { x: 330, y: 470 });
+  assert.deepEqual(game.player.pendingInteraction.approach, { x: 330, y: 470 });
+  assert.equal(game.player.pendingInteraction.actionSequence.requireExactApproach, true);
+});
+
+test("looking at an already-open window still approaches but skips animation and repeats its talk", () => {
+  const scene = chapter1.scenes.find((candidate) => candidate.id === "scene.chapter1.apartment");
+  const target = scene.interactables.find((candidate) => candidate.id === "window");
+  const game = Object.create(Game.prototype);
+  game.currentScene = scene;
+  game.selectedVerb = "look";
+  game.state = { flags: { apartmentWindowOpen: true } };
+  game.player = {
+    position: { x: 900, y: 550 },
+    target: null,
+    animation: "idle",
+    facing: "east",
+    pendingInteraction: null
+  };
+  game.inventory = { has: () => false };
+  game.t = (key) => `translated:${key}`;
+  game.setStatusMessage = (message) => { game.spokenMessage = message; };
+  game.walkToPoint = (point) => { game.walkedTo = { ...point }; };
+  game.actionAnimationForSequence = () => { throw new Error("open window animation should not replay"); };
+
+  game.handleTarget(target, { x: 300, y: 250 });
+
+  assert.deepEqual(game.walkedTo, { x: 330, y: 470 });
+  assert.deepEqual(game.player.pendingInteraction.approach, { x: 330, y: 470 });
+  assert.equal(game.player.facing, "west");
+  game.player.position = { x: 330, y: 470 };
+  game.resolvePendingInteraction();
+  assert.equal(game.player.pendingInteraction, null);
+  assert.equal(game.player.animation, "idle");
+  assert.equal(game.spokenMessage, "translated:msg.apartment.window_opened");
+});
+
 test("rect target approach uses click point as hand target and left-middle fallback without click", () => {
   const target = { rect: { x: 640, y: 155, w: 140, h: 220 } };
   const game = Object.create(Game.prototype);
@@ -1368,6 +1545,28 @@ test("target action turns toward hand point when no movement is needed", () => {
   assert.equal(game.message, "look.apartment.mirror");
 });
 
+test("speech bubble layout stays in 1280 by 720 virtual coordinates across viewport scales", () => {
+  const game = Object.create(Game.prototype);
+  game.currentScene = chapter1.scenes.find((scene) => scene.id === "scene.chapter1.apartment");
+  game.player = { position: { x: 650, y: 520 }, facing: "west" };
+  game.speechBubble = {
+    metrics: { width: 350, height: 90, maxWidth: 350, maxHeight: 170 }
+  };
+  game.canvas = {
+    width: 1280,
+    height: 720,
+    getBoundingClientRect: () => ({ width: 640, height: 360 })
+  };
+
+  const smallViewportLayout = game.speechBubblePosition();
+  game.canvas.getBoundingClientRect = () => ({ width: 3840, height: 2160 });
+  const largeViewportLayout = game.speechBubblePosition();
+
+  assert.deepEqual(largeViewportLayout, smallViewportLayout);
+  assert.equal(game.speechBubble.debug.bubbleRect.w, 350);
+  assert.equal(game.speechBubble.debug.bubbleRect.h, 90);
+});
+
 test("speech bubble messages start talk or reject animation variants", () => {
   const game = Object.create(Game.prototype);
   game.usesExternalCharacterAnimation = () => true;
@@ -1433,6 +1632,79 @@ test("speech bubble defers during walking and appears when idle", () => {
   assert.equal(game.speechBubble.text, "after walk");
   assert.equal(game.player.animation, "talk");
   assert.equal(game.player.animator.played.animation, "talk");
+});
+
+test("speech message arrays keep one bubble while text crossfades and the bubble resizes", () => {
+  const game = Object.create(Game.prototype);
+  game.usesExternalCharacterAnimation = () => false;
+  game.renderUi = () => {};
+  game.measureSpeechBubble = () => ({ width: 220, height: 90, maxWidth: 350, maxHeight: 200 });
+  game.player = {
+    target: null,
+    animation: "idle",
+    speaking: false,
+    speechAnimation: null
+  };
+  game.message = "";
+  game.speechBubble = null;
+  game.pendingSpeechBubble = null;
+  game.speechBubbleQueue = [];
+  game.speechBubblePauseRemaining = 0;
+  game.speechBubbleSequence = 0;
+
+  game.setStatusMessage(["Mmmm...", "Smells like elections.", "Someone aired out the coalition."]);
+
+  assert.equal(game.speechBubble.text, "Mmmm...");
+  assert.deepEqual(game.speechBubbleQueue.map((beat) => beat.message), [
+    "Smells like elections.",
+    "Someone aired out the coalition."
+  ]);
+
+  const bubbleId = game.speechBubble.id;
+  game.speechBubble.phase = "visible";
+  game.speechBubble.elapsed = game.speechBubble.visibleSeconds;
+  game.updateSpeechBubble(0);
+  assert.equal(game.speechBubble.id, bubbleId);
+  assert.equal(game.speechBubble.text, "Mmmm...");
+  assert.equal(game.speechBubble.phase, "visible");
+  game.updateSpeechBubble(0.2);
+  assert.equal(game.speechBubble.text, "Mmmm...");
+  game.updateSpeechBubble(0.2);
+  assert.equal(game.speechBubble.id, bubbleId);
+  assert.equal(game.speechBubble.text, "Mmmm...");
+  assert.equal(game.speechBubble.phase, "beat-out");
+  game.updateSpeechBubble(0.2);
+  assert.equal(game.speechBubble.id, bubbleId);
+  assert.equal(game.speechBubble.text, "Smells like elections.");
+  assert.equal(game.speechBubble.phase, "beat-in");
+  game.updateSpeechBubble(0.2);
+  assert.equal(game.speechBubble.phase, "visible");
+  assert.equal(game.speechBubbleQueue.length, 1);
+});
+
+test("speech bubble waits for its talk animation to finish before fading out", () => {
+  const game = Object.create(Game.prototype);
+  let animationFinished = false;
+  game.renderUi = () => {};
+  game.player = {
+    target: null,
+    animation: "talk",
+    speechAnimation: { slot: "external_talk_east_long_1" },
+    animator: { isFinished: () => animationFinished }
+  };
+  game.speechBubble = {
+    text: "A short line with a longer gesture.",
+    phase: "visible",
+    elapsed: 10,
+    visibleSeconds: 1
+  };
+
+  game.updateSpeechBubble(0.1);
+  assert.equal(game.speechBubble.phase, "visible");
+
+  animationFinished = true;
+  game.updateSpeechBubble(0.1);
+  assert.equal(game.speechBubble.phase, "out");
 });
 
 test("talk animation semantic heuristic classifies text shape", () => {
@@ -1699,6 +1971,24 @@ test("open-window action carries an accepted reproducible registration fit", () 
   assert.equal(externalAnimationV1.actionAnimations.east.opensWindow[0].scale, config.scale);
   assert.equal(externalAnimationV1.actionAnimations.east.opensWindow[0].offsetX, config.offsetX);
   assert.equal(externalAnimationV1.actionAnimations.east.opensWindow[0].offsetY, config.offsetY);
+});
+
+test("take action carries an accepted character-fixture registration fit", () => {
+  const selection = JSON.parse(readFileSync("assets_src/characters/bai_mitko/external_animation_v1/external-animation-selection.json", "utf8"));
+  const config = selection.animations.take_east_forward_default;
+  const fit = config.registration.lastFit;
+  const runtime = externalAnimationV1.actionAnimations.east.take[0];
+  assert.equal(config.registration.referenceProvider, "character");
+  assert.equal(config.registration.referenceFrame, 15);
+  assert.equal(config.registration.stabilizationReferenceFrame, 0);
+  assert.equal(config.registration.stabilizationFixture, "bai_mitko_lower_body");
+  assert.equal(config.registration.executionFixture, "bai_mitko_head_top_center");
+  assert.equal(config.offsets.length, runtime.frameCount);
+  assert.ok(fit.score >= config.registration.acceptance.minimumGlobalScore);
+  assert.ok(fit.minimumFrameScore >= config.registration.acceptance.minimumFrameScore);
+  assert.equal(runtime.scale, config.scale);
+  assert.equal(runtime.offsetX, config.offsetX);
+  assert.equal(runtime.offsetY, config.offsetY);
 });
 
 test("external animation chroma key converts green amount into soft alpha", () => {

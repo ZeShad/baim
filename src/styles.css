@@ -75,6 +75,209 @@ button:hover {
   padding: 0 10px;
 }
 
+.game-hud {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  pointer-events: none;
+  color: #f5ead5;
+}
+
+.hud-meters,
+.hud-verb,
+.inventory-dock-panel {
+  position: absolute;
+  border: 1px solid rgba(177, 146, 94, 0.42);
+  background: linear-gradient(180deg, rgba(40, 32, 23, 0.84), rgba(20, 17, 13, 0.76));
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.32), inset 0 1px rgba(255, 244, 216, 0.08);
+  backdrop-filter: blur(5px) saturate(0.85);
+}
+
+.hud-meters {
+  left: 18px;
+  bottom: 18px;
+  width: 292px;
+  display: grid;
+  gap: 8px;
+  padding: 11px 13px;
+  border-radius: 11px;
+}
+
+.hud-meter {
+  display: grid;
+  grid-template-columns: 128px 1fr;
+  align-items: center;
+  gap: 9px;
+  min-height: 16px;
+}
+
+.hud-meter-label {
+  overflow: hidden;
+  color: #eee3d1;
+  font-size: 13px;
+  line-height: 1.1;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.hud-meter-track {
+  height: 11px;
+  overflow: hidden;
+  border: 1px solid rgba(190, 163, 118, 0.65);
+  border-radius: 999px;
+  background: rgba(15, 13, 10, 0.72);
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.6);
+}
+
+.hud-meter-fill {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: #69b6ff;
+  box-shadow: 0 0 8px rgba(105, 182, 255, 0.42);
+}
+
+.hud-meter.suspicion .hud-meter-fill {
+  background: #e36767;
+  box-shadow: 0 0 8px rgba(227, 103, 103, 0.38);
+}
+
+.hud-meter.public-mood .hud-meter-fill {
+  background: #8ccf73;
+  box-shadow: 0 0 8px rgba(140, 207, 115, 0.4);
+}
+
+.hud-verb {
+  left: 50%;
+  bottom: 20px;
+  display: block;
+  min-height: 38px;
+  min-width: 112px;
+  padding: 8px 18px;
+  border-radius: 999px;
+  color: #fff2d8;
+  font-size: 17px;
+  font-weight: 600;
+  transform: translateX(-50%);
+  white-space: nowrap;
+  pointer-events: auto;
+}
+
+.hud-verb:hover,
+.hud-verb:focus-visible {
+  border-color: rgba(231, 192, 121, 0.82);
+  background: linear-gradient(180deg, rgba(62, 48, 31, 0.94), rgba(28, 22, 15, 0.9));
+  color: #fff2d8;
+  outline: none;
+}
+
+.inventory-dock-panel {
+  right: 18px;
+  bottom: 14px;
+  width: max-content;
+  max-width: 760px;
+  padding: 8px;
+  overflow: visible;
+  border-radius: 18px;
+  pointer-events: auto;
+}
+
+.inventory-dock {
+  display: flex;
+  flex-wrap: wrap-reverse;
+  align-items: flex-end;
+  justify-content: flex-end;
+  gap: 8px;
+  max-width: 742px;
+}
+
+.inventory-item {
+  position: relative;
+  flex: 0 0 78px;
+  width: 78px;
+  height: 78px;
+  min-height: 78px;
+  padding: 0;
+  border: 1px solid rgba(200, 169, 113, 0.58);
+  border-radius: 15px;
+  background: radial-gradient(circle at 50% 32%, rgba(255, 245, 216, 0.14), rgba(43, 34, 24, 0.82));
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.38), inset 0 1px rgba(255, 249, 228, 0.12);
+  transform-origin: 50% 100%;
+  transition: transform 180ms cubic-bezier(0.2, 0.8, 0.2, 1), border-color 160ms ease,
+    filter 160ms ease, box-shadow 160ms ease;
+  cursor: pointer;
+}
+
+.inventory-item img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  filter: drop-shadow(0 5px 5px rgba(0, 0, 0, 0.38));
+  pointer-events: none;
+}
+
+.inventory-item:hover,
+.inventory-item:focus-visible {
+  z-index: 3;
+  border-color: rgba(246, 208, 137, 0.95);
+  background: radial-gradient(circle at 50% 28%, rgba(255, 247, 217, 0.24), rgba(55, 42, 27, 0.94));
+  box-shadow: 0 13px 23px rgba(0, 0, 0, 0.46), 0 0 0 2px rgba(222, 181, 106, 0.28);
+  filter: saturate(1.08) brightness(1.06);
+  outline: none;
+  transform: translateY(-13px) scale(1.28);
+}
+
+.inventory-item:has(+ .inventory-item:hover),
+.inventory-item:has(+ .inventory-item:focus-visible),
+.inventory-item:hover + .inventory-item,
+.inventory-item:focus-visible + .inventory-item {
+  z-index: 2;
+  transform: translateY(-5px) scale(1.1);
+}
+
+.inventory-tooltip {
+  position: absolute;
+  left: 50%;
+  bottom: calc(100% + 8px);
+  z-index: 5;
+  max-width: 190px;
+  padding: 6px 9px;
+  border: 1px solid rgba(190, 153, 94, 0.7);
+  border-radius: 7px;
+  background: rgba(28, 22, 16, 0.96);
+  color: #fff0d0;
+  font-size: 13px;
+  line-height: 1.2;
+  opacity: 0;
+  pointer-events: none;
+  transform: translate(-50%, 5px) scale(0.8);
+  transition: opacity 120ms ease, transform 150ms ease;
+  white-space: nowrap;
+}
+
+.inventory-item:hover .inventory-tooltip,
+.inventory-item:focus-visible .inventory-tooltip {
+  opacity: 1;
+  transform: translate(-50%, 0) scale(0.78);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .inventory-item,
+  .inventory-tooltip {
+    transition-duration: 1ms;
+  }
+
+  .inventory-item:hover,
+  .inventory-item:focus-visible,
+  .inventory-item:has(+ .inventory-item:hover),
+  .inventory-item:has(+ .inventory-item:focus-visible),
+  .inventory-item:hover + .inventory-item,
+  .inventory-item:focus-visible + .inventory-item {
+    transform: none;
+  }
+}
+
 .panel {
   position: absolute;
   pointer-events: auto;
@@ -152,13 +355,27 @@ button:hover {
 
 .speech-bubble {
   position: absolute;
-  min-width: min(200px, calc(100vw - 48px));
-  max-height: min(170px, 32vh);
+  min-width: 200px;
+  max-height: 170px;
   /*transform: translate(-50%, -100%);*/
   pointer-events: none;
   color: #4b3625;
   filter: drop-shadow(0 14px 22px rgba(0, 0, 0, 0.34));
   opacity: 1;
+  box-sizing: border-box;
+}
+
+.speech-bubble.beat-resizing {
+  transition: width 400ms ease-in-out, height 400ms ease-in-out, left 400ms ease-in-out,
+    right 400ms ease-in-out, bottom 400ms ease-in-out;
+}
+
+.speech-bubble.phase-beat-out .speech-text {
+  animation: speech-text-out 200ms ease-in both;
+}
+
+.speech-bubble.phase-beat-in .speech-text {
+  animation: speech-text-in 200ms ease-out both;
 }
 
 .speech-bubble.phase-in {
@@ -176,6 +393,8 @@ button:hover {
   padding: 12px 16px;
   overflow: visible;
   filter: url("#speech-goo");
+  box-sizing: border-box;
+  height: 100%;
 }
 
 .speech-blob-top,
@@ -206,7 +425,7 @@ button:hover {
 .speech-text {
   position: relative;
   z-index: 2;
-  max-height: min(102px, 22vh);
+  max-height: 102px;
   overflow: hidden;
   padding: 0 12px;
   color: #5e513e;
@@ -309,6 +528,24 @@ button:hover {
   }
   to {
     opacity: 0;
+  }
+}
+
+@keyframes speech-text-out {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes speech-text-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
   }
 }
 

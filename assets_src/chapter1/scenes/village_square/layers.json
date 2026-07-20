@@ -1,0 +1,9 @@
+{
+  "sceneId": "scene.chapter1.village_square",
+  "sourceBackground": "assets/chapter1/scenes/village_square/background.png",
+  "zScale": {
+    "frontmost": 0,
+    "horizon": 100
+  },
+  "layers": []
+}

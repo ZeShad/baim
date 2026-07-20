@@ -297,9 +297,10 @@ export function sceneScale(scene, point) {
   return zone.far + t * (zone.near - zone.far);
 }
 
-export function findTargetAt(scene, point) {
+export function findTargetAt(scene, point, targetAvailable = () => true) {
   const targets = [...scene.npcs, ...scene.interactables, ...scene.exits];
   return targets.find((target) => {
+    if (!targetAvailable(target)) return false;
     if (target.polygon) return pointInPolygon(point, target.polygon);
     return pointInRect(point, target.rect);
   });

@@ -13,7 +13,7 @@ export const characterDefinitions = {
       verticalDirectionBias: 1.6,
       sceneHeights: {
         "scene.chapter1.apartment": { near: 335, far: 270 },
-        "scene.chapter1.village_square": { near: 300, far: 190 },
+        "scene.chapter1.village_square": { near: 300, far: 109 },
         "scene.chapter1.mehana": { near: 285, far: 230 }
       }
     },

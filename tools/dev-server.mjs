@@ -12,6 +12,11 @@ const editorScenes = {
     objectGeometryPath: "assets_src/chapter1/scenes/apartment/object-geometry-v1.json",
     layerPath: "assets_src/chapter1/scenes/apartment/layers.json",
     actionAnimationPath: "assets_src/characters/bai_mitko/external_animation_v1/external-animation-selection.json"
+  },
+  "scene.chapter1.village_square": {
+    walkGeometryPath: "assets_src/chapter1/scenes/village_square/walk-geometry-v1.json",
+    objectGeometryPath: "assets_src/chapter1/scenes/village_square/object-geometry-v1.json",
+    layerPath: "assets_src/chapter1/scenes/village_square/layers.json"
   }
 };
 
@@ -71,22 +76,39 @@ function handleEditorSave(req, res) {
       const payload = JSON.parse(body || "{}");
       const config = editorScenes[payload.sceneId];
       if (!config) throw new Error(`Scene is not editor-configured: ${payload.sceneId}`);
-      validateWalkGeometry(payload.walkGeometry);
-      validateObjectGeometry(payload.objectGeometry);
-      validateLayerSource(payload.layerSource);
-      if (payload.actionAnimationSource) validateActionAnimationSource(payload.actionAnimationSource);
-      writeKnownJson(config.walkGeometryPath, payload.walkGeometry);
-      writeKnownJson(config.objectGeometryPath, payload.objectGeometry);
-      writeKnownJson(config.layerPath, payload.layerSource);
-      if (payload.actionAnimationSource && config.actionAnimationPath) writeKnownJson(config.actionAnimationPath, payload.actionAnimationSource);
-      runBuild("tools/build-walk-masks.js");
-      runBuild("tools/build-scene-object-geometry.js");
-      runBuild("tools/build-scene-layer-runtime.js");
-      if (payload.actionAnimationSource && config.actionAnimationPath) runBuild("tools/build-external-runtime-staging.js");
+      const saveScope = String(payload.saveScope || "all");
+      if (!["walk", "objects", "layers", "actions", "all"].includes(saveScope)) throw new Error(`Unknown editor save scope: ${saveScope}`);
+      const savedScopes = [];
+      if (saveScope === "walk" || saveScope === "all") {
+        validateWalkGeometry(payload.walkGeometry);
+        writeKnownJson(config.walkGeometryPath, payload.walkGeometry);
+        runBuild("tools/build-walk-masks.js");
+        savedScopes.push("walk");
+      }
+      if (saveScope === "objects" || saveScope === "all") {
+        validateObjectGeometry(payload.objectGeometry);
+        writeKnownJson(config.objectGeometryPath, payload.objectGeometry);
+        runBuild("tools/build-scene-object-geometry.js");
+        savedScopes.push("objects");
+      }
+      if (saveScope === "layers" || saveScope === "all") {
+        validateLayerSource(payload.layerSource);
+        writeKnownJson(config.layerPath, payload.layerSource);
+        runBuild("tools/build-scene-layer-runtime.js");
+        savedScopes.push("layers");
+      }
+      if (saveScope === "actions" || (saveScope === "all" && payload.actionAnimationSource)) {
+        if (!config.actionAnimationPath) throw new Error(`Scene has no action animation source: ${payload.sceneId}`);
+        validateActionAnimationSource(payload.actionAnimationSource);
+        writeKnownJson(config.actionAnimationPath, payload.actionAnimationSource);
+        runBuild("tools/build-external-runtime-staging.js");
+        savedScopes.push("actions");
+      }
       json(res, 200, {
         ok: true,
         sceneId: payload.sceneId,
-        actionAnimationSaved: Boolean(payload.actionAnimationSource && config.actionAnimationPath)
+        savedScopes,
+        actionAnimationSaved: savedScopes.includes("actions")
       });
     } catch (error) {
       json(res, 400, { ok: false, error: error.message });

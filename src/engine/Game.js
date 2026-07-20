@@ -26,6 +26,7 @@ const IDLE_VARIANT_COMBO_PROBABILITY = 0.35;
 const IDLE_VARIANT_FOLLOWUP_IDLE5_PROBABILITY = 0.7;
 const TARGET_INTERACTION_DISTANCE = 100;
 const TARGET_APPROACH_FEET_CANCEL_DISTANCE = 80;
+const EXACT_ACTION_APPROACH_EPSILON = 4;
 const TARGET_HAND_TO_FEET_X = 90;
 const TARGET_HAND_TO_FEET_Y = 155;
 const TARGET_REACH_ORIGIN_HEIGHT_RATIO = 0.58;
@@ -34,14 +35,15 @@ export const SHORT_WALK_PATH_DISTANCE = 400;
 const TALK_SINGLE_WORD_MAX_CHARS = 18;
 const TALK_LONG_SENTENCE_MIN_CHARS = 72;
 const SPEECH_BUBBLE_MAX_WIDTH_PX = 350;
-const SPEECH_BUBBLE_VIEWPORT_MARGIN_X_PX = 20;
-const SPEECH_BUBBLE_MAX_HEIGHT_PX = 200;
-const SPEECH_BUBBLE_MAX_HEIGHT_VIEWPORT_RATIO = 0.6;
+const SPEECH_BUBBLE_MAX_HEIGHT_PX = 170;
 const SPEECH_BUBBLE_WEST_OFFSET_X_FULL_SIZE = 40;
 const SPEECH_BUBBLE_WEST_OFFSET_Y_FULL_SIZE = -75;
 const SPEECH_BUBBLE_WEST_TAIL_END_FROM_RIGHT_PX = 72;
 const SPEECH_BUBBLE_TAIL_END_FROM_BOTTOM_PX = 26;
 const SPEECH_BUBBLE_FADE_SECONDS = 0.3;
+const SPEECH_BUBBLE_BEAT_PAUSE_SECONDS = 0.35;
+const SPEECH_BUBBLE_BEAT_TEXT_FADE_SECONDS = 0.2;
+const SPEECH_BUBBLE_BEAT_RESIZE_SECONDS = SPEECH_BUBBLE_BEAT_TEXT_FADE_SECONDS * 2;
 const SPEECH_BUBBLE_MIN_VISIBLE_SECONDS = 1.4;
 const SPEECH_BUBBLE_MAX_VISIBLE_SECONDS = 6;
 const SPEECH_BUBBLE_CHARS_PER_SECOND = 18;
@@ -68,6 +70,8 @@ export class Game {
     this.message = this.t("ui.hint");
     this.speechBubble = null;
     this.pendingSpeechBubble = null;
+    this.speechBubbleQueue = [];
+    this.speechBubblePauseRemaining = 0;
     this.speechBubbleSequence = 0;
     this.currentScene = this.resolveInitialScene();
     this.player = {
@@ -129,7 +133,8 @@ export class Game {
   async start() {
     await Promise.all([
       this.assets.preloadAllCharacterAssets(),
-      this.assets.preloadSceneAssets(this.currentScene.id)
+      this.assets.preloadSceneAssets(this.currentScene.id),
+      this.assets.preloadAllItemAssets()
     ]);
     if (!this.inputBound) {
       this.bindInput();
@@ -472,16 +477,32 @@ export class Game {
   clearStatusMessage() {
     this.message = "";
     this.pendingSpeechBubble = null;
+    this.speechBubbleQueue = [];
+    this.speechBubblePauseRemaining = 0;
     if (this.speechBubble) this.hideSpeechBubble(true);
     else if (this.uiRoot) this.renderUi();
   }
 
   setStatusMessage(message, options = {}) {
+    const beats = (Array.isArray(message) ? message : [message])
+      .map((part) => String(part || "").trim())
+      .filter(Boolean);
+    if (this.speechBubble) this.hideSpeechBubble(true);
+    this.speechBubbleQueue = beats.slice(1).map((part) => ({ message: part, options: { ...options } }));
+    this.speechBubblePauseRemaining = 0;
+    const firstBeat = beats[0] || "";
     if (this.player.target || this.player.animation === "walk" || this.player.animation === "action") {
-      this.hideSpeechBubble(true);
-      this.pendingSpeechBubble = message ? { message, options: { ...options } } : null;
+      this.pendingSpeechBubble = firstBeat ? { message: firstBeat, options: { ...options } } : null;
+      if (this.pendingSpeechBubble && this.speechBubbleQueue.length) {
+        this.pendingSpeechBubble.remaining = [...this.speechBubbleQueue];
+      }
+      this.speechBubbleQueue = [];
       return;
     }
+    this.showSpeechBubbleBeat(firstBeat, options);
+  }
+
+  showSpeechBubbleBeat(message, options = {}) {
     this.pendingSpeechBubble = null;
     this.message = message;
     this.speechBubble = message
@@ -501,6 +522,83 @@ export class Game {
     if (this.uiRoot) this.renderUi();
   }
 
+  replaceSpeechBubbleBeat(message, options = {}) {
+    if (!this.speechBubble) {
+      this.showSpeechBubbleBeat(message, options);
+      return;
+    }
+    this.message = message;
+    this.speechBubble.text = message;
+    this.speechBubble.tone = options.reject ? "reject" : "talk";
+    this.speechBubble.metrics = this.measureSpeechBubble(message);
+    this.speechBubble.debug = null;
+    this.speechBubble.elapsed = 0;
+    this.speechBubble.visibleSeconds = this.speechBubbleVisibleSeconds(message);
+    this.speechBubble.phase = "visible";
+    this.speechBubble.waitingForNextBeat = false;
+    this.speechBubblePauseRemaining = 0;
+    this.startSpeechAnimationForMessage(message, options);
+    if (this.uiRoot) this.renderUi();
+  }
+
+  beginSpeechBubbleBeatTransition(message, options = {}) {
+    if (!this.speechBubble) {
+      this.showSpeechBubbleBeat(message, options);
+      return;
+    }
+    const nextMetrics = this.measureSpeechBubble(message);
+    this.speechBubble.beatTransition = {
+      elapsed: 0,
+      swapped: false,
+      message,
+      options: { ...options },
+      metrics: nextMetrics
+    };
+    this.speechBubble.phase = "beat-out";
+    this.speechBubble.waitingForNextBeat = false;
+    this.speechBubblePauseRemaining = 0;
+    const bubble = this.speechBubbleElement();
+    if (!bubble) return;
+    bubble.classList.remove("phase-in", "phase-out", "phase-visible", "phase-beat-in");
+    bubble.classList.add("beat-resizing", "phase-beat-out");
+    this.applySpeechBubbleLayout(bubble, this.speechBubblePosition(nextMetrics), nextMetrics);
+  }
+
+  updateSpeechBubbleBeatTransition(dt) {
+    const transition = this.speechBubble?.beatTransition;
+    if (!transition) return false;
+    transition.elapsed += dt;
+    if (!transition.swapped && transition.elapsed >= SPEECH_BUBBLE_BEAT_TEXT_FADE_SECONDS) {
+      transition.swapped = true;
+      this.message = transition.message;
+      this.speechBubble.text = transition.message;
+      this.speechBubble.tone = transition.options.reject ? "reject" : "talk";
+      this.speechBubble.metrics = transition.metrics;
+      this.speechBubble.debug = null;
+      this.speechBubble.visibleSeconds = this.speechBubbleVisibleSeconds(transition.message);
+      this.speechBubble.phase = "beat-in";
+      const bubble = this.speechBubbleElement();
+      if (bubble) {
+        bubble.classList.remove("phase-beat-out");
+        bubble.classList.add("phase-beat-in");
+        bubble.classList.toggle("reject", this.speechBubble.tone === "reject");
+        const textNode = bubble.querySelector(".speech-text");
+        if (textNode) textNode.textContent = transition.message;
+      }
+      this.startSpeechAnimationForMessage(transition.message, transition.options);
+    }
+    if (transition.elapsed < SPEECH_BUBBLE_BEAT_RESIZE_SECONDS) return true;
+    this.speechBubble.beatTransition = null;
+    this.speechBubble.phase = "visible";
+    this.speechBubble.elapsed = 0;
+    const bubble = this.speechBubbleElement();
+    if (bubble) {
+      bubble.classList.remove("beat-resizing", "phase-in", "phase-out", "phase-beat-in", "phase-beat-out");
+      bubble.classList.add("phase-visible");
+    }
+    return true;
+  }
+
   speechBubbleVisibleSeconds(message) {
     const normalized = String(message || "").trim();
     const punctuationBonus = (normalized.match(/[.!?…]/g)?.length || 0) * 0.18;
@@ -512,7 +610,8 @@ export class Game {
     if (!this.speechBubble && this.pendingSpeechBubble && !this.player.target && this.player.animation === "idle") {
       const pending = this.pendingSpeechBubble;
       this.pendingSpeechBubble = null;
-      this.setStatusMessage(pending.message, pending.options);
+      this.speechBubbleQueue = pending.remaining || [];
+      this.showSpeechBubbleBeat(pending.message, pending.options);
       return;
     }
     if (!this.speechBubble) return;
@@ -520,12 +619,30 @@ export class Game {
       this.hideSpeechBubble(true);
       return;
     }
+    if (this.updateSpeechBubbleBeatTransition(dt)) return;
     this.speechBubble.elapsed += dt;
     if (this.speechBubble.phase === "in" && this.speechBubble.elapsed >= SPEECH_BUBBLE_FADE_SECONDS) {
       this.speechBubble.phase = "visible";
     }
-    if (this.speechBubble.phase !== "out" && this.speechBubble.elapsed >= this.speechBubble.visibleSeconds) {
-      this.hideSpeechBubble();
+    if (
+      this.speechBubble.phase !== "out"
+      && this.speechBubble.elapsed >= this.speechBubble.visibleSeconds
+      && !this.speechAnimationInProgress()
+    ) {
+      if (this.speechBubbleQueue?.length) {
+        if (!this.speechBubble.waitingForNextBeat) {
+          this.speechBubble.waitingForNextBeat = true;
+          this.speechBubblePauseRemaining = SPEECH_BUBBLE_BEAT_PAUSE_SECONDS;
+        } else {
+          this.speechBubblePauseRemaining = Math.max(0, this.speechBubblePauseRemaining - dt);
+          if (this.speechBubblePauseRemaining <= 0) {
+            const next = this.speechBubbleQueue.shift();
+            this.beginSpeechBubbleBeatTransition(next.message, next.options);
+          }
+        }
+      } else {
+        this.hideSpeechBubble();
+      }
     }
     if (this.speechBubble?.phase === "out" && this.speechBubble.elapsed >= this.speechBubble.visibleSeconds + SPEECH_BUBBLE_FADE_SECONDS) {
       this.speechBubble = null;
@@ -534,21 +651,33 @@ export class Game {
     }
   }
 
+  speechAnimationInProgress() {
+    const animator = this.player?.animator;
+    return Boolean(
+      this.player?.speechAnimation
+      && typeof animator?.isFinished === "function"
+      && !animator.isFinished()
+    );
+  }
+
   hideSpeechBubble(immediate = false) {
     if (!this.speechBubble) return;
     if (immediate) {
       this.speechBubble = null;
       this.pendingSpeechBubble = null;
+      this.speechBubbleQueue = [];
+      this.speechBubblePauseRemaining = 0;
       this.message = "";
       this.player.speaking = false;
       this.player.speechAnimation = null;
       if (!this.player.target && this.player.animation !== "walk") {
         this.player.animation = "idle";
       }
-      this.renderUi();
+      if (this.uiRoot) this.renderUi();
       return;
     }
     if (this.speechBubble.phase !== "out") {
+      this.speechBubble.elapsed = Math.min(this.speechBubble.elapsed, this.speechBubble.visibleSeconds);
       this.speechBubble.phase = "out";
       this.renderUi();
     }
@@ -608,6 +737,11 @@ export class Game {
     return target?.actions?.[verb] || null;
   }
 
+  actionSequenceSkipsAnimation(sequence) {
+    const flag = sequence?.skipAnimationWhenFlag;
+    return Boolean(flag && this.state?.flags?.[flag]);
+  }
+
   actionAnimationForSequence(sequence) {
     const actionName = sequence?.animation || sequence?.action;
     if (!actionName) return null;
@@ -640,6 +774,11 @@ export class Game {
     }
     if (sequence.facing) this.player.facing = sequence.facing;
     else if (sequence.facingPoint) this.facePoint(sequence.facingPoint);
+    if (this.actionSequenceSkipsAnimation(sequence)) {
+      const messageKey = sequence?.messageKey;
+      if (messageKey) this.setStatusMessage(this.t(messageKey));
+      return true;
+    }
     const frame = this.actionAnimationForSequence(sequence);
     if (!frame) {
       this.completeInteractionActionSequence({ target, verb, sequence, frame: null });
@@ -660,8 +799,27 @@ export class Game {
 
   updateActionSequence() {
     if (!this.player.actionSequence || this.player.animation !== "action") return;
+    const effectFrame = Number(this.player.actionSequence.sequence?.effectFrame);
+    if (
+      Number.isFinite(effectFrame)
+      && (Number(this.player.animator?.frameIndex) || 0) >= effectFrame
+    ) {
+      this.applyInteractionActionSequenceEffect(this.player.actionSequence);
+    }
     if (!this.player.animator?.isFinished()) return;
     this.completeInteractionActionSequence();
+  }
+
+  applyInteractionActionSequenceEffect(actionSequence = this.player.actionSequence) {
+    if (!actionSequence || actionSequence.effectApplied) return;
+    actionSequence.effectApplied = true;
+    if (actionSequence.verb !== VERBS.TAKE || !actionSequence.target?.takeItemId) return;
+    if (!this.inventory.has(actionSequence.target.takeItemId)) {
+      this.inventory.add(actionSequence.target.takeItemId);
+    }
+    if (actionSequence.target.flagOnTake) this.state[actionSequence.target.flagOnTake] = true;
+    this.save();
+    if (this.uiRoot) this.renderUi();
   }
 
   completeInteractionActionSequence(actionSequence = this.player.actionSequence) {
@@ -680,7 +838,12 @@ export class Game {
       this.save();
     }
     if (actionSequence.verb === VERBS.TAKE && actionSequence.target?.takeItemId) {
-      this.takeTarget(actionSequence.target, { messageKey: actionSequence.sequence?.messageKey });
+      if (!actionSequence.effectApplied) {
+        this.takeTarget(actionSequence.target, { messageKey: actionSequence.sequence?.messageKey });
+        return;
+      }
+      const messageKey = actionSequence.sequence?.messageKey;
+      if (messageKey) this.setStatusMessage(this.t(messageKey));
       return;
     }
     const messageKey = actionSequence.sequence?.messageKey;
@@ -697,7 +860,7 @@ export class Game {
   }
 
   handleWorldClick(point) {
-    const target = findTargetAt(this.currentScene, point);
+    const target = findTargetAt(this.currentScene, point, (candidate) => this.targetAvailable(candidate));
     if (target) {
       this.handleTarget(target, point);
       return;
@@ -717,6 +880,11 @@ export class Game {
       this.walkToPoint(destination, point);
       this.clearStatusMessage();
     }
+  }
+
+  targetAvailable(target) {
+    if (target?.hiddenWhenItemOwned && this.inventory?.has(target.hiddenWhenItemOwned)) return false;
+    return true;
   }
 
   handleTarget(target, clickPoint = null) {
@@ -746,7 +914,13 @@ export class Game {
         feetGoal: rawApproach,
         feet: approach ? { ...approach } : null
       };
-      if (!approach || distance(this.player.position, approach) <= TARGET_APPROACH_FEET_CANCEL_DISTANCE) return false;
+      if (!approach) return false;
+      const approachDistance = distance(this.player.position, approach);
+      if (actionSequence.requireExactApproach && approachDistance <= EXACT_ACTION_APPROACH_EPSILON) {
+        this.player.position = { ...approach };
+        return false;
+      }
+      if (!actionSequence.requireExactApproach && approachDistance <= TARGET_APPROACH_FEET_CANCEL_DISTANCE) return false;
       this.player.pendingFacingPoint = { ...reachPoint };
       this.player.pendingInteraction = {
         target,
@@ -1041,7 +1215,111 @@ export class Game {
     if (this.paused) this.uiRoot.appendChild(this.createPause());
     if (dialogueNode) this.uiRoot.appendChild(this.createDialogue(dialogueNode));
     if (this.speechBubble && !this.menuOpen && !this.paused && !dialogueNode) this.uiRoot.appendChild(this.createSpeechBubble());
+    if (!this.editMode && !this.devHome && !this.menuOpen && !this.paused && !dialogueNode) this.uiRoot.appendChild(this.createHud());
     this.uiRoot.appendChild(this.createTopBar());
+  }
+
+  createHud() {
+    const hud = element("section", "game-hud");
+    hud.setAttribute("aria-label", this.t("ui.hud"));
+
+    const meters = element("div", "hud-meters");
+    meters.append(
+      this.createHudMeter("ui.meter.influence", this.state.influence, "influence"),
+      this.createHudMeter("ui.meter.suspicion", this.state.suspicion, "suspicion"),
+      this.createHudMeter("ui.meter.public_mood", this.state.publicMood, "public-mood")
+    );
+
+    const verb = element("button", "hud-verb");
+    verb.type = "button";
+    verb.textContent = this.t(`verb.${this.selectedVerb}`);
+    verb.setAttribute("aria-label", `${this.t("ui.verb")}: ${this.t(`verb.${this.selectedVerb}`)}`);
+    verb.addEventListener("pointerdown", (event) => event.stopPropagation());
+    verb.addEventListener("click", (event) => {
+      event.stopPropagation();
+      this.cycleVerb();
+    });
+    verb.addEventListener("contextmenu", (event) => {
+      event.preventDefault();
+      event.stopPropagation();
+      this.cycleVerb();
+    });
+
+    hud.append(meters, verb);
+    const items = this.inventory.list();
+    if (items.length) hud.appendChild(this.createInventoryDock(items));
+    return hud;
+  }
+
+  createHudMeter(labelKey, value, tone) {
+    const meter = element("div", `hud-meter ${tone}`);
+    const normalized = clampNumber(Number(value) || 0, 0, 100);
+    meter.setAttribute("role", "meter");
+    meter.setAttribute("aria-label", this.t(labelKey));
+    meter.setAttribute("aria-valuemin", "0");
+    meter.setAttribute("aria-valuemax", "100");
+    meter.setAttribute("aria-valuenow", String(normalized));
+    meter.innerHTML = `
+      <span class="hud-meter-label">${escapeHtml(this.t(labelKey))}</span>
+      <span class="hud-meter-track"><span class="hud-meter-fill" style="width:${normalized}%"></span></span>
+    `;
+    return meter;
+  }
+
+  createInventoryDock(items) {
+    const panel = element("div", "inventory-dock-panel");
+    panel.addEventListener("pointerdown", (event) => event.stopPropagation());
+    panel.addEventListener("pointerup", (event) => event.stopPropagation());
+    panel.addEventListener("click", (event) => event.stopPropagation());
+    panel.addEventListener("contextmenu", (event) => {
+      event.preventDefault();
+      event.stopPropagation();
+    });
+    const dock = element("div", "inventory-dock");
+    dock.setAttribute("role", "toolbar");
+    dock.setAttribute("aria-label", this.t("ui.inventory"));
+    items.forEach((item, index) => {
+      const itemName = this.t(item.nameKey);
+      const tooltipId = `inventory-tooltip-${item.id.replaceAll(".", "-")}`;
+      const itemButton = element("button", "inventory-item");
+      itemButton.type = "button";
+      itemButton.tabIndex = index === 0 ? 0 : -1;
+      itemButton.setAttribute("aria-label", itemName);
+      itemButton.setAttribute("aria-describedby", tooltipId);
+      itemButton.dataset.itemId = item.id;
+      const iconPath = assetManifest.items?.[item.id]?.icon;
+      if (iconPath) {
+        const icon = document.createElement("img");
+        icon.src = iconPath;
+        icon.alt = "";
+        icon.draggable = false;
+        itemButton.appendChild(icon);
+      }
+      const tooltip = element("span", "inventory-tooltip");
+      tooltip.id = tooltipId;
+      tooltip.setAttribute("role", "tooltip");
+      tooltip.textContent = itemName;
+      itemButton.appendChild(tooltip);
+      itemButton.addEventListener("click", () => this.setStatusMessage(this.t(item.descriptionKey)));
+      dock.appendChild(itemButton);
+    });
+    dock.addEventListener("keydown", (event) => this.handleInventoryDockKeydown(event, dock));
+    panel.appendChild(dock);
+    return panel;
+  }
+
+  handleInventoryDockKeydown(event, dock) {
+    const items = [...dock.querySelectorAll(".inventory-item")];
+    const currentIndex = items.indexOf(document.activeElement);
+    if (currentIndex < 0 || !["ArrowLeft", "ArrowRight", "Home", "End"].includes(event.key)) return;
+    event.preventDefault();
+    let nextIndex = currentIndex;
+    if (event.key === "ArrowLeft") nextIndex = (currentIndex - 1 + items.length) % items.length;
+    if (event.key === "ArrowRight") nextIndex = (currentIndex + 1) % items.length;
+    if (event.key === "Home") nextIndex = 0;
+    if (event.key === "End") nextIndex = items.length - 1;
+    items.forEach((item, index) => { item.tabIndex = index === nextIndex ? 0 : -1; });
+    items[nextIndex]?.focus();
   }
 
   createTopBar() {
@@ -1052,10 +1330,10 @@ export class Game {
       button(this.t("ui.reset"), () => this.confirmResetAndReload())
     );
     right.append(
-      button(this.t("verb.look"), () => (this.selectedVerb = VERBS.LOOK)),
-      button(this.t("verb.talk"), () => (this.selectedVerb = VERBS.TALK)),
-      button(this.t("verb.use"), () => (this.selectedVerb = VERBS.USE)),
-      button(this.t("verb.take"), () => (this.selectedVerb = VERBS.TAKE)),
+      button(this.t("verb.look"), () => { this.selectedVerb = VERBS.LOOK; this.renderUi(); }),
+      button(this.t("verb.talk"), () => { this.selectedVerb = VERBS.TALK; this.renderUi(); }),
+      button(this.t("verb.use"), () => { this.selectedVerb = VERBS.USE; this.renderUi(); }),
+      button(this.t("verb.take"), () => { this.selectedVerb = VERBS.TAKE; this.renderUi(); }),
       button("BG", () => this.setLanguage("bg")),
       button("EN", () => this.setLanguage("en"))
     );
@@ -1068,10 +1346,7 @@ export class Game {
     const position = this.speechBubblePosition();
     const bubble = element("div", `speech-bubble tail-${position.tailSide} phase-${this.speechBubble.phase} ${this.speechBubble.tone === "reject" ? "reject" : ""}`);
     bubble.dataset.speechId = this.speechBubble.id;
-    if (position.right != null) bubble.style.right = `${position.right}%`;
-    else bubble.style.left = `${position.left}%`;
-    bubble.style.bottom = `${position.bottom}%`;
-    bubble.style.width = `${position.width}px`;
+    this.applySpeechBubbleLayout(bubble, position, this.speechBubble.metrics);
     bubble.style.maxWidth = `${position.maxWidth}px`;
     bubble.style.maxHeight = `${position.maxHeight}px`;
     bubble.innerHTML = `
@@ -1089,18 +1364,31 @@ export class Game {
     return bubble;
   }
 
+  speechBubbleElement() {
+    if (!this.uiRoot || !this.speechBubble) return null;
+    return this.uiRoot.querySelector(`.speech-bubble[data-speech-id="${this.speechBubble.id}"]`);
+  }
+
+  applySpeechBubbleLayout(bubble, position, metrics = this.speechBubble?.metrics) {
+    if (!bubble || !position) return;
+    if (position.right != null) {
+      bubble.style.left = "auto";
+      bubble.style.right = `${position.right}%`;
+    } else {
+      bubble.style.right = "auto";
+      bubble.style.left = `${position.left}%`;
+    }
+    bubble.style.bottom = `${position.bottom}%`;
+    bubble.style.width = `${position.width}px`;
+    if (metrics?.height) bubble.style.height = `${metrics.height}px`;
+  }
+
   measureSpeechBubble(text) {
     if (typeof window === "undefined" || typeof document === "undefined") {
       return { width: SPEECH_BUBBLE_MAX_WIDTH_PX, height: 120, maxWidth: SPEECH_BUBBLE_MAX_WIDTH_PX, maxHeight: SPEECH_BUBBLE_MAX_HEIGHT_PX };
     }
-    const maxWidth = Math.max(
-      120,
-      Math.min(SPEECH_BUBBLE_MAX_WIDTH_PX, (window.innerWidth || SPEECH_BUBBLE_MAX_WIDTH_PX) - SPEECH_BUBBLE_VIEWPORT_MARGIN_X_PX)
-    );
-    const maxHeight = Math.max(
-      80,
-      Math.min(SPEECH_BUBBLE_MAX_HEIGHT_PX, (window.innerHeight || 720) * SPEECH_BUBBLE_MAX_HEIGHT_VIEWPORT_RATIO)
-    );
+    const maxWidth = SPEECH_BUBBLE_MAX_WIDTH_PX;
+    const maxHeight = SPEECH_BUBBLE_MAX_HEIGHT_PX;
     if (!this.uiRoot) return { width: maxWidth, height: 120, maxWidth, maxHeight };
     const probe = element("div", "speech-bubble speech-measure tail-right");
     probe.style.width = `${maxWidth}px`;
@@ -1118,17 +1406,18 @@ export class Game {
     `;
     probe.querySelector(".speech-text").textContent = text;
     this.uiRoot.appendChild(probe);
-    const rect = probe.getBoundingClientRect();
+    const measuredWidth = probe.offsetWidth;
+    const measuredHeight = probe.offsetHeight;
     probe.remove();
     return {
-      width: Math.ceil(Math.min(maxWidth, Math.max(1, rect.width))),
-      height: Math.ceil(Math.min(maxHeight, Math.max(1, rect.height))),
+      width: Math.ceil(Math.min(maxWidth, Math.max(1, measuredWidth))),
+      height: Math.ceil(Math.min(maxHeight, Math.max(1, measuredHeight))),
       maxWidth,
       maxHeight
     };
   }
 
-  speechBubblePosition() {
+  speechBubblePosition(metricsOverride = null) {
     const definition = this.characterDefinitions?.["npc.bai_mitko"] || characterDefinitions["npc.bai_mitko"];
     const height = characterHeight(definition, this.currentScene, this.player.position);
     const facing = eastWestFallbackFacing(this.player.facing) || "east";
@@ -1142,18 +1431,15 @@ export class Game {
     const renderScale = height / Math.max(1, fullSizeHeight);
     const speechOffsetX = SPEECH_BUBBLE_WEST_OFFSET_X_FULL_SIZE * renderScale * (facing === "west" ? 1 : -1);
     const speechOffsetY = SPEECH_BUBBLE_WEST_OFFSET_Y_FULL_SIZE * renderScale;
-    const metrics = this.speechBubble?.metrics || { width: 350, height: 120, maxWidth: SPEECH_BUBBLE_MAX_WIDTH_PX, maxHeight: SPEECH_BUBBLE_MAX_HEIGHT_PX };
-    const canvasRect = this.canvas.getBoundingClientRect();
-    const cssToWorldX = this.canvas.width / Math.max(1, canvasRect.width || this.canvas.width);
-    const cssToWorldY = this.canvas.height / Math.max(1, canvasRect.height || this.canvas.height);
-    const bubbleWidthWorld = metrics.width * cssToWorldX;
-    const bubbleHeightWorld = metrics.height * cssToWorldY;
+    const metrics = metricsOverride || this.speechBubble?.metrics || { width: 350, height: 120, maxWidth: SPEECH_BUBBLE_MAX_WIDTH_PX, maxHeight: SPEECH_BUBBLE_MAX_HEIGHT_PX };
+    const bubbleWidthWorld = metrics.width;
+    const bubbleHeightWorld = metrics.height;
     const tailEnd = {
       x: mouth.x + speechOffsetX,
       y: mouth.y + speechOffsetY
     };
-    const tailOffsetXWorld = SPEECH_BUBBLE_WEST_TAIL_END_FROM_RIGHT_PX * cssToWorldX;
-    const tailOffsetYWorld = SPEECH_BUBBLE_TAIL_END_FROM_BOTTOM_PX * cssToWorldY;
+    const tailOffsetXWorld = SPEECH_BUBBLE_WEST_TAIL_END_FROM_RIGHT_PX;
+    const tailOffsetYWorld = SPEECH_BUBBLE_TAIL_END_FROM_BOTTOM_PX;
     const bottomWorld = 720 - tailEnd.y + tailOffsetYWorld;
     if (facing === "west") {
       const leftWorld = tailEnd.x - bubbleWidthWorld + tailOffsetXWorld;
@@ -1216,7 +1502,8 @@ export class Game {
           <span>active Bai Mitko animation import path. East start/loop/short/stop only; west mirrors east. North/south/diagonals deferred.</span>
           <a href="./?animLab=1">Open animLab external section</a>
           <a href="./?simpleAnimTest=1">Open simple animation test</a>
-          <a href="./?edit=1&scene=scene.chapter1.apartment">Open scene geometry editor</a>
+          <a href="./?edit=1&scene=scene.chapter1.apartment">Edit Bai Mitko's room</a>
+          <a href="./?edit=1&scene=scene.chapter1.village_square">Edit village square</a>
           <a href="./?play=1">Play with External Animation v1</a>
         </div>
       </div>
@@ -1227,7 +1514,8 @@ node tools/build-external-runtime-staging.js</pre>
       <div class="dev-links">
         <a href="./?animLab=1">Animation Lab</a>
         <a href="./?simpleAnimTest=1">Simple Animation Test</a>
-        <a href="./?edit=1&scene=scene.chapter1.apartment">Scene Geometry Editor</a>
+        <a href="./?edit=1&scene=scene.chapter1.apartment">Bai Mitko's Room Editor</a>
+        <a href="./?edit=1&scene=scene.chapter1.village_square">Village Square Editor</a>
         <a href="./?play=1">Play External Animation v1</a>
         <a href="./target/external_animation_v1/previews/walk_east_start.gif">Walk East Start GIF</a>
         <a href="./target/external_animation_v1/previews/walk_east_loop.gif">Walk East Loop GIF</a>

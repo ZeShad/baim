@@ -15,7 +15,8 @@ export const sceneLayerGeometry = {
         "asset": "billsOnTable",
         "zIndex": -2,
         "top": 390,
-        "left": 199
+        "left": 199,
+        "hiddenWhenItemOwned": "item.unpaid_bills"
       },
       {
         "id": "layer.apartment.window_open_back",
@@ -37,5 +38,9 @@ export const sceneLayerGeometry = {
         "visibleWhenFlag": "apartmentWindowOpen"
       }
     ]
+  },
+  "scene.chapter1.village_square": {
+    "sceneId": "scene.chapter1.village_square",
+    "foregroundLayers": []
   }
 };

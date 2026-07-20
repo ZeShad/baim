@@ -1,10 +1,10 @@
 {
-  "id": "walkmask.chapter1.apartment.floor_v1",
-  "sceneId": "scene.chapter1.apartment",
+  "id": "walkmask.chapter1.village_square.floor_v1",
+  "sceneId": "scene.chapter1.village_square",
   "sourceBackground": {
-    "path": "assets/chapter1/scenes/apartment/background.png",
-    "width": 1672,
-    "height": 941
+    "path": "assets/chapter1/scenes/village_square/background.png",
+    "width": 1280,
+    "height": 720
   },
   "world": {
     "width": 1280,
@@ -34,35 +34,34 @@
       "................................................................",
       "................................................................",
       "................................................................",
-      "................................................................",
-      "................................................................",
-      "................................................................",
-      "................................................................",
-      "................cccccc..........................................",
-      "..............cccccccccc........................................",
-      ".............ccccccccccccccccc..................................",
-      ".............ccccccccccccccccccccccccccccccccccccc..............",
-      ".............ccccccccccccccccccccccccccccccccccccc..............",
-      "..............ccccccccccccccccccccccccccccccccccccc.............",
-      "...............cccccccccccccccccccccccccccccccccccc.............",
-      "........................cccccccccccccccccccccccccccc............",
-      ".........................ccccccccccccccccccccccccccc............",
-      "..........................cccccccccccccccccccccccc..............",
-      "............................ccccccccccccccccccccc...............",
-      "................................................................",
+      "...........ccccccc..............................................",
+      "..........cc....................................................",
+      "..........c..................ccccccccccccccc.ccc................",
+      "..........ccccccccccccccccccccccccccccccccc...ccccccc...........",
+      "...........cccccccc............................ccccccc..........",
+      "............ccccccc.............................cccccc..........",
+      "............ccccccc.............................ccccc...........",
+      ".........ccccccccccc...........................cccccc...........",
+      "........ccccccccccccc........................cccccc.............",
+      "........ccccccccccccccccc.................cccccccc..............",
+      "......ccccccccccccccccccccccccccccccccccccccccc.cc..............",
+      "....ccccccccccccccccccccccccccccccccccccccccccccccccccc.........",
+      ".....cccccccccccccccccccccccccccccccccccccccccccccccccc.........",
+      "......cccccccccccccccccccccccccccccccccccccccccccccccc.ccccccc..",
+      ".......ccccccccccccccccccccccccccccccccccccccccccccccc..ccccc...",
+      "........cccccccccccccccccccccccccccccccccccccccccccccccccccc....",
       "................................................................"
     ]
   },
   "legend": {
     ".": {
       "walkable": false,
-      "debugFill": "rgba(0, 0, 0, 0)"
+      "role": "blocked"
     },
     "c": {
       "walkable": true,
-      "role": "walkable_floor",
-      "debugFill": "rgba(91, 214, 120, 0.18)"
+      "role": "center"
     }
   },
-  "objectsAreEditedIn": "assets_src/chapter1/scenes/apartment/object-geometry-v1.json"
+  "objectsAreEditedIn": "assets_src/chapter1/scenes/village_square/object-geometry-v1.json"
 }

@@ -117,7 +117,6 @@ export class Renderer {
     this.drawSceneZLayers(scene, actors);
     if (this.game.editMode) this.game.sceneEditor?.draw(ctx);
     else if (this.game.debugSceneGeometry || !hasRealBackground) this.drawSceneGeometry(scene);
-    this.drawHud();
   }
 
   drawSimpleAnimTest() {
@@ -362,6 +361,7 @@ export class Renderer {
 
   sceneLayerVisible(layer) {
     if (layer?.visibleWhenFlag && !this.game.state?.flags?.[layer.visibleWhenFlag]) return false;
+    if (layer?.hiddenWhenItemOwned && this.game.inventory?.has(layer.hiddenWhenItemOwned)) return false;
     if (layer?.visibleDuringAction) {
       const condition = layer.visibleDuringAction;
       const action = this.game.player?.actionAnimation;
@@ -986,66 +986,4 @@ export class Renderer {
     return loopStartFrame + ((next - loopStartFrame) % loopLength);
   }
 
-  drawHud() {
-    const { ctx } = this;
-    const state = this.game.state;
-    ctx.fillStyle = "rgba(23, 20, 16, 0.64)";
-    ctx.fillRect(0, 600, 1280, 120);
-    this.drawMeter(28, 620, this.game.t("ui.meter.influence"), state.influence, "#69b6ff");
-    this.drawMeter(28, 650, this.game.t("ui.meter.suspicion"), state.suspicion, "#e36767");
-    this.drawMeter(28, 680, this.game.t("ui.meter.public_mood"), state.publicMood, "#8ccf73");
-
-    ctx.fillStyle = "#f2e5cf";
-    ctx.font = "16px Arial";
-    ctx.fillText(`${this.game.t("ui.verb")}: ${this.game.t(`verb.${this.game.selectedVerb}`)}`, 360, 632);
-
-    let x = 760;
-    ctx.font = "14px Arial";
-    for (const item of this.game.inventory.list()) {
-      ctx.fillStyle = "rgba(239, 224, 189, 0.08)";
-      ctx.fillRect(x, 620, 104, 70);
-      ctx.strokeStyle = "#967d52";
-      ctx.strokeRect(x, 620, 104, 70);
-      const icon = this.game.assets.getItemImage(item.id);
-      if (this.game.assets.isLoaded(icon)) {
-        const max = 38;
-        const ratio = Math.min(max / icon.width, max / icon.height);
-        const w = icon.width * ratio;
-        const h = icon.height * ratio;
-        ctx.drawImage(icon, x + 52 - w / 2, 624, w, h);
-      }
-      ctx.fillStyle = "#f4e8d0";
-      wrapText(ctx, this.game.t(item.nameKey), x + 8, 670, 88, 14);
-      x += 116;
-    }
-  }
-
-  drawMeter(x, y, label, value, color) {
-    const { ctx } = this;
-    ctx.fillStyle = "#f2e5cf";
-    ctx.font = "14px Arial";
-    ctx.fillText(label, x, y + 14);
-    ctx.fillStyle = "#3a3026";
-    ctx.fillRect(x + 150, y, 150, 16);
-    ctx.fillStyle = color;
-    ctx.fillRect(x + 150, y, clamp(value, 0, 100) * 1.5, 16);
-    ctx.strokeStyle = "#9e8a67";
-    ctx.strokeRect(x + 150, y, 150, 16);
-  }
-}
-
-function wrapText(ctx, text, x, y, maxWidth, lineHeight) {
-  const words = text.split(" ");
-  let line = "";
-  for (const word of words) {
-    const test = line ? `${line} ${word}` : word;
-    if (ctx.measureText(test).width > maxWidth && line) {
-      ctx.fillText(line, x, y);
-      line = word;
-      y += lineHeight;
-    } else {
-      line = test;
-    }
-  }
-  ctx.fillText(line, x, y);
 }

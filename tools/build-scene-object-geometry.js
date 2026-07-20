@@ -5,6 +5,10 @@ const SOURCES = [
   {
     name: "apartmentObjectGeometry",
     path: "assets_src/chapter1/scenes/apartment/object-geometry-v1.json"
+  },
+  {
+    name: "villageSquareObjectGeometry",
+    path: "assets_src/chapter1/scenes/village_square/object-geometry-v1.json"
   }
 ];
 

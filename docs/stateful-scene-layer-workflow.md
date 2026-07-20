@@ -57,6 +57,11 @@ For a temporary action backing layer, use:
 Frame indices are zero-based. This layer is absent through frame 9, appears when frame 10 becomes active,
 and disappears when the action ends. A persistent `visibleWhenFlag` layer can replace it in the same render.
 
+Collectible prop layers can use `hiddenWhenItemOwned` with a stable item ID. The renderer hides the
+layer as soon as that item enters inventory and keeps it hidden after save/load. For take animations,
+set `effectFrame` on the interaction sequence to the contact frame where the hand has secured the item;
+the inventory and layer state switch on that frame instead of waiting for the animation to finish.
+
 3. Add `flagOnComplete` to the gameplay action sequence that reveals the layer:
 
 ```js

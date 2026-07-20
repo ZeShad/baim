@@ -25,7 +25,8 @@
       "output": "assets/chapter1/scenes/apartment/bills-on-table.png",
       "zIndex": -2,
       "top": 390,
-      "left": 199
+      "left": 199,
+      "hiddenWhenItemOwned": "item.unpaid_bills"
     },
     {
       "id": "layer.apartment.window_open_back",

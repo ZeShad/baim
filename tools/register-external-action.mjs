@@ -7,6 +7,7 @@ import { characterDefinitions } from "../src/content/art/characters.js";
 import { assetManifest } from "../src/content/art/assetManifest.js";
 import { externalAnimationV1 } from "../src/content/art/externalAnimationV1.generated.js";
 import { characterHeight } from "../src/engine/CharacterRenderMath.js";
+import { stableExternalVisualBounds } from "../src/engine/Renderer.js";
 import { ensureDir, makePng, readJson, readPng, writeJson, writePng } from "./external-animation-utils.mjs";
 
 const SELECTION_PATH = "assets_src/characters/bai_mitko/external_animation_v1/external-animation-selection.json";
@@ -28,7 +29,7 @@ const actorPosition = resolveApproachPoint(scene, sequence);
 const definition = characterDefinitions["npc.bai_mitko"];
 const stableBounds = stableExternalVisualBounds(definition);
 const baseScale = characterHeight(definition, scene, actorPosition) / stableBounds.h;
-const background = await referencePixels(registration, scene);
+const background = await referencePixels(registration, scene, actorPosition, stableBounds, baseScale);
 const sourceSheet = readPng(frame.src);
 const sourceRect = frame.frameRects[registration.referenceFrame || 0];
 const markerBounds = unionRects(registration.sceneMarkerRects);
@@ -129,7 +130,38 @@ function resolveApproachPoint(sceneValue, sequenceValue) {
   };
 }
 
-async function referencePixels(registrationValue, sceneValue) {
+async function referencePixels(registrationValue, sceneValue, actorPositionValue, stableBoundsValue, baseScaleValue) {
+  if (registrationValue.referenceProvider === "character") {
+    const referenceKey = registrationValue.characterReferenceAnimation || "walk_east_start";
+    const referenceFrameIndex = Math.max(0, Number(registrationValue.characterReferenceFrame) || 0);
+    const referenceMetadata = externalAnimationV1.animations?.[referenceKey];
+    if (!referenceMetadata) throw new Error(`Unknown character reference animation ${referenceKey}`);
+    const referenceRect = referenceMetadata.frameRects?.[referenceFrameIndex];
+    if (!referenceRect) throw new Error(`Missing frame ${referenceFrameIndex} in ${referenceKey}`);
+    const referenceSheet = readPng(referenceMetadata.src);
+    const frameOffset = referenceMetadata.offsets?.[referenceFrameIndex] || {};
+    const referenceOffset = {
+      x: (Number(referenceMetadata.offsetX) || 0) + (Number(frameOffset.x) || 0),
+      y: (Number(referenceMetadata.offsetY) || 0) + (Number(frameOffset.y) || 0)
+    };
+    const canvas = makePng(1280, 720);
+    for (let index = 0; index < canvas.data.length; index += 4) {
+      canvas.data[index] = 1;
+      canvas.data[index + 1] = 1;
+      canvas.data[index + 2] = 1;
+      canvas.data[index + 3] = 255;
+    }
+    return actionOnScene(
+      canvas,
+      referenceSheet,
+      referenceRect,
+      referenceMetadata,
+      baseScaleValue * (Number(referenceMetadata.scale) || 1),
+      actorPositionValue,
+      referenceOffset,
+      stableBoundsValue
+    );
+  }
   const path = registrationValue.referenceProvider === "background"
     ? assetManifest.scenes?.[sceneValue.id]?.background
     : registrationValue.referencePath;
@@ -166,6 +198,9 @@ function markerTemplate(sheet, sheetFrame, rects, bounds, scale) {
 
 function stabilizeFrames(sheet, metadata, roi, runtimeScale) {
   const sequential = registration.stabilizationMode === "sequential";
+  const stabilizationReferenceFrame = Number.isInteger(registration.stabilizationReferenceFrame)
+    ? registration.stabilizationReferenceFrame
+    : (registration.referenceFrame || 0);
   const output = [];
   let cumulativeX = 0;
   let cumulativeY = 0;
@@ -173,7 +208,7 @@ function stabilizeFrames(sheet, metadata, roi, runtimeScale) {
     const movingRect = metadata.frameRects[frameIndex];
     const referenceRect = sequential && frameIndex > 0
       ? metadata.frameRects[frameIndex - 1]
-      : metadata.frameRects[registration.referenceFrame || 0];
+      : metadata.frameRects[stabilizationReferenceFrame];
     const trackingRoi = sequential
       ? { ...roi, x: roi.x - cumulativeX, y: roi.y - cumulativeY }
       : roi;
@@ -187,7 +222,7 @@ function stabilizeFrames(sheet, metadata, roi, runtimeScale) {
     let fine = sequentialFine;
     let registrationMode = sequential ? "sequential" : "direct";
     if (sequential && frameIndex > 0) {
-      const directReference = metadata.frameRects[registration.referenceFrame || 0];
+      const directReference = metadata.frameRects[stabilizationReferenceFrame];
       const directCoarse = searchFrameShift(sheet, directReference, movingRect, roi, { minX: -140, maxX: 140, minY: -40, maxY: 40, step: 4 });
       const directFine = searchFrameShift(sheet, directReference, movingRect, roi, {
         minX: directCoarse.x - 5, maxX: directCoarse.x + 5, minY: directCoarse.y - 5, maxY: directCoarse.y + 5, step: 1
@@ -275,11 +310,11 @@ function searchFrameShift(sheet, referenceRect, movingRect, roi, range) {
   return best;
 }
 
-function actionOnScene(reference, sheet, rect, metadata, scale, actor, offset) {
+function actionOnScene(reference, sheet, rect, metadata, scale, actor, offset, stableBoundsValue = stableBounds) {
   const output = makePng(reference.width, reference.height);
   output.data.set(reference.data);
   const drawX = Math.round(actor.x + offset.x - metadata.frameWidth * scale * 0.5);
-  const drawY = Math.round(actor.y + offset.y - stableBounds.baselineY * scale);
+  const drawY = Math.round(actor.y + offset.y - stableBoundsValue.baselineY * scale);
   const width = Math.round(rect.w * scale);
   const height = Math.round(rect.h * scale);
   for (let y = 0; y < height; y += 1) {
@@ -319,21 +354,6 @@ function matchMaskedTemplate(reference, marker, searchRect) {
   const extrema = cv.minMaxLoc(result);
   searchRgba.delete(); markerRgba.delete(); searchRgb.delete(); markerRgb.delete(); maskMat.delete(); result.delete();
   return { score: extrema.maxVal, x: searchRect.x + extrema.maxLoc.x, y: searchRect.y + extrema.maxLoc.y };
-}
-
-function stableExternalVisualBounds(definitionValue) {
-  const bounds = [];
-  for (const parts of Object.values(definitionValue.animations.walk.parts || {})) {
-    for (const candidate of Object.values(parts || {})) {
-      if (candidate?.role === "loop") continue;
-      for (const bound of candidate?.sourceFrameContentBounds || []) {
-        if (!(bound.w >= candidate.frameWidth * 0.98 && bound.h >= candidate.frameHeight * 0.98)) bounds.push(bound);
-      }
-    }
-  }
-  const minY = Math.min(...bounds.map((bound) => bound.y));
-  const maxY = Math.max(...bounds.map((bound) => bound.y + bound.h));
-  return { h: maxY - minY, baselineY: maxY - 40 };
 }
 
 function unionRects(rects) {

@@ -12,8 +12,20 @@ const EDITOR_SCENES = {
         label: "Open window",
         sceneObjectId: "window",
         verb: "look"
+      },
+      {
+        id: "take_east_forward_default",
+        label: "Take apartment bills",
+        sceneObjectId: "hotspot.apartment.unpaid_bills",
+        verb: "take"
       }
     ]
+  },
+  "scene.chapter1.village_square": {
+    walkGeometryPath: "assets_src/chapter1/scenes/village_square/walk-geometry-v1.json",
+    objectGeometryPath: "assets_src/chapter1/scenes/village_square/object-geometry-v1.json",
+    layerPath: "assets_src/chapter1/scenes/village_square/layers.json",
+    actions: []
   }
 };
 
@@ -96,6 +108,14 @@ export class SceneEditor {
     const panel = document.createElement("section");
     panel.className = "panel scene-editor";
     if (this.panelSide === "right") panel.classList.add("right");
+    if (!this.config) {
+      panel.innerHTML = `
+        <div class="scene-editor-title">Scene Edit Mode</div>
+        <div class="scene-editor-status">${escapeHtml(this.status)}</div>
+      `;
+      stopPanelEvents(panel);
+      return panel;
+    }
     const objectOptions = this.objects.map((object) => `<option value="${escapeHtml(object.id)}"${object.id === this.selectedObjectId ? " selected" : ""}>${escapeHtml(displayObjectId(object.id))}</option>`).join("");
     const layerOptions = this.layers.map((layer) => `<option value="${escapeHtml(layer.id)}"${layer.id === this.selectedLayerId ? " selected" : ""}>${escapeHtml(displayLayerId(layer.id))}</option>`).join("");
     const selectedLayer = this.selectedLayer();
@@ -109,7 +129,7 @@ export class SceneEditor {
           <option value="walk"${this.mode === "walk" ? " selected" : ""}>Walkable raster</option>
           <option value="objects"${this.mode === "objects" ? " selected" : ""}>Object polygons</option>
           <option value="layers"${this.mode === "layers" ? " selected" : ""}>Layer positions</option>
-          <option value="actions"${this.mode === "actions" ? " selected" : ""}>Actions</option>
+          ${this.config.actions?.length ? `<option value="actions"${this.mode === "actions" ? " selected" : ""}>Actions</option>` : ""}
         </select>
       </label>
       ${this.mode === "walk" ? `<label>Walk cell
@@ -156,7 +176,7 @@ export class SceneEditor {
       <div class="scene-editor-action-note">${escapeHtml(actionEditorText(selectedAction, selectedActionConfig))}</div>` : ""}
       <div class="scene-editor-actions">
         <button type="button" data-editor="dock">${this.panelSide === "left" ? "Move Right" : "Move Left"}</button>
-        <button type="button" data-editor="save">Save JSON</button>
+        <button type="button" data-editor="save">Save ${escapeHtml(editorModeLabel(this.mode))}</button>
         <button type="button" data-editor="reload">Reload Source</button>
       </div>
       ${this.mode === "objects" ? `<div class="scene-editor-actions">
@@ -166,15 +186,7 @@ export class SceneEditor {
       <div class="scene-editor-help">${this.helpText()}</div>
       <div class="scene-editor-status">${escapeHtml(this.status)}</div>
     `;
-    panel.addEventListener("pointerdown", (event) => event.stopPropagation());
-    panel.addEventListener("pointermove", (event) => event.stopPropagation());
-    panel.addEventListener("pointerup", (event) => event.stopPropagation());
-    panel.addEventListener("click", (event) => event.stopPropagation());
-    panel.addEventListener("wheel", (event) => event.stopPropagation(), { passive: true });
-    panel.addEventListener("contextmenu", (event) => {
-      event.preventDefault();
-      event.stopPropagation();
-    });
+    stopPanelEvents(panel);
     panel.querySelector('[data-editor="mode"]').addEventListener("change", (event) => {
       this.mode = event.target.value;
       if (this.mode === "objects" && !this.selectedObjectId) this.selectedObjectId = this.objects[0]?.id || null;
@@ -616,27 +628,37 @@ export class SceneEditor {
   }
 
   async save() {
-    if (!this.config || !this.walkSource || !this.objectSource || !this.layerSource) return;
-    this.walkSource.raster.rows = this.rows.slice();
-    this.objectSource.objects = this.objectSource.objects.map((object) => ({
-      id: object.id,
-      polygon: (object.polygon || []).map(roundPoint)
-    }));
-    this.layerSource.layers = this.layerSource.layers.map(cleanLayerSource);
-    this.status = "Saving...";
+    if (!this.config) return;
+    const payload = { sceneId: this.game.currentScene.id, saveScope: this.mode };
+    if (this.mode === "walk") {
+      if (!this.walkSource) return;
+      this.walkSource.raster.rows = this.rows.slice();
+      payload.walkGeometry = this.walkSource;
+    } else if (this.mode === "objects") {
+      if (!this.objectSource) return;
+      this.objectSource.objects = this.objectSource.objects.map((object) => ({
+        id: object.id,
+        polygon: (object.polygon || []).map(roundPoint)
+      }));
+      payload.objectGeometry = this.objectSource;
+    } else if (this.mode === "layers") {
+      if (!this.layerSource) return;
+      this.layerSource.layers = this.layerSource.layers.map(cleanLayerSource);
+      payload.layerSource = this.layerSource;
+    } else if (this.mode === "actions") {
+      if (!this.actionAnimationSource) return;
+      payload.actionAnimationPath = this.config.actionAnimationPath;
+      payload.actionAnimationSource = this.actionAnimationSource;
+    } else {
+      return;
+    }
+    this.status = `Saving ${editorModeLabel(this.mode)}...`;
     this.game.renderUi();
     try {
       const response = await fetch("/__editor/save-scene-geometry", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          sceneId: this.game.currentScene.id,
-          walkGeometry: this.walkSource,
-          objectGeometry: this.objectSource,
-          layerSource: this.layerSource,
-          actionAnimationPath: this.config.actionAnimationPath,
-          actionAnimationSource: this.actionAnimationSource
-        })
+        body: JSON.stringify(payload)
       });
       const text = await response.text();
       let result = null;
@@ -649,12 +671,12 @@ export class SceneEditor {
         throw new Error(text || "save failed with non-JSON response");
       }
       if (!response.ok) throw new Error(result.error || "save failed");
-      if (this.mode === "actions" && !result.actionAnimationSaved) {
+      if (this.mode === "actions" && !result.savedScopes?.includes("actions")) {
         throw new Error("action animation was not saved by this server process; restart the dev server window");
       }
       this.status = this.mode === "actions"
         ? `Saved ${result.sceneId}; rebuilt action animation metadata. Hard reload to test persisted module.`
-        : `Saved ${result.sceneId}`;
+        : `Saved ${editorModeLabel(this.mode)} for ${result.sceneId}`;
     } catch (error) {
       this.status = `Save failed: ${error.message}`;
     }
@@ -814,6 +836,18 @@ function escapeHtml(value) {
     .replaceAll('"', "&quot;");
 }
 
+function stopPanelEvents(panel) {
+  panel.addEventListener("pointerdown", (event) => event.stopPropagation());
+  panel.addEventListener("pointermove", (event) => event.stopPropagation());
+  panel.addEventListener("pointerup", (event) => event.stopPropagation());
+  panel.addEventListener("click", (event) => event.stopPropagation());
+  panel.addEventListener("wheel", (event) => event.stopPropagation(), { passive: true });
+  panel.addEventListener("contextmenu", (event) => {
+    event.preventDefault();
+    event.stopPropagation();
+  });
+}
+
 function displayObjectId(id) {
   const value = String(id || "");
   if (value.startsWith("exit.apartment.")) return `exit.${value.slice("exit.apartment.".length)}`;
@@ -842,6 +876,10 @@ function layerFieldValue(layer, key) {
 function formatOffsetsForEdit(offsets) {
   if (!Array.isArray(offsets) || !offsets.length) return "";
   return JSON.stringify(offsets, null, 2);
+}
+
+function editorModeLabel(mode) {
+  return ({ walk: "Walk Raster", objects: "Objects", layers: "Layers", actions: "Actions" })[mode] || "Current Tool";
 }
 
 function actionEditorText(action, config) {
@@ -921,6 +959,7 @@ function runtimeLayerFromSource(layer) {
     zIndex: Number(layer.zIndex)
   };
   if (layer.visibleWhenFlag) result.visibleWhenFlag = String(layer.visibleWhenFlag);
+  if (layer.hiddenWhenItemOwned) result.hiddenWhenItemOwned = String(layer.hiddenWhenItemOwned);
   if (layer.visibleDuringAction) result.visibleDuringAction = structuredClone(layer.visibleDuringAction);
   for (const key of ["top", "left", "right", "bottom"]) {
     if (Number.isFinite(Number(layer[key]))) result[key] = Number(layer[key]);

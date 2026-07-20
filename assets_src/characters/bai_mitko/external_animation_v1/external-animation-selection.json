@@ -180,7 +180,123 @@
       "frameStart": 0,
       "frameEndTrim": 0,
       "fps": 12,
-      "action": "take"
+      "action": "take",
+      "registration": {
+        "referenceProvider": "character",
+        "characterReferenceAnimation": "walk_east_start",
+        "characterReferenceFrame": 0,
+        "sceneId": "scene.chapter1.apartment",
+        "sceneObjectId": "hotspot.apartment.unpaid_bills",
+        "verb": "take",
+        "referenceFrame": 15,
+        "stabilizationReferenceFrame": 0,
+        "stabilizationRoi": {
+          "x": 140,
+          "y": 600,
+          "w": 350,
+          "h": 430
+        },
+        "stabilizationFixture": "bai_mitko_lower_body",
+        "executionFixture": "bai_mitko_head_top_center",
+        "sceneMarkerRects": [
+          {
+            "x": 150,
+            "y": 140,
+            "w": 200,
+            "h": 250
+          }
+        ],
+        "sceneSearchRect": {
+          "x": 140,
+          "y": 180,
+          "w": 500,
+          "h": 430
+        },
+        "scaleRange": {
+          "min": 0.98,
+          "max": 1.02,
+          "step": 0.001
+        },
+        "acceptance": {
+          "minimumGlobalScore": 0.85,
+          "minimumFrameScore": 0.85
+        },
+        "lastFit": {
+          "version": 1,
+          "score": 0.981035,
+          "minimumFrameScore": 0.954057,
+          "report": "target/external_animation_v1/registration/take_east_forward_default/scene-registration-report.json"
+        }
+      },
+      "scale": 1.006,
+      "offsetX": 25.677,
+      "offsetY": 1.952,
+      "offsets": [
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          0.368
+        ],
+        [
+          0,
+          0.368
+        ],
+        [
+          -0.368,
+          0.368
+        ],
+        [
+          0,
+          0.736
+        ],
+        [
+          0,
+          1.105
+        ],
+        [
+          0,
+          1.105
+        ],
+        [
+          0,
+          1.105
+        ],
+        [
+          0,
+          1.105
+        ],
+        [
+          -0.368,
+          0.736
+        ],
+        [
+          0,
+          0.736
+        ],
+        [
+          0,
+          0.736
+        ],
+        [
+          0,
+          0.368
+        ],
+        [
+          0,
+          0.368
+        ],
+        [
+          0,
+          0.368
+        ]
+      ]
     },
     "opens_window": {
       "use": true,

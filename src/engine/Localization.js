@@ -11,9 +11,14 @@ export class Localization {
   t(key, replacements = {}) {
     const table = this.strings[this.language] || {};
     let value = table[key] || this.strings.en?.[key] || key;
-    for (const [name, replacement] of Object.entries(replacements)) {
-      value = value.replaceAll(`{${name}}`, replacement);
-    }
-    return value;
+    const replace = (part) => {
+      let result = String(part);
+      for (const [name, replacement] of Object.entries(replacements)) {
+        result = result.replaceAll(`{${name}}`, replacement);
+      }
+      return result;
+    };
+    if (Array.isArray(value)) return value.map(replace);
+    return replace(value);
   }
 }

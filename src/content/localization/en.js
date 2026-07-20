@@ -14,6 +14,8 @@ export const en = {
   "ui.reset": "Reset",
   "ui.reset_confirm": "Reset the current game, pockets, and all saved inventory items?",
   "ui.quests": "Quests",
+  "ui.hud": "Game status",
+  "ui.inventory": "Inventory",
   "ui.verb": "Verb",
   "ui.meter.influence": "Influence",
   "ui.meter.suspicion": "Suspicion",
@@ -82,7 +84,10 @@ export const en = {
   "look.apartment.tv": "The TV is explaining that the situation is stable, but in an emergency way.",
   "look.apartment.wardrobe": "The wardrobe guards clothes from a time when Bai Mitko still had a plan B.",
   "look.apartment.table": "A table for bills, promises, and other paper tragedies.",
-  "msg.apartment.window_opened": "Mmm. Smells like elections... again. Somebody must have aired out the coalition.",
+  "msg.apartment.window_opened": [
+    "Mmmm. Smells like elections.",
+    "Someone must have aired out the coalition again."
+  ],
   "look.apartment.poster": "VOTE MITKO: AT LEAST YOU KNOW HIM. A strong platform when the village has run out of options.",
   "look.square.poster_board": "Poster over poster over promise. Archaeology of hope.",
   "look.square.fountain": "The fountain does not work, but at least it is not stealing electricity.",

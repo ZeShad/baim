@@ -75,6 +75,11 @@ export class AssetLoader {
       .flatMap((characterAssets) => imageAssetPaths(characterAssets)));
   }
 
+  preloadAllItemAssets() {
+    return this.preload(Object.values(this.manifest.items || {})
+      .flatMap((itemAssets) => imageAssetPaths(itemAssets)));
+  }
+
   preloadSceneAssets(sceneId) {
     return this.preload(imageAssetPaths(this.manifest.scenes?.[sceneId]));
   }
