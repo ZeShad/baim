@@ -9,6 +9,18 @@ Build a high-resolution 2D point-and-click adventure prototype:
 Chapter 1 only for now. The first version must establish reusable systems and one playable vertical
 slice that future chapters can extend.
 
+## Collaboration Rules
+
+Before performing any work, also read:
+
+- docs/Developer-Handbook/PERSONAL_RULES.md
+
+AGENTS.md defines the project rules.
+
+PERSONAL_RULES.md defines how to collaborate with the project owner.
+
+If these documents ever appear to conflict, ask the project owner for clarification instead of making assumptions.
+
 ## Non-Negotiable Direction
 
 - This is not a low-res pixel game.
