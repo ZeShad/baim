@@ -79,22 +79,243 @@ The AI workflow now has separate responsibilities:
 - The branch has been published and synced with GitHub.
 - `master` has not yet been changed by this documentation work.
 
+### Completed Since the Earlier Update
+
+- Created the first Pull Request from `docs/developer-handbook` into `master`.
+- Verified that the Pull Request targeted the user's own repository:
+  - base repository: `ZeShad/baim`
+  - base branch: `master`
+  - compare branch: `docs/developer-handbook`
+- Reviewed the Pull Request before merging.
+- Merged Pull Request #1 into `master`.
+- Switched the local repository back to `master`.
+- Used `git pull` to synchronize local `master` with `origin/master`.
+- Verified:
+  - local branch was `master`
+  - `master` was up to date with `origin/master`
+  - working tree was clean.
+
+### Developer Handbook Expansion
+
+Created a new branch:
+
+`docs/handbook-content`
+
+Completed the four core Developer Handbook chapters:
+
+- `00_Project_Overview.md`
+  - project purpose
+  - Chapter 1 scope
+  - design principles
+  - visual direction
+  - gameplay overview
+  - current project state
+  - high-level architecture
+
+- `01_Project_Structure.md`
+  - repository structure
+  - `src/engine/` vs `src/content/`
+  - runtime assets vs source assets
+  - tools
+  - tests
+  - generated output
+  - important root files
+  - guidance for where new files belong
+
+- `02_Engine_Overview.md`
+  - `Game.js` as coordinator
+  - runtime input flow
+  - movement
+  - game loop
+  - rendering
+  - animation
+  - asset loading
+  - dialogue
+  - inventory
+  - quests
+  - localization
+  - save/load
+  - stable IDs
+  - geometry
+  - hotspots
+  - exits
+  - anchors
+  - scene editor
+  - debugging flows
+  - engine boundaries
+  - data-driven architecture
+
+- `03_File_Cheat_Sheet.md`
+  - quick engine-file reference
+  - responsibility map
+  - debugging starting points
+  - "where should I make this change?" guide
+  - pre-edit checklist
+  - fast mental model
+
+### Git Work Completed
+
+Staged only the four handbook chapters.
+
+Created commit:
+
+`4909de0 Add core Developer Handbook chapters`
+
+The commit contained:
+
+- 4 changed files
+- 4,324 additions
+
+Published the branch with:
+
+`git push -u origin docs/handbook-content`
+
+Created Pull Request #2:
+
+`Add core Developer Handbook chapters`
+
+Verified before merging:
+
+- base: `master`
+- compare: `docs/handbook-content`
+- 1 commit
+- 4 changed files
+- 4,324 additions
+- 0 deletions
+- no merge conflicts
+
+Merged Pull Request #2 into `master`.
+
+Then:
+
+- switched local repository back to `master`
+- pulled the merged changes
+- verified local `master` matched `origin/master`
+- verified the working tree was clean
+
+Created a new branch for this learning-log update:
+
+`docs/update-learning-log`
+
+### Git Concepts Reinforced Today
+
+The complete branch workflow is now much clearer:
+
+```text
+master
+    ↓
+create new branch
+    ↓
+make changes
+    ↓
+git status
+    ↓
+git add
+    ↓
+git commit
+    ↓
+git push
+    ↓
+Pull Request
+    ↓
+review
+    ↓
+merge
+    ↓
+switch back to master
+    ↓
+git pull
+    ↓
+verify clean synchronized state
+```
+
+Important lessons:
+
+- A branch allows work to remain separate from `master`.
+- `git add` chooses exactly what will enter the next commit.
+- A commit is a local checkpoint.
+- `git push` publishes commits but does not merge them into `master`.
+- A Pull Request provides a review step before merging.
+- After merging on GitHub, local `master` must still be synchronized with `git pull`.
+- `git status` is an important safety check before and after Git operations.
+- Explicit file paths in `git add` are safer than staging everything blindly.
+- GitHub's compare page should always be checked carefully to make sure the correct repository and branches are selected.
+
+### Biggest Insight
+
+A professional Git workflow is not just:
+
+```text
+save → upload
+```
+
+It is:
+
+```text
+isolate work
+    ↓
+review what changed
+    ↓
+create a checkpoint
+    ↓
+publish safely
+    ↓
+review again
+    ↓
+merge intentionally
+    ↓
+synchronize local state
+```
+
+The branch and Pull Request workflow gives several opportunities to catch mistakes before they reach `master`.
+
+### Current Project State
+
+- BAIM launches locally.
+- Bai Mitko's runtime animation assets have been rebuilt successfully.
+- The previous automated test run reported 95 passed and 0 failed.
+- The Codex collaboration workflow is documented.
+- The prompt library is in place.
+- The first documentation foundation Pull Request has been merged.
+- The four core Developer Handbook chapters are now complete and merged into `master`.
+- Local `master` is synchronized with GitHub.
+- The current working branch is `docs/update-learning-log`.
+
+### Developer Handbook Current State
+
+Completed:
+
+- `00_Project_Overview.md`
+- `01_Project_Structure.md`
+- `02_Engine_Overview.md`
+- `03_File_Cheat_Sheet.md`
+- `PERSONAL_RULES.md`
+- `13_Daily_Learning_Log.md` is actively maintained
+- `Glossary.md` exists
+- reusable prompt library exists under `docs/Prompts/`
+
+The Developer Handbook now has a real foundation rather than only placeholder chapters.
+
 ### Still Pending
 
-- Create the first Pull Request from `docs/developer-handbook` into `master`.
-- Review the Pull Request before merging.
-- Merge the documentation branch into `master`.
-- Switch the local repository back to `master` and synchronize it.
-- Continue expanding the Developer Handbook.
-- Return to actual Comrade Candidate game development.
-- Design the Telegram reporting and approval workflow separately.
+- Commit and publish this Daily Learning Log update.
+- Decide whether to expand the Developer Handbook further.
+- Continue improving the glossary as new concepts are learned.
+- Return to actual Comrade Candidate gameplay development.
+- Continue learning `Game.js` and the runtime input/movement flow in real code.
+- Design the Telegram/Codex reporting and approval workflow separately and securely.
 
 ### Next Topic
 
-Create and review the first GitHub Pull Request from:
+After finishing this learning-log update:
 
-`docs/developer-handbook`
+1. Commit and push the log update.
+2. Merge it into `master`.
+3. Decide between:
+   - continuing the Developer Handbook,
+   - returning to gameplay development,
+   - or examining `Game.js` in detail using `05_Explain_File.md`.
 
-into:
+The next technical learning topic remains:
 
-`master`
+> Follow one real player click through `Game.js` and understand how it becomes Bai Mitko's movement or interaction.
