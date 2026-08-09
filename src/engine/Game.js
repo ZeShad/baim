@@ -181,6 +181,7 @@ export class Game {
       if (this.editMode) return;
       this.cycleVerb();
     });
+    // Main gameplay click entry point: filter invalid clicks, convert to world coordinates, then dispatch to handleWorldClick().
     this.canvas.addEventListener("pointerdown", (event) => {
       if (this.simpleAnimTest) return;
       if (this.editMode) {
