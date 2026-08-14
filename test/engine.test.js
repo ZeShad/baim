@@ -1404,6 +1404,34 @@ test("registered action requiring exact approach walks to its anchor even from h
   assert.equal(game.player.pendingInteraction.actionSequence.requireExactApproach, true);
 });
 
+test("village-square poster-board clicks share one fixed east-facing look approach", () => {
+  const scene = chapter1.scenes.find((candidate) => candidate.id === "scene.chapter1.village_square");
+  const target = scene.interactables.find((candidate) => candidate.id === "hotspot.square.poster_board");
+  const approaches = [];
+
+  for (const clickPoint of [{ x: 1080, y: 270 }, { x: 1160, y: 400 }]) {
+    const game = Object.create(Game.prototype);
+    game.currentScene = scene;
+    game.selectedVerb = "look";
+    game.player = {
+      position: { x: 900, y: 550 },
+      target: null,
+      animation: "idle",
+      facing: "east",
+      pendingInteraction: null
+    };
+    game.walkToPoint = (point) => { approaches.push({ ...point }); };
+    game.clearStatusMessage = () => {};
+
+    assert.equal(game.shouldApproachTargetBeforeAction(target, clickPoint), true);
+    assert.deepEqual(game.player.pendingInteraction.approach, { x: 976, y: 625 });
+    assert.equal(game.player.pendingInteraction.actionSequence.messageKey, target.lookKey);
+    assert.equal(game.player.facing, "east");
+  }
+
+  assert.deepEqual(approaches, [{ x: 976, y: 625 }, { x: 976, y: 625 }]);
+});
+
 test("looking at an already-open window still approaches but skips animation and repeats its talk", () => {
   const scene = chapter1.scenes.find((candidate) => candidate.id === "scene.chapter1.apartment");
   const target = scene.interactables.find((candidate) => candidate.id === "window");
