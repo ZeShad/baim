@@ -165,7 +165,15 @@ const rawScenes = [
         kind: "hotspot",
         nameKey: "hotspot.poster_board.name",
         rect: { x: 1080, y: 245, w: 140, h: 235 },
-        lookKey: "look.square.poster_board"
+        lookKey: "look.square.poster_board",
+        actions: {
+          look: {
+            approach: { x: 976, y: 625 },
+            requireExactApproach: true,
+            facing: "east",
+            messageKey: "look.square.poster_board"
+          }
+        }
       },
       {
         id: "hotspot.square.fountain",
