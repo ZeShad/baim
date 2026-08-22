@@ -337,6 +337,14 @@ test("save migration removes the old prototype starter inventory", () => {
   assert.deepEqual(save.inventory, []);
 });
 
+test("save migration preserves a legitimately collected accordion", () => {
+  const storage = new MemoryStorage({
+    test: JSON.stringify({ inventory: ["item.accordion"] })
+  });
+  const save = new SaveSystem(storage, "test").load();
+  assert.deepEqual(save.inventory, ["item.accordion"]);
+});
+
 test("Bai Mitko render height is canonical across idle and walk assets", () => {
   const scene = chapter1.scenes.find((candidate) => candidate.id === "scene.chapter1.apartment");
   const definition = characterDefinitions["npc.bai_mitko"];
@@ -463,6 +471,43 @@ test("apartment bills define a take action sequence with approach, facing, anima
   assert.equal(bills.actions.take.animation, "take");
   assert.equal(bills.actions.take.effectFrame, 8);
   assert.equal(bills.actions.take.messageKey, "msg.apartment.unpaid_bills_taken");
+});
+
+test("apartment accordion is collectible through the generic take flow", () => {
+  const scene = chapter1.scenes.find((candidate) => candidate.id === "scene.chapter1.apartment");
+  const accordion = scene.interactables.find((candidate) => candidate.id === "hotspot.apartment.accordion");
+  const game = Object.create(Game.prototype);
+  const owned = new Set();
+  let saves = 0;
+  game.inventory = {
+    has: (itemId) => owned.has(itemId),
+    add: (itemId) => owned.add(itemId)
+  };
+  game.t = (key) => key;
+  game.setStatusMessage = () => {};
+  game.save = () => { saves += 1; };
+
+  assert.equal(accordion.takeItemId, "item.accordion");
+  game.takeTarget(accordion);
+  assert.equal(owned.has("item.accordion"), true);
+  assert.equal(saves, 1);
+  game.takeTarget(accordion);
+  assert.equal(owned.size, 1);
+  assert.equal(saves, 1);
+});
+
+test("Tony's existing distraction logic accepts the collected accordion", () => {
+  const game = Object.create(Game.prototype);
+  let saves = 0;
+  game.inventory = { has: (itemId) => itemId === "item.accordion" };
+  game.state = { flags: {} };
+  game.t = (key) => key;
+  game.setStatusMessage = () => {};
+  game.save = () => { saves += 1; };
+
+  game.useTarget({ id: "npc.tony_fridge" });
+  assert.equal(game.state.flags.tonyDistracted, true);
+  assert.equal(saves, 1);
 });
 
 test("apartment window defines a look action sequence from raster cell to west-facing open animation", () => {

@@ -54,7 +54,8 @@ const rawScenes = [
         kind: "hotspot",
         nameKey: "item.accordion.name",
         rect: { x: 1120, y: 375, w: 150, h: 190 },
-        lookKey: "look.apartment.accordion"
+        lookKey: "look.apartment.accordion",
+        takeItemId: "item.accordion"
       },
       {
         id: "hotspot.apartment.unpaid_bills",
