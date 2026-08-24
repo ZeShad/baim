@@ -98,8 +98,10 @@ test("game start waits for character sprites, scene layers, and item icons befor
 test("localization returns Bulgarian and English strings from stable keys", () => {
   const l10n = new Localization(strings, "bg");
   assert.equal(l10n.t("chapter1.title"), "Изборен ден на село");
+  assert.equal(l10n.t("quest.chapter1.main.title"), "Стани кмет, преди кредиторите да те намерят.");
   l10n.setLanguage("en");
   assert.equal(l10n.t("chapter1.title"), "Election Day in the Village");
+  assert.equal(l10n.t("quest.chapter1.main.title"), "Become Mayor before your creditors find you.");
 });
 
 test("localization falls back to English before returning the key", () => {
@@ -327,6 +329,41 @@ test("save system merges old saves with current defaults", () => {
 
 test("fresh chapter start has no preloaded inventory items", () => {
   assert.deepEqual(DEFAULT_SAVE.inventory, []);
+});
+
+test("fresh chapter start exposes only the main quest", () => {
+  const save = new SaveSystem(new MemoryStorage(), "test").load();
+  assert.deepEqual(DEFAULT_SAVE.activeQuests, ["quest.chapter1.main"]);
+  assert.deepEqual(save.activeQuests, ["quest.chapter1.main"]);
+});
+
+test("reset restores the main-only fresh quest list", () => {
+  const storage = new MemoryStorage({
+    test: JSON.stringify({
+      activeQuests: ["quest.chapter1.main", "quest.chapter1.fake_diploma", "quest.chapter1.tony_vote"]
+    })
+  });
+  const save = new SaveSystem(storage, "test").reset();
+  assert.deepEqual(save.activeQuests, ["quest.chapter1.main"]);
+  assert.equal(storage.getItem("test"), null);
+});
+
+test("existing saves preserve their active quest list", () => {
+  const activeQuests = ["quest.chapter1.main", "quest.chapter1.fake_diploma", "quest.chapter1.tony_vote"];
+  const storage = new MemoryStorage({ test: JSON.stringify({ activeQuests }) });
+  const save = new SaveSystem(storage, "test").load();
+  assert.deepEqual(save.activeQuests, activeQuests);
+});
+
+test("chapter quest IDs remain stable", () => {
+  assert.deepEqual(chapter1.quests.map((quest) => quest.id), [
+    "quest.chapter1.main",
+    "quest.chapter1.fake_diploma",
+    "quest.chapter1.baba_vote",
+    "quest.chapter1.tony_vote",
+    "quest.chapter1.journalist",
+    "quest.chapter1.ballot_box"
+  ]);
 });
 
 test("save migration removes the old prototype starter inventory", () => {

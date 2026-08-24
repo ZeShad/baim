@@ -112,7 +112,7 @@ export const en = {
   "msg.water_swap_missing": "Without a distraction, this looks like crime instead of politics.",
   "msg.scene_not_ready": "This part of the municipality is still under repair of the repair.",
 
-  "quest.chapter1.main.title": "Win the village election before your creditors find you.",
+  "quest.chapter1.main.title": "Become Mayor before your creditors find you.",
   "quest.chapter1.fake_diploma.title": "Create a diploma impressive enough for voters who never read diplomas.",
   "quest.chapter1.baba_vote.title": "Convince Baba Stoyanka that your corruption is at least traditional.",
   "quest.chapter1.tony_vote.title": "Win Tony the Fridge's support without losing consciousness.",

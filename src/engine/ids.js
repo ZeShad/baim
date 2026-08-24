@@ -36,9 +36,7 @@ export const DEFAULT_SAVE = {
   triedToSwapTonysRakia: false,
   completedQuests: [],
   activeQuests: [
-    "quest.chapter1.main",
-    "quest.chapter1.fake_diploma",
-    "quest.chapter1.tony_vote"
+    "quest.chapter1.main"
   ],
   flags: {},
   chapter1Choices: {}
