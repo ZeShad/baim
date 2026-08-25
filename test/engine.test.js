@@ -37,6 +37,7 @@ test("animation asset discovery includes every raster character slot without man
 
 test("scene preload discovery includes action-timed and persistent raster layers", () => {
   const paths = imageAssetPaths(assetManifest.scenes["scene.chapter1.apartment"]);
+  assert.ok(paths.includes(assetManifest.scenes["scene.chapter1.apartment"].accordionOnChair));
   assert.ok(paths.includes(assetManifest.scenes["scene.chapter1.apartment"].windowOpenBack));
   assert.ok(paths.includes(assetManifest.scenes["scene.chapter1.apartment"].windowOpen));
 });
@@ -162,6 +163,12 @@ test("apartment uses a raster walk mask for walkable floor", () => {
     && Number.isFinite(layer.top)
     && Number.isFinite(layer.left)
     && layer.hiddenWhenItemOwned === "item.unpaid_bills"));
+  assert.ok(scene.foregroundLayers.some((layer) => layer.id === "layer.apartment.accordion_on_chair"
+    && layer.asset === "accordionOnChair"
+    && layer.zIndex === 0
+    && layer.top === 399
+    && layer.left === 1064
+    && layer.hiddenWhenItemOwned === "item.accordion"));
   assert.ok(scene.foregroundLayers.some((layer) => layer.id === "layer.apartment.window_open"
     && layer.asset === "windowOpen"
     && layer.zIndex === 100
@@ -525,8 +532,11 @@ test("apartment accordion is collectible through the generic take flow", () => {
   game.save = () => { saves += 1; };
 
   assert.equal(accordion.takeItemId, "item.accordion");
+  assert.equal(accordion.hiddenWhenItemOwned, "item.accordion");
+  assert.equal(game.targetAvailable(accordion), true);
   game.takeTarget(accordion);
   assert.equal(owned.has("item.accordion"), true);
+  assert.equal(game.targetAvailable(accordion), false);
   assert.equal(saves, 1);
   game.takeTarget(accordion);
   assert.equal(owned.size, 1);
@@ -574,11 +584,27 @@ test("stateful scene layers stay hidden until their save flag is set", () => {
 test("collectible scene layers hide as soon as their item is owned", () => {
   const renderer = Object.create(Renderer.prototype);
   const owned = new Set();
-  const layer = { hiddenWhenItemOwned: "item.unpaid_bills" };
+  const scene = chapter1.scenes.find((candidate) => candidate.id === "scene.chapter1.apartment");
+  const layer = scene.foregroundLayers.find((candidate) => candidate.id === "layer.apartment.accordion_on_chair");
   renderer.game = { state: { flags: {} }, inventory: { has: (itemId) => owned.has(itemId) } };
   assert.equal(renderer.sceneLayerVisible(layer), true);
-  owned.add("item.unpaid_bills");
+  owned.add("item.accordion");
   assert.equal(renderer.sceneLayerVisible(layer), false);
+});
+
+test("a saved accordion keeps its Apartment layer and hotspot unavailable after load", () => {
+  const storage = new MemoryStorage({ test: JSON.stringify({ inventory: ["item.accordion"] }) });
+  const state = new SaveSystem(storage, "test").load();
+  const scene = chapter1.scenes.find((candidate) => candidate.id === "scene.chapter1.apartment");
+  const layer = scene.foregroundLayers.find((candidate) => candidate.id === "layer.apartment.accordion_on_chair");
+  const accordion = scene.interactables.find((candidate) => candidate.id === "hotspot.apartment.accordion");
+  const renderer = Object.create(Renderer.prototype);
+  const game = Object.create(Game.prototype);
+  const inventory = { has: (itemId) => state.inventory.includes(itemId) };
+  renderer.game = { state, inventory };
+  game.inventory = inventory;
+  assert.equal(renderer.sceneLayerVisible(layer), false);
+  assert.equal(game.targetAvailable(accordion), false);
 });
 
 test("action-timed scene layers appear on their configured animation frame only", () => {

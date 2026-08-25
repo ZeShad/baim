@@ -19,6 +19,14 @@ export const sceneLayerGeometry = {
         "hiddenWhenItemOwned": "item.unpaid_bills"
       },
       {
+        "id": "layer.apartment.accordion_on_chair",
+        "asset": "accordionOnChair",
+        "zIndex": 0,
+        "top": 399,
+        "left": 1064,
+        "hiddenWhenItemOwned": "item.accordion"
+      },
+      {
         "id": "layer.apartment.window_open_back",
         "asset": "windowOpenBack",
         "zIndex": 100,

@@ -29,6 +29,16 @@
       "hiddenWhenItemOwned": "item.unpaid_bills"
     },
     {
+      "id": "layer.apartment.accordion_on_chair",
+      "enabled": true,
+      "asset": "accordionOnChair",
+      "output": "assets/chapter1/scenes/apartment/accordion-on-chair.png",
+      "zIndex": 0,
+      "top": 399,
+      "left": 1064,
+      "hiddenWhenItemOwned": "item.accordion"
+    },
+    {
       "id": "layer.apartment.window_open_back",
       "enabled": true,
       "asset": "windowOpenBack",
