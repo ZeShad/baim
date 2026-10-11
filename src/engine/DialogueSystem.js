@@ -30,8 +30,9 @@ export class DialogueSystem {
   }
 
   choose(choice) {
-    if (choice.effect) this.onChoice?.(choice.effect);
+    if (choice.effect && this.onChoice?.(choice.effect) === false) return false;
     if (choice.next) this.enterNode(choice.next);
     else this.close();
+    return true;
   }
 }

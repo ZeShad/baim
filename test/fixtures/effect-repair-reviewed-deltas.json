@@ -1,0 +1,308 @@
+{
+  "baseline": "4b12dca33f507c472d8b219675fcf7744e4b67d1",
+  "records": {
+    "src/engine/Game.js": {
+      "beforeSHA256": "f3443eef9e030b28a22567b86bb26fe251c14b584783b20c46fcb99d82e59f92",
+      "afterSHA256": "cfd0e37e9ac4d7e71010b2c256f19f9e8972114ed2d438e6a0b15a58a9e388f2",
+      "hunks": [
+        {
+          "at": 1090,
+          "removed": [
+            "    if (!this.inventory.has(actionSequence.target.takeItemId)) {",
+            "      this.inventory.add(actionSequence.target.takeItemId);",
+            "    }",
+            "    if (actionSequence.target.flagOnTake) this.state[actionSequence.target.flagOnTake] = true;",
+            "    if (actionSequence.target.takeEffects?.length) {",
+            "      applyEffects(actionSequence.target.takeEffects, this.effectContext());",
+            "    }"
+          ],
+          "added": [
+            "    actionSequence.effectSucceeded = applyEffects(this.takeEffects(actionSequence.target), this.effectContext());",
+            "    if (!actionSequence.effectSucceeded) return false;"
+          ]
+        },
+        {
+          "at": 1105,
+          "removed": [
+            "    let stateChanged = false;"
+          ],
+          "added": [
+            "    if (actionSequence.effectSucceeded === false) return false;",
+            "    const effects = [...(actionSequence.sequence?.effectsOnComplete || [])];"
+          ]
+        },
+        {
+          "at": 1109,
+          "removed": [
+            "      this.state.flags ||= {};",
+            "      this.state.flags[flagOnComplete] = true;",
+            "      stateChanged = true;"
+          ],
+          "added": [
+            "      effects.unshift({ type: \"setFlag\", key: flagOnComplete });"
+          ]
+        },
+        {
+          "at": 1111,
+          "removed": [
+            "    if (actionSequence.sequence?.effectsOnComplete?.length) {",
+            "      applyEffects(actionSequence.sequence.effectsOnComplete, this.effectContext());",
+            "      stateChanged = true;"
+          ],
+          "added": [
+            "    if (actionSequence.verb === VERBS.TAKE && actionSequence.target?.takeItemId && !actionSequence.effectApplied) {",
+            "      return this.takeTarget(actionSequence.target, { messageKey: actionSequence.sequence?.messageKey, effects });"
+          ]
+        },
+        {
+          "at": 1114,
+          "removed": [
+            "    if (stateChanged) this.save();"
+          ],
+          "added": [
+            "    if (!applyEffects(effects, this.effectContext())) return false;",
+            "    if (effects.length) this.save();"
+          ]
+        },
+        {
+          "at": 1117,
+          "removed": [
+            "      if (!actionSequence.effectApplied) {",
+            "        this.takeTarget(actionSequence.target, { messageKey: actionSequence.sequence?.messageKey });",
+            "        return;",
+            "      }"
+          ],
+          "added": []
+        },
+        {
+          "at": 1455,
+          "removed": [
+            "    if (rule) return this.applyContentEffect(rule);"
+          ],
+          "added": [
+            "    if (rule) return this.applyContentEffect({ ...rule, effects: [...(options.effects || []), ...(rule.effects || [])] });"
+          ]
+        },
+        {
+          "at": 1460,
+          "removed": [
+            "    this.inventory.add(target.takeItemId);",
+            "    if (target.flagOnTake) this.state[target.flagOnTake] = true;",
+            "    if (target.takeEffects?.length) applyEffects(target.takeEffects, this.effectContext());"
+          ],
+          "added": [
+            "    if (!applyEffects([...(options.effects || []), ...this.takeEffects(target)], this.effectContext())) return false;"
+          ]
+        },
+        {
+          "at": 1463,
+          "removed": [],
+          "added": [
+            "    return true;",
+            "  }",
+            "",
+            "  takeEffects(target) {",
+            "    return [",
+            "      { type: \"addItem\", itemId: target.takeItemId },",
+            "      ...(target.flagOnTake ? [{ type: \"setState\", key: target.flagOnTake, value: true }] : []),",
+            "      ...(target.takeEffects || [])",
+            "    ];"
+          ]
+        },
+        {
+          "at": 1578,
+          "removed": [
+            "    this.applyContentEffect(effect, { render: false });"
+          ],
+          "added": [
+            "    const applied = this.applyContentEffect(effect, { render: false });",
+            "    if (applied === false) return false;"
+          ]
+        },
+        {
+          "at": 1581,
+          "removed": [],
+          "added": [
+            "    return true;"
+          ]
+        },
+        {
+          "at": 1589,
+          "removed": [],
+          "added": [
+            "    if (!requirementsMet(definition.requirements, this.effectContext())) {",
+            "      if (options.render !== false) this.renderUi();",
+            "      return false;",
+            "    }"
+          ]
+        },
+        {
+          "at": 1594,
+          "removed": [
+            "    if (definition.endingTrigger) return this.requestEnding(definition.endingTrigger);",
+            "    applyEffects(definition.effects, this.effectContext());"
+          ],
+          "added": [
+            "    if (definition.endingTrigger) return this.requestEnding(definition.endingTrigger, definition.effects);",
+            "    if (!applyEffects(definition.effects, this.effectContext())) {",
+            "      if (options.render !== false) this.renderUi();",
+            "      return false;",
+            "    }"
+          ]
+        },
+        {
+          "at": 1629,
+          "removed": [
+            "    this.updateSceneAction(0);"
+          ],
+          "added": [
+            "    if (this.updateSceneAction(0) === false) return false;"
+          ]
+        },
+        {
+          "at": 1650,
+          "removed": [
+            "      applyEffects(effect.effects, this.effectContext());"
+          ],
+          "added": [
+            "      if (!requirementsMet(effect.requirements, this.effectContext()) || !applyEffects(effect.effects, this.effectContext())) {",
+            "        this.sceneAction.reset();",
+            "        this.sceneIdleVariations?.reset(); this.sceneNpcSpeech?.reset();",
+            "        this.renderUi();",
+            "        return false;",
+            "      }"
+          ]
+        },
+        {
+          "at": 1704,
+          "removed": [
+            "  requestEnding(trigger = {}) {"
+          ],
+          "added": [
+            "  requestEnding(trigger = {}, effects = []) {"
+          ]
+        },
+        {
+          "at": 1717,
+          "removed": [
+            "    const ending = resolveEnding(candidates, this.effectContext());"
+          ],
+          "added": [
+            "    const ending = resolveEnding(candidates, this.effectContext(), effects);"
+          ]
+        },
+        {
+          "at": 2988,
+          "removed": [
+            "    this.dialogue.choose(choice);"
+          ],
+          "added": [
+            "    if (this.dialogue.choose(choice) === false) return false;"
+          ]
+        }
+      ]
+    },
+    "src/engine/EffectSystem.js": {
+      "beforeSHA256": "05d44364cbcc4826999c7d5888e2ece969ec227baab48531d6505ef4f55bb8ba",
+      "afterSHA256": "794431cc92efc1449c5d413482327f32cdb6f9cc12e45db90d2bc74151a46a88",
+      "hunks": [
+        {
+          "at": 24,
+          "removed": [],
+          "added": [
+            "// Gameplay systems share this save-state object. Keep its existing containers",
+            "// alive on rollback, including arrays replaced by inventory/quest operations.",
+            "function checkpoint(value) {",
+            "  const entries = Object.entries(value);",
+            "  const children = entries.filter(([, child]) => child && typeof child === \"object\")",
+            "    .map(([, child]) => checkpoint(child));",
+            "  const length = Array.isArray(value) ? value.length : null;",
+            "  return () => {",
+            "    for (const key of Object.keys(value)) delete value[key];",
+            "    if (length !== null) value.length = length;",
+            "    for (const [key, child] of entries) value[key] = child;",
+            "    for (const restore of children) restore();",
+            "  };",
+            "}",
+            "",
+            "// One synchronous batch: true commits all selected effects; false restores the",
+            "// shared gameplay state. Invalid content also rolls back, then throws loudly."
+          ]
+        },
+        {
+          "at": 42,
+          "removed": [],
+          "added": [
+            "  const restore = checkpoint(context.state || {});",
+            "  try {",
+            "    if (!applyEffectBatch(effects, context)) {",
+            "      restore();",
+            "      return false;",
+            "    }",
+            "    return true;",
+            "  } catch (error) {",
+            "    restore();",
+            "    throw error;",
+            "  }",
+            "}",
+            "",
+            "function applyEffectBatch(effects, context) {"
+          ]
+        },
+        {
+          "at": 87,
+          "removed": [],
+          "added": [
+            "  return true;"
+          ]
+        }
+      ]
+    },
+    "src/engine/DialogueSystem.js": {
+      "beforeSHA256": "756f04fc0cbb3d78e00594b5ec11288f11b952f7ca58a55915e86a0c49c95334",
+      "afterSHA256": "58959bb2436802a08e3f9e166bf8051c1f74b544f3c6bd8fddce4a0b11266b8b",
+      "hunks": [
+        {
+          "at": 32,
+          "removed": [
+            "    if (choice.effect) this.onChoice?.(choice.effect);"
+          ],
+          "added": [
+            "    if (choice.effect && this.onChoice?.(choice.effect) === false) return false;"
+          ]
+        },
+        {
+          "at": 35,
+          "removed": [],
+          "added": [
+            "    return true;"
+          ]
+        }
+      ]
+    },
+    "src/engine/EndingSystem.js": {
+      "beforeSHA256": "e52b1c8652e80344fcc493ed1336082eb32087c92c51a5d648e69f04417d57db",
+      "afterSHA256": "b404eee139cf67bcb12a2e56b9fee69e35b6b9930776b7add3d8a9fbedeb8014",
+      "hunks": [
+        {
+          "at": 6,
+          "removed": [
+            "export function resolveEnding(endings = [], context = {}) {"
+          ],
+          "added": [
+            "export function resolveEnding(endings = [], context = {}, effects = []) {"
+          ]
+        },
+        {
+          "at": 11,
+          "removed": [
+            "  applyEffects(ending.effects, context);"
+          ],
+          "added": [
+            "  if (!applyEffects([...effects, ...(ending.effects || [])], context)) return null;"
+          ]
+        }
+      ]
+    }
+  }
+}

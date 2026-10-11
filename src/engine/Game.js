@@ -1088,13 +1088,8 @@ export class Game {
     if (!actionSequence || actionSequence.effectApplied) return;
     actionSequence.effectApplied = true;
     if (actionSequence.verb !== VERBS.TAKE || !actionSequence.target?.takeItemId) return;
-    if (!this.inventory.has(actionSequence.target.takeItemId)) {
-      this.inventory.add(actionSequence.target.takeItemId);
-    }
-    if (actionSequence.target.flagOnTake) this.state[actionSequence.target.flagOnTake] = true;
-    if (actionSequence.target.takeEffects?.length) {
-      applyEffects(actionSequence.target.takeEffects, this.effectContext());
-    }
+    actionSequence.effectSucceeded = applyEffects(this.takeEffects(actionSequence.target), this.effectContext());
+    if (!actionSequence.effectSucceeded) return false;
     this.save();
     if (this.uiRoot) this.renderUi();
   }
@@ -1108,23 +1103,18 @@ export class Game {
       this.setIdleHoldFrame(frame, Math.max(0, (frame.frameCount || 1) - 1));
     }
     this.player.animation = "idle";
-    let stateChanged = false;
+    if (actionSequence.effectSucceeded === false) return false;
+    const effects = [...(actionSequence.sequence?.effectsOnComplete || [])];
     const flagOnComplete = actionSequence.sequence?.flagOnComplete;
     if (flagOnComplete) {
-      this.state.flags ||= {};
-      this.state.flags[flagOnComplete] = true;
-      stateChanged = true;
+      effects.unshift({ type: "setFlag", key: flagOnComplete });
     }
-    if (actionSequence.sequence?.effectsOnComplete?.length) {
-      applyEffects(actionSequence.sequence.effectsOnComplete, this.effectContext());
-      stateChanged = true;
+    if (actionSequence.verb === VERBS.TAKE && actionSequence.target?.takeItemId && !actionSequence.effectApplied) {
+      return this.takeTarget(actionSequence.target, { messageKey: actionSequence.sequence?.messageKey, effects });
     }
-    if (stateChanged) this.save();
+    if (!applyEffects(effects, this.effectContext())) return false;
+    if (effects.length) this.save();
     if (actionSequence.verb === VERBS.TAKE && actionSequence.target?.takeItemId) {
-      if (!actionSequence.effectApplied) {
-        this.takeTarget(actionSequence.target, { messageKey: actionSequence.sequence?.messageKey });
-        return;
-      }
       const messageKey = actionSequence.sequence?.messageKey;
       if (messageKey) this.setStatusMessage(this.t(messageKey));
       return;
@@ -1463,16 +1453,23 @@ export class Game {
   takeTarget(target, options = {}) {
     if (!this.targetAvailable(target)) return false;
     const rule = firstMatchingRule(target.takeRules, this.effectContext());
-    if (rule) return this.applyContentEffect(rule);
+    if (rule) return this.applyContentEffect({ ...rule, effects: [...(options.effects || []), ...(rule.effects || [])] });
     if (this.inventory.has(target.takeItemId)) {
       this.setStatusMessage(this.t("msg.already_taken"), { reject: true });
       return;
     }
-    this.inventory.add(target.takeItemId);
-    if (target.flagOnTake) this.state[target.flagOnTake] = true;
-    if (target.takeEffects?.length) applyEffects(target.takeEffects, this.effectContext());
+    if (!applyEffects([...(options.effects || []), ...this.takeEffects(target)], this.effectContext())) return false;
     this.setStatusMessage(this.t(options.messageKey || target.takeMessageKey || "msg.taken"));
     this.save();
+    return true;
+  }
+
+  takeEffects(target) {
+    return [
+      { type: "addItem", itemId: target.takeItemId },
+      ...(target.flagOnTake ? [{ type: "setState", key: target.flagOnTake, value: true }] : []),
+      ...(target.takeEffects || [])
+    ];
   }
 
   useTarget(target) {
@@ -1579,8 +1576,10 @@ export class Game {
   }
 
   applyDialogueEffect(effect) {
-    this.applyContentEffect(effect, { render: false });
+    const applied = this.applyContentEffect(effect, { render: false });
+    if (applied === false) return false;
     this.player.speaking = false;
+    return true;
   }
 
   effectContext() {
@@ -1588,9 +1587,16 @@ export class Game {
   }
 
   applyContentEffect(definition = {}, options = {}) {
+    if (!requirementsMet(definition.requirements, this.effectContext())) {
+      if (options.render !== false) this.renderUi();
+      return false;
+    }
     if (definition.sceneSequence) return this.startSceneAction(definition);
-    if (definition.endingTrigger) return this.requestEnding(definition.endingTrigger);
-    applyEffects(definition.effects, this.effectContext());
+    if (definition.endingTrigger) return this.requestEnding(definition.endingTrigger, definition.effects);
+    if (!applyEffects(definition.effects, this.effectContext())) {
+      if (options.render !== false) this.renderUi();
+      return false;
+    }
     this.audio?.play(definition.soundCue);
     const stateMessage = definition.messageByState;
     const stateValue = Number(this.state[stateMessage?.key]);
@@ -1621,7 +1627,7 @@ export class Game {
     this.hideSpeechBubble(true); this.npcSpeechBubble = null; this.hoveredTarget = null;
     this.sceneIdleVariations?.reset(); this.sceneNpcSpeech?.reset();
     this.assets.getItemImage('item.sunflower_oil');
-    this.updateSceneAction(0);
+    if (this.updateSceneAction(0) === false) return false;
     this.renderUi();
     return true;
   }
@@ -1642,7 +1648,12 @@ export class Game {
     if (this.sceneAction.state.phase === 'received' && this.sceneActionEffect) {
       const { sceneSequence, ...effect } = this.sceneActionEffect;
       this.sceneActionEffect = null; // Consume before effects/UI: one grant per accepted order.
-      applyEffects(effect.effects, this.effectContext());
+      if (!requirementsMet(effect.requirements, this.effectContext()) || !applyEffects(effect.effects, this.effectContext())) {
+        this.sceneAction.reset();
+        this.sceneIdleVariations?.reset(); this.sceneNpcSpeech?.reset();
+        this.renderUi();
+        return false;
+      }
       this.protectCurrentAssetWorkingSet(); this.save();
       this.renderUi();
     }
@@ -1691,7 +1702,7 @@ export class Game {
     return panel;
   }
 
-  requestEnding(trigger = {}) {
+  requestEnding(trigger = {}, effects = []) {
     if (this.state.chapter1Completed) return false;
     if (!requirementsMet(trigger.requirements, this.effectContext())) {
       this.setStatusMessage(this.t("msg.election.not_ready"), { reject: true });
@@ -1704,7 +1715,7 @@ export class Game {
       return false;
     }
     const candidates = (this.content.endings || []).filter((ending) => ending.groupId === trigger.groupId);
-    const ending = resolveEnding(candidates, this.effectContext());
+    const ending = resolveEnding(candidates, this.effectContext(), effects);
     if (!ending) {
       this.setStatusMessage(this.t("msg.election.not_ready"), { reject: true });
       return false;
@@ -2975,7 +2986,7 @@ node tools/build-external-runtime-staging.js</pre>
   chooseDialogueChoice(choice, event) {
     if (this.sceneAction?.active || !this.dialogueChoiceAvailable(choice)) return false;
     if (this.dialogueChoicePointerLock !== null && event?.detail !== 0) return false;
-    this.dialogue.choose(choice);
+    if (this.dialogue.choose(choice) === false) return false;
     this.renderUi();
     return true;
   }

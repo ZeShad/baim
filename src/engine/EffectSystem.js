@@ -22,7 +22,38 @@ export function firstMatchingRule(rules = [], context = {}) {
   return rules.find((rule) => requirementsMet(rule.requirements, context)) || null;
 }
 
+// Gameplay systems share this save-state object. Keep its existing containers
+// alive on rollback, including arrays replaced by inventory/quest operations.
+function checkpoint(value) {
+  const entries = Object.entries(value);
+  const children = entries.filter(([, child]) => child && typeof child === "object")
+    .map(([, child]) => checkpoint(child));
+  const length = Array.isArray(value) ? value.length : null;
+  return () => {
+    for (const key of Object.keys(value)) delete value[key];
+    if (length !== null) value.length = length;
+    for (const [key, child] of entries) value[key] = child;
+    for (const restore of children) restore();
+  };
+}
+
+// One synchronous batch: true commits all selected effects; false restores the
+// shared gameplay state. Invalid content also rolls back, then throws loudly.
 export function applyEffects(effects = [], context = {}) {
+  const restore = checkpoint(context.state || {});
+  try {
+    if (!applyEffectBatch(effects, context)) {
+      restore();
+      return false;
+    }
+    return true;
+  } catch (error) {
+    restore();
+    throw error;
+  }
+}
+
+function applyEffectBatch(effects, context) {
   const state = context.state || {};
   state.flags ||= {};
 
@@ -54,4 +85,5 @@ export function applyEffects(effects = [], context = {}) {
       throw new Error(`Unknown content effect type: ${effect.type}`);
     }
   }
+  return true;
 }
