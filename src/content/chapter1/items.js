@@ -1,5 +1,7 @@
 import { accordionCue } from "./audio.js";
 export const items = [
+  { id: "item.empty_rakia_bottle", nameKey: "bottle.empty.name", descriptionKey: "bottle.empty.desc" },
+  { id: "item.fountain_water_bottle", nameKey: "bottle.water.name", descriptionKey: "bottle.water.desc" },
   {
     id: "item.accordion",
     nameKey: "item.accordion.name",
@@ -112,13 +114,7 @@ export const items = [
     id: "item.sunflower_oil",
     nameKey: "item.sunflower_oil.name",
     descriptionKey: "item.sunflower_oil.desc",
-    selfUseRules: [{
-      effects: [
-        { type: "removeItem", itemId: "item.sunflower_oil" },
-        { type: "setState", key: "drankOilBeforeTonyChallenge", value: true }
-      ],
-      messageKey: "msg.self.sunflower_oil"
-    }]
+    selfUseRules: [{ effects: [], messageKey: "bottle.keep_oil", reject: true }]
   },
   {
     id: "item.glass_of_water",

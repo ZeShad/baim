@@ -466,8 +466,9 @@ test("fresh Chapter 1 journeys reach all three endings through real clicks in Bu
         await clickTarget("hotspot.square.fountain");
         await waitFor(() => window.__comradeCandidateTest.game.state.flags.fountainDiagnosed);
         await go("exit.square.to_mehana", "scene.chapter1.mehana");
-        await verb("take");
-        await clickTarget("hotspot.mehana.oil");
+        await verb("talk");
+        await clickTarget("npc.mehana_waiter");
+        await choice("fountain.kiro.choice.refill");
         await waitFor(() => window.__comradeCandidateTest.game.inventory.has("item.sunflower_oil"));
     await page.locator(".received-item-screen > button:last-child").click();
         await go("exit.mehana.to_square", "scene.chapter1.village_square");
@@ -497,7 +498,12 @@ test("fresh Chapter 1 journeys reach all three endings through real clicks in Bu
         await useItem("item.accordion");
         await clickTarget("npc.tony_fridge");
         await waitFor(() => window.__comradeCandidateTest.game.state.flags.tonyDistracted);
-        await useItem("item.glass_of_water");
+        await go("exit.mehana.to_square", "scene.chapter1.village_square");
+        await useItem("item.empty_rakia_bottle");
+        await clickTarget("hotspot.square.fountain");
+        await waitFor(() => window.__comradeCandidateTest.game.inventory.has("item.fountain_water_bottle"));
+        await go("exit.square.to_mehana", "scene.chapter1.mehana");
+        await useItem("item.fountain_water_bottle");
         await clickTarget("hotspot.mehana.bai_mitko_rakia_glass");
         await waitFor(() => window.__comradeCandidateTest.game.state.swappedOwnRakiaWithWater);
         await talk("npc.tony_fridge");
@@ -533,7 +539,7 @@ async function waitForServer(url) {
   throw new Error(`Timed out waiting for ${url}`);
 }
 
-test("fountain repair supports real clicks, consumed-oil recovery and mid-puzzle reloads", { timeout: 120_000 }, async (t) => {
+test("fountain repair supports real clicks, safe oil self-use and mid-puzzle reloads", { timeout: 120_000 }, async (t) => {
   if (!browserAvailable(t, chromium.executablePath())) return;
   const port = await availablePort();
   const server = spawn(process.execPath, ["tools/dev-server.mjs"], {
@@ -572,17 +578,13 @@ test("fountain repair supports real clicks, consumed-oil recovery and mid-puzzle
     await waitFor(() => window.__comradeCandidateTest.game.state.flags.fountainOilClue);
     await click("exit.square.to_mehana");
     await waitFor(() => window.__comradeCandidateTest.game.currentScene.id === "scene.chapter1.mehana");
-    await verb("take");
-    await click("hotspot.mehana.oil");
+    await verb("talk");
+        await click("npc.mehana_waiter");
+        await choice("fountain.kiro.choice.refill");
     await waitFor(() => window.__comradeCandidateTest.game.inventory.has("item.sunflower_oil"));
     await page.locator(".received-item-screen > button:last-child").click();
     await oilAction("ui.inventory.use_on_self");
-    await waitFor(() => !window.__comradeCandidateTest.game.inventory.has("item.sunflower_oil"));
-    await verb("talk");
-    await click("npc.mehana_waiter");
-    await choice("fountain.kiro.choice.refill");
-    await waitFor(() => window.__comradeCandidateTest.game.inventory.has("item.sunflower_oil"));
-    await page.locator(".received-item-screen > button:last-child").click();
+    assert.equal(await page.evaluate(() => window.__comradeCandidateTest.game.inventory.has("item.sunflower_oil")), true);
     await click("exit.mehana.to_square");
     await waitFor(() => window.__comradeCandidateTest.game.currentScene.id === "scene.chapter1.village_square");
     await oilAction("ui.inventory.use");

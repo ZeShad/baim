@@ -5,6 +5,14 @@ import { campaignEn } from "./chapter1Campaign.js";
 import { fountainEn } from "./chapter1Fountain.js";
 
 export const en = {
+  "bottle.glass_refused": "Tony knows Kiro's water glasses. I need murky fountain water in a rakia bottle.",
+  "bottle.keep_oil": "The oil is for the valve. My insides are not due for maintenance.",
+  "bottle.no_flow": "Empty bottle, dry fountain. First oil the valve with cooking oil from Kiro, then turn it.",
+  "bottle.filled": "Filled it at the fountain. Blue-green, with a hint of yellow. A municipal cocktail. No substitutions.",
+  "bottle.water.desc": "Slightly murky blue-green water with a hint of yellow, filled to the shoulder. In a rakia bottle — just right for my glass against Tony.",
+  "bottle.water.name": "Bottle of Fountain Water",
+  "bottle.empty.desc": "The oil is gone; the bottle stays. Fill it at the running fountain.",
+  "bottle.empty.name": "Empty Rakia Bottle",
   "ui.received_oil.controls": "Click and drag to tilt the bottle. Scroll to zoom in and out.",
   "ui.received_oil.reset": "Front",
   "ui.received_oil.loading": "Loading bottle…",
@@ -120,7 +128,7 @@ export const en = {
   "item.village_wine.name": "Bottle of Village Wine",
   "item.village_wine.desc": "Homemade wine with enough character to pass for an official mediator.",
   "item.sunflower_oil.name": "Sunflower Oil",
-  "item.sunflower_oil.desc": "Folk medicine for heavy political decisions.",
+  "item.sunflower_oil.desc": "200 ml of Kiro's cooking oil in a rakia bottle. For the stuck fountain valve.",
   "item.glass_of_water.name": "Glass of Water",
   "item.glass_of_water.desc": "Colorless, nonpartisan, and suspiciously sober.",
   "item.campaign_pamphlets.name": "Campaign Pamphlets",
@@ -301,7 +309,7 @@ export const en = {
   "quest.chapter1.tony_vote.title": "Win Tony the Fridge's support without losing consciousness.",
   "quest.chapter1.tony_vote.stage.accept_challenge": "Accept Tony the Fridge's drinking challenge.",
   "quest.chapter1.tony_vote.stage.distract": "Find a way to distract Tony during the challenge.",
-  "quest.chapter1.tony_vote.stage.swap_water": "Replace the rakia in Bai Mitko's glass with water.",
+  "quest.chapter1.tony_vote.stage.swap_water": "Fill the empty bottle at the running fountain, then pour the water into your glass while Tony is distracted.",
   "quest.chapter1.tony_vote.stage.finish_challenge": "Finish Tony's drinking challenge.",
   "quest.chapter1.journalist.title": "Survive the journalist's questions without accidentally telling the truth.",
   "quest.chapter1.journalist.stage.find_reporter": "Return to the square and find the journalist by the election notice.",

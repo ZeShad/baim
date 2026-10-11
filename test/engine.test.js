@@ -66,6 +66,8 @@ test("inventory preload discovery includes every authored high-resolution item i
     assetManifest.items["item.glass_of_water"].icon,
     assetManifest.items["item.municipality_stamp"].icon,
     assetManifest.items["item.sunflower_oil"].icon,
+    assetManifest.items["item.empty_rakia_bottle"].icon,
+    assetManifest.items["item.fountain_water_bottle"].icon,
     assetManifest.items["item.unpaid_bills"].icon
   ].sort());
 });

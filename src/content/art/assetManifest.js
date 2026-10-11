@@ -128,6 +128,15 @@ export const assetManifest = {
     "item.sunflower_oil": {
       icon: "assets/chapter1/items/kiro-bottle/oil-200ml-r07.png"
     },
+    "item.empty_rakia_bottle": {
+      icon: "assets/chapter1/items/kiro-bottle/empty-r07.png",
+      model: "assets/chapter1/items/kiro-bottle/empty-r08.glb"
+    },
+    "item.fountain_water_bottle": {
+      icon: "assets/chapter1/items/kiro-bottle/fountain-water-c07.png",
+      model: "assets/chapter1/items/kiro-bottle/fountain-water-c07.glb",
+      liquidColor: null
+    },
     "item.glass_of_water": {
       icon: "assets/chapter1/items/glass-of-water-v1.png"
     }

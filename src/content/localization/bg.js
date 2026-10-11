@@ -5,6 +5,14 @@ import { campaignBg } from "./chapter1Campaign.js";
 import { fountainBg } from "./chapter1Fountain.js";
 
 export const bg = {
+  "bottle.glass_refused": "Тони познава чашите на Киро. Трябва ми мътната вода от фонтана в бутилка от ракия.",
+  "bottle.keep_oil": "Олиото е за крана. Вътрешен ремонт не ми трябва.",
+  "bottle.no_flow": "Празна бутилка под сух фонтан. Първо да смажа крана с олио от Киро, после да го завъртя.",
+  "bottle.filled": "Напълних бутилката от фонтана. Синьо-зелена, леко жълтеникава. Общински коктейл — без право на избор.",
+  "bottle.water.desc": "Леко мътна, синьо-зеленикава вода с жълт оттенък, до рамото на бутилката. В бутилка от ракия — точно за моята чаша срещу Тони.",
+  "bottle.water.name": "Бутилка с вода от фонтана",
+  "bottle.empty.desc": "Олиото свърши, бутилката остана. Мога да я напълня от работещия фонтан.",
+  "bottle.empty.name": "Празна бутилка от ракия",
   "ui.received_oil.controls": "Натисни и плъзни, за да наклониш бутилката. Приближи и отдалечи с колелцето.",
   "ui.received_oil.reset": "Отпред",
   "ui.received_oil.loading": "Бутилката се зарежда…",
@@ -120,7 +128,7 @@ export const bg = {
   "item.village_wine.name": "Бутилка селско вино",
   "item.village_wine.desc": "Домашно вино с достатъчно характер, за да мине за официален посредник.",
   "item.sunflower_oil.name": "Олио",
-  "item.sunflower_oil.desc": "Народна медицина срещу тежки политически решения.",
+  "item.sunflower_oil.desc": "200 мл олио от Киро в бутилка от ракия. За заялия кран на фонтана.",
   "item.glass_of_water.name": "Чаша вода",
   "item.glass_of_water.desc": "Безцветна, безпартийна и подозрително трезва.",
   "item.campaign_pamphlets.name": "Предизборни листовки",
@@ -301,7 +309,7 @@ export const bg = {
   "quest.chapter1.tony_vote.title": "Спечели подкрепата на Тони Хладилника, без да изпаднеш в безсъзнание.",
   "quest.chapter1.tony_vote.stage.accept_challenge": "Приеми алкохолното предизвикателство на Тони Хладилника.",
   "quest.chapter1.tony_vote.stage.distract": "Намери начин да разсееш Тони по време на предизвикателството.",
-  "quest.chapter1.tony_vote.stage.swap_water": "Подмени ракията в чашата на Бай Митко с вода.",
+  "quest.chapter1.tony_vote.stage.swap_water": "Напълни празната бутилка от работещия фонтан и излей водата в своята чаша, докато Тони е разсеян.",
   "quest.chapter1.tony_vote.stage.finish_challenge": "Довърши алкохолното предизвикателство на Тони.",
   "quest.chapter1.journalist.title": "Оцелей пред въпросите на журналиста, без случайно да кажеш истината.",
   "quest.chapter1.journalist.stage.find_reporter": "Върни се на площада и намери журналистката до предизборното табло.",

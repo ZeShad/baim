@@ -1,0 +1,826 @@
+{
+  "baseline": "31793384bef7e48d763416b13dabfcf76fc3652e",
+  "records": {
+    "src/content/art/assetManifest.js": {
+      "beforeSHA256": "bf4612065b6b576074982b0d4db8d937b31a48b751b8fc03ce49d686d0324d6d",
+      "afterSHA256": "0e4c9713350e3956be8b2694bf32f47b9b9cf22de459e19ea4e098e9f4473a74",
+      "hunks": [
+        {
+          "at": 130,
+          "removed": [],
+          "added": [
+            "    \"item.empty_rakia_bottle\": {",
+            "      icon: \"assets/chapter1/items/kiro-bottle/empty-r07.png\",",
+            "      model: \"assets/chapter1/items/kiro-bottle/empty-r08.glb\"",
+            "    },",
+            "    \"item.fountain_water_bottle\": {",
+            "      icon: \"assets/chapter1/items/kiro-bottle/fountain-water-c07.png\",",
+            "      model: \"assets/chapter1/items/kiro-bottle/fountain-water-c07.glb\",",
+            "      liquidColor: null",
+            "    },"
+          ]
+        }
+      ]
+    },
+    "src/content/chapter1/fountain.js": {
+      "beforeSHA256": "6c503089250852bcf58b90a1abe79d1d61b240c882edae120196c7aad548cf5e",
+      "afterSHA256": "26f1b1ad38e7ecb941220f88243c5b14af9f21fa916befffac19f36107a71b4f",
+      "hunks": [
+        {
+          "at": 31,
+          "removed": [],
+          "added": [
+            "  {",
+            "    itemId: \"item.empty_rakia_bottle\",",
+            "    requirements: { items: [\"item.empty_rakia_bottle\"], flags: [\"fountainRepaired\"], state: active },",
+            "    effects: [{ type: \"replaceItem\", itemId: \"item.empty_rakia_bottle\", withItemId: \"item.fountain_water_bottle\" }],",
+            "    messageKey: \"bottle.filled\"",
+            "  },",
+            "  {",
+            "    itemId: \"item.empty_rakia_bottle\",",
+            "    requirements: { items: [\"item.empty_rakia_bottle\"], notFlags: [\"fountainRepaired\"], state: active },",
+            "    messageKey: \"bottle.no_flow\", reject: true",
+            "  },"
+          ]
+        },
+        {
+          "at": 50,
+          "removed": [
+            "    effects: [diagnosed, clue, { type: \"removeItem\", itemId: \"item.sunflower_oil\" },"
+          ],
+          "added": [
+            "    effects: [diagnosed, clue, { type: \"replaceItem\", itemId: \"item.sunflower_oil\", withItemId: \"item.empty_rakia_bottle\" },"
+          ]
+        },
+        {
+          "at": 121,
+          "removed": [
+            "    absentItems: [\"item.sunflower_oil\"],"
+          ],
+          "added": [
+            "    absentItems: [\"item.sunflower_oil\", \"item.fountain_water_bottle\"],",
+            "    anyOf: [{ items: [\"item.empty_rakia_bottle\"] }, { absentItems: [\"item.empty_rakia_bottle\"] }],"
+          ]
+        },
+        {
+          "at": 126,
+          "removed": [],
+          "added": [
+            "    { type: \"removeItem\", itemId: \"item.empty_rakia_bottle\", requirements: { items: [\"item.empty_rakia_bottle\"] } },"
+          ]
+        }
+      ]
+    },
+    "src/content/chapter1/items.js": {
+      "beforeSHA256": "2fa2d58677fd1a10be511708714e0a862018da2f50f783cba4f505b1c3f0be10",
+      "afterSHA256": "185d0e308e92a64b84546a0e7a0dbd683acee243c9148d0cfa68386cfad048f4",
+      "hunks": [
+        {
+          "at": 2,
+          "removed": [],
+          "added": [
+            "  { id: \"item.empty_rakia_bottle\", nameKey: \"bottle.empty.name\", descriptionKey: \"bottle.empty.desc\" },",
+            "  { id: \"item.fountain_water_bottle\", nameKey: \"bottle.water.name\", descriptionKey: \"bottle.water.desc\" },"
+          ]
+        },
+        {
+          "at": 116,
+          "removed": [
+            "    selfUseRules: [{",
+            "      effects: [",
+            "        { type: \"removeItem\", itemId: \"item.sunflower_oil\" },",
+            "        { type: \"setState\", key: \"drankOilBeforeTonyChallenge\", value: true }",
+            "      ],",
+            "      messageKey: \"msg.self.sunflower_oil\"",
+            "    }]"
+          ],
+          "added": [
+            "    selfUseRules: [{ effects: [], messageKey: \"bottle.keep_oil\", reject: true }]"
+          ]
+        }
+      ]
+    },
+    "src/content/chapter1/scenes.js": {
+      "beforeSHA256": "907cbc5cab5a21e6ebbd0f4415692367f75f80a39996545bee738cce04e8a05c",
+      "afterSHA256": "65e8668145ececd099b467e78012daef6ec5dc3dfee67aa3758c47777773082b",
+      "hunks": [
+        {
+          "at": 410,
+          "removed": [],
+          "added": [
+            "          { itemId: \"item.glass_of_water\", messageKey: \"bottle.glass_refused\", reject: true },"
+          ]
+        },
+        {
+          "at": 412,
+          "removed": [
+            "            itemId: \"item.glass_of_water\","
+          ],
+          "added": [
+            "            itemId: \"item.fountain_water_bottle\","
+          ]
+        },
+        {
+          "at": 414,
+          "removed": [],
+          "added": [
+            "              items: [\"item.fountain_water_bottle\"],"
+          ]
+        },
+        {
+          "at": 419,
+          "removed": [
+            "              { type: \"removeItem\", itemId: \"item.glass_of_water\" },"
+          ],
+          "added": [
+            "              { type: \"replaceItem\", itemId: \"item.fountain_water_bottle\", withItemId: \"item.empty_rakia_bottle\" },"
+          ]
+        },
+        {
+          "at": 425,
+          "removed": [
+            "            itemId: \"item.glass_of_water\","
+          ],
+          "added": [
+            "            itemId: \"item.fountain_water_bottle\","
+          ]
+        },
+        {
+          "at": 427,
+          "removed": [],
+          "added": [
+            "              items: [\"item.fountain_water_bottle\"],"
+          ]
+        },
+        {
+          "at": 440,
+          "removed": [
+            "            itemId: \"item.glass_of_water\","
+          ],
+          "added": [
+            "            itemId: \"item.fountain_water_bottle\","
+          ]
+        },
+        {
+          "at": 442,
+          "removed": [],
+          "added": [
+            "              items: [\"item.fountain_water_bottle\"],"
+          ]
+        },
+        {
+          "at": 477,
+          "removed": [
+            "        takeItemId: \"item.sunflower_oil\",",
+            "        flagOnTake: \"hasSunflowerOil\",",
+            "        takeRules: [{ sceneSequence: \"kiro-oil-handover\", effects: [",
+            "          { type: \"addItem\", itemId: \"item.sunflower_oil\" },",
+            "          { type: \"setState\", key: \"hasSunflowerOil\", value: true }",
+            "        ] }],",
+            "        requirements: { state: { hasSunflowerOil: false }, absentItems: [\"item.sunflower_oil\"] },",
+            "        useRules: [",
+            "          {",
+            "            requirements: { items: [\"item.sunflower_oil\"] },",
+            "            effects: [{ type: \"setState\", key: \"drankOilBeforeTonyChallenge\", value: true }],",
+            "            messageKey: \"msg.oil_used\"",
+            "          }",
+            "        ]"
+          ],
+          "added": [
+            "        requirements: { disabled: true }"
+          ]
+        }
+      ]
+    },
+    "src/content/localization/bg.js": {
+      "beforeSHA256": "9521d088a9a990368021068cfba45dd2f759d4fa58b9b06d094022822634af2b",
+      "afterSHA256": "9886e819ad48b771066ac1c818305f68a8f02a99d00aad5e25c706ba44c1d422",
+      "hunks": [
+        {
+          "at": 7,
+          "removed": [],
+          "added": [
+            "  \"bottle.glass_refused\": \"Тони познава чашите на Киро. Трябва ми мътната вода от фонтана в бутилка от ракия.\",",
+            "  \"bottle.keep_oil\": \"Олиото е за крана. Вътрешен ремонт не ми трябва.\",",
+            "  \"bottle.no_flow\": \"Празна бутилка под сух фонтан. Първо да смажа крана с олио от Киро, после да го завъртя.\",",
+            "  \"bottle.filled\": \"Напълних бутилката от фонтана. Синьо-зелена, леко жълтеникава. Общински коктейл — без право на избор.\",",
+            "  \"bottle.water.desc\": \"Леко мътна, синьо-зеленикава вода с жълт оттенък, до рамото на бутилката. В бутилка от ракия — точно за моята чаша срещу Тони.\",",
+            "  \"bottle.water.name\": \"Бутилка с вода от фонтана\",",
+            "  \"bottle.empty.desc\": \"Олиото свърши, бутилката остана. Мога да я напълня от работещия фонтан.\",",
+            "  \"bottle.empty.name\": \"Празна бутилка от ракия\","
+          ]
+        },
+        {
+          "at": 130,
+          "removed": [
+            "  \"item.sunflower_oil.desc\": \"Народна медицина срещу тежки политически решения.\","
+          ],
+          "added": [
+            "  \"item.sunflower_oil.desc\": \"200 мл олио от Киро в бутилка от ракия. За заялия кран на фонтана.\","
+          ]
+        },
+        {
+          "at": 311,
+          "removed": [
+            "  \"quest.chapter1.tony_vote.stage.swap_water\": \"Подмени ракията в чашата на Бай Митко с вода.\","
+          ],
+          "added": [
+            "  \"quest.chapter1.tony_vote.stage.swap_water\": \"Напълни празната бутилка от работещия фонтан и излей водата в своята чаша, докато Тони е разсеян.\","
+          ]
+        }
+      ]
+    },
+    "src/content/localization/chapter1Fountain.js": {
+      "beforeSHA256": "d2394d11f124b71016a954d589e0e4d99298e540a419f4c9cf8327a9cf7194df",
+      "afterSHA256": "3f2c3325647ab7550eb7e11c63e52ff1801e1daaa54015bcc72ea85085815407",
+      "hunks": [
+        {
+          "at": 5,
+          "removed": [
+            "  \"fountain.use.hint\": \"Трябва да смажа крана с олио от механата. Ако съм го изпил, Киро ще даде друго; ако съм го оставил някъде, ще си го прибера.\","
+          ],
+          "added": [
+            "  \"fountain.use.hint\": \"Кранът иска олио. Ще поръчам 200 мл от Киро в механата. Ако съм оставил бутилката някъде, ще си я прибера.\","
+          ]
+        },
+        {
+          "at": 8,
+          "removed": [
+            "  \"fountain.oil.applied\": \"Смазах заялия кран. Сега мога да го завъртя — „Използвай“ върху фонтана.\","
+          ],
+          "added": [
+            "  \"fountain.oil.applied\": \"Смазах крана и запазих празната бутилка. Сега „Използвай“ върху фонтана — да потече.\","
+          ]
+        },
+        {
+          "at": 24,
+          "removed": [
+            "  \"fountain.kiro.refill\": \"Киро: Ето резервна бутилка. За крана, Митко. Той скърца, не ти.\",",
+            "  \"fountain.kiro.hint\": \"Киро: На шкафа има олио. Ако си го изпил, ще дам друго. Ако си го оставил на земята, прибери си го — не е изчезнало по процедура.\","
+          ],
+          "added": [
+            "  \"fountain.kiro.refill\": \"Киро: 200 мл олио, на твоята сметка. За крана, Митко. Той скърца, не ти.\",",
+            "  \"fountain.kiro.hint\": \"Киро: Олио се поръчва при мен, Митко. 200 мл на вересия. Бутилката я пази — после можеш да я напълниш от фонтана.\","
+          ]
+        },
+        {
+          "at": 29,
+          "removed": [
+            "  \"fountain.quest.find_oil\": \"Вземи олио от механата. Ако е изпито, поискай друго от Киро; ако е оставено, прибери го.\","
+          ],
+          "added": [
+            "  \"fountain.quest.find_oil\": \"Поръчай 200 мл олио от Киро. Ако си оставил бутилката, прибери я.\","
+          ]
+        },
+        {
+          "at": 40,
+          "removed": [
+            "  \"fountain.use.hint\": \"The valve needs cooking oil from the Mehana. Kiro can replace oil I've drunk; if I dropped it, I should pick it up.\","
+          ],
+          "added": [
+            "  \"fountain.use.hint\": \"The valve needs cooking oil. I'll order 200 ml from Kiro at the Mehana. If I dropped the bottle, I should pick it up.\","
+          ]
+        },
+        {
+          "at": 43,
+          "removed": [
+            "  \"fountain.oil.applied\": \"The stuck valve is oiled. Now choose Use on the fountain to turn it.\","
+          ],
+          "added": [
+            "  \"fountain.oil.applied\": \"Oiled the valve and kept the empty bottle. Now choose Use on the fountain to get it running.\","
+          ]
+        },
+        {
+          "at": 59,
+          "removed": [
+            "  \"fountain.kiro.refill\": \"Kiro: Here's a spare bottle. For the valve, Mitko. It's the one squeaking.\",",
+            "  \"fountain.kiro.hint\": \"Kiro: There's oil on the sideboard. Drank it? I'll replace it. Dropped it? Pick it up. It hasn't vanished into the filing system.\","
+          ],
+          "added": [
+            "  \"fountain.kiro.refill\": \"Kiro: 200 ml of oil, on your tab. For the valve, Mitko. It's the one squeaking.\",",
+            "  \"fountain.kiro.hint\": \"Kiro: Order the oil from me, Mitko. 200 ml on your tab. Keep the bottle — you can fill it at the fountain later.\","
+          ]
+        },
+        {
+          "at": 64,
+          "removed": [
+            "  \"fountain.quest.find_oil\": \"Get oil from the Mehana. Ask Kiro for more if you drank it; retrieve it if you dropped it.\","
+          ],
+          "added": [
+            "  \"fountain.quest.find_oil\": \"Order 200 ml of cooking oil from Kiro. Retrieve the bottle if you dropped it.\","
+          ]
+        }
+      ]
+    },
+    "src/content/localization/en.js": {
+      "beforeSHA256": "3ec0be3201e670fef8689fd7eab31c713209df134a0868489b90ff0a557146a0",
+      "afterSHA256": "47cbd69ae2d01d63ba981ef714e3aa8954b1b6c9e18fda087803c0c6c25bf50e",
+      "hunks": [
+        {
+          "at": 7,
+          "removed": [],
+          "added": [
+            "  \"bottle.glass_refused\": \"Tony knows Kiro's water glasses. I need murky fountain water in a rakia bottle.\",",
+            "  \"bottle.keep_oil\": \"The oil is for the valve. My insides are not due for maintenance.\",",
+            "  \"bottle.no_flow\": \"Empty bottle, dry fountain. First oil the valve with cooking oil from Kiro, then turn it.\",",
+            "  \"bottle.filled\": \"Filled it at the fountain. Blue-green, with a hint of yellow. A municipal cocktail. No substitutions.\",",
+            "  \"bottle.water.desc\": \"Slightly murky blue-green water with a hint of yellow, filled to the shoulder. In a rakia bottle — just right for my glass against Tony.\",",
+            "  \"bottle.water.name\": \"Bottle of Fountain Water\",",
+            "  \"bottle.empty.desc\": \"The oil is gone; the bottle stays. Fill it at the running fountain.\",",
+            "  \"bottle.empty.name\": \"Empty Rakia Bottle\","
+          ]
+        },
+        {
+          "at": 130,
+          "removed": [
+            "  \"item.sunflower_oil.desc\": \"Folk medicine for heavy political decisions.\","
+          ],
+          "added": [
+            "  \"item.sunflower_oil.desc\": \"200 ml of Kiro's cooking oil in a rakia bottle. For the stuck fountain valve.\","
+          ]
+        },
+        {
+          "at": 311,
+          "removed": [
+            "  \"quest.chapter1.tony_vote.stage.swap_water\": \"Replace the rakia in Bai Mitko's glass with water.\","
+          ],
+          "added": [
+            "  \"quest.chapter1.tony_vote.stage.swap_water\": \"Fill the empty bottle at the running fountain, then pour the water into your glass while Tony is distracted.\","
+          ]
+        }
+      ]
+    },
+    "src/engine/EffectSystem.js": {
+      "beforeSHA256": "21a1190d846e758dc644c5397ce6610a4ba91e4d89ac23112b605c83dcc6051a",
+      "afterSHA256": "05d44364cbcc4826999c7d5888e2ece969ec227baab48531d6505ef4f55bb8ba",
+      "hunks": [
+        {
+          "at": 42,
+          "removed": [],
+          "added": [
+            "    } else if (effect.type === \"replaceItem\") {",
+            "      if (!context.inventory?.replace(effect.itemId, effect.withItemId)) return false;"
+          ]
+        }
+      ]
+    },
+    "src/engine/Game.js": {
+      "beforeSHA256": "1e8dfcf1b490d5d2e0d97b245f4c7c581fdf8373737a6f57f1d3df52a8dd0a43",
+      "afterSHA256": "f3443eef9e030b28a22567b86bb26fe251c14b584783b20c46fcb99d82e59f92",
+      "hunks": [
+        {
+          "at": 1182,
+          "removed": [
+            "    const blocked = this.sceneAction?.active || this.menuOpen || this.paused || this.dialogue.current"
+          ],
+          "added": [
+            "    const blocked = this.inspectedItemId || this.sceneAction?.active || this.menuOpen || this.paused || this.dialogue.current"
+          ]
+        },
+        {
+          "at": 1200,
+          "removed": [
+            "    if (this.sceneAction?.active) return;"
+          ],
+          "added": [
+            "    if (this.inspectedItemId || this.sceneAction?.active) return;"
+          ]
+        },
+        {
+          "at": 1389,
+          "removed": [
+            "    if (this.sceneAction?.active) return;"
+          ],
+          "added": [
+            "    if (this.inspectedItemId || this.sceneAction?.active) return;"
+          ]
+        },
+        {
+          "at": 1402,
+          "removed": [
+            "    if (this.sceneAction?.active) return;"
+          ],
+          "added": [
+            "    if (this.inspectedItemId || this.sceneAction?.active) return;"
+          ]
+        },
+        {
+          "at": 1492,
+          "removed": [
+            "    if (this.sceneAction?.active) return false;"
+          ],
+          "added": [
+            "    if (this.inspectedItemId || this.sceneAction?.active) return false;"
+          ]
+        },
+        {
+          "at": 1509,
+          "removed": [],
+          "added": [
+            "    if (!this.inventory.has(itemId) || this.inspectedItemId) return false;"
+          ]
+        },
+        {
+          "at": 1542,
+          "removed": [],
+          "added": [
+            "    if (!this.inventory.has(itemId) || this.inspectedItemId) return false;"
+          ]
+        },
+        {
+          "at": 1657,
+          "removed": [],
+          "added": [
+            "  createItemInspection() {",
+            "    const item = this.content.items[this.inspectedItemId];",
+            "    const asset = this.assets.manifest.items[item.id];",
+            "    const panel = element('section', 'received-item-screen');",
+            "    panel.setAttribute('role', 'dialog'); panel.setAttribute('aria-modal', 'true');",
+            "    panel.setAttribute('aria-label', this.t(item.nameKey));",
+            "    const title = document.createElement('h2'); title.textContent = this.t(item.nameKey);",
+            "    const viewer = element('div', 'item-model-viewer');",
+            "    const text = Object.fromEntries(['loading','unavailable','controls'].map(key => [key, this.t('ui.received_oil.' + key)]));",
+            "    text.name = this.t(item.nameKey);",
+            "    this.receivedItemViewer = mountItemModelViewer(viewer, { modelUrl: asset.model, fallbackUrl: asset.icon, text, liquidColor: asset.liquidColor });",
+            "    const description = document.createElement('p'); description.textContent = this.t(item.descriptionKey);",
+            "    panel.append(title, viewer, description, button(this.t('ui.received_oil.close'), () => {",
+            "      this.inspectedItemId = null; this.renderUi();",
+            "    }));",
+            "    return panel;",
+            "  }",
+            ""
+          ]
+        },
+        {
+          "at": 1734,
+          "removed": [],
+          "added": [
+            "    this.inspectedItemId = null;"
+          ]
+        },
+        {
+          "at": 1886,
+          "removed": [],
+          "added": [
+            "    if (this.inspectedItemId && !this.menuOpen && !this.paused) this.uiRoot.appendChild(this.createItemInspection());"
+          ]
+        },
+        {
+          "at": 2024,
+          "removed": [
+            "          this.setStatusMessage(this.t(selectedItem.descriptionKey));"
+          ],
+          "added": [
+            "          if (this.assets.manifest.items[selectedItem.id]?.model) {",
+            "            this.inspectedItemId = selectedItem.id;",
+            "            this.player.target = null; this.player.walkPath = [];",
+            "            this.renderUi();",
+            "          } else this.setStatusMessage(this.t(selectedItem.descriptionKey));"
+          ]
+        }
+      ]
+    },
+    "src/engine/InventorySystem.js": {
+      "beforeSHA256": "f5737540a19f3d8cce9a90d5b0f67d022202a5582ad4fac8cc0fc49c09c18e5f",
+      "afterSHA256": "02a8e46bb2b0dd53b208d6678244800aecc373586e89d35034954a8abc27a1f6",
+      "hunks": [
+        {
+          "at": 18,
+          "removed": [],
+          "added": [
+            "  // Contents change in one synchronous operation; stale duplicate events do nothing.",
+            "  replace(itemId, withItemId) {",
+            "    if (!this.has(itemId) || this.has(withItemId)",
+            "      || this.state.droppedItems?.some(record => record.itemId === withItemId)) return false;",
+            "    this.state.inventory = this.state.inventory.filter(id => id !== itemId);",
+            "    this.state.inventory.push(withItemId);",
+            "    return true;",
+            "  }",
+            ""
+          ]
+        }
+      ]
+    },
+    "src/engine/ItemModelViewer.js": {
+      "beforeSHA256": "8914a7c30996d338f3cb6c5c76aeb7083dc0eb518fd6d201ca77d1d46c9268e1",
+      "afterSHA256": "29c876f3cde1407508cf7f89b7b033eaf39cb3ac54f674bc2db4c55d823e73c4",
+      "hunks": [
+        {
+          "at": 1,
+          "removed": [
+            "export function mountItemModelViewer(host, { modelUrl, fallbackUrl, text }) {"
+          ],
+          "added": [
+            "export function mountItemModelViewer(host, { modelUrl, fallbackUrl, text, liquidColor = '#b77c00' }) {"
+          ]
+        },
+        {
+          "at": 163,
+          "removed": [
+            "        else { m.transparent=false; m.opacity=1; m.depthWrite=true; m.side=T.FrontSide; m.forceSinglePass=true; m.envMapIntensity=.3; m.roughness=.2; m.color.set('#b77c00'); mesh.renderOrder=2; }"
+          ],
+          "added": [
+            "        else { m.transparent=false; m.opacity=1; m.depthWrite=true; m.side=T.FrontSide; m.forceSinglePass=true; m.envMapIntensity=.3; m.roughness=.2; if (liquidColor) m.color.set(liquidColor); mesh.renderOrder=2; }"
+          ]
+        }
+      ]
+    },
+    "src/engine/SaveSystem.js": {
+      "beforeSHA256": "bac9f76443de67cca0ffc7a8fbc84b0cf62e8701fd8743ba4fd118fe6591108c",
+      "afterSHA256": "d9f2d2e70cbb5b8eda71cfbb15d62ea0a6b8a503b9da059e4aaf94e3bb2915bb",
+      "hunks": [
+        {
+          "at": 0,
+          "removed": [],
+          "added": [
+            "import { normalizeBottleSave } from \"../content/chapter1/bottleSave.js\";"
+          ]
+        },
+        {
+          "at": 42,
+          "removed": [],
+          "added": [
+            "  normalizeBottleSave(normalized);"
+          ]
+        }
+      ]
+    },
+    "test/baba-delighted-animation.test.js": {
+      "beforeSHA256": "64429f81b11aef2facbcbf70672146445b487a33aad399c42d0174ee3b576243",
+      "afterSHA256": "5d081151166cde0e1a27c2148e548b7609400f68922cebea7393145853b128bb",
+      "hunks": [
+        {
+          "at": 9,
+          "removed": [],
+          "added": [
+            "import {stripBottleQuest} from './helpers/bottle-preservation.js';"
+          ]
+        },
+        {
+          "at": 67,
+          "removed": [
+            " const current=readFileSync('src/content/chapter1/fountain.js','utf8').replace(', reactionId: \"delighted_approval\"','').replace(', reactionId: \"skeptical_disapproval\"','');"
+          ],
+          "added": [
+            " const current=stripBottleQuest('src/content/chapter1/fountain.js',readFileSync('src/content/chapter1/fountain.js','utf8')).replace(', reactionId: \"delighted_approval\"','').replace(', reactionId: \"skeptical_disapproval\"','');"
+          ]
+        }
+      ]
+    },
+    "test/baba-skeptical-animation.test.js": {
+      "beforeSHA256": "a1ed5996927dc06f9d5099ed72aa4761380015deef3329ef89106969fe660a43",
+      "afterSHA256": "bbbaac409aa9ee3c1be61d749a04bbe0b1dafb9ee4c6b2e7fcb9652538702997",
+      "hunks": [
+        {
+          "at": 81,
+          "removed": [
+            " const fountain='src/content/chapter1/fountain.js';assert.equal(sha(readFileSync(fountain,'utf8').replace(', reactionId: \"skeptical_disapproval\"','')),baseline.source.fountain);"
+          ],
+          "added": [
+            " const fountain='src/content/chapter1/fountain.js';assert.equal(sha(stripKiroOilIntegration(fountain,readFileSync(fountain,'utf8')).replace(', reactionId: \"skeptical_disapproval\"','')),baseline.source.fountain);"
+          ]
+        }
+      ]
+    },
+    "test/browser-smoke.test.js": {
+      "beforeSHA256": "f6f3609a744bbbb53090920c2e6003ca88cbcd836b9287541cb075454aa24493",
+      "afterSHA256": "e51233da5ce876ac1f57a279714c1fb95520a109c973c32650cfabda13dede4b",
+      "hunks": [
+        {
+          "at": 468,
+          "removed": [
+            "        await verb(\"take\");",
+            "        await clickTarget(\"hotspot.mehana.oil\");"
+          ],
+          "added": [
+            "        await verb(\"talk\");",
+            "        await clickTarget(\"npc.mehana_waiter\");",
+            "        await choice(\"fountain.kiro.choice.refill\");"
+          ]
+        },
+        {
+          "at": 500,
+          "removed": [
+            "        await useItem(\"item.glass_of_water\");"
+          ],
+          "added": [
+            "        await go(\"exit.mehana.to_square\", \"scene.chapter1.village_square\");",
+            "        await useItem(\"item.empty_rakia_bottle\");",
+            "        await clickTarget(\"hotspot.square.fountain\");",
+            "        await waitFor(() => window.__comradeCandidateTest.game.inventory.has(\"item.fountain_water_bottle\"));",
+            "        await go(\"exit.square.to_mehana\", \"scene.chapter1.mehana\");",
+            "        await useItem(\"item.fountain_water_bottle\");"
+          ]
+        },
+        {
+          "at": 541,
+          "removed": [
+            "test(\"fountain repair supports real clicks, consumed-oil recovery and mid-puzzle reloads\", { timeout: 120_000 }, async (t) => {"
+          ],
+          "added": [
+            "test(\"fountain repair supports real clicks, safe oil self-use and mid-puzzle reloads\", { timeout: 120_000 }, async (t) => {"
+          ]
+        },
+        {
+          "at": 580,
+          "removed": [
+            "    await verb(\"take\");",
+            "    await click(\"hotspot.mehana.oil\");",
+            "    await waitFor(() => window.__comradeCandidateTest.game.inventory.has(\"item.sunflower_oil\"));",
+            "    await page.locator(\".received-item-screen > button:last-child\").click();",
+            "    await oilAction(\"ui.inventory.use_on_self\");",
+            "    await waitFor(() => !window.__comradeCandidateTest.game.inventory.has(\"item.sunflower_oil\"));"
+          ],
+          "added": []
+        },
+        {
+          "at": 581,
+          "removed": [
+            "    await click(\"npc.mehana_waiter\");",
+            "    await choice(\"fountain.kiro.choice.refill\");"
+          ],
+          "added": [
+            "        await click(\"npc.mehana_waiter\");",
+            "        await choice(\"fountain.kiro.choice.refill\");"
+          ]
+        },
+        {
+          "at": 585,
+          "removed": [],
+          "added": [
+            "    await oilAction(\"ui.inventory.use_on_self\");",
+            "    assert.equal(await page.evaluate(() => window.__comradeCandidateTest.game.inventory.has(\"item.sunflower_oil\")), true);"
+          ]
+        }
+      ]
+    },
+    "test/chapter1-fountain.test.js": {
+      "beforeSHA256": "c596c23e894a6c1d6379749f06b67bbfda52e87bddd947e1aea87beba37a2019",
+      "afterSHA256": "7635040d136cc22d9a9ed57924a4f56330ac088ccea8dab80ed0fec1331ee617",
+      "hunks": [
+        {
+          "at": 89,
+          "removed": [
+            "test(\"consumed oil is replaceable but carried or dropped oil cannot be duplicated\", () => {"
+          ],
+          "added": [
+            "test(\"Kiro is the sole source; self-use preserves oil and dropped bottles prevent duplicate orders\", () => {"
+          ]
+        },
+        {
+          "at": 92,
+          "removed": [
+            "  assert.equal(requirementsMet(oil.requirements, ctx), true);",
+            "  apply(oilRefillRule, ctx);"
+          ],
+          "added": []
+        },
+        {
+          "at": 93,
+          "removed": [
+            "  assert.equal(requirementsMet(oilRefillRule.requirements, ctx), false);",
+            "  const oilItem = chapter1.items.find(item => item.id === \"item.sunflower_oil\");",
+            "  apply(oilItem.selfUseRules[0], ctx);",
+            "  ctx = reload(ctx);"
+          ],
+          "added": []
+        },
+        {
+          "at": 94,
+          "removed": [
+            "  ctx.inventory.remove(\"item.sunflower_oil\");",
+            "  ctx.state.droppedItems.push({ itemId: \"item.sunflower_oil\", sceneId: \"scene.chapter1.apartment\", position: { x: 800, y: 550 } });"
+          ],
+          "added": [
+            "  const item = chapter1.items.find(item => item.id === \"item.sunflower_oil\");",
+            "  apply(item.selfUseRules[0], ctx);",
+            "  assert.equal(ctx.inventory.has(item.id), true);",
+            "  assert.equal(ctx.state.drankOilBeforeTonyChallenge, false);",
+            "  ctx.inventory.remove(item.id);",
+            "  ctx.state.droppedItems.push({ itemId: item.id, sceneId: mehana.id, position: { x: 800, y: 550 } });"
+          ]
+        },
+        {
+          "at": 103,
+          "removed": [
+            "  ctx.inventory.add(\"item.sunflower_oil\");",
+            "  apply(firstMatchingRule(fountainItemRules.filter(rule => rule.itemId === \"item.sunflower_oil\"), ctx), ctx);"
+          ],
+          "added": [
+            "  ctx.inventory.add(item.id);",
+            "  apply(firstMatchingRule(fountainItemRules.filter(rule => rule.itemId === item.id), ctx), ctx);",
+            "  assert.equal(ctx.inventory.has(\"item.empty_rakia_bottle\"), true);"
+          ]
+        }
+      ]
+    },
+    "test/content-effects.test.js": {
+      "beforeSHA256": "2b593b6599e587fb0f7a932f82dd0a82dd14f72c06ddc533a3855a302990a063",
+      "afterSHA256": "83dc30ea27ec3d1b81e0d6433a9cd1c825f296c2c78c5fb37fdb6ef5df57137a",
+      "hunks": [
+        {
+          "at": 11,
+          "removed": [
+            "    remove: (itemId) => items.delete(itemId)"
+          ],
+          "added": [
+            "    remove: (itemId) => items.delete(itemId),",
+            "    replace: (itemId, next) => { if (!items.has(itemId) || items.has(next)) return false; items.delete(itemId); items.add(next); return true; }"
+          ]
+        },
+        {
+          "at": 110,
+          "removed": [
+            "  inventory.add(\"item.glass_of_water\");"
+          ],
+          "added": [
+            "  inventory.add(\"item.fountain_water_bottle\");"
+          ]
+        },
+        {
+          "at": 112,
+          "removed": [
+            "    mitkoGlass.itemUseRules.filter((rule) => rule.itemId === \"item.glass_of_water\"),"
+          ],
+          "added": [
+            "    mitkoGlass.itemUseRules.filter((rule) => rule.itemId === \"item.fountain_water_bottle\"),"
+          ]
+        },
+        {
+          "at": 131,
+          "removed": [
+            "  assert.equal(inventory.has(\"item.glass_of_water\"), false);"
+          ],
+          "added": [
+            "  assert.equal(inventory.has(\"item.fountain_water_bottle\"), false);"
+          ]
+        },
+        {
+          "at": 342,
+          "removed": [
+            "  const inventory = inventoryWith(\"item.glass_of_water\");"
+          ],
+          "added": [
+            "  const inventory = inventoryWith(\"item.fountain_water_bottle\");"
+          ]
+        },
+        {
+          "at": 350,
+          "removed": [
+            "  const waterRules = mitkoGlass.itemUseRules.filter((rule) => rule.itemId === \"item.glass_of_water\");"
+          ],
+          "added": [
+            "  const waterRules = mitkoGlass.itemUseRules.filter((rule) => rule.itemId === \"item.fountain_water_bottle\");"
+          ]
+        },
+        {
+          "at": 357,
+          "removed": [
+            "  assert.equal(inventory.has(\"item.glass_of_water\"), true);"
+          ],
+          "added": [
+            "  assert.equal(inventory.has(\"item.fountain_water_bottle\"), true);"
+          ]
+        },
+        {
+          "at": 363,
+          "removed": [
+            "  assert.equal(inventory.has(\"item.glass_of_water\"), true);"
+          ],
+          "added": [
+            "  assert.equal(inventory.has(\"item.fountain_water_bottle\"), true);"
+          ]
+        }
+      ]
+    },
+    "test/engine.test.js": {
+      "beforeSHA256": "2e7ebe4ea9a8d9931c8fbbec1b90fea4f3c1cf376ea977d4ce232c0d1dda7fdd",
+      "afterSHA256": "aff976b91e0625fe07d8abedf216c981222c60bae75ebe91f85485910d7cd7e9",
+      "hunks": [
+        {
+          "at": 68,
+          "removed": [],
+          "added": [
+            "    assetManifest.items[\"item.empty_rakia_bottle\"].icon,",
+            "    assetManifest.items[\"item.fountain_water_bottle\"].icon,"
+          ]
+        }
+      ]
+    },
+    "test/kiro-talking-polishing.test.js": {
+      "beforeSHA256": "1e5be6c18e33b9c6219bff87fa5775831f891f07726170901afecec09d4efe91",
+      "afterSHA256": "4fad71f13a046eab94b4d7a1182ba3bb3a9b53b18b968356abb44c536059651d",
+      "hunks": [
+        {
+          "at": 102,
+          "removed": [
+            "  const manifest=structuredClone(assetManifest);for(const key of ['kiroOilScale','kiroOilHandover','mehanaWaiterTonyGlanceC05','mehanaWaiterTalkingPolishing','mehanaWaiterTalkingPolishingC07','mehanaWaiterListeningC07','mehanaWaiterListeningFinal'])delete manifest.scenes[scene.id][key];assert.equal(manifest.items['item.sunflower_oil'].icon,'assets/chapter1/items/kiro-bottle/oil-200ml-r07.png');manifest.items['item.sunflower_oil']=structuredClone(baseline.manifest.items['item.sunflower_oil']);assert.deepEqual(manifest,baseline.manifest);"
+          ],
+          "added": [
+            "  const manifest=structuredClone(assetManifest);delete manifest.items['item.empty_rakia_bottle'];delete manifest.items['item.fountain_water_bottle'];for(const key of ['kiroOilScale','kiroOilHandover','mehanaWaiterTonyGlanceC05','mehanaWaiterTalkingPolishing','mehanaWaiterTalkingPolishingC07','mehanaWaiterListeningC07','mehanaWaiterListeningFinal'])delete manifest.scenes[scene.id][key];assert.equal(manifest.items['item.sunflower_oil'].icon,'assets/chapter1/items/kiro-bottle/oil-200ml-r07.png');manifest.items['item.sunflower_oil']=structuredClone(baseline.manifest.items['item.sunflower_oil']);assert.deepEqual(manifest,baseline.manifest);"
+          ]
+        }
+      ]
+    }
+  }
+}

@@ -40,6 +40,8 @@ export function applyEffects(effects = [], context = {}) {
       if (effect.timestampKey) state[effect.timestampKey] = state[effect.key] > minimum ? (context.now?.() ?? Date.now()) : null;
     } else if (effect.type === "addItem") {
       context.inventory?.add(effect.itemId);
+    } else if (effect.type === "replaceItem") {
+      if (!context.inventory?.replace(effect.itemId, effect.withItemId)) return false;
     } else if (effect.type === "removeItem") {
       context.inventory?.remove(effect.itemId);
     } else if (effect.type === "startQuest") {

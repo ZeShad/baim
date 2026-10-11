@@ -1,0 +1,26 @@
+{
+  "source": "assets/chapter1/items/kiro-bottle/yellow-water-full-r08.glb",
+  "sourceSHA256": "76e35855002fff91437040e0d8724f2f4a7bc1a39f7a68e6ebb98388606ebd8b",
+  "originalBinarySHA256": "ff37676a5e810de65880b760aa22b134c472654d999764253c801b61f7a9034f",
+  "originalBinaryBytes": 5847488,
+  "originalBinaryPreserved": true,
+  "waterColourSRGB": [
+    152,
+    184,
+    160
+  ],
+  "textureWidth": 2048,
+  "textureHeight": 1024,
+  "seed": 707,
+  "textureSHA256": "f2cb758950e0610920bc959916860310669a5360bb82d39a164f5ed2dc7e1d39",
+  "outputSHA256": "9fd292fd471439c183ff39f52eb114efd5d3a0d242d4bc7161accc2b0c3f60ae",
+  "positionAccessorUnchanged": 226,
+  "normalAccessorUnchanged": 227,
+  "indicesAccessorUnchanged": 228,
+  "fillBoundsY": [
+    0.009879570454359055,
+    0.1667681634426117
+  ],
+  "ownerReference": "kiro-fountain-water-look-c07",
+  "note": "Append only UVs and embedded water texture; original geometry/index/normal and label image bytes remain identical. Other materials/nodes/transforms unchanged."
+}
