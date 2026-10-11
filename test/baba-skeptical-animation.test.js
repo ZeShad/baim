@@ -79,7 +79,7 @@ test('Skeptical source and timing are bound; original approved assets, systems a
  assert.equal(reaction.loop,false);assert.equal(reaction.interpolateFrames,true);assert.equal(reaction.transitionDurationMs,148);
  assert.deepEqual([layer.left,layer.top,layer.height,layer.zIndex],[325,330,122,90]);
  assert.equal(assetManifest.scenes[scene.id].babaStoyankaSkepticalSeated,candidate.import.runtime.asset);
- const fountain='src/content/chapter1/fountain.js';assert.equal(sha(readFileSync(fountain,'utf8').replace(', reactionId: "skeptical_disapproval"','')),baseline.source.fountain);
+ const fountain='src/content/chapter1/fountain.js';assert.equal(sha(stripKiroOilIntegration(fountain,readFileSync(fountain,'utf8')).replace(', reactionId: "skeptical_disapproval"','')),baseline.source.fountain);
  const source='assets_src/chapter1/scenes/village_square/layers.json';const layers=JSON.parse(readFileSync(source));
  delete layers.layers.find(l=>l.id===layer.id).reactionAnimations.skeptical_disapproval;
  assert.equal(sha(JSON.stringify(layers)),baseline.semantic.layers,'prior layers/geometry and delighted reaction remain unchanged');

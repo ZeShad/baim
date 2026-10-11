@@ -9,7 +9,8 @@ function inventoryWith(...initialItems) {
   return {
     has: (itemId) => items.has(itemId),
     add: (itemId) => items.add(itemId),
-    remove: (itemId) => items.delete(itemId)
+    remove: (itemId) => items.delete(itemId),
+    replace: (itemId, next) => { if (!items.has(itemId) || items.has(next)) return false; items.delete(itemId); items.add(next); return true; }
   };
 }
 
@@ -107,9 +108,9 @@ test("Tony vote vertical slice is reachable from authored Chapter 1 data", () =>
   );
   assert.ok(distraction);
   applyEffects(distraction.effects, context);
-  inventory.add("item.glass_of_water");
+  inventory.add("item.fountain_water_bottle");
   const swap = firstMatchingRule(
-    mitkoGlass.itemUseRules.filter((rule) => rule.itemId === "item.glass_of_water"),
+    mitkoGlass.itemUseRules.filter((rule) => rule.itemId === "item.fountain_water_bottle"),
     context
   );
   assert.equal(swap.messageKey, "msg.water_swap_ready");
@@ -128,7 +129,7 @@ test("Tony vote vertical slice is reachable from authored Chapter 1 data", () =>
   assert.equal(state.influence, 25);
   assert.equal(state.suspicion, 10);
   assert.equal(state.publicMood, 55);
-  assert.equal(inventory.has("item.glass_of_water"), false);
+  assert.equal(inventory.has("item.fountain_water_bottle"), false);
   assert.deepEqual(completed, ["quest.chapter1.tony_vote"]);
 });
 
@@ -339,7 +340,7 @@ test("Tony catches one early water attempt but does not consume the water", () =
   const mitkoGlass = mehana.interactables.find(
     (target) => target.id === "hotspot.mehana.bai_mitko_rakia_glass"
   );
-  const inventory = inventoryWith("item.glass_of_water");
+  const inventory = inventoryWith("item.fountain_water_bottle");
   const state = {
     tonyVote: false,
     swappedOwnRakiaWithWater: false,
@@ -347,20 +348,20 @@ test("Tony catches one early water attempt but does not consume the water", () =
     flags: { tonyChallengeStarted: true }
   };
   const context = { state, inventory };
-  const waterRules = mitkoGlass.itemUseRules.filter((rule) => rule.itemId === "item.glass_of_water");
+  const waterRules = mitkoGlass.itemUseRules.filter((rule) => rule.itemId === "item.fountain_water_bottle");
 
   const caught = firstMatchingRule(waterRules, context);
   assert.equal(caught.messageKey, "msg.water_swap_watched");
   applyEffects(caught.effects, context);
   assert.equal(state.flags.tonyCaughtWaterAttempt, true);
   assert.equal(state.suspicion, 3);
-  assert.equal(inventory.has("item.glass_of_water"), true);
+  assert.equal(inventory.has("item.fountain_water_bottle"), true);
 
   const repeated = firstMatchingRule(waterRules, context);
   assert.equal(repeated.messageKey, "msg.water_swap_still_watched");
   applyEffects(repeated.effects, context);
   assert.equal(state.suspicion, 3);
-  assert.equal(inventory.has("item.glass_of_water"), true);
+  assert.equal(inventory.has("item.fountain_water_bottle"), true);
 });
 
 test("Tony's challenge invitation disappears after acceptance or vote completion", () => {

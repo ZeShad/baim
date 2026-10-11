@@ -408,21 +408,24 @@ const rawScenes = [
           state: { tonyVote: false }
         },
         itemUseRules: [
+          { itemId: "item.glass_of_water", messageKey: "bottle.glass_refused", reject: true },
           {
-            itemId: "item.glass_of_water",
+            itemId: "item.fountain_water_bottle",
             requirements: {
+              items: ["item.fountain_water_bottle"],
               flags: ["tonyChallengeStarted", "tonyDistracted"],
               state: { swappedOwnRakiaWithWater: false, tonyVote: false }
             },
             effects: [
-              { type: "removeItem", itemId: "item.glass_of_water" },
+              { type: "replaceItem", itemId: "item.fountain_water_bottle", withItemId: "item.empty_rakia_bottle" },
               { type: "setState", key: "swappedOwnRakiaWithWater", value: true }
             ],
             messageKey: "msg.water_swap_ready"
           },
           {
-            itemId: "item.glass_of_water",
+            itemId: "item.fountain_water_bottle",
             requirements: {
+              items: ["item.fountain_water_bottle"],
               flags: ["tonyChallengeStarted"],
               notFlags: ["tonyDistracted", "tonyCaughtWaterAttempt"],
               state: { swappedOwnRakiaWithWater: false, tonyVote: false }
@@ -435,8 +438,9 @@ const rawScenes = [
             reject: true
           },
           {
-            itemId: "item.glass_of_water",
+            itemId: "item.fountain_water_bottle",
             requirements: {
+              items: ["item.fountain_water_bottle"],
               flags: ["tonyChallengeStarted", "tonyCaughtWaterAttempt"],
               notFlags: ["tonyDistracted"],
               state: { swappedOwnRakiaWithWater: false, tonyVote: false }
@@ -471,20 +475,7 @@ const rawScenes = [
         nameKey: "item.sunflower_oil.name",
         rect: { x: 1138, y: 292, w: 44, h: 97 },
         lookKey: "look.mehana.oil",
-        takeItemId: "item.sunflower_oil",
-        flagOnTake: "hasSunflowerOil",
-        takeRules: [{ sceneSequence: "kiro-oil-handover", effects: [
-          { type: "addItem", itemId: "item.sunflower_oil" },
-          { type: "setState", key: "hasSunflowerOil", value: true }
-        ] }],
-        requirements: { state: { hasSunflowerOil: false }, absentItems: ["item.sunflower_oil"] },
-        useRules: [
-          {
-            requirements: { items: ["item.sunflower_oil"] },
-            effects: [{ type: "setState", key: "drankOilBeforeTonyChallenge", value: true }],
-            messageKey: "msg.oil_used"
-          }
-        ]
+        requirements: { disabled: true }
       },
       {
         id: "hotspot.mehana.water_jug",

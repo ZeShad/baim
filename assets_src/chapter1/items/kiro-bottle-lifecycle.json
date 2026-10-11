@@ -1,0 +1,66 @@
+{
+  "baseline": "31793384bef7e48d763416b13dabfcf76fc3652e",
+  "sourceApproval": "Owner approved c07/empty runtime visuals and exact publication/cleanup bundle in the focused Codex chat, 11 October 2026",
+  "newGeneration": false,
+  "records": [
+    {
+      "state": "empty",
+      "path": "assets/chapter1/items/kiro-bottle/empty-r07.png",
+      "source": "extraFixes/blender-workshop/rakia-oil-200ml/blender-r07/kiro-bottle-empty-r07.png",
+      "bytes": 1224801,
+      "sha256": "c7ecf00dc5f02f11aaedf8b8be4e9fd79264eaff8851174304bb1ed6bcfd15c9",
+      "status": "runtime_approved"
+    },
+    {
+      "state": "empty",
+      "path": "assets/chapter1/items/kiro-bottle/empty-r08.glb",
+      "source": "extraFixes/blender-workshop/rakia-oil-200ml/game-models-r08/kiro-bottle-empty.glb",
+      "bytes": 5392460,
+      "sha256": "463324d8f33d79fb1482056e08d46e70b265f83d29ba9480b97174dcf4dbc4b0",
+      "status": "runtime_approved"
+    },
+    {
+      "state": "water",
+      "path": "assets/chapter1/items/kiro-bottle/yellow-water-full-r07.png",
+      "source": "extraFixes/blender-workshop/rakia-oil-200ml/blender-r07/kiro-bottle-yellow-water-full-r07.png",
+      "bytes": 1211542,
+      "sha256": "eff08fbd7d1ec6439cfb9ed40d17a5b02261e9e6beb354ddfb2df8d22a3b138c",
+      "status": "retained_unused"
+    },
+    {
+      "state": "water",
+      "path": "assets/chapter1/items/kiro-bottle/yellow-water-full-r08.glb",
+      "source": "extraFixes/blender-workshop/rakia-oil-200ml/game-models-r08/kiro-bottle-yellow-water-full.glb",
+      "bytes": 5907228,
+      "sha256": "76e35855002fff91437040e0d8724f2f4a7bc1a39f7a68e6ebb98388606ebd8b",
+      "status": "retained_unused"
+    },
+    {
+      "state": "water-c07",
+      "path": "assets/chapter1/items/kiro-bottle/fountain-water-c07.glb",
+      "source": "assets/chapter1/items/kiro-bottle/yellow-water-full-r08.glb",
+      "bytes": 6941428,
+      "sha256": "9fd292fd471439c183ff39f52eb114efd5d3a0d242d4bc7161accc2b0c3f60ae",
+      "status": "runtime_approved",
+      "appearanceReference": "assets_src/chapter1/items/kiro-water-c07/owner-selected-look-c07.png",
+      "recipe": "assets_src/chapter1/items/kiro-water-c07/derivation.json"
+    },
+    {
+      "state": "water-c07",
+      "path": "assets/chapter1/items/kiro-bottle/fountain-water-c07.png",
+      "source": "assets_src/chapter1/items/kiro-water-c07/water-c07.blend",
+      "bytes": 1181050,
+      "sha256": "3b25a160deef102634c68365630080c8e80723f0d672e33098fe964d96024e8b",
+      "status": "runtime_approved",
+      "appearanceReference": "assets_src/chapter1/items/kiro-water-c07/owner-selected-look-c07.png",
+      "recipe": "assets_src/chapter1/items/kiro-water-c07/derivation.json"
+    }
+  ],
+  "runtimeApproval": {
+    "date": "2026-10-11",
+    "thread": "01a12800-99c7-7180-bc0d-6f0f54b18f05",
+    "decision": "approved",
+    "reviewSnapshotSHA256": "f2b71c75bb184f8cd478a84be4928c7e2ac59867d44bcd9574d80507ec61a02d",
+    "scope": "Reviewed bottle quest including empty and c07 GLB/PNG; original yellow-water outputs retained unused; commit/push/PR/merge only exact-head green CI, PC synchronization/runtime verification, exact listed cleanup."
+  }
+}

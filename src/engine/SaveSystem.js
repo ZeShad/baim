@@ -1,3 +1,4 @@
+import { normalizeBottleSave } from "../content/chapter1/bottleSave.js";
 import { DEFAULT_SAVE, SAVE_KEY } from "./ids.js";
 
 export class SaveSystem {
@@ -39,6 +40,7 @@ function migrateSave(save) {
     completedQuests: Array.isArray(save.completedQuests) ? save.completedQuests : [],
     expiredQuests: Array.isArray(save.expiredQuests) ? save.expiredQuests : []
   };
+  normalizeBottleSave(normalized);
   // Preserve earned registration in old saves, including saves from before the
   // registration flags existed. Never reopen a resolved chapter.
   if (!normalized.chapter1Completed) {

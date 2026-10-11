@@ -87,24 +87,23 @@ test("gift dialogue and direct offers cannot buy support or consume puzzle items
   assert.equal(ctx.state.babaStoyankaVote, true);
 });
 
-test("consumed oil is replaceable but carried or dropped oil cannot be duplicated", () => {
+test("Kiro is the sole source; self-use preserves oil and dropped bottles prevent duplicate orders", () => {
   let ctx = context();
   const oil = mehana.interactables.find(target => target.id === "hotspot.mehana.oil");
-  assert.equal(requirementsMet(oil.requirements, ctx), true);
-  apply(oilRefillRule, ctx);
   assert.equal(requirementsMet(oil.requirements, ctx), false);
-  assert.equal(requirementsMet(oilRefillRule.requirements, ctx), false);
-  const oilItem = chapter1.items.find(item => item.id === "item.sunflower_oil");
-  apply(oilItem.selfUseRules[0], ctx);
-  ctx = reload(ctx);
   apply(oilRefillRule, ctx);
-  ctx.inventory.remove("item.sunflower_oil");
-  ctx.state.droppedItems.push({ itemId: "item.sunflower_oil", sceneId: "scene.chapter1.apartment", position: { x: 800, y: 550 } });
+  const item = chapter1.items.find(item => item.id === "item.sunflower_oil");
+  apply(item.selfUseRules[0], ctx);
+  assert.equal(ctx.inventory.has(item.id), true);
+  assert.equal(ctx.state.drankOilBeforeTonyChallenge, false);
+  ctx.inventory.remove(item.id);
+  ctx.state.droppedItems.push({ itemId: item.id, sceneId: mehana.id, position: { x: 800, y: 550 } });
   ctx = reload(ctx);
   assert.equal(requirementsMet(oilRefillRule.requirements, ctx), false);
   ctx.state.droppedItems = [];
-  ctx.inventory.add("item.sunflower_oil");
-  apply(firstMatchingRule(fountainItemRules.filter(rule => rule.itemId === "item.sunflower_oil"), ctx), ctx);
+  ctx.inventory.add(item.id);
+  apply(firstMatchingRule(fountainItemRules.filter(rule => rule.itemId === item.id), ctx), ctx);
+  assert.equal(ctx.inventory.has("item.empty_rakia_bottle"), true);
   assert.equal(requirementsMet(oilRefillRule.requirements, ctx), false);
 });
 

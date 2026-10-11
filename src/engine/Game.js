@@ -1180,7 +1180,7 @@ export class Game {
   }
 
   updateHoveredTarget(point) {
-    const blocked = this.sceneAction?.active || this.menuOpen || this.paused || this.dialogue.current
+    const blocked = this.inspectedItemId || this.sceneAction?.active || this.menuOpen || this.paused || this.dialogue.current
       || this.sceneTransitionPending || this.player?.actionSequence || this.player?.animation === "action";
     const previousTargetId = this.hoveredTarget?.id || null;
     this.hoveredTarget = !blocked && point
@@ -1198,7 +1198,7 @@ export class Game {
   }
 
   handleTarget(target, clickPoint = null) {
-    if (this.sceneAction?.active) return;
+    if (this.inspectedItemId || this.sceneAction?.active) return;
     if (this.shouldApproachTargetBeforeAction(target, clickPoint)) return;
     this.performTargetAction(target);
   }
@@ -1387,7 +1387,7 @@ export class Game {
   }
 
   walkToPoint(point, facingPoint = point) {
-    if (this.sceneAction?.active) return;
+    if (this.inspectedItemId || this.sceneAction?.active) return;
     const path = findWalkPath(this.currentScene, this.player.position, point);
     const route = path.length ? path : [{ ...point }];
     const routeDistance = walkPathDistance(this.player.position, route);
@@ -1400,7 +1400,7 @@ export class Game {
   }
 
   performTargetAction(target, forcedActionSequence = null) {
-    if (this.sceneAction?.active) return;
+    if (this.inspectedItemId || this.sceneAction?.active) return;
     if (this.inventoryUseItemId) {
       this.useInventoryItemOnTarget(this.inventoryUseItemId, target);
       return;
@@ -1490,7 +1490,7 @@ export class Game {
   }
 
   beginInventoryItemUse(itemId) {
-    if (this.sceneAction?.active) return false;
+    if (this.inspectedItemId || this.sceneAction?.active) return false;
     if (!itemId || !this.inventory.has(itemId)) return false;
     this.selectedInventoryItemId = null;
     this.inventoryUseItemId = itemId;
@@ -1507,6 +1507,7 @@ export class Game {
   }
 
   useInventoryItemOnTarget(itemId, target) {
+    if (!this.inventory.has(itemId) || this.inspectedItemId) return false;
     const item = this.content.items[itemId];
     const explicitRule = firstMatchingRule(
       (target.itemUseRules || []).filter((candidate) => candidate.itemId === itemId),
@@ -1539,6 +1540,7 @@ export class Game {
   }
 
   useInventoryItemOnSelf(itemId) {
+    if (!this.inventory.has(itemId) || this.inspectedItemId) return false;
     const item = this.content.items[itemId];
     const rule = firstMatchingRule(item?.selfUseRules, this.effectContext());
     this.clearInventoryInteraction();
@@ -1653,6 +1655,24 @@ export class Game {
     this.renderUi();
   }
 
+  createItemInspection() {
+    const item = this.content.items[this.inspectedItemId];
+    const asset = this.assets.manifest.items[item.id];
+    const panel = element('section', 'received-item-screen');
+    panel.setAttribute('role', 'dialog'); panel.setAttribute('aria-modal', 'true');
+    panel.setAttribute('aria-label', this.t(item.nameKey));
+    const title = document.createElement('h2'); title.textContent = this.t(item.nameKey);
+    const viewer = element('div', 'item-model-viewer');
+    const text = Object.fromEntries(['loading','unavailable','controls'].map(key => [key, this.t('ui.received_oil.' + key)]));
+    text.name = this.t(item.nameKey);
+    this.receivedItemViewer = mountItemModelViewer(viewer, { modelUrl: asset.model, fallbackUrl: asset.icon, text, liquidColor: asset.liquidColor });
+    const description = document.createElement('p'); description.textContent = this.t(item.descriptionKey);
+    panel.append(title, viewer, description, button(this.t('ui.received_oil.close'), () => {
+      this.inspectedItemId = null; this.renderUi();
+    }));
+    return panel;
+  }
+
   createReceivedItem() {
     const panel = element('section', 'received-item-screen');
     panel.setAttribute('role', 'dialog'); panel.setAttribute('aria-modal', 'true');
@@ -1712,6 +1732,7 @@ export class Game {
       this.message = this.t("msg.scene_not_ready");
       return;
     }
+    this.inspectedItemId = null;
     const sceneLoadToken = Symbol(sceneId);
     this.sceneLoadToken = sceneLoadToken;
     this.sceneAction?.reset(); this.sceneActionEffect = null;
@@ -1863,6 +1884,7 @@ export class Game {
     }
     this.uiRoot.appendChild(this.createTopBar());
     if (this.sceneAction?.state?.phase === 'received') this.uiRoot.appendChild(this.createReceivedItem());
+    if (this.inspectedItemId && !this.menuOpen && !this.paused) this.uiRoot.appendChild(this.createItemInspection());
   }
 
   createHud() {
@@ -2000,7 +2022,11 @@ export class Game {
           : []),
         button(this.t("ui.inventory.inspect"), () => {
           this.clearInventoryInteraction();
-          this.setStatusMessage(this.t(selectedItem.descriptionKey));
+          if (this.assets.manifest.items[selectedItem.id]?.model) {
+            this.inspectedItemId = selectedItem.id;
+            this.player.target = null; this.player.walkPath = [];
+            this.renderUi();
+          } else this.setStatusMessage(this.t(selectedItem.descriptionKey));
         }),
         button(this.t("ui.inventory.drop"), () => this.dropInventoryItem(selectedItem)),
         button(this.t("ui.inventory.close"), () => {

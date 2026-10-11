@@ -1,5 +1,5 @@
 // The scene remains 2D. Load the 3D dependencies only for an inspected item.
-export function mountItemModelViewer(host, { modelUrl, fallbackUrl, text }) {
+export function mountItemModelViewer(host, { modelUrl, fallbackUrl, text, liquidColor = '#b77c00' }) {
   let disposed = false, cleanup = () => {}, resetView = () => {};
   const status = document.createElement('span');
   status.className = 'item-model-status'; status.textContent = text.loading;
@@ -161,7 +161,7 @@ export function mountItemModelViewer(host, { modelUrl, fallbackUrl, text }) {
           mesh.material=[m,foot]; original.dispose(); mesh.renderOrder=3;
         }
         else if (m.name.includes('paper')) { m.alphaTest=.12; m.transparent=false; m.depthWrite=true; m.side=T.FrontSide; mesh.renderOrder=4; }
-        else { m.transparent=false; m.opacity=1; m.depthWrite=true; m.side=T.FrontSide; m.forceSinglePass=true; m.envMapIntensity=.3; m.roughness=.2; m.color.set('#b77c00'); mesh.renderOrder=2; }
+        else { m.transparent=false; m.opacity=1; m.depthWrite=true; m.side=T.FrontSide; m.forceSinglePass=true; m.envMapIntensity=.3; m.roughness=.2; if (liquidColor) m.color.set(liquidColor); mesh.renderOrder=2; }
         flattened.add(mesh);
       }
     });

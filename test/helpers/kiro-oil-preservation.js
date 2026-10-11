@@ -1,3 +1,4 @@
+import { stripBottleQuest } from './bottle-preservation.js';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { createHash } from 'node:crypto';
@@ -5,6 +6,7 @@ const additions=JSON.parse(readFileSync(new URL('../fixtures/kiro-oil-integratio
 // Remove only exact, hash-bound oil integration deltas before ORIGINAL Baba comparisons.
 // Original Baba baseline and its hashes remain immutable.
 export function stripKiroOilIntegration(path,source){
+ source=stripBottleQuest(path,source);
  const record=additions[path];if(!record)return source;
  source=source.toString();
  for(const patch of record.patches){

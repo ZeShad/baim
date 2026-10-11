@@ -30,6 +30,17 @@ export const fountainUseRules = [
 
 export const fountainItemRules = [
   {
+    itemId: "item.empty_rakia_bottle",
+    requirements: { items: ["item.empty_rakia_bottle"], flags: ["fountainRepaired"], state: active },
+    effects: [{ type: "replaceItem", itemId: "item.empty_rakia_bottle", withItemId: "item.fountain_water_bottle" }],
+    messageKey: "bottle.filled"
+  },
+  {
+    itemId: "item.empty_rakia_bottle",
+    requirements: { items: ["item.empty_rakia_bottle"], notFlags: ["fountainRepaired"], state: active },
+    messageKey: "bottle.no_flow", reject: true
+  },
+  {
     itemId: "item.sunflower_oil",
     requirements: { flags: ["fountainValveOiled"] },
     messageKey: "fountain.oil.already"
@@ -37,7 +48,7 @@ export const fountainItemRules = [
   {
     itemId: "item.sunflower_oil",
     requirements: { items: ["item.sunflower_oil"], notFlags: ["fountainRepaired"], state: active },
-    effects: [diagnosed, clue, { type: "removeItem", itemId: "item.sunflower_oil" },
+    effects: [diagnosed, clue, { type: "replaceItem", itemId: "item.sunflower_oil", withItemId: "item.empty_rakia_bottle" },
       { type: "setFlag", key: "fountainValveOiled" }],
     messageKey: "fountain.oil.applied"
   },
@@ -108,10 +119,12 @@ export const babaFountainDialogue = {
 
 export const oilRefillRule = {
   requirements: {
-    absentItems: ["item.sunflower_oil"],
+    absentItems: ["item.sunflower_oil", "item.fountain_water_bottle"],
+    anyOf: [{ items: ["item.empty_rakia_bottle"] }, { absentItems: ["item.empty_rakia_bottle"] }],
     notFlags: ["fountainValveOiled", "fountainRepaired"], state: active
   },
   effects: [
+    { type: "removeItem", itemId: "item.empty_rakia_bottle", requirements: { items: ["item.empty_rakia_bottle"] } },
     { type: "addItem", itemId: "item.sunflower_oil" },
     { type: "setState", key: "hasSunflowerOil", value: true }, diagnosed, clue
   ],

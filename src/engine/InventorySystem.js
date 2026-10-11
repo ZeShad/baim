@@ -16,6 +16,15 @@ export class InventorySystem {
     this.state.inventory = this.state.inventory.filter((id) => id !== itemId);
   }
 
+  // Contents change in one synchronous operation; stale duplicate events do nothing.
+  replace(itemId, withItemId) {
+    if (!this.has(itemId) || this.has(withItemId)
+      || this.state.droppedItems?.some(record => record.itemId === withItemId)) return false;
+    this.state.inventory = this.state.inventory.filter(id => id !== itemId);
+    this.state.inventory.push(withItemId);
+    return true;
+  }
+
   list() {
     return this.state.inventory.map((id) => this.itemsById[id]).filter(Boolean);
   }
