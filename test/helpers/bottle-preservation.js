@@ -1,3 +1,4 @@
+import {stripEffectRepair} from './effect-repair-preservation.js';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {createHash} from 'node:crypto';
@@ -6,6 +7,7 @@ const sha=x=>createHash('sha256').update(x).digest('hex');
 // Restore only explicit task deltas before immutable historical comparisons.
 // Any unexpected byte in a changed file fails, rather than escaping preservation.
 export function stripBottleQuest(path,source){
+ source=stripEffectRepair(path,source);
  const record=fixture.records[path];if(!record)return source;
  source=source.toString();assert.equal(sha(source),record.afterSHA256,'bound bottle quest changes: '+path);
  const lines=source.split('\n');
