@@ -202,6 +202,29 @@ function smoothWalkPath(scene, points) {
 function lineIsWalkable(scene, from, to) {
   const dx = to.x - from.x;
   const dy = to.y - from.y;
+  if (scene.walkMask) {
+    // Check every crossed cell, including very short corner intersections that
+    // fixed-distance samples can miss when smoothing a furniture-side route.
+    const mask = scene.walkMask;
+    const crossings = [0, 1];
+    for (const [start, delta, cellSize] of [
+      [from.x, dx, (mask.worldWidth || 1280) / mask.width],
+      [from.y, dy, (mask.worldHeight || 720) / mask.height]
+    ]) {
+      if (!delta) continue;
+      const low = Math.min(start, start + delta), high = Math.max(start, start + delta);
+      for (let boundary = (Math.floor(low / cellSize) + 1) * cellSize; boundary < high; boundary += cellSize) {
+        crossings.push((boundary - start) / delta);
+      }
+    }
+    crossings.sort((a, b) => a - b);
+    const clear = t => isWalkable(scene, { x: from.x + dx * t, y: from.y + dy * t });
+    if (!clear(0) || !clear(1)) return false;
+    for (let i = 1; i < crossings.length; i++) {
+      if (!clear(crossings[i]) || !clear((crossings[i - 1] + crossings[i]) / 2)) return false;
+    }
+    return true;
+  }
   const distance = Math.hypot(dx, dy);
   const steps = Math.max(1, Math.ceil(distance / 8));
   for (let index = 0; index <= steps; index += 1) {

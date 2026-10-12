@@ -31,13 +31,13 @@ test('tavern floor, Kiro recovery and fixed spit render in BG/EN through normal 
     const requireReady=(key,image)=>{if(!g.assets.isLoaded(image)||!image.complete||!image.naturalWidth||!image.naturalHeight)throw Error('Game image is not ready: '+JSON.stringify({key,path:g.assets.getSceneAssetPath(g.currentScene.id,key),status:g.assets.getImageStatus(image),src:image?.getAttribute('src'),width:image?.naturalWidth,height:image?.naturalHeight,protected:g.assets.protectedPaths.has(g.assets.getSceneAssetPath(g.currentScene.id,key))}));};
     requireReady('mehanaWaiterSneakyGlassSwap',im);
     const canvas=document.createElement('canvas');canvas.width=2;canvas.height=2;canvas.getContext('2d').drawImage(im,0,0,2,2);const pixels=Array.from(canvas.getContext('2d').getImageData(0,0,2,2).data);
-    const occluders=[];for(const key of ['mehanaCounterFront','tonyTableOccluder']){const img=g.assets.getSceneImage(g.currentScene.id,key);requireReady(key,img);const c=document.createElement('canvas');c.width=1280;c.height=720;const ctx=c.getContext('2d');ctx.drawImage(img,0,0);occluders.push({key,path:g.assets.getSceneAssetPath(g.currentScene.id,key),width:img.naturalWidth,height:img.naturalHeight,aisleAlpha:[[550,380],[600,480],[620,650]].map(([x,y])=>ctx.getImageData(x,y,1,1).data[3])});}
+    const occluders=[];for(const key of ['mehanaCounterFront','leftTablePlayerOccluder','rightTablePlayerOccluder']){const img=g.assets.getSceneImage(g.currentScene.id,key);requireReady(key,img);const c=document.createElement('canvas');c.width=1280;c.height=720;const ctx=c.getContext('2d');ctx.drawImage(img,0,0);occluders.push({key,path:g.assets.getSceneAssetPath(g.currentScene.id,key),width:img.naturalWidth,height:img.naturalHeight,aisleAlpha:[[550,380],[620,480],[620,650]].map(([x,y])=>ctx.getImageData(x,y,1,1).data[3])});}
     return {version:m.version,loadedVersion:g.assets.runtimeVersion,path,width:im.naturalWidth,height:im.naturalHeight,pixels,occluders,sceneAssetKeys:Object.keys(g.assets.manifest.scenes[g.currentScene.id])};
    },language);
    assert.equal(binding.version,binding.loadedVersion);assert.match(binding.path,/kiro-spitting-fixed-owner-export-c01\.[a-f0-9]{12}\.webp/);assert.deepEqual([binding.width,binding.height],[1572,3684]);assert.ok(binding.pixels.some((value,index)=>index%4===3&&value>0),'decoded atlas draws visible alpha');
    for(const key of ['mehanaRearChairs','tableGroupLeft','tableGroupRight','kaliakraOil','waterJug','todayNewspaper'])assert.ok(!binding.sceneAssetKeys.includes(key));
    assert.ok(binding.sceneAssetKeys.includes('tonyTableOccluder'));
-   for(const mask of binding.occluders){assert.deepEqual([mask.width,mask.height],[1280,720]);assert.deepEqual(mask.aisleAlpha,[0,0,0]);assert.match(mask.path,/(kiro-counter|tony-table)-occluder-v1\.[a-f0-9]{12}\.png/);}
+   for(const mask of binding.occluders){assert.deepEqual([mask.width,mask.height],[1280,720]);assert.deepEqual(mask.aisleAlpha,[0,0,0]);assert.match(mask.path,/(kiro-counter-occluder|(?:left|right)-table-player-occluder)-v1\.[a-f0-9]{12}\.png/);}
    await shot('entry-clear-chairs-props',1000);
    // Actual ground click into the central aisle; every traversed feet position is checked.
    await page.locator('#game').click({position:{x:610,y:550}});
@@ -60,9 +60,19 @@ test('tavern floor, Kiro recovery and fixed spit render in BG/EN through normal 
     if(approach.dialogue==='dialogue.mehana_waiter')break;
    }
    assert.equal(await page.evaluate(()=>window.__comradeCandidateTest.game.dialogue.current?.id),'dialogue.mehana_waiter');
+   assert.deepEqual(await page.evaluate(()=>({...window.__comradeCandidateTest.game.player.position})),{x:650,y:550});
    const label=await page.evaluate(()=>window.__comradeCandidateTest.game.t('dialogue.waiter.choice.water'));
    await page.locator('.dialogue-choice-list').getByRole('button',{name:label,exact:true}).click();
    assert.equal(await page.evaluate(()=>window.__comradeCandidateTest.game.inventory.has('item.glass_of_water')),true);await shot('kiro-water-acquired',1000);
+   // Actual Talk Tony click must walk behind the right table before opening dialogue.
+   const tonyPoint=await page.evaluate(async()=>{const g=window.__comradeCandidateTest.game,{findTargetAt}=await import('/src/engine/SceneGeometry.js');for(let y=305;y<440;y+=4)for(let x=880;x<1060;x+=4)if(findTargetAt(g.currentScene,{x,y},t=>g.targetAvailable(t))?.id==='npc.tony_fridge')return {x,y};throw Error('Tony has no exposed hit target');});
+   await page.locator('#game').click({position:tonyPoint});
+   for(let i=0;i<100;i++){
+    await advance(100);const approach=await page.evaluate(async()=>{const g=window.__comradeCandidateTest.game,{isWalkable}=await import('/src/engine/SceneGeometry.js');return {walkable:isWalkable(g.currentScene,g.player.position),dialogue:g.dialogue.current?.id};});assert.equal(approach.walkable,true);
+    if(approach.dialogue==='dialogue.tony_fridge')break;
+   }
+   assert.equal(await page.evaluate(()=>window.__comradeCandidateTest.game.dialogue.current?.id),'dialogue.tony_fridge');
+   assert.deepEqual(await page.evaluate(()=>({...window.__comradeCandidateTest.game.player.position})),{x:740,y:580});await shot('tony-behind-table',1000);
    await page.reload();await page.evaluate(()=>window.__comradeCandidateTest.ready);await advance(0);
    assert.equal(await page.evaluate(()=>window.__comradeCandidateTest.game.inventory.has('item.glass_of_water')),true);
    await page.evaluate(async()=>{const g=window.__comradeCandidateTest.game;await g.changeScene('scene.chapter1.village_square');await g.changeScene('scene.chapter1.mehana');});await advance(0);await shot('scene-reentry',1000);

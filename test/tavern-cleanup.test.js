@@ -25,8 +25,8 @@ test('tavern blocked furniture and bar cannot be entered; all floor routes avoid
  const enter=chapter1.scenes.find(s=>s.id==='scene.chapter1.village_square').exits.find(e=>e.id==='exit.square.to_mehana');
  assert.equal(isWalkable(scene,enter.targetPosition),true);assert.equal(isWalkable(scene,scene.playerStart),true);
  const approach=scene.npcs.find(n=>n.id==='npc.mehana_waiter').interactionApproach;
- assert.deepEqual(approach,{x:610,y:580});assert.equal(isWalkable(scene,approach),true);
- for(const point of [{x:660,y:580},{x:635,y:550},{x:650,y:650}])assert.equal(isWalkable(scene,point),false,'tablecloth clearance for the full actor');
+ assert.deepEqual(approach,{x:650,y:550});assert.equal(isWalkable(scene,approach),true);
+ for(const point of [{x:700,y:580},{x:850,y:550},{x:650,y:650}])assert.equal(isWalkable(scene,point),false,'furniture centres remain blocked');
 });
 
 test('removed props and obsolete chair overlays cannot render or intercept input',()=>{

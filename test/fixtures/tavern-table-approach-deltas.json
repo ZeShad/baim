@@ -1,0 +1,439 @@
+{
+  "baseline": "95e74665eba372184d2351d507ff500e29a6077c",
+  "status": "owner accepted r03 local visuals; publication requires a separate decision",
+  "records": {
+    "assets_src/chapter1/scenes/mehana/layers.json": {
+      "beforeSHA256": "b3ea2d6f2ff3850c457bd8ba2fabf21427ada99be80e11d6b59293b3a47cedd1",
+      "afterSHA256": "0d4f31a4044e3e70dddce3ade9e1fc1222bf0cb9dac00479cdeee99e06591121",
+      "hunks": [
+        {
+          "at": 368,
+          "removed": [
+            "      \"asset\": \"tonyTableOccluder\",",
+            "      \"output\": \"assets/chapter1/scenes/mehana/tony-table-occluder-v1.png\","
+          ],
+          "added": [
+            "      \"asset\": \"rightTablePlayerOccluder\",",
+            "      \"output\": \"assets/chapter1/scenes/mehana/right-table-player-occluder-v1.png\","
+          ]
+        },
+        {
+          "at": 373,
+          "removed": [],
+          "added": [
+            "    },",
+            "    {",
+            "      \"id\": \"layer.mehana.left_table_player_occluder\",",
+            "      \"enabled\": true,",
+            "      \"asset\": \"leftTablePlayerOccluder\",",
+            "      \"output\": \"assets/chapter1/scenes/mehana/left-table-player-occluder-v1.png\",",
+            "      \"zIndex\": 20,",
+            "      \"left\": 0,",
+            "      \"top\": 0"
+          ]
+        }
+      ]
+    },
+    "assets_src/chapter1/scenes/mehana/walk-geometry-v1.json": {
+      "beforeSHA256": "ff4ffcc51c6ae1afa46a18493be1be085d8505cc69897407e2ffeb649eb62940",
+      "afterSHA256": "0e54dae1c05f2e8f6527e53db19d21a642471c727356acd6875dc88459ca2cda",
+      "hunks": [
+        {
+          "at": 63,
+          "removed": [
+            "          \"x\": 630,"
+          ],
+          "added": [
+            "          \"x\": 680,"
+          ]
+        },
+        {
+          "at": 67,
+          "removed": [
+            "          \"x\": 610,"
+          ],
+          "added": [
+            "          \"x\": 620,"
+          ]
+        },
+        {
+          "at": 75,
+          "removed": [],
+          "added": [
+            "    },",
+            "    {",
+            "      \"id\": \"walk.chapter1.mehana.aisle_3\",",
+            "      \"points\": [",
+            "        {",
+            "          \"x\": 540,",
+            "          \"y\": 530",
+            "        },",
+            "        {",
+            "          \"x\": 610,",
+            "          \"y\": 530",
+            "        },",
+            "        {",
+            "          \"x\": 610,",
+            "          \"y\": 600",
+            "        },",
+            "        {",
+            "          \"x\": 540,",
+            "          \"y\": 600",
+            "        }",
+            "      ]",
+            "    },",
+            "    {",
+            "      \"id\": \"walk.chapter1.mehana.aisle_4\",",
+            "      \"points\": [",
+            "        {",
+            "          \"x\": 630,",
+            "          \"y\": 500",
+            "        },",
+            "        {",
+            "          \"x\": 820,",
+            "          \"y\": 500",
+            "        },",
+            "        {",
+            "          \"x\": 820,",
+            "          \"y\": 530",
+            "        },",
+            "        {",
+            "          \"x\": 650,",
+            "          \"y\": 530",
+            "        }",
+            "      ]",
+            "    },",
+            "    {",
+            "      \"id\": \"walk.chapter1.mehana.aisle_5\",",
+            "      \"points\": [",
+            "        {",
+            "          \"x\": 720,",
+            "          \"y\": 520",
+            "        },",
+            "        {",
+            "          \"x\": 760,",
+            "          \"y\": 520",
+            "        },",
+            "        {",
+            "          \"x\": 760,",
+            "          \"y\": 590",
+            "        },",
+            "        {",
+            "          \"x\": 720,",
+            "          \"y\": 590",
+            "        }",
+            "      ]"
+          ]
+        },
+        {
+          "at": 195,
+          "removed": [
+            "      \"......ccccccccccccc.............................................................................................................\",",
+            "      \"......ccccccccccccc.........................................ccc.................................................................\",",
+            "      \"......ccccccccccccc.........................................ccc.................................................................\",",
+            "      \"......ccccccccccccc........................................cccc.................................................................\",",
+            "      \"......ccccccccccccc........................................ccc..................................................................\",",
+            "      \"......ccccccccccccc........................................ccc..................................................................\",",
+            "      \"......ccccccccccccc.......................................cccc..................................................................\",",
+            "      \"......ccccccccccccc.......................................cccc..................................................................\",",
+            "      \"......ccccccccccccc.......................................cccc..................................................................\",",
+            "      \"......ccccccccccccc.......................................cccc..................................................................\",",
+            "      \"......ccccccccccccc......................................ccccc..................................................................\",",
+            "      \"......ccccccccccccc......................................cccc...................................................................\",",
+            "      \"......ccccccccccccc......................................cccc...................................................................\",",
+            "      \"......ccccccccccccc.....................................ccccc...................................................................\",",
+            "      \"......ccccccccccccc.....................................ccccc...................................................................\","
+          ],
+          "added": [
+            "      \"......ccccccccccccc............................................ccccccccccccccccccc..............................................\",",
+            "      \"......ccccccccccccc.........................................cccccccccccccccccccccc..............................................\",",
+            "      \"......ccccccccccccc.........................................cccccccccccccccccccccc..............................................\",",
+            "      \"......ccccccccccccc...................................ccccccccccccc.....cccc....................................................\",",
+            "      \"......ccccccccccccc...................................cccccccccccc......cccc....................................................\",",
+            "      \"......ccccccccccccc...................................cccccccccccc......cccc....................................................\",",
+            "      \"......ccccccccccccc...................................cccccccccccc......cccc....................................................\",",
+            "      \"......ccccccccccccc...................................ccccccccccc.......cccc....................................................\",",
+            "      \"......ccccccccccccc...................................ccccccccccc.......cccc....................................................\",",
+            "      \"......ccccccccccccc...................................cccccccccc................................................................\",",
+            "      \"......ccccccccccccc......................................ccccccc................................................................\",",
+            "      \"......ccccccccccccc......................................cccccc.................................................................\",",
+            "      \"......ccccccccccccc......................................cccccc.................................................................\",",
+            "      \"......ccccccccccccc.....................................ccccccc.................................................................\",",
+            "      \"......ccccccccccccc.....................................cccccc..................................................................\","
+          ]
+        }
+      ]
+    },
+    "src/content/art/assetManifest.js": {
+      "beforeSHA256": "2ba896cf8f732d9efeaa01dc795eec71116bcdb6a627e407d93669f1f914ef8d",
+      "afterSHA256": "7717a2f6ce617bb698fc069433500e9cd55068f262f12880fc6927561372c2b6",
+      "hunks": [
+        {
+          "at": 41,
+          "removed": [],
+          "added": [
+            "      leftTablePlayerOccluder: \"assets/chapter1/scenes/mehana/left-table-player-occluder-v1.png\",",
+            "      rightTablePlayerOccluder: \"assets/chapter1/scenes/mehana/right-table-player-occluder-v1.png\","
+          ]
+        }
+      ]
+    },
+    "src/content/chapter1/sceneLayers.generated.js": {
+      "beforeSHA256": "6135105c2b01362409dd58f881784de92c0a7beff8912e043ae465abe8bc1335",
+      "afterSHA256": "a2b814faf3dc77444fed2bf9d6decafdf5fb99530e5fbf94acc5cfcd7eee38ed",
+      "hunks": [
+        {
+          "at": 630,
+          "removed": [
+            "        \"asset\": \"tonyTableOccluder\","
+          ],
+          "added": [
+            "        \"asset\": \"rightTablePlayerOccluder\",",
+            "        \"zIndex\": 20,",
+            "        \"top\": 0,",
+            "        \"left\": 0",
+            "      },",
+            "      {",
+            "        \"id\": \"layer.mehana.left_table_player_occluder\",",
+            "        \"asset\": \"leftTablePlayerOccluder\","
+          ]
+        }
+      ]
+    },
+    "src/content/chapter1/scenes.js": {
+      "beforeSHA256": "8310bd5ff7d765357816673197053d2a006f5e5d92be80059a2be24992b72c8f",
+      "afterSHA256": "de31ed4bd267e4b1293bd5087c56dee708357c8d249cf7f3d9cdac01f53e75eb",
+      "hunks": [
+        {
+          "at": 380,
+          "removed": [],
+          "added": [
+            "    depthZones: [{",
+            "      id: \"depth.mehana.behind_left_chair\",",
+            "      polygon: [{ x: 520, y: 510 }, { x: 625, y: 510 }, { x: 625, y: 625 }, { x: 520, y: 625 }],",
+            "      zDepth: 0.75",
+            "    }, {",
+            "      id: \"depth.mehana.tony_standing_bay\",",
+            "      polygon: [{ x: 700, y: 530 }, { x: 780, y: 530 }, { x: 780, y: 610 }, { x: 700, y: 610 }],",
+            "      depth: (550 - 415) / (590 - 415),",
+            "      zDepth: 0.75",
+            "    }],"
+          ]
+        },
+        {
+          "at": 550,
+          "removed": [
+            "        interactionApproach: { x: 610, y: 580 },"
+          ],
+          "added": [
+            "        interactionApproach: { x: 650, y: 550 },"
+          ]
+        },
+        {
+          "at": 571,
+          "removed": [],
+          "added": [
+            "        interactionApproach: { x: 740, y: 580 },",
+            "        interactionApproachExact: true,",
+            "        interactionFacingPoint: { x: 973, y: 350 },"
+          ]
+        }
+      ]
+    },
+    "src/content/chapter1/walkMasks.generated.js": {
+      "beforeSHA256": "005ff66fb41c593284f52b991cc2623a8546875f9de893c16412379b3e63e0b6",
+      "afterSHA256": "6990644a56d584154c4594f02d3d4cfa1a3c2da271c1e2e1ffc8101edc427b21",
+      "hunks": [
+        {
+          "at": 446,
+          "removed": [
+            "          \"x\": 630,"
+          ],
+          "added": [
+            "          \"x\": 680,"
+          ]
+        },
+        {
+          "at": 450,
+          "removed": [
+            "          \"x\": 610,"
+          ],
+          "added": [
+            "          \"x\": 620,"
+          ]
+        },
+        {
+          "at": 458,
+          "removed": [],
+          "added": [
+            "    },",
+            "    {",
+            "      \"id\": \"walk.chapter1.mehana.aisle_3\",",
+            "      \"points\": [",
+            "        {",
+            "          \"x\": 540,",
+            "          \"y\": 530",
+            "        },",
+            "        {",
+            "          \"x\": 610,",
+            "          \"y\": 530",
+            "        },",
+            "        {",
+            "          \"x\": 610,",
+            "          \"y\": 600",
+            "        },",
+            "        {",
+            "          \"x\": 540,",
+            "          \"y\": 600",
+            "        }",
+            "      ]",
+            "    },",
+            "    {",
+            "      \"id\": \"walk.chapter1.mehana.aisle_4\",",
+            "      \"points\": [",
+            "        {",
+            "          \"x\": 630,",
+            "          \"y\": 500",
+            "        },",
+            "        {",
+            "          \"x\": 820,",
+            "          \"y\": 500",
+            "        },",
+            "        {",
+            "          \"x\": 820,",
+            "          \"y\": 530",
+            "        },",
+            "        {",
+            "          \"x\": 650,",
+            "          \"y\": 530",
+            "        }",
+            "      ]",
+            "    },",
+            "    {",
+            "      \"id\": \"walk.chapter1.mehana.aisle_5\",",
+            "      \"points\": [",
+            "        {",
+            "          \"x\": 720,",
+            "          \"y\": 520",
+            "        },",
+            "        {",
+            "          \"x\": 760,",
+            "          \"y\": 520",
+            "        },",
+            "        {",
+            "          \"x\": 760,",
+            "          \"y\": 590",
+            "        },",
+            "        {",
+            "          \"x\": 720,",
+            "          \"y\": 590",
+            "        }",
+            "      ]"
+          ]
+        },
+        {
+          "at": 597,
+          "removed": [
+            "      \"......ccccccccccccc.............................................................................................................\",",
+            "      \"......ccccccccccccc.........................................ccc.................................................................\",",
+            "      \"......ccccccccccccc.........................................ccc.................................................................\",",
+            "      \"......ccccccccccccc........................................cccc.................................................................\",",
+            "      \"......ccccccccccccc........................................ccc..................................................................\",",
+            "      \"......ccccccccccccc........................................ccc..................................................................\",",
+            "      \"......ccccccccccccc.......................................cccc..................................................................\",",
+            "      \"......ccccccccccccc.......................................cccc..................................................................\",",
+            "      \"......ccccccccccccc.......................................cccc..................................................................\",",
+            "      \"......ccccccccccccc.......................................cccc..................................................................\",",
+            "      \"......ccccccccccccc......................................ccccc..................................................................\",",
+            "      \"......ccccccccccccc......................................cccc...................................................................\",",
+            "      \"......ccccccccccccc......................................cccc...................................................................\",",
+            "      \"......ccccccccccccc.....................................ccccc...................................................................\",",
+            "      \"......ccccccccccccc.....................................ccccc...................................................................\","
+          ],
+          "added": [
+            "      \"......ccccccccccccc............................................ccccccccccccccccccc..............................................\",",
+            "      \"......ccccccccccccc.........................................cccccccccccccccccccccc..............................................\",",
+            "      \"......ccccccccccccc.........................................cccccccccccccccccccccc..............................................\",",
+            "      \"......ccccccccccccc...................................ccccccccccccc.....cccc....................................................\",",
+            "      \"......ccccccccccccc...................................cccccccccccc......cccc....................................................\",",
+            "      \"......ccccccccccccc...................................cccccccccccc......cccc....................................................\",",
+            "      \"......ccccccccccccc...................................cccccccccccc......cccc....................................................\",",
+            "      \"......ccccccccccccc...................................ccccccccccc.......cccc....................................................\",",
+            "      \"......ccccccccccccc...................................ccccccccccc.......cccc....................................................\",",
+            "      \"......ccccccccccccc...................................cccccccccc................................................................\",",
+            "      \"......ccccccccccccc......................................ccccccc................................................................\",",
+            "      \"......ccccccccccccc......................................cccccc.................................................................\",",
+            "      \"......ccccccccccccc......................................cccccc.................................................................\",",
+            "      \"......ccccccccccccc.....................................ccccccc.................................................................\",",
+            "      \"......ccccccccccccc.....................................cccccc..................................................................\","
+          ]
+        }
+      ]
+    },
+    "src/engine/DepthMath.js": {
+      "beforeSHA256": "1f0c7c2dfd0d513f15a0c29fe45cf1bcc4329b962d57b8b54c98c19247bd5916",
+      "afterSHA256": "4cd21536daac1366e4c81bd514895262f31c42798e28a92dc11501aae521a87e",
+      "hunks": [
+        {
+          "at": 4,
+          "removed": [
+            "  if (zone) {"
+          ],
+          "added": [
+            "  if (zone && Number.isFinite(Number(zone.depth))) {"
+          ]
+        }
+      ]
+    },
+    "src/engine/SceneGeometry.js": {
+      "beforeSHA256": "31314dc212b1208e89da97fbed38a371d7608dc2b3ea3a50bc2e6e1a97caa9b2",
+      "afterSHA256": "2ec4af3a52295c1657bae9ae26e880842667f922a64500a7269c8b6dc6584b53",
+      "hunks": [
+        {
+          "at": 204,
+          "removed": [],
+          "added": [
+            "  if (scene.walkMask) {",
+            "    // Check every crossed cell, including very short corner intersections that",
+            "    // fixed-distance samples can miss when smoothing a furniture-side route.",
+            "    const mask = scene.walkMask;",
+            "    const crossings = [0, 1];",
+            "    for (const [start, delta, cellSize] of [",
+            "      [from.x, dx, (mask.worldWidth || 1280) / mask.width],",
+            "      [from.y, dy, (mask.worldHeight || 720) / mask.height]",
+            "    ]) {",
+            "      if (!delta) continue;",
+            "      const low = Math.min(start, start + delta), high = Math.max(start, start + delta);",
+            "      for (let boundary = (Math.floor(low / cellSize) + 1) * cellSize; boundary < high; boundary += cellSize) {",
+            "        crossings.push((boundary - start) / delta);",
+            "      }",
+            "    }",
+            "    crossings.sort((a, b) => a - b);",
+            "    const clear = t => isWalkable(scene, { x: from.x + dx * t, y: from.y + dy * t });",
+            "    if (!clear(0) || !clear(1)) return false;",
+            "    for (let i = 1; i < crossings.length; i++) {",
+            "      if (!clear(crossings[i]) || !clear((crossings[i - 1] + crossings[i]) / 2)) return false;",
+            "    }",
+            "    return true;",
+            "  }"
+          ]
+        }
+      ]
+    },
+    "test/kiro-talking-polishing.test.js": {
+      "beforeSHA256": "ba8d830cab1ae29593dd71085617dd07f0ba3c618ee165ca3c2ecb09ca4ca88b",
+      "afterSHA256": "cc7837cb5a39a40790b763b135eb60716c60f9f67653be4b55d628b008b1bba5",
+      "hunks": [
+        {
+          "at": 103,
+          "removed": [
+            "  const manifest=structuredClone(assetManifest);for(const key of ['background','mehanaCounterFront','mehanaRearChairs','tableGroupLeft','tableGroupRight','kaliakraOil','waterJug','todayNewspaper'])manifest.scenes[scene.id][key]=baseline.manifest.scenes[scene.id][key];manifest.scenes[scene.id].mehanaWaiterSneakyGlassSwap=baseline.manifest.scenes[scene.id].mehanaWaiterSneakyGlassSwap;delete manifest.scenes[scene.id].tonyTableOccluder;delete manifest.items['item.empty_rakia_bottle'];delete manifest.items['item.fountain_water_bottle'];for(const key of ['kiroOilScale','kiroOilHandover','mehanaWaiterTonyGlanceC05','mehanaWaiterTalkingPolishing','mehanaWaiterTalkingPolishingC07','mehanaWaiterListeningC07','mehanaWaiterListeningFinal'])delete manifest.scenes[scene.id][key];assert.equal(manifest.items['item.sunflower_oil'].icon,'assets/chapter1/items/kiro-bottle/oil-200ml-r07.png');manifest.items['item.sunflower_oil']=structuredClone(baseline.manifest.items['item.sunflower_oil']);assert.deepEqual(manifest,baseline.manifest);"
+          ],
+          "added": [
+            "  const manifest=structuredClone(assetManifest);for(const key of ['background','mehanaCounterFront','mehanaRearChairs','tableGroupLeft','tableGroupRight','kaliakraOil','waterJug','todayNewspaper'])manifest.scenes[scene.id][key]=baseline.manifest.scenes[scene.id][key];manifest.scenes[scene.id].mehanaWaiterSneakyGlassSwap=baseline.manifest.scenes[scene.id].mehanaWaiterSneakyGlassSwap;for(const key of ['tonyTableOccluder','leftTablePlayerOccluder','rightTablePlayerOccluder'])delete manifest.scenes[scene.id][key];delete manifest.items['item.empty_rakia_bottle'];delete manifest.items['item.fountain_water_bottle'];for(const key of ['kiroOilScale','kiroOilHandover','mehanaWaiterTonyGlanceC05','mehanaWaiterTalkingPolishing','mehanaWaiterTalkingPolishingC07','mehanaWaiterListeningC07','mehanaWaiterListeningFinal'])delete manifest.scenes[scene.id][key];assert.equal(manifest.items['item.sunflower_oil'].icon,'assets/chapter1/items/kiro-bottle/oil-200ml-r07.png');manifest.items['item.sunflower_oil']=structuredClone(baseline.manifest.items['item.sunflower_oil']);assert.deepEqual(manifest,baseline.manifest);"
+          ]
+        }
+      ]
+    }
+  }
+}

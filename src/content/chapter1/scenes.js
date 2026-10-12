@@ -378,6 +378,16 @@ const rawScenes = [
     walkPolygons: mehanaWalkGeometry.walkPolygons,
     walkMask: mehanaWalkGeometry.walkMask,
     perspectiveScale: { horizonY: 415, bottomY: 590, far: 1.08, near: 1.51 },
+    depthZones: [{
+      id: "depth.mehana.behind_left_chair",
+      polygon: [{ x: 520, y: 510 }, { x: 625, y: 510 }, { x: 625, y: 625 }, { x: 520, y: 625 }],
+      zDepth: 0.75
+    }, {
+      id: "depth.mehana.tony_standing_bay",
+      polygon: [{ x: 700, y: 530 }, { x: 780, y: 530 }, { x: 780, y: 610 }, { x: 700, y: 610 }],
+      depth: (550 - 415) / (590 - 415),
+      zDepth: 0.75
+    }],
     anchors: {
       baiMitkoSeat: { x: 120, y: 530 },
       tonyTable: { x: 845, y: 570 },
@@ -538,7 +548,7 @@ const rawScenes = [
         rect: { x: 727, y: 222, w: 88, h: 121 },
         speechAnchor: { x: 773, y: 208 },
         itemRejectKey: "msg.inventory.npc_reject.mehana_waiter",
-        interactionApproach: { x: 610, y: 580 },
+        interactionApproach: { x: 650, y: 550 },
         interactionApproachExact: true,
         interactionFacingPoint: { x: 771, y: 270 },
         dialogueId: "dialogue.mehana_waiter",
@@ -559,6 +569,9 @@ const rawScenes = [
         rect: { x: 878, y: 302, w: 190, h: 315 },
         speechAnchor: { x: 973, y: 264 },
         itemRejectKey: "msg.inventory.npc_reject.tony_fridge",
+        interactionApproach: { x: 740, y: 580 },
+        interactionApproachExact: true,
+        interactionFacingPoint: { x: 973, y: 350 },
         dialogueId: "dialogue.tony_fridge",
         lookKey: "look.npc.tony_fridge",
         itemUseRules: [
