@@ -2,7 +2,7 @@ import { clamp } from "./geometry.js";
 
 export function sceneDepthT(scene, point) {
   const zone = sceneDepthZone(scene, point);
-  if (zone) {
+  if (zone && Number.isFinite(Number(zone.depth))) {
     const depth = Number(zone.depth);
     return clamp(Number.isFinite(depth) ? depth : 0, 0, 1);
   }

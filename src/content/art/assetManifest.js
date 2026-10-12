@@ -39,6 +39,8 @@ export const assetManifest = {
     "scene.chapter1.mehana": {
       background: "assets/chapter1/scenes/mehana/background-clean-occlusion-v1.png",
       tonyTableOccluder: "assets/chapter1/scenes/mehana/tony-table-occluder-v1.png",
+      leftTablePlayerOccluder: "assets/chapter1/scenes/mehana/left-table-player-occluder-v1.png",
+      rightTablePlayerOccluder: "assets/chapter1/scenes/mehana/right-table-player-occluder-v1.png",
       ...kiroOilAssets,
       mehanaCounterFront: "assets/chapter1/scenes/mehana/kiro-counter-occluder-v1.png",
       mehanaCellarHatch: "assets/chapter1/scenes/mehana/cellar-hatch-preserved-v1.png",

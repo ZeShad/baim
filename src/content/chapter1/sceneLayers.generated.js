@@ -628,7 +628,14 @@ export const sceneLayerGeometry = {
       },
       {
         "id": "layer.mehana.tony_table_occluder",
-        "asset": "tonyTableOccluder",
+        "asset": "rightTablePlayerOccluder",
+        "zIndex": 20,
+        "top": 0,
+        "left": 0
+      },
+      {
+        "id": "layer.mehana.left_table_player_occluder",
+        "asset": "leftTablePlayerOccluder",
         "zIndex": 20,
         "top": 0,
         "left": 0
