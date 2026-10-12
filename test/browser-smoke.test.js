@@ -492,8 +492,8 @@ test("fresh Chapter 1 journeys reach all three endings through real clicks in Bu
         await go("exit.square.to_mehana", "scene.chapter1.mehana");
         await talk("npc.tony_fridge");
         for (const key of ["dialogue.tony.choice.challenge", "dialogue.tony.choice.accept", "dialogue.tony.choice.prepare"]) await choice(key);
-        await verb("take");
-        await clickTarget("hotspot.mehana.water_jug");
+        await talk("npc.mehana_waiter");
+        await choice("dialogue.waiter.choice.water");
         await waitFor(() => window.__comradeCandidateTest.game.inventory.has("item.glass_of_water"));
         await useItem("item.accordion");
         await clickTarget("npc.tony_fridge");

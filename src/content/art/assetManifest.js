@@ -37,12 +37,10 @@ export const assetManifest = {
       droppedBelongingsPile: "assets/chapter1/items/dropped-belongings-pile-v1.png"
     },
     "scene.chapter1.mehana": {
-      background: "assets/chapter1/scenes/mehana/background-redesign-v1.png",
-      tableGroupLeft: "assets/chapter1/scenes/mehana/table-group-left-redesign-v1.png",
-      tableGroupRight: "assets/chapter1/scenes/mehana/table-group-right-redesign-v1.png",
-      mehanaRearChairs: "assets/chapter1/scenes/mehana/rear-chairs-redesign-v1.png",
+      background: "assets/chapter1/scenes/mehana/background-clean-occlusion-v1.png",
+      tonyTableOccluder: "assets/chapter1/scenes/mehana/tony-table-occluder-v1.png",
       ...kiroOilAssets,
-      mehanaCounterFront: "assets/chapter1/scenes/mehana/counter-front-redesign-v1.png",
+      mehanaCounterFront: "assets/chapter1/scenes/mehana/kiro-counter-occluder-v1.png",
       mehanaCellarHatch: "assets/chapter1/scenes/mehana/cellar-hatch-preserved-v1.png",
       mehanaWaiterIdle: "assets/chapter1/characters/mehana_waiter/idle-bartender-v2.png",
       mehanaWaiterPolishingIdle: "assets/chapter1/characters/mehana_waiter/kiro-polishing-idle-web-c01.png",
@@ -50,7 +48,7 @@ export const assetManifest = {
       mehanaWaiterListeningFinal: "assets/chapter1/characters/mehana_waiter/kiro-listening-final-frame08-d01.png",
       mehanaWaiterTalkingPolishing: "assets/chapter1/characters/mehana_waiter/kiro-talking-polishing-web-final-12d548cd.webp",
       mehanaWaiterTonyGlanceC05: "assets/chapter1/characters/mehana_waiter/kiro-tony-glance-keyframe-c05.webp",
-      mehanaWaiterSneakyGlassSwap: "assets/chapter1/characters/mehana_waiter/kiro-sneaky-glass-swap-web-c02.webp",
+      mehanaWaiterSneakyGlassSwap: "assets/chapter1/characters/mehana_waiter/kiro-spitting-fixed-owner-export-c01.webp",
       tonyFridgeSeated: "assets/chapter1/characters/tony_fridge/seated-v1.png",
       tonyFridgeIdleSeated: "assets/chapter1/characters/tony_fridge/idle-seated-v1.webp",
       tonyFridgeTalkSeated: "assets/chapter1/characters/tony_fridge/talk-seated-v1.webp",
@@ -58,10 +56,7 @@ export const assetManifest = {
       tonyFridgeSkepticalSeated: "assets/chapter1/characters/tony_fridge/skeptical-seated-v1.webp",
       tonyFridgeApprovingNodSeated: "assets/chapter1/characters/tony_fridge/approving-nod-seated-v1.webp",
       tonyFridgeAngerSeated: "assets/chapter1/characters/tony_fridge/anger-seated-v1.webp",
-      kaliakraOil: "assets/chapter1/scenes/mehana/kaliakra-oil-v1.png",
       mitkoCompetitionGlass: "assets/chapter1/scenes/mehana/competition-glass-v1.png",
-      waterJug: "assets/chapter1/scenes/mehana/water-jug-v1.png",
-      todayNewspaper: "assets/chapter1/scenes/mehana/newspaper-v3.png",
       droppedBelongingsPile: "assets/chapter1/items/dropped-belongings-pile-v1.png"
     },
     "scene.chapter1.municipality": {

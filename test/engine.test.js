@@ -825,7 +825,7 @@ test("Mehana sideboard props, larger furniture, and moved cellar align with the 
   const oilLayer = scene.foregroundLayers.find((layer) => layer.id === "layer.mehana.kaliakra_oil");
   const waterLayer = scene.foregroundLayers.find((layer) => layer.id === "layer.mehana.water_jug");
   const leftTableLayer = scene.foregroundLayers.find((layer) => layer.id === "layer.mehana.table_group_left");
-  const rightTableLayer = scene.foregroundLayers.find((layer) => layer.id === "layer.mehana.table_group_right");
+  const rightTableLayer = scene.foregroundLayers.find((layer) => layer.id === "layer.mehana.tony_table_occluder");
   const tonyLayer = scene.foregroundLayers.find((layer) => layer.id === "layer.mehana.tony_fridge_seated");
   const newspaperLayer = scene.foregroundLayers.find((layer) => layer.id === "layer.mehana.newspaper_left_table");
   const cellar = scene.interactables.find((target) => target.id === "hotspot.mehana.cellar_hatch");
@@ -835,10 +835,12 @@ test("Mehana sideboard props, larger furniture, and moved cellar align with the 
   assert.equal(pointInPolygon({ x: 575, y: 440 }, oil.polygon), false);
   assert.equal(pointInPolygon({ x: 950, y: 650 }, cellar.polygon), true);
   assert.equal(pointInPolygon({ x: 1160, y: 520 }, cellar.polygon), false);
-  assert.equal(oilLayer.hiddenWhenState, "hasSunflowerOil");
-  assert.equal(waterLayer.hiddenWhenState, "hasGlassOfWater");
-  assert.deepEqual([leftTableLayer.left, leftTableLayer.top], [0, 0]);
-  assert.equal(leftTableLayer.width, undefined);
+  assert.equal(oilLayer, undefined);
+  assert.equal(oil.requirements.disabled, true);
+  assert.equal(waterLayer, undefined);
+  assert.equal(water.requirements.disabled, true);
+  assert.equal(leftTableLayer, undefined);
+  assert.ok(!scene.foregroundLayers.some(layer => layer.id === "layer.mehana.table_group_right"));
   assert.deepEqual([rightTableLayer.left, rightTableLayer.top], [0, 0]);
   assert.equal(rightTableLayer.width, undefined);
   assert.ok(rightTableLayer.zIndex < tonyLayer.zIndex, "table must occlude seated Tony");
@@ -855,7 +857,8 @@ test("Mehana sideboard props, larger furniture, and moved cellar align with the 
     contentBounds: { x: 116, y: 91, w: 152, h: 198 }
   });
   assert.equal(assetManifest.scenes[scene.id].tonyFridgeIdleSeated, "assets/chapter1/characters/tony_fridge/idle-seated-v1.webp");
-  assert.equal(newspaperLayer.asset, "todayNewspaper");
+  assert.equal(newspaperLayer, undefined);
+  assert.equal(scene.interactables.find(t=>t.id==="hotspot.mehana.newspaper").requirements.disabled,true);
   assert.equal(scene.interactables.find((target) => target.id === "hotspot.mehana.newspaper").lookKey, "look.mehana.newspaper");
   assert.equal(scene.interactables.find((target) => target.id === "hotspot.mehana.radio").lookKey, "look.mehana.radio");
   assert.ok(sceneScale(scene, scene.playerStart) > 1.3);

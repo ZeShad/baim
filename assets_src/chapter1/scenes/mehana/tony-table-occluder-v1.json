@@ -1,0 +1,14 @@
+{
+  "source": "assets/chapter1/scenes/mehana/table-group-right-redesign-v1.png",
+  "sourceSHA256": "ee35121b31d388ec61380cb3437f8c63b24937fb3b185c8581151f13fd3ed92f",
+  "output": "assets/chapter1/scenes/mehana/tony-table-occluder-v1.png",
+  "outputSHA256": "06ff8b276f084498509cabb8789c88a9800dd7f6f9100cd7fd2cd4e741a7fec3",
+  "rect": {
+    "left": 840,
+    "top": 420,
+    "width": 300,
+    "height": 200
+  },
+  "role": "Only Tony lower-body table occlusion; no old furniture masks across player aisles",
+  "preservation": "Original assets remain unchanged. Exact retained RGBA, no repainting."
+}

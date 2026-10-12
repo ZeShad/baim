@@ -1,6 +1,6 @@
 {
   "sceneId": "scene.chapter1.mehana",
-  "sourceBackground": "assets/chapter1/scenes/mehana/background-redesign-v1.png",
+  "sourceBackground": "assets/chapter1/scenes/mehana/background-clean-occlusion-v1.png",
   "zScale": {
     "frontmost": 0,
     "horizon": 100
@@ -38,16 +38,22 @@
         "intervalMaxMs": 50000,
         "animation": {
           "asset": "mehanaWaiterSneakyGlassSwap",
-          "frameWidth": 170,
-          "frameHeight": 512,
+          "frameWidth": 262,
+          "frameHeight": 614,
           "frameCount": 36,
           "columns": 6,
-          "frameDurationMs": 131,
+          "frameDurationMs": 125,
           "loop": false,
           "transitionDurationMs": 148,
           "contentBounds": {
             "x": 0,
             "y": 0,
+            "w": 262,
+            "h": 614
+          },
+          "registrationBounds": {
+            "x": 46,
+            "y": 102,
             "w": 170,
             "h": 512
           }
@@ -258,7 +264,7 @@
     },
     {
       "id": "layer.mehana.kaliakra_oil",
-      "enabled": true,
+      "enabled": false,
       "asset": "kaliakraOil",
       "output": "assets/chapter1/scenes/mehana/kaliakra-oil-v1.png",
       "zIndex": 30,
@@ -269,7 +275,7 @@
     },
     {
       "id": "layer.mehana.water_jug",
-      "enabled": true,
+      "enabled": false,
       "asset": "waterJug",
       "output": "assets/chapter1/scenes/mehana/water-jug-v1.png",
       "zIndex": 30,
@@ -280,7 +286,7 @@
     },
     {
       "id": "layer.mehana.table_group_left",
-      "enabled": true,
+      "enabled": false,
       "asset": "tableGroupLeft",
       "output": "assets/chapter1/scenes/mehana/table-group-left-redesign-v1.png",
       "zIndex": 20,
@@ -289,7 +295,7 @@
     },
     {
       "id": "layer.mehana.table_group_right",
-      "enabled": true,
+      "enabled": false,
       "asset": "tableGroupRight",
       "output": "assets/chapter1/scenes/mehana/table-group-right-redesign-v1.png",
       "zIndex": 20,
@@ -298,7 +304,7 @@
     },
     {
       "id": "layer.mehana.newspaper_left_table",
-      "enabled": true,
+      "enabled": false,
       "asset": "todayNewspaper",
       "output": "assets/chapter1/scenes/mehana/newspaper-v3.png",
       "zIndex": 19,
@@ -320,7 +326,7 @@
     },
     {
       "id": "layer.mehana.rear_chairs",
-      "enabled": true,
+      "enabled": false,
       "asset": "mehanaRearChairs",
       "output": "assets/chapter1/scenes/mehana/rear-chairs-redesign-v1.png",
       "zIndex": 40,
@@ -331,7 +337,7 @@
       "id": "layer.mehana.counter_front",
       "enabled": true,
       "asset": "mehanaCounterFront",
-      "output": "assets/chapter1/scenes/mehana/counter-front-redesign-v1.png",
+      "output": "assets/chapter1/scenes/mehana/kiro-counter-occluder-v1.png",
       "zIndex": 45,
       "top": 0,
       "left": 0
@@ -356,6 +362,15 @@
       "height": 34,
       "visibleWhenFlag": "tonyChallengeStarted",
       "hiddenWhenState": "tonyVote"
+    },
+    {
+      "id": "layer.mehana.tony_table_occluder",
+      "enabled": true,
+      "asset": "tonyTableOccluder",
+      "output": "assets/chapter1/scenes/mehana/tony-table-occluder-v1.png",
+      "zIndex": 20,
+      "top": 0,
+      "left": 0
     }
   ]
 }

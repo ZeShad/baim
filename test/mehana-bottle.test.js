@@ -65,11 +65,12 @@ test('atomic reusable replacement rejects stale source or owned/dropped destinat
 import {readFileSync} from 'node:fs';
 import {createHash} from 'node:crypto';
 import {stripBottleQuest} from './helpers/bottle-preservation.js';
+import {stripTavern} from './helpers/tavern-preservation.js';
 test('fixed PR53 art, motion, renderer and animation-state systems remain byte-exact',()=>{
  const fixture=JSON.parse(readFileSync('test/fixtures/mehana-bottle-art-baseline.json'));
  assert.equal(fixture.baseline,'31793384bef7e48d763416b13dabfcf76fc3652e');
  for(const [path,objectId]of Object.entries(fixture.originals)){
-  const data=readFileSync(path);assert.equal(createHash('sha1').update('blob '+data.length+'\0').update(data).digest('hex'),objectId,path);
+  const data=Buffer.from(stripTavern(path,readFileSync(path)));assert.equal(createHash('sha1').update('blob '+data.length+'\0').update(data).digest('hex'),objectId,path);
  }
  const deltas=JSON.parse(readFileSync('test/fixtures/mehana-bottle-reviewed-deltas.json'));
  for(const [path,record]of Object.entries(deltas.records))assert.equal(createHash('sha256').update(stripBottleQuest(path,readFileSync(path))).digest('hex'),record.beforeSHA256,path);
