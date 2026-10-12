@@ -342,6 +342,7 @@ export const en = {
   "dialogue.waiter.choice.rakia": "One rakia.",
   "dialogue.waiter.choice.shopska": "One Shopska salad.",
   "dialogue.waiter.choice.tripe_soup": "Tripe soup for stabilization.",
+  "dialogue.waiter.choice.water": "Kiro, a glass of water, please.",
   "dialogue.waiter.choice.village_wine": "A bottle of the village wine.",
   "dialogue.waiter.choice.tony_weakness": "Does Tony always watch other people's glasses like that?",
   "dialogue.waiter.serving_question": "Kiro: Having it here or taking it with you?",

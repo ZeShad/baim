@@ -1,3 +1,4 @@
+import {stripTavern} from './tavern-preservation.js';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {createHash} from 'node:crypto';
@@ -5,6 +6,7 @@ const fixture=JSON.parse(readFileSync(new URL('../fixtures/effect-repair-reviewe
 const sha=value=>createHash('sha256').update(value).digest('hex');
 // Normalize only this exact repair before the immutable PR54/older comparisons.
 export function stripEffectRepair(path,source) {
+  source=stripTavern(path,source);
   const record=fixture.records[path];if(!record)return source;
   source=source.toString();assert.equal(sha(source),record.afterSHA256,'bound effect repair: '+path);
   const lines=source.split('\n');

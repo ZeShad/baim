@@ -1,0 +1,18 @@
+{
+  "painting": "assets_src/chapter1/scenes/mehana/redesign-v1/accepted-room-v13.png",
+  "paintingSHA256": "52fd891803279facd1523a941239d4dd746da47b49210c1dfd52f5c55efbf51d",
+  "background": "assets/chapter1/scenes/mehana/background-clean-occlusion-v1.png",
+  "backgroundSHA256": "1ba890a6703f4ca44beafa25de8c09a75e37d49a3e1a0e218699e97d84f0e41e",
+  "source": "assets/chapter1/scenes/mehana/counter-front-redesign-v1.png",
+  "sourceSHA256": "718b61e34572fbd66de4c368bca8183a8209f0e1935a297fc7f6b607e16a6dfe",
+  "output": "assets/chapter1/scenes/mehana/kiro-counter-occluder-v1.png",
+  "outputSHA256": "f0afebd7a28c64778a7a5eb3e7b80bb857e1f66659ea2eaf9d19c4b950b8cffb",
+  "rect": {
+    "left": 690,
+    "top": 343,
+    "width": 160,
+    "height": 162
+  },
+  "role": "Only Kiro lower-body counter occlusion; static background restores every original furniture pixel",
+  "preservation": "Same accepted painting resize. Exact retained counter RGBA; no repainting or original overwrite."
+}

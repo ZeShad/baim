@@ -342,6 +342,7 @@ export const bg = {
   "dialogue.waiter.choice.rakia": "Една ракия.",
   "dialogue.waiter.choice.shopska": "Една шопска салата.",
   "dialogue.waiter.choice.tripe_soup": "Едно шкембе за стабилизация.",
+  "dialogue.waiter.choice.water": "Киро, една чаша вода, моля.",
   "dialogue.waiter.choice.village_wine": "Бутилка от селското вино.",
   "dialogue.waiter.choice.tony_weakness": "Тони винаги ли гледа така чуждите чаши?",
   "dialogue.waiter.serving_question": "Киро: За тук или за вкъщи?",

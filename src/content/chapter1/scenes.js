@@ -233,7 +233,7 @@ const rawScenes = [
         rect: { x: 0, y: 120, w: 235, h: 345 },
         depthY: 590,
         targetSceneId: "scene.chapter1.mehana",
-        targetPosition: { x: 430, y: 530 }
+        targetPosition: { x: 120, y: 530 }
       },
       {
         id: "exit.square.to_municipality",
@@ -371,7 +371,7 @@ const rawScenes = [
     palette: { sky: "#4a3327", wall: "#7a5538", floor: "#32251d" },
     movementSpeed: 75,
     playerMode: "seated",
-    playerStart: { x: 430, y: 530 },
+    playerStart: { x: 120, y: 530 },
     seatedPresentation: {
       tableRect: { x: 230, y: 435, w: 395, h: 230 }
     },
@@ -379,7 +379,7 @@ const rawScenes = [
     walkMask: mehanaWalkGeometry.walkMask,
     perspectiveScale: { horizonY: 415, bottomY: 590, far: 1.08, near: 1.51 },
     anchors: {
-      baiMitkoSeat: { x: 430, y: 530 },
+      baiMitkoSeat: { x: 120, y: 530 },
       tonyTable: { x: 845, y: 570 },
       bar: { x: 620, y: 500 },
       waiter: { x: 705, y: 465 },
@@ -485,6 +485,7 @@ const rawScenes = [
         lookKey: "look.mehana.water_jug",
         takeItemId: "item.glass_of_water",
         flagOnTake: "hasGlassOfWater",
+        requirements: { disabled: true },
         useRules: [
           {
             requirements: { items: ["item.glass_of_water"] },
@@ -501,7 +502,8 @@ const rawScenes = [
         kind: "hotspot",
         nameKey: "hotspot.mehana.newspaper.name",
         rect: { x: 398, y: 402, w: 124, h: 93 },
-        lookKey: "look.mehana.newspaper"
+        lookKey: "look.mehana.newspaper",
+        requirements: { disabled: true }
       },
       {
         id: "hotspot.mehana.radio",
@@ -536,7 +538,7 @@ const rawScenes = [
         rect: { x: 727, y: 222, w: 88, h: 121 },
         speechAnchor: { x: 773, y: 208 },
         itemRejectKey: "msg.inventory.npc_reject.mehana_waiter",
-        interactionApproach: { x: 660, y: 580 },
+        interactionApproach: { x: 610, y: 580 },
         interactionApproachExact: true,
         interactionFacingPoint: { x: 771, y: 270 },
         dialogueId: "dialogue.mehana_waiter",

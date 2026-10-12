@@ -1,0 +1,83 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import {spawn} from 'node:child_process';
+import {createServer} from 'node:net';
+import {mkdirSync,writeFileSync} from 'node:fs';
+import {chromium} from 'playwright';
+import {browserAvailable} from './helpers/browser-availability.js';
+
+test('tavern floor, Kiro recovery and fixed spit render in BG/EN through normal generated assets', {timeout:180000},async t=>{
+ if(!browserAvailable(t,chromium.executablePath()))return;
+ const port=await new Promise(resolve=>{const probe=createServer();probe.listen(0,'127.0.0.1',()=>{const p=probe.address().port;probe.close(()=>resolve(p));});});
+ const origin='http://127.0.0.1:'+port;
+ const server=spawn(process.execPath,['tools/dev-server.mjs'],{env:{...process.env,PORT:String(port)},stdio:'ignore'});
+ const root=process.env.BAIM_TAVERN_REVIEW_DIR||'target/tavern-cleanup-review';mkdirSync(root,{recursive:true});
+ const report={nativeDurationMs:4500,sampleMs:125,sourceAssetOverrides:false,languages:[]};let browser;
+ try{
+  let ready=false;for(let i=0;i<100;i++){try{ready=(await fetch(origin)).ok;}catch{}if(ready)break;await new Promise(r=>setTimeout(r,100));}assert.equal(ready,true);
+  browser=await chromium.launch({headless:true});
+  for(const language of ['bg','en']){
+   const context=await browser.newContext({viewport:{width:1280,height:720},serviceWorkers:'block'}),page=await context.newPage(),errors=[],failed=[],captures=[];
+   page.on('pageerror',e=>errors.push(String(e)));page.on('console',m=>{if(m.type()==='error')errors.push(m.text());});page.on('requestfailed',r=>failed.push(r.url()));page.on('response',r=>{if(r.status()>=400)failed.push(r.url()+':'+r.status());});
+   await page.addInitScript(()=>window.requestAnimationFrame=()=>0);
+   await page.goto(origin+'/?play=1&testHarness=1');await page.evaluate(()=>window.__comradeCandidateTest.ready);
+   const advance=ms=>page.evaluate(ms=>{const g=window.__comradeCandidateTest.game;let left=ms;do{const step=Math.min(50,left);g.tick(g.lastTime+step);left-=step;}while(left>0);},ms);
+   const shot=async(name,delayMs=125)=>{await advance(0);const file=`${root}/${language}-${String(captures.length).padStart(3,'0')}-${name}.png`;await page.screenshot({path:file});captures.push({path:file,delayMs,name});};
+   const binding=await page.evaluate(async language=>{
+    const g=window.__comradeCandidateTest.game;g.setLanguage(language);await g.changeScene('scene.chapter1.mehana');await g.assets.preloadSceneAssets(g.currentScene.id);await g.assets.preloadCharacterSlots(g.player.id,g.bootstrapCharacterSlots());g.protectCurrentAssetWorkingSet();
+    const m=await(await fetch('/target/runtime-assets/manifest.json',{cache:'no-store'})).json(),path=g.assets.getSceneAssetPath(g.currentScene.id,'mehanaWaiterSneakyGlassSwap'),im=g.assets.getSceneImage(g.currentScene.id,'mehanaWaiterSneakyGlassSwap');
+    // Preload already awaits the loader's decode. Inspect and draw that exact
+    // protected game image rather than requesting a second asynchronous decode.
+    const requireReady=(key,image)=>{if(!g.assets.isLoaded(image)||!image.complete||!image.naturalWidth||!image.naturalHeight)throw Error('Game image is not ready: '+JSON.stringify({key,path:g.assets.getSceneAssetPath(g.currentScene.id,key),status:g.assets.getImageStatus(image),src:image?.getAttribute('src'),width:image?.naturalWidth,height:image?.naturalHeight,protected:g.assets.protectedPaths.has(g.assets.getSceneAssetPath(g.currentScene.id,key))}));};
+    requireReady('mehanaWaiterSneakyGlassSwap',im);
+    const canvas=document.createElement('canvas');canvas.width=2;canvas.height=2;canvas.getContext('2d').drawImage(im,0,0,2,2);const pixels=Array.from(canvas.getContext('2d').getImageData(0,0,2,2).data);
+    const occluders=[];for(const key of ['mehanaCounterFront','tonyTableOccluder']){const img=g.assets.getSceneImage(g.currentScene.id,key);requireReady(key,img);const c=document.createElement('canvas');c.width=1280;c.height=720;const ctx=c.getContext('2d');ctx.drawImage(img,0,0);occluders.push({key,path:g.assets.getSceneAssetPath(g.currentScene.id,key),width:img.naturalWidth,height:img.naturalHeight,aisleAlpha:[[550,380],[600,480],[620,650]].map(([x,y])=>ctx.getImageData(x,y,1,1).data[3])});}
+    return {version:m.version,loadedVersion:g.assets.runtimeVersion,path,width:im.naturalWidth,height:im.naturalHeight,pixels,occluders,sceneAssetKeys:Object.keys(g.assets.manifest.scenes[g.currentScene.id])};
+   },language);
+   assert.equal(binding.version,binding.loadedVersion);assert.match(binding.path,/kiro-spitting-fixed-owner-export-c01\.[a-f0-9]{12}\.webp/);assert.deepEqual([binding.width,binding.height],[1572,3684]);assert.ok(binding.pixels.some((value,index)=>index%4===3&&value>0),'decoded atlas draws visible alpha');
+   for(const key of ['mehanaRearChairs','tableGroupLeft','tableGroupRight','kaliakraOil','waterJug','todayNewspaper'])assert.ok(!binding.sceneAssetKeys.includes(key));
+   assert.ok(binding.sceneAssetKeys.includes('tonyTableOccluder'));
+   for(const mask of binding.occluders){assert.deepEqual([mask.width,mask.height],[1280,720]);assert.deepEqual(mask.aisleAlpha,[0,0,0]);assert.match(mask.path,/(kiro-counter|tony-table)-occluder-v1\.[a-f0-9]{12}\.png/);}
+   await shot('entry-clear-chairs-props',1000);
+   // Actual ground click into the central aisle; every traversed feet position is checked.
+   await page.locator('#game').click({position:{x:610,y:550}});
+   let settled=false;for(let i=0;i<200;i++){
+    await advance(100);const result=await page.evaluate(async()=>{const g=window.__comradeCandidateTest.game,{isWalkable}=await import('/src/engine/SceneGeometry.js');return {walkable:isWalkable(g.currentScene,g.player.position),moving:!!g.player.target};});assert.equal(result.walkable,true,'moving feet stay on visible floor');
+    if(!result.moving){settled=true;break;}
+   }assert.equal(settled,true);await shot('central-aisle-clear-chairs',1000);
+   const feet=await page.evaluate(()=>({...window.__comradeCandidateTest.game.player.position}));assert.ok(feet.x>=580&&feet.x<=620&&feet.y>=510);
+   await page.evaluate(()=>{const g=window.__comradeCandidateTest.game;g.sceneIdleVariations.random=()=>0;g.sceneIdleVariations.reset();g.player.idleVariantTimer=1e9;});await advance(0);await advance(25000);
+   for(let i=0;i<36;i++){if(i)await advance(125);await shot('spit-'+String(i).padStart(2,'0'));}
+   await advance(125);await shot('return-polishing',700);
+   const phase=await page.evaluate(()=>{const g=window.__comradeCandidateTest.game,l=g.currentScene.foregroundLayers.find(l=>l.id==='layer.mehana.waiter_idle');return g.sceneIdleVariationPresentation(g.currentScene,l).phase;});assert.equal(phase,'idle');
+   // Existing actual bottle journey separately verifies acquisition, self-use refusal and Tony swap.
+   const talkLabel=await page.evaluate(()=>window.__comradeCandidateTest.game.t('verb.talk'));
+   await page.getByRole('button',{name:talkLabel,exact:true}).click();
+   const talkPoint=await page.evaluate(async()=>{const g=window.__comradeCandidateTest.game,{findTargetAt}=await import('/src/engine/SceneGeometry.js');for(let y=230;y<340;y+=4)for(let x=730;x<815;x+=4)if(findTargetAt(g.currentScene,{x,y},t=>g.targetAvailable(t))?.id==='npc.mehana_waiter')return {x,y};throw Error('Kiro has no exposed hit target');});
+   await page.locator('#game').click({position:talkPoint});
+   for(let i=0;i<100;i++){
+    await advance(100);const approach=await page.evaluate(async()=>{const g=window.__comradeCandidateTest.game,{isWalkable}=await import('/src/engine/SceneGeometry.js');return {walkable:isWalkable(g.currentScene,g.player.position),dialogue:g.dialogue.current?.id};});assert.equal(approach.walkable,true);
+    if(approach.dialogue==='dialogue.mehana_waiter')break;
+   }
+   assert.equal(await page.evaluate(()=>window.__comradeCandidateTest.game.dialogue.current?.id),'dialogue.mehana_waiter');
+   const label=await page.evaluate(()=>window.__comradeCandidateTest.game.t('dialogue.waiter.choice.water'));
+   await page.locator('.dialogue-choice-list').getByRole('button',{name:label,exact:true}).click();
+   assert.equal(await page.evaluate(()=>window.__comradeCandidateTest.game.inventory.has('item.glass_of_water')),true);await shot('kiro-water-acquired',1000);
+   await page.reload();await page.evaluate(()=>window.__comradeCandidateTest.ready);await advance(0);
+   assert.equal(await page.evaluate(()=>window.__comradeCandidateTest.game.inventory.has('item.glass_of_water')),true);
+   await page.evaluate(async()=>{const g=window.__comradeCandidateTest.game;await g.changeScene('scene.chapter1.village_square');await g.changeScene('scene.chapter1.mehana');});await advance(0);await shot('scene-reentry',1000);
+   // Fresh normal owner URL, same earned save, no testHarness and no forced source assets.
+   const normal=await context.newPage();const normalFailures=[];normal.on('pageerror',e=>normalFailures.push(String(e)));normal.on('requestfailed',r=>normalFailures.push(r.url()));normal.on('response',r=>{if(r.status()>=400)normalFailures.push(r.url());});
+   await normal.goto(origin+'/?play=1');await normal.waitForLoadState('networkidle');
+   const normalBinding=await normal.evaluate(async()=>{
+    const m=await(await fetch('/target/runtime-assets/manifest.json',{cache:'no-store'})).json(),url=m.manifest.scenes['scene.chapter1.mehana'].mehanaWaiterSneakyGlassSwap;
+    const im=new Image();im.src='/'+url;await im.decode();const c=document.createElement('canvas');c.width=2;c.height=2;c.getContext('2d').drawImage(im,0,0,2,2);
+    return {version:m.version,url,width:im.naturalWidth,height:im.naturalHeight,pixels:Array.from(c.getContext('2d').getImageData(0,0,2,2).data),harnessAbsent:!window.__comradeCandidateTest,requested:performance.getEntriesByType('resource').filter(r=>r.name.includes('kiro-spitting-fixed-owner-export-c01')).map(r=>r.name)};
+   });
+   assert.equal(normalBinding.harnessAbsent,true);assert.equal(normalBinding.version,binding.version);assert.deepEqual([normalBinding.width,normalBinding.height],[1572,3684]);assert.ok(normalBinding.requested.length>0);assert.deepEqual(normalBinding.pixels,binding.pixels);
+   await normal.screenshot({path:`${root}/${language}-normal-owner-url.png`});assert.deepEqual(normalFailures,[]);assert.deepEqual(errors,[]);assert.deepEqual(failed,[]);
+   report.languages.push({language,binding,normalBinding,captures,feet,errors,failed,normalFailures});await context.close();
+  }
+  writeFileSync(root+'/review.json',JSON.stringify(report,null,2)+'\n');
+ }finally{await browser?.close();if(server.exitCode===null){server.kill();await new Promise(resolve=>server.once('exit',resolve));}}
+});
