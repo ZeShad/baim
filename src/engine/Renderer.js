@@ -770,15 +770,37 @@ export class Renderer {
     return animation;
   }
 
+  drawScenePerformance(scene, performance, image, occlusionAsset) {
+    const r = performance.sourceRect;
+    const draw = (ctx) => ctx.drawImage(image, r.x, r.y, r.w, r.h,
+      performance.left, performance.top, performance.height * 504 / 896, performance.height);
+    if (!occlusionAsset) { draw(this.ctx); return true; }
+    const occluder = this.game.assets.getSceneImage(scene.id, occlusionAsset);
+    // Until the mask is ready, retain the safely occluded stationary fallback.
+    if (!this.game.assets.isLoaded(occluder)) return false;
+    this.scenePerformanceCanvas ||= document.createElement("canvas");
+    const canvas = this.scenePerformanceCanvas;
+    if (canvas.width !== 1280 || canvas.height !== 720) { canvas.width = 1280; canvas.height = 720; }
+    const ctx = canvas.getContext("2d");
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    draw(ctx);
+    ctx.save();
+    ctx.globalCompositeOperation = "destination-out";
+    ctx.drawImage(occluder, 0, 0, canvas.width, canvas.height);
+    ctx.restore();
+    // Mask only this moving sprite, never repaint furniture over other actors.
+    this.ctx.drawImage(canvas, 0, 0);
+    return true;
+  }
+
   drawSceneRasterLayer(scene, layer) {
     if (this.ambientSceneId !== scene.id) { this.ambientSceneId = scene.id; this.ambientClocks = new Map(); }
     const performance = this.game.sceneAction?.presentation(scene.id, layer.id);
     if (performance) {
       const image = this.game.assets.getSceneImage(scene.id, performance.asset);
       if (this.game.assets.isLoaded(image)) {
-        const r = performance.sourceRect;
-        this.ctx.drawImage(image, r.x, r.y, r.w, r.h, performance.left, performance.top, performance.height * 504 / 896, performance.height);
-        return;
+        const occlusionAsset = this.game.sceneAction.state?.definition?.occlusionAsset;
+        if (this.drawScenePerformance(scene, performance, image, occlusionAsset)) return;
       }
     }
     if (this.drawSceneNpcSpeech(scene, layer)) return;
