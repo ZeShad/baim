@@ -14,7 +14,7 @@ test('every reachable tavern cell stays in front of the counter while preserving
   if(feet.x>=500)assert.ok(sceneZIndexForPoint(scene,feet)<layer('mehanaCounterFront').zIndex,JSON.stringify(feet)+' counter cannot cut the player');
   assert.ok(!(feet.x>190&&feet.x<610&&feet.y>445&&feet.y<650),'no chair/table footprint');
  }
- assert.ok(inspected>650);
+ assert.equal(inspected,scene.walkMask.rows.join('').replaceAll('.','').length);
  const central={x:670,y:590},rear={x:610,y:550},front={x:400,y:680};
  assert.ok(sceneZIndexForPoint(scene,central)<layer('leftTablePlayerOccluder').zIndex,'aisle is in front of left furniture');
  assert.ok(sceneZIndexForPoint(scene,central)>layer('rightTablePlayerOccluder').zIndex,'aisle stays behind right furniture');

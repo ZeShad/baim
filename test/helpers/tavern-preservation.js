@@ -4,10 +4,19 @@ import {createHash} from 'node:crypto';
 const fixture=JSON.parse(readFileSync(new URL('../fixtures/tavern-reviewed-deltas.json',import.meta.url)));
 const followup=JSON.parse(readFileSync(new URL('../fixtures/tavern-table-approach-deltas.json',import.meta.url)));
 const clipping=JSON.parse(readFileSync(new URL('../fixtures/tavern-clipping-boundary-deltas.json',import.meta.url)));
+const door=JSON.parse(readFileSync(new URL('../fixtures/tavern-door-floor-deltas.json',import.meta.url)));
 const sha=x=>createHash('sha256').update(x).digest('hex');
 // Invert only exact reviewed tavern deltas before immutable historical checks.
 // A changed byte outside this fixed snapshot fails; no moving baseline is used.
 export function stripTavern(path,source){
+ const floor=door.records[path];
+ if(floor){
+  const text=source.toString();assert.equal(sha(text),floor.afterSHA256,'bound door floor correction: '+path);
+  const lines=text.split('\n');for(const h of [...floor.hunks].reverse()){
+   assert.deepEqual(lines.slice(h.at,h.at+h.added.length),h.added,path);lines.splice(h.at,h.added.length,...h.removed);
+  }
+  source=lines.join('\n');assert.equal(sha(source),floor.beforeSHA256,'fixed PR58 baseline: '+path);
+ }
  const correction=clipping.records[path];
  if(correction){
   const text=source.toString();assert.equal(sha(text),correction.afterSHA256,'bound clipping correction: '+path);
