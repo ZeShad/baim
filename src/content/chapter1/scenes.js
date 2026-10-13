@@ -380,13 +380,17 @@ const rawScenes = [
     perspectiveScale: { horizonY: 415, bottomY: 590, far: 1.08, near: 1.51 },
     depthZones: [{
       id: "depth.mehana.behind_left_chair",
-      polygon: [{ x: 520, y: 510 }, { x: 625, y: 510 }, { x: 625, y: 625 }, { x: 520, y: 625 }],
+      polygon: [{ x: 600, y: 520 }, { x: 650, y: 520 }, { x: 650, y: 570 }, { x: 600, y: 570 }],
       zDepth: 0.75
     }, {
       id: "depth.mehana.tony_standing_bay",
       polygon: [{ x: 700, y: 530 }, { x: 780, y: 530 }, { x: 780, y: 610 }, { x: 700, y: 610 }],
       depth: (550 - 415) / (590 - 415),
       zDepth: 0.75
+    }, {
+      id: "depth.mehana.central_aisle",
+      polygon: [{ x: 630, y: 520 }, { x: 850, y: 520 }, { x: 850, y: 650 }, { x: 630, y: 650 }],
+      zDepth: 0.85
     }],
     anchors: {
       baiMitkoSeat: { x: 120, y: 530 },

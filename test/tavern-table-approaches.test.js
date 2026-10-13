@@ -11,18 +11,18 @@ const scene=chapter1.scenes.find(s=>s.id==='scene.chapter1.mehana');
 test('both talk destinations and behind-left-chair position have connected furniture-safe return routes',()=>{
  const kiro=scene.npcs.find(n=>n.id==='npc.mehana_waiter'),tony=scene.npcs.find(n=>n.id==='npc.tony_fridge');
  assert.deepEqual(kiro.interactionApproach,{x:650,y:550});assert.deepEqual(tony.interactionApproach,{x:740,y:580});assert.equal(tony.interactionApproachExact,true);
- const points=[scene.playerStart,{x:400,y:680},{x:610,y:550},{x:550,y:565},kiro.interactionApproach,tony.interactionApproach];
+ const points=[scene.playerStart,{x:400,y:680},{x:610,y:550},{x:670,y:600},kiro.interactionApproach,tony.interactionApproach];
  for(const from of points)for(const to of points){assert.equal(isWalkable(scene,to),true);const path=findWalkPath(scene,from,to);assert.ok(path.length);let prev=from;for(const end of path){const count=Math.max(1,Math.ceil(Math.hypot(end.x-prev.x,end.y-prev.y)));for(let i=0;i<=count;i++)assert.equal(isWalkable(scene,{x:prev.x+(end.x-prev.x)*i/count,y:prev.y+(end.y-prev.y)*i/count}),true);prev=end;}}
  for(const point of [{x:770,y:440},{x:790,y:470},{x:450,y:480},{x:850,y:550},{x:1100,y:570}])assert.equal(isWalkable(scene,point),false,'no bar/table-centre access');
 });
 
 test('furniture draws in front of rear approaches and behind foreground player without perspective jumps',()=>{
  const layer=scene.foregroundLayers.find(l=>l.asset==='leftTablePlayerOccluder');
- for(const point of [{x:610,y:550},{x:610,y:580},{x:550,y:565}]){
+ for(const point of [{x:610,y:540},{x:610,y:550},{x:640,y:550}]){
   assert.ok(sceneZIndexForPoint(scene,point)>layer.zIndex);
   assert.equal(sceneDepthT(scene,point),sceneDepthT({...scene,depthZones:[]},point),'occlusion-only zones preserve continuous actor scale');
  }
- assert.equal(sceneZDepthT(scene,{x:610,y:580}),.75);
+ assert.equal(sceneZDepthT(scene,{x:610,y:550}),.75);
  assert.ok(sceneZIndexForPoint(scene,{x:400,y:680})<layer.zIndex);
  assert.ok(sceneZIndexForPoint(scene,{x:740,y:580})>scene.foregroundLayers.find(l=>l.asset==='rightTablePlayerOccluder').zIndex);
  assert.equal(sceneDepthT(scene,{x:740,y:580}),sceneDepthT(scene,{x:740,y:550}),'lower Tony stop keeps its standing size');
