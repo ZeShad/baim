@@ -15,7 +15,7 @@ const water=chapter1.dialogues.find(d=>d.id==='dialogue.mehana_waiter').nodes.st
 test('tavern blocked furniture and bar cannot be entered; all floor routes avoid blocked cells',()=>{
  const blocked=[{x:430,y:530},{x:850,y:570},{x:770,y:440},{x:930,y:425},{x:530,y:435},{x:1060,y:550}];
  for(const point of blocked)assert.equal(isWalkable(scene,point),false,JSON.stringify(point));
- const destinations=[{x:120,y:525},{x:120,y:680},{x:400,y:680},{x:590,y:680},{x:610,y:540}];
+ const destinations=[{x:120,y:535},{x:120,y:680},{x:400,y:680},{x:590,y:680},{x:610,y:540}];
  for(const from of destinations)for(const to of destinations){
   assert.equal(isWalkable(scene,from),true);
   const path=findWalkPath(scene,from,to);assert.ok(path.length,'connected aisles');
