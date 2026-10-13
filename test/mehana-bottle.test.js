@@ -6,14 +6,14 @@ import {InventorySystem} from '../src/engine/InventorySystem.js';
 import {QuestSystem} from '../src/engine/QuestSystem.js';
 import {SaveSystem} from '../src/engine/SaveSystem.js';
 import {applyEffects,firstMatchingRule,requirementsMet} from '../src/engine/EffectSystem.js';
-import {fountainItemRules,fountainUseRules,oilRefillRule,babaSupportRule} from '../src/content/chapter1/fountain.js';
+import {fountainItemRules,statueItemRules,fountainUseRules,oilRefillRule,babaSupportRule} from '../src/content/chapter1/fountain.js';
 import {bottleItemIds} from '../src/content/chapter1/bottleSave.js';
 const empty='item.empty_rakia_bottle',water='item.fountain_water_bottle',oil='item.sunflower_oil';
 const index=arr=>Object.fromEntries(arr.map(x=>[x.id,x]));
 function ctx(overrides={}){const state={...structuredClone(DEFAULT_SAVE),...overrides};return {state,inventory:new InventorySystem(index(chapter1.items),state),quests:new QuestSystem(index(chapter1.quests),state)};}
 function reload(c){let raw;const save=new SaveSystem({getItem:()=>raw,setItem:(_,v)=>raw=v});save.save(c.state);return ctx(save.load());}
 function apply(rule,c){if(!rule||!requirementsMet(rule.requirements,c))return false;applyEffects(rule.effects,c);return true;}
-const fountain=(id,c)=>firstMatchingRule(fountainItemRules.filter(r=>r.itemId===id),c);
+const fountain=(id,c)=>firstMatchingRule((id===oil?statueItemRules:fountainItemRules).filter(r=>r.itemId===id),c);
 const mehana=chapter1.scenes.find(s=>s.id==='scene.chapter1.mehana');
 const glass=mehana.interactables.find(x=>x.id==='hotspot.mehana.bai_mitko_rakia_glass');
 const finish=chapter1.dialogues.find(d=>d.id==='dialogue.tony_fridge').nodes.start.choices.find(c=>c.textKey==='dialogue.tony.choice.finish_challenge');
@@ -23,7 +23,7 @@ const bottleCount=c=>[...c.state.inventory,...c.state.droppedItems.map(r=>r.item
 test('complete bottle chain survives every save; repeat fills/swaps cannot duplicate or farm rewards',()=>{
  let c=reload(ctx());assert.equal(bottleCount(c),0);apply(oilRefillRule,c);c=reload(c);assert.equal(bottleCount(c),1);
  apply(fountain(oil,c),c);c=reload(c);assert.deepEqual(c.state.inventory,[empty]);
- const before=structuredClone(c.state);assert.equal(fountain(empty,c).reject,true);apply(fountain(empty,c),c);assert.deepEqual(c.state,before);
+ assert.equal(c.state.flags.fountainRepaired,true); // Repair now completes directly on the statue.
  apply(firstMatchingRule(fountainUseRules,c),c);c=reload(c);apply(fountain(empty,c),c);c=reload(c);assert.deepEqual(c.state.inventory,[water]);assert.equal(fountain(empty,c),null);
  c.state.flags.tonyChallengeStarted=true;apply(swap(water,c),c);assert.equal(c.state.suspicion,3);apply(swap(water,c),c);assert.equal(c.state.suspicion,3);assert.equal(c.inventory.has(water),true);
  c.state.flags.tonyDistracted=true;apply(swap(water,c),c);c=reload(c);assert.deepEqual(c.state.inventory,[empty]);assert.equal(c.state.swappedOwnRakiaWithWater,true);assert.equal(swap(water,c),null);
@@ -65,12 +65,12 @@ test('atomic reusable replacement rejects stale source or owned/dropped destinat
 import {readFileSync} from 'node:fs';
 import {createHash} from 'node:crypto';
 import {stripBottleQuest} from './helpers/bottle-preservation.js';
-import {stripTavern} from './helpers/tavern-preservation.js';
+import {stripSquareRedesign} from './helpers/square-redesign-preservation.js';
 test('fixed PR53 art, motion, renderer and animation-state systems remain byte-exact',()=>{
  const fixture=JSON.parse(readFileSync('test/fixtures/mehana-bottle-art-baseline.json'));
  assert.equal(fixture.baseline,'31793384bef7e48d763416b13dabfcf76fc3652e');
  for(const [path,objectId]of Object.entries(fixture.originals)){
-  const data=Buffer.from(stripTavern(path,readFileSync(path)));assert.equal(createHash('sha1').update('blob '+data.length+'\0').update(data).digest('hex'),objectId,path);
+  const data=Buffer.from(stripSquareRedesign(path,readFileSync(path)));assert.equal(createHash('sha1').update('blob '+data.length+'\0').update(data).digest('hex'),objectId,path);
  }
  const deltas=JSON.parse(readFileSync('test/fixtures/mehana-bottle-reviewed-deltas.json'));
  for(const [path,record]of Object.entries(deltas.records))assert.equal(createHash('sha256').update(stripBottleQuest(path,readFileSync(path))).digest('hex'),record.beforeSHA256,path);

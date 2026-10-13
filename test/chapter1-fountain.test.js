@@ -1,7 +1,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import { chapter1 } from "../src/content/chapter1/index.js";
-import { babaSupportRule, babaGiftRules, fountainLookRules, fountainUseRules, fountainItemRules, oldMenRules, oilRefillRule, fountainQuestStages } from "../src/content/chapter1/fountain.js";
+import { babaSupportRule, babaGiftRules, fountainLookRules, fountainUseRules, fountainItemRules, statueItemRules, oldMenRules, oilRefillRule, fountainQuestStages } from "../src/content/chapter1/fountain.js";
 import { fountainBg, fountainEn } from "../src/content/localization/chapter1Fountain.js";
 import { DEFAULT_SAVE, VERBS } from "../src/engine/ids.js";
 import { InventorySystem } from "../src/engine/InventorySystem.js";
@@ -9,7 +9,6 @@ import { QuestSystem } from "../src/engine/QuestSystem.js";
 import { SaveSystem } from "../src/engine/SaveSystem.js";
 import { Game } from "../src/engine/Game.js";
 import { Renderer } from "../src/engine/Renderer.js";
-import { drawSceneEffect, streamPoint } from "../src/engine/SceneEffects.js";
 import { applyEffects, firstMatchingRule, requirementsMet } from "../src/engine/EffectSystem.js";
 
 function context(overrides = {}) {
@@ -31,7 +30,7 @@ function reload(ctx) {
 const square = chapter1.scenes.find(scene => scene.id === "scene.chapter1.village_square");
 const mehana = chapter1.scenes.find(scene => scene.id === "scene.chapter1.mehana");
 
-test("Baba support requires oiling, operating and reporting; progress survives intermediate reloads", () => {
+test("Baba support requires statue repair and reporting; progress survives intermediate reloads", () => {
   let ctx = context();
   const stage = () => firstMatchingRule(fountainQuestStages, ctx).id;
   assert.equal(stage(), "stage.baba.ask_terms");
@@ -44,12 +43,12 @@ test("Baba support requires oiling, operating and reporting; progress survives i
   assert.equal(stage(), "stage.baba.find_oil");
   apply(oilRefillRule, ctx);
   assert.equal(stage(), "stage.baba.oil_valve");
-  apply(firstMatchingRule(fountainItemRules.filter(rule => rule.itemId === "item.sunflower_oil"), ctx), ctx);
+  apply(firstMatchingRule(statueItemRules.filter(rule => rule.itemId === "item.sunflower_oil"), ctx), ctx);
   assert.equal(ctx.inventory.has("item.sunflower_oil"), false);
   assert.equal(ctx.state.babaStoyankaVote, false);
-  assert.equal(requirementsMet(babaSupportRule.requirements, ctx), false);
+  assert.equal(requirementsMet(babaSupportRule.requirements, ctx), true);
   ctx = reload(ctx);
-  assert.equal(stage(), "stage.baba.turn_valve");
+  assert.equal(stage(), "stage.baba.report_repair");
   apply(firstMatchingRule(fountainUseRules, ctx), ctx);
   assert.equal(stage(), "stage.baba.report_repair");
   assert.equal(ctx.state.babaStoyankaVote, false);
@@ -81,7 +80,7 @@ test("gift dialogue and direct offers cannot buy support or consume puzzle items
   assert.deepEqual(ctx.state.inventory, before);
   assert.equal(ctx.state.babaStoyankaVote, false);
   assert.equal(ctx.state.suspicion, 0);
-  apply(firstMatchingRule(fountainItemRules.filter(rule => rule.itemId === "item.sunflower_oil"), ctx), ctx);
+  apply(firstMatchingRule(statueItemRules.filter(rule => rule.itemId === "item.sunflower_oil"), ctx), ctx);
   apply(firstMatchingRule(fountainUseRules, ctx), ctx);
   apply(babaSupportRule, ctx);
   assert.equal(ctx.state.babaStoyankaVote, true);
@@ -102,7 +101,7 @@ test("Kiro is the sole source; self-use preserves oil and dropped bottles preven
   assert.equal(requirementsMet(oilRefillRule.requirements, ctx), false);
   ctx.state.droppedItems = [];
   ctx.inventory.add(item.id);
-  apply(firstMatchingRule(fountainItemRules.filter(rule => rule.itemId === item.id), ctx), ctx);
+  apply(firstMatchingRule(statueItemRules.filter(rule => rule.itemId === item.id), ctx), ctx);
   assert.equal(ctx.inventory.has("item.empty_rakia_bottle"), true);
   assert.equal(requirementsMet(oilRefillRule.requirements, ctx), false);
 });
@@ -117,7 +116,7 @@ test("early repair works without visiting Baba or the chorus; repeated failures 
   apply(firstMatchingRule(fountainItemRules.filter(rule => rule.itemId === "item.glass_of_water"), ctx), ctx);
   assert.equal(ctx.inventory.has("item.glass_of_water"), true);
   assert.equal(ctx.state.suspicion, 0);
-  apply(firstMatchingRule(fountainItemRules.filter(rule => rule.itemId === "item.sunflower_oil"), ctx), ctx);
+  apply(firstMatchingRule(statueItemRules.filter(rule => rule.itemId === "item.sunflower_oil"), ctx), ctx);
   apply(firstMatchingRule(fountainUseRules, ctx), ctx);
   apply(babaSupportRule, ctx);
   assert.equal(ctx.state.babaStoyankaVote, true);
@@ -128,7 +127,7 @@ test("legacy votes remain earned without inventing a repair or granting a second
     completedQuests: ["quest.chapter1.baba_vote"], inventory: ["item.sunflower_oil"] }));
   assert.equal(ctx.state.flags.fountainRepaired, undefined);
   assert.equal(ctx.state.babaStoyankaVote, true);
-  apply(firstMatchingRule(fountainItemRules.filter(rule => rule.itemId === "item.sunflower_oil"), ctx), ctx);
+  apply(firstMatchingRule(statueItemRules.filter(rule => rule.itemId === "item.sunflower_oil"), ctx), ctx);
   apply(firstMatchingRule(fountainUseRules, ctx), ctx);
   assert.equal(requirementsMet(babaSupportRule.requirements, ctx), false);
   assert.equal(ctx.state.influence, 15);
@@ -154,27 +153,18 @@ test("the chorus Talk action uses the same authored clue as Look and Use", () =>
   assert.equal(game.message, "fountain.chorus.clue");
 });
 
-test("fountain stream follows saved visibility and remains within its authored nozzle/basin area", () => {
-  const effect = square.effects[0];
+test("repaired fountain reveals shallow pool and statue stream, never retired tap", () => {
+  assert.equal(square.effects.length, 1);
+  assert.equal(square.effects[0].visibleWhenFlag, "fountainRepaired");
+  assert.equal(square.effects[0].points[0].x, 543);
+  const effect = square.foregroundLayers.find(layer => layer.asset === 'fountainShallowWater');
+  assert.ok(effect);
+  assert.equal(effect.animation, undefined);
   const renderer = Object.create(Renderer.prototype);
   renderer.game = { state: { flags: {} } };
   assert.equal(renderer.sceneLayerVisible(effect), false);
   renderer.game.state.flags.fountainRepaired = true;
   assert.equal(renderer.sceneLayerVisible(effect), true);
-  assert.deepEqual(streamPoint(effect.points, 0), effect.points[0]);
-  assert.deepEqual(streamPoint(effect.points, 1), effect.points[3]);
-  for (let t = 0; t <= 1; t += 0.1) {
-    const point = streamPoint(effect.points, t);
-    assert.ok(point.x >= 682 && point.x <= 704 && point.y >= 168 && point.y <= 243);
-  }
-  const frames = [];
-  const ctx = { save() {}, restore() {}, beginPath() {}, stroke() {}, bezierCurveTo() {}, quadraticCurveTo() {},
-    moveTo(x, y) { frames.push([x, y]); }, lineTo(x, y) { frames.push([x, y]); } };
-  drawSceneEffect(ctx, effect, 0);
-  const first = [...frames];
-  frames.length = 0;
-  drawSceneEffect(ctx, effect, 0.2);
-  assert.notDeepEqual(frames, first);
 });
 
 test("fountain dialogue, stages and feedback resolve in both languages; wine remains orderable", () => {

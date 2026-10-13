@@ -30,7 +30,7 @@ test('Mehana bottle chain through actual BG/EN gameplay, inspection, save/load a
    const choice=async key=>{const label=await page.evaluate(key=>window.__comradeCandidateTest.game.t(key),key);await page.locator('.dialogue-choice-list').getByRole('button',{name:label,exact:true}).click();};
    const verb=async name=>{const label=await page.evaluate(name=>window.__comradeCandidateTest.game.t('verb.'+name),name);for(let i=0;i<4;i++){if(await page.locator('.hud-verb').textContent()===label)return;await page.locator('.hud-verb').click();}assert.fail(name);};
    const click=async id=>{const point=await page.evaluate(async id=>{const g=window.__comradeCandidateTest.game;const {findTargetAt}=await import('/src/engine/SceneGeometry.js');const points=[];for(let y=80;y<580;y+=8)for(let x=16;x<1260;x+=8)if(findTargetAt(g.currentScene,{x,y},t=>g.targetAvailable(t))?.id===id)points.push({x,y});if(!points.length)throw Error('No exposed target '+id);return points[Math.floor(points.length/2)];},id);await page.locator('#game').click({position:point});};
-   const settled=()=>wait(()=>{const g=window.__comradeCandidateTest.game;return !g.player.pendingInteraction&&!g.player.actionSequence&&!g.sceneTransitionPending;},'interaction settles');
+   const settled=()=>wait(()=>{const g=window.__comradeCandidateTest.game;return !g.player.pendingInteraction&&!g.player.actionSequence&&!g.sceneTransitionPending&&!g.sceneAction.active;},'interaction settles');
    const go=async(id,scene)=>{await click(id);await wait(()=>!window.__comradeCandidateTest.game.sceneTransitionPending&&window.__comradeCandidateTest.game.currentScene.id===window.__expectedScene,'scene '+scene);};
    // Set only the expected assertion value, never game state.
    const exit=async(id,scene)=>{await page.evaluate(scene=>window.__expectedScene=scene,scene);await go(id,scene);};
@@ -55,9 +55,9 @@ test('Mehana bottle chain through actual BG/EN gameplay, inspection, save/load a
    await page.locator('.item-model-viewer[data-model-state=ready]').waitFor();await shot('oil-receipt');
    await page.locator('.received-item-screen > button:last-child').click();await reload();
    await itemAction('item.sunflower_oil','ui.inventory.use_on_self');assert.equal(await page.evaluate(()=>window.__comradeCandidateTest.game.inventory.has('item.sunflower_oil')),true);
-   await exit('exit.mehana.to_square','scene.chapter1.village_square');await use('item.sunflower_oil','hotspot.square.fountain');
+   await exit('exit.mehana.to_square','scene.chapter1.village_square');await use('item.sunflower_oil','hotspot.square.statue');
    assert.deepEqual((await snapshot()).inventory.filter(id=>id.includes('bottle')||id==='item.sunflower_oil'),['item.empty_rakia_bottle']);await shot('oil-applied-empty-kept');await reload();
-   await use('item.empty_rakia_bottle','hotspot.square.fountain');assert.equal(await page.evaluate(()=>window.__comradeCandidateTest.game.inventory.has('item.empty_rakia_bottle')),true);await shot('dry-fountain-refusal');
+   await verb('use');await click('hotspot.square.fountain');await settled();assert.equal(await page.evaluate(()=>window.__comradeCandidateTest.game.inventory.has('item.empty_rakia_bottle')),true);await shot('ordinary-use-keeps-empty');
    await itemAction('item.empty_rakia_bottle','ui.inventory.inspect');await page.locator('.item-model-viewer[data-model-state=ready]').waitFor();await shot('empty-inspection');
    const inspectInventory=(await snapshot()).inventory;await page.locator('.item-model-viewer canvas').evaluate(c=>c.dispatchEvent(new Event('webglcontextlost',{cancelable:true})));await page.locator('.item-model-viewer[data-model-state=fallback] img').waitFor();await page.waitForFunction(()=>document.querySelector('.item-model-viewer img')?.naturalWidth>0);await shot('empty-fallback');await page.locator('.received-item-screen > button:last-child').click();assert.deepEqual((await snapshot()).inventory,inspectInventory);
    await verb('use');await click('hotspot.square.fountain');await settled();assert.equal((await snapshot()).flags.fountainRepaired,true);await shot('fountain-running');

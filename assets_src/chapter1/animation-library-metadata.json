@@ -73,10 +73,10 @@
   "world": {
     "effect.fountain_water_stream": {
       "label": "Fountain Water Stream",
-      "description": "Procedural canvas water segments follow the authored fountain path after the repair flag is set.",
+      "description": "A restrained procedural stream runs from the c05 soldier's nozzle into the shallow dirty pool after statue repair. Highlights and ripples loop in 1.25 seconds; menus freeze motion. The statue and approved scene pixels remain static.",
       "scene": "scene.chapter1.village_square",
       "source": "src/engine/SceneEffects.js",
-      "previewAsset": "assets/chapter1/scenes/village_square/fountain-foreground-v1.png"
+      "previewAsset": "assets/chapter1/scenes/village_square/background-redesign-c05.png"
     },
     "ui.interface_transitions": {
       "label": "Interface Transitions",

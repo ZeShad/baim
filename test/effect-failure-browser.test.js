@@ -70,17 +70,17 @@ test('BG/EN failed effect choices keep UI/state/save and suppress success presen
       const point=await page.evaluate(async()=>{
         const g=window.__comradeCandidateTest.game,{findTargetAt}=await import('/src/engine/SceneGeometry.js'),points=[];
         for(let y=80;y<580;y+=8)for(let x=16;x<1260;x+=8)
-          if(findTargetAt(g.currentScene,{x,y},t=>g.targetAvailable(t))?.id==='hotspot.square.fountain')points.push({x,y});
+          if(findTargetAt(g.currentScene,{x,y},t=>g.targetAvailable(t))?.id==='hotspot.square.statue')points.push({x,y});
         if(!points.length)throw Error('No exposed fountain');return points[Math.floor(points.length/2)];
       });
       await page.locator('#game').click({position:point});
       for(let i=0;i<160;i++){
-        const settled=await page.evaluate(()=>{const g=window.__comradeCandidateTest.game;for(let j=0;j<5;j++)g.tick(g.lastTime+50);return !g.player.pendingInteraction&&!g.player.actionSequence&&!g.sceneTransitionPending;});
+        const settled=await page.evaluate(()=>{const g=window.__comradeCandidateTest.game;for(let j=0;j<5;j++)g.tick(g.lastTime+50);return !g.player.pendingInteraction&&!g.player.actionSequence&&!g.sceneTransitionPending&&!g.sceneAction.active;});
         if(settled)break;await page.waitForTimeout(10);if(i===159)throw Error('Fountain interaction did not settle');
       }
       const worldAfter=await page.evaluate(()=>{const g=window.__comradeCandidateTest.game;return {state:structuredClone(g.state),saved:JSON.stringify({...localStorage}),calls:window.__effectCalls,applications:window.__worldApplications,item:g.inventoryUseItemId};});
       assert.deepEqual(worldAfter.state,worldBefore.state);assert.equal(worldAfter.saved,worldBefore.saved);assert.deepEqual(worldAfter.calls,[]);
-      assert.equal(worldAfter.applications.length,1);assert.equal(worldAfter.applications[0].result,false);assert.equal(worldAfter.item,null);
+      assert.equal(worldAfter.applications.length,1);assert.equal(worldAfter.applications[0].result,true);assert.equal(worldAfter.item,null);
       assert.equal(await page.locator('.inventory-use-indicator').count(),0);
       results.push({language,conflict:'authored-fountain-held',actualClicks:true,stateUnchanged:true,saveUnchanged:true,applications:worldAfter.applications,indicatorCleared:true});
       assert.deepEqual(errors,[]);await context.close();

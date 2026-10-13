@@ -60,6 +60,7 @@ export const campaignPosterRules = [
 
 export const campaignDialogues = [{
   id: "dialogue.penka_kiosk",
+  npcId: "hotspot.square.kiosk",
   nodes: {
     start: {
       lineKey: "campaign.kiosk.start",

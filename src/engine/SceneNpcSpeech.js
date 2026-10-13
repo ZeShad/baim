@@ -11,7 +11,7 @@ export class SceneNpcSpeech {
     const present = new Set(), dt = Math.max(0, Number(deltaMs) || 0);
     for (const layer of scene.foregroundLayers || []) {
       const config = layer.speechAnimation;
-      if (!config || !visible(layer) || !scene.npcs?.some(n => n.id === config.npcId)) continue;
+      if (!config || !visible(layer) || !findSceneSpeaker(scene, config.npcId)) continue;
       present.add(layer.id);
       let state = this.entries.get(layer.id);
       if (!state) {
@@ -122,3 +122,4 @@ export class SceneNpcSpeech {
       idleWeight: weight('idle') + weight('snapshot'), blendComplete: t === 1 };
   }
 }
+import {findSceneSpeaker} from './SceneGeometry.js';

@@ -309,7 +309,7 @@ test("fresh Chapter 1 journeys reach all three endings through real clicks in Bu
       assert.equal(await pamphletIcon.isVisible(), true);
       assert.equal(await pamphletIcon.evaluate(image => image.complete && image.naturalWidth > 0), true);
       await page.mouse.move(0, 0);
-      const posterBefore = await page.screenshot({ clip: { x: 1090, y: 255, width: 85, height: 160 } });
+      const posterBefore = await page.screenshot({ clip: { x: 1047, y: 255, width: 60, height: 153 } });
       await page.locator('[data-item-id="item.campaign_pamphlets"]').click();
       const use = await page.evaluate(() => window.__comradeCandidateTest.game.t("ui.inventory.use"));
       await page.locator(".inventory-item-actions").getByRole("button", { name: use, exact: true }).click();
@@ -319,7 +319,7 @@ test("fresh Chapter 1 journeys reach all three endings through real clicks in Bu
       await page.evaluate(() => window.__comradeCandidateTest.ready);
       assert.equal(await page.evaluate(() => window.__comradeCandidateTest.game.state.flags.campaignPosted), true);
       await page.mouse.move(0, 0);
-      assert.notDeepEqual(await page.screenshot({ clip: { x: 1090, y: 255, width: 85, height: 160 } }), posterBefore);
+      assert.notDeepEqual(await page.screenshot({ clip: { x: 1047, y: 255, width: 60, height: 153 } }), posterBefore);
 
       assert.equal(await page.evaluate(() => window.__comradeCandidateTest.game.inventory.has("item.campaign_pamphlets")), false);
       assert.equal(await page.evaluate(() => window.__comradeCandidateTest.game.inventory.has("item.fake_diploma")), true);
@@ -473,8 +473,8 @@ test("fresh Chapter 1 journeys reach all three endings through real clicks in Bu
     await page.locator(".received-item-screen > button:last-child").click();
         await go("exit.mehana.to_square", "scene.chapter1.village_square");
         await useItem("item.sunflower_oil");
-        await clickTarget("hotspot.square.fountain");
-        await waitFor(() => window.__comradeCandidateTest.game.state.flags.fountainValveOiled);
+        await clickTarget("hotspot.square.statue");
+        await waitFor(() => window.__comradeCandidateTest.game.state.flags.fountainValveOiled && !window.__comradeCandidateTest.game.sceneAction.active);
         await verb("use");
         await clickTarget("hotspot.square.fountain");
         await waitFor(() => window.__comradeCandidateTest.game.state.flags.fountainRepaired);
@@ -588,22 +588,23 @@ test("fountain repair supports real clicks, safe oil self-use and mid-puzzle rel
     await click("exit.mehana.to_square");
     await waitFor(() => window.__comradeCandidateTest.game.currentScene.id === "scene.chapter1.village_square");
     await oilAction("ui.inventory.use");
-    await click("hotspot.square.fountain");
+    const waterClip = { x: 650, y: 480, width: 70, height: 14 };
+    const before = await page.screenshot({ clip: waterClip });
+    await click("hotspot.square.statue");
     await waitFor(() => window.__comradeCandidateTest.game.state.flags.fountainValveOiled);
     await page.reload();
     await page.evaluate(() => window.__comradeCandidateTest.ready);
     assert.equal(await page.evaluate(() => window.__comradeCandidateTest.game.state.flags.fountainValveOiled), true);
     assert.equal(await page.evaluate(() => window.__comradeCandidateTest.game.state.babaStoyankaVote), false);
-    const waterClip = { x: 670, y: 166, width: 45, height: 85 };
-    const before = await page.screenshot({ clip: waterClip });
     await verb("use");
     await click("hotspot.square.fountain");
     await waitFor(() => window.__comradeCandidateTest.game.state.flags.fountainRepaired);
-    // A new animation frame makes the restored/stateful water effect observable.
+    // Shallow static pool plus animated statue stream; retired tap is absent.
     await page.evaluate(() => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve))));
     const visible = await page.evaluate(() => {
       const { game } = window.__comradeCandidateTest;
-      return game.renderer.sceneLayerVisible(game.currentScene.effects[0]);
+      const pool = game.currentScene.foregroundLayers.find(layer => layer.asset === "fountainShallowWater");
+      return game.renderer.sceneLayerVisible(pool) && !pool.animation && game.currentScene.effects[0]?.id === 'effect.square.statue_stream';
     });
     assert.equal(visible, true);
     assert.notDeepEqual(await page.screenshot({ clip: waterClip }), before);

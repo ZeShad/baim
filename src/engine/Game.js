@@ -12,6 +12,7 @@ import { SceneIdleVariations, sceneIdleVariationsBlocked } from "./SceneIdleVari
 import { mountItemModelViewer } from "./ItemModelViewer.js";
 import { SceneActionSequence } from "./SceneActionSequence.js";
 import { kiroOilSequence } from "../content/art/kiroOilHandover.generated.js";
+import { fountainRepairSequence } from "../content/chapter1/fountain.js";
 import { SceneNpcSpeech } from "./SceneNpcSpeech.js";
 import { SaveSystem } from "./SaveSystem.js";
 import { SceneEditor } from "./SceneEditor.js";
@@ -19,7 +20,7 @@ import { AnimationPlayer } from "./AnimationPlayer.js";
 import { AssetLoader } from "./AssetLoader.js";
 import { characterHeight } from "./CharacterRenderMath.js";
 import { DEFAULT_SAVE, LANGUAGES, VERBS } from "./ids.js";
-import { findTargetAt, findWalkPath, isWalkable, nearestReachableWalkablePoint, nearestWalkablePoint, walkPathDistance } from "./SceneGeometry.js";
+import { findSceneSpeaker, findTargetAt, findWalkPath, isWalkable, nearestReachableWalkablePoint, nearestWalkablePoint, walkPathDistance } from "./SceneGeometry.js";
 import { distance } from "./geometry.js";
 import { strings } from "../content/localization/index.js";
 import { chapter1 } from "../content/chapter1/index.js";
@@ -1504,7 +1505,7 @@ export class Game {
   }
 
   useInventoryItemOnTarget(itemId, target) {
-    if (!this.inventory.has(itemId) || this.inspectedItemId) return false;
+    if (!this.inventory.has(itemId) || this.inspectedItemId || this.sceneAction?.active) return false;
     const item = this.content.items[itemId];
     const explicitRule = firstMatchingRule(
       (target.itemUseRules || []).filter((candidate) => candidate.itemId === itemId),
@@ -1619,14 +1620,15 @@ export class Game {
 
   startSceneAction(effect) {
     if (!requirementsMet(effect.requirements, this.effectContext())) return false;
-    const definition = effect.sceneSequence === kiroOilSequence.id ? kiroOilSequence : null;
+    const definition = [kiroOilSequence, fountainRepairSequence].find(candidate => candidate.id === effect.sceneSequence);
+    if (definition?.type === 'fade' && !this.sceneActionAssetsAvailable(definition)) return false;
     if (!definition || !this.sceneAction.start(this.currentScene.id, definition, frame => this.sceneActionFrameAvailable(frame))) return false;
     this.sceneActionEffect = effect;
     this.player.target = null; this.player.walkPath = []; this.player.animation = 'idle';
     this.player.pendingInteraction = null; this.player.pendingFacingPoint = null;
     this.hideSpeechBubble(true); this.npcSpeechBubble = null; this.hoveredTarget = null;
     this.sceneIdleVariations?.reset(); this.sceneNpcSpeech?.reset();
-    this.assets.getItemImage('item.sunflower_oil');
+    if (definition.type !== 'fade') this.assets.getItemImage('item.sunflower_oil');
     if (this.updateSceneAction(0) === false) return false;
     this.renderUi();
     return true;
@@ -1637,6 +1639,10 @@ export class Game {
       && this.assets.isLoaded(this.assets.getSceneImage(this.currentScene.id, 'kiroOilScale'));
   }
 
+  sceneActionAssetsAvailable(definition) {
+    return (definition.requiredAssets || []).every(key => this.assets.isLoaded(this.assets.getSceneImage(this.currentScene.id, key)));
+  }
+
   updateSceneAction(dt) {
     if (!this.sceneAction?.active) return;
     this.sceneAction.update(this.currentScene.id, dt * 1000, {
@@ -1645,6 +1651,25 @@ export class Game {
       available: frame => this.sceneActionFrameAvailable(frame)
     });
     if (!this.sceneAction.active) { this.sceneActionEffect = null; return; }
+    const performance = this.sceneAction.state;
+    if (performance.definition?.type === 'fade') {
+      if (this.paused || this.menuOpen) return;
+      if (!performance.committed && !this.sceneActionAssetsAvailable(performance.definition)) {
+        this.sceneAction.reset(); this.sceneActionEffect = null; this.renderUi(); return false;
+      }
+      if (!performance.committed && performance.elapsedMs >= performance.definition.commitAtMs) {
+        const effect = this.sceneActionEffect;
+        this.sceneActionEffect = null; // Consume once before invoking effects/UI.
+        if (!effect || !requirementsMet(effect.requirements, this.effectContext()) || !applyEffects(effect.effects, this.effectContext())) {
+          this.sceneAction.reset(); this.renderUi(); return false;
+        }
+        performance.committed = true;
+        this.protectCurrentAssetWorkingSet(); this.save();
+        if (effect.messageKey) this.setStatusMessage(this.t(effect.messageKey));
+      }
+      if (performance.phase === 'received') { this.sceneAction.reset(); this.renderUi(); }
+      return;
+    }
     if (this.sceneAction.state.phase === 'received' && this.sceneActionEffect) {
       const { sceneSequence, ...effect } = this.sceneActionEffect;
       this.sceneActionEffect = null; // Consume before effects/UI: one grant per accepted order.
@@ -2910,7 +2935,7 @@ node tools/build-external-runtime-staging.js</pre>
     const node = this.dialogue.getNode();
     const dialogue = this.content.dialogues[session?.id];
     const npcId = node?.npcId || dialogue?.npcId;
-    const npc = this.currentScene.npcs?.find((candidate) => candidate.id === npcId);
+    const npc = findSceneSpeaker(this.currentScene, npcId);
     if (!node?.lineKey || !dialogue?.npcId || !npc) {
       this.npcDialogueSpeech = null;
       return;
@@ -2945,7 +2970,7 @@ node tools/build-external-runtime-staging.js</pre>
     if (!node?.lineKey) return null;
     const dialogue = this.content.dialogues[this.dialogue.current?.id];
     if (!dialogue?.npcId) return null;
-    const npc = this.currentScene.npcs?.find((candidate) => candidate.id === (node.npcId || dialogue.npcId));
+    const npc = findSceneSpeaker(this.currentScene, node.npcId || dialogue.npcId);
     const lineKey = firstMatchingRule(node.lineRules, this.effectContext())?.lineKey || node.lineKey;
     return this.createNpcSpeechBubble(npc, this.t(lineKey), "dialogue-speech-bubble");
   }
@@ -2953,7 +2978,7 @@ node tools/build-external-runtime-staging.js</pre>
   createNpcReactionBubble() {
     const speech = this.npcSpeechBubble;
     if (!speech) return null;
-    const npc = this.currentScene.npcs?.find((candidate) => candidate.id === speech.npcId);
+    const npc = findSceneSpeaker(this.currentScene, speech.npcId);
     return this.createNpcSpeechBubble(npc, speech.text, `dialogue-speech-bubble npc-reaction-bubble phase-${speech.phase}`);
   }
 

@@ -312,7 +312,7 @@ export const sceneLayerGeometry = {
         "asset": "oldMenChorusSeated",
         "zIndex": 91,
         "top": 322,
-        "left": 488,
+        "left": 580,
         "height": 99
       },
       {
@@ -341,6 +341,71 @@ export const sceneLayerGeometry = {
         "top": 0,
         "left": 0,
         "visibleWhenFlag": "campaignPosted"
+      },
+      {
+        "id": "layer.square.shallow_water",
+        "asset": "fountainShallowWater",
+        "zIndex": 41,
+        "top": 0,
+        "left": 0,
+        "visibleWhenFlag": "fountainRepaired"
+      },
+      {
+        "id": "layer.square.kiosk_counter",
+        "asset": "kioskCounterC05",
+        "zIndex": 30,
+        "top": 0,
+        "left": 0
+      },
+      {
+        "id": "layer.square.pepa_idle",
+        "asset": "squarePepaStill",
+        "zIndex": 89,
+        "top": 315,
+        "left": 1120,
+        "width": 140,
+        "height": 140,
+        "animation": {
+          "freezeWhenPaused": true,
+          "asset": "squarePepaIdle",
+          "frameWidth": 140,
+          "frameHeight": 140,
+          "frameCount": 36,
+          "columns": 6,
+          "frameDurationMs": 122,
+          "loop": true,
+          "contentBounds": {
+            "x": 0,
+            "y": 0,
+            "w": 140,
+            "h": 140
+          }
+        }
+      },
+      {
+        "id": "layer.square.flag_wind",
+        "asset": "squareFlagWind",
+        "zIndex": 99,
+        "top": 35,
+        "left": 850,
+        "width": 80,
+        "height": 90,
+        "animation": {
+          "freezeWhenPaused": true,
+          "asset": "squareFlagWind",
+          "frameWidth": 80,
+          "frameHeight": 90,
+          "frameCount": 64,
+          "columns": 8,
+          "frameDurationMs": 57,
+          "loop": true,
+          "contentBounds": {
+            "x": 0,
+            "y": 0,
+            "w": 80,
+            "h": 90
+          }
+        }
       }
     ]
   },

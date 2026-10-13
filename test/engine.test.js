@@ -475,10 +475,10 @@ test("village square mehana menu uses the authored editor geometry and bilingual
   assert.equal(menu.lookKey, "look.square.mehana_menu");
   assert.equal(menu.useDialogueId, "dialogue.square.mehana_menu");
   assert.deepEqual(menu.polygon, [
-    { x: 169, y: 333 },
-    { x: 216, y: 332 },
-    { x: 219, y: 431 },
-    { x: 168, y: 434 }
+    { x: 166, y: 324 },
+    { x: 220, y: 325 },
+    { x: 226, y: 437 },
+    { x: 163, y: 438 }
   ]);
   assert.equal(typeof strings.bg[menu.lookKey], "string");
   assert.equal(typeof strings.en[menu.lookKey], "string");
@@ -3392,7 +3392,7 @@ test("the full-scene campaign poster appears only after posting, including old s
   const layer = scene.foregroundLayers.find(layer => layer.id === "layer.square.campaign_poster");
   assert.ok(layer);
   assert.equal(scene.foregroundLayers.some(layer => layer.id === "layer.square.poster_before"), false);
-  assert.equal(assetManifest.scenes[scene.id][layer.asset], "assets/chapter1/scenes/village_square/campaign-poster-v2.png");
+  assert.equal(assetManifest.scenes[scene.id][layer.asset], "assets/chapter1/scenes/village_square/campaign-poster-c05.png");
   const editedScene = {};
   SceneEditor.prototype.applyLayersToRuntime.call({ layerSource: {}, layers: [layer], game: { currentScene: editedScene } });
   assert.equal(editedScene.foregroundLayers[0].visibleWhenFlag, "campaignPosted");

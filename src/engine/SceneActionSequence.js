@@ -17,6 +17,14 @@ export class SceneActionSequence {
     state.elapsedMs += Math.max(0, deltaMs || 0);
     if (state.elapsedMs >= state.definition.durationMs || !state.definition.frames.every(available)) state.phase = 'received';
   }
+  fadeOpacity(sceneId) {
+    const s = this.state;
+    if (!s || s.sceneId !== sceneId || s.definition.type !== 'fade') return 0;
+    const d = s.definition, t = s.elapsedMs;
+    if (t < d.commitAtMs) return Math.min(1, t / d.commitAtMs);
+    if (t <= d.revealAtMs) return 1;
+    return Math.max(0, (d.durationMs - t) / (d.durationMs - d.revealAtMs));
+  }
   presentation(sceneId, layerId) {
     const s = this.state;
     if (!s || s.phase !== 'playing' || s.sceneId !== sceneId || s.definition.layerId !== layerId) return null;

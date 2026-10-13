@@ -1,0 +1,44 @@
+{
+  "candidate": "pepa-kiosk-breathing-5s-animate-hydra-c14",
+  "status": "runtime_review",
+  "ownerSelection": "12 October 2026: implement this animation; supplied sheet hash exactly matches c14",
+  "sourcePngSha256": "301f37aa4599100700a340a926f513a4197fe1add068f7d48ca61aba17512f4d",
+  "sourceJsonSha256": "b1726003e9bf532afaec11e2abaa0a06ebaf2021e6f238fd14dda80d94cff31d",
+  "frameCount": 36,
+  "frameDurationMs": 122,
+  "durationMs": 4392,
+  "frameRange": [
+    0,
+    35
+  ],
+  "crop": {
+    "left": 19,
+    "top": 211,
+    "width": 468,
+    "height": 474
+  },
+  "patch": {
+    "left": 1120,
+    "top": 315,
+    "width": 140,
+    "height": 140
+  },
+  "actor": {
+    "left": 1127,
+    "top": 325,
+    "width": 120,
+    "height": 120
+  },
+  "output": "assets/chapter1/scenes/village_square/pepa-idle-hydra-c14-r03.png",
+  "still": "assets/chapter1/scenes/village_square/pepa-idle-hydra-c14-r03-static.png",
+  "outputSha256": "5c1b86a46ba9cbfb3daf76ad196f1a56a0189a096d628549ed9e6c9059614f99",
+  "staticOutputSha256": "b48b8381e1a02aa3dfd8b2b5393c8ca8aea965e4964201af35d9e30e123910b9",
+  "notes": "Actor motion/timing/source preserved; uniform grade, bounded background restoration, looping smoke and newspaper occlusion only.",
+  "derivative": "composite-r03",
+  "colorGrade": {
+    "brightness": 0.92,
+    "saturation": 0.76
+  },
+  "smoke": "Old background smoke covered from existing cleanplate; periodic thin warm-grey wisp,36 phases",
+  "occlusion": "Existing newspaper edge texture fitted over lower screen-right arm"
+}

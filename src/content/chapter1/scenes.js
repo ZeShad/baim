@@ -4,7 +4,7 @@ import { electionScene } from "./election.js";
 import { archiveObjectGeometry } from "./sceneObjectGeometry.generated.js";
 import { archiveScene, archiveEntryRules } from "./archive.js";
 import { wireRegistrationScenes } from "./registration.js";
-import { babaGiftRules, fountainLookRules, fountainUseRules, fountainItemRules, oldMenRules } from "./fountain.js";
+import { babaGiftRules, fountainLookRules, fountainUseRules, fountainItemRules, statueItemRules, oldMenRules } from "./fountain.js";
 import { apartmentWalkGeometry, mehanaWalkGeometry, municipalityWalkGeometry, villageSquareWalkGeometry } from "./walkMasks.generated.js";
 import { apartmentObjectGeometry, mehanaObjectGeometry, municipalityObjectGeometry, villageSquareObjectGeometry } from "./sceneObjectGeometry.generated.js";
 import { sceneLayerGeometry } from "./sceneLayers.generated.js";
@@ -195,10 +195,16 @@ const rawScenes = [
   {
     id: "scene.chapter1.village_square",
     effects: [{
-      id: "effect.chapter1.village_square.fountain_water",
-      type: "waterStream", visibleWhenFlag: "fountainRepaired", zIndex: 100,
-      points: [{ x: 704, y: 168 }, { x: 694, y: 182 }, { x: 682, y: 212 }, { x: 684, y: 242 }],
-      width: 3, speed: 0.7
+      id: "effect.square.statue_stream", type: "waterStream", visibleWhenFlag: "fountainRepaired", freezeWhenPaused: true,
+      // c05 statue nozzle -> shallow basin; drawn over water, behind rim/player.
+      points: [{ x: 543, y: 374 }, { x: 594, y: 369 }, { x: 631, y: 424 }, { x: 648, y: 478 }],
+      // The legacy foreground contains background in the trouser/rifle gap.
+      // Draw water above that patch, cutting out the rifle's actual silhouette.
+      occlusionPolygons: [[{ x: 557, y: 334 }, { x: 564, y: 337 }, { x: 556, y: 423 },
+        { x: 552, y: 487 }, { x: 529, y: 487 }, { x: 532, y: 469 }, { x: 541, y: 431 }, { x: 549, y: 365 }]],
+      zIndex: 40.8, splashZIndex: 40.5, width: 2.6, speed: 0.8,
+      splash: { radiusX: 23, radiusY: 5, height: 12, droplets: 7 },
+      color: "rgba(159,167,107,0.72)", highlight: "rgba(224,226,177,0.8)"
     }],
     titleKey: "scene.chapter1.village_square.title",
     palette: { sky: "#829aa1", wall: "#8a7657", floor: "#48443a" },
@@ -211,8 +217,8 @@ const rawScenes = [
       baiMitkoSpawn: { x: 300, y: 540 },
       babaBench: { x: 520, y: 455 },
       journalist: { x: 965, y: 525 },
-      oldMenChorus: { x: 565, y: 450 },
-      fountain: { x: 650, y: 500 },
+      oldMenChorus: { x: 620, y: 420 },
+      fountain: { x: 735, y: 600 },
       mehanaDoor: { x: 120, y: 465 },
       municipalityDoor: { x: 965, y: 450 }
     },
@@ -287,7 +293,10 @@ const rawScenes = [
         id: "hotspot.square.fountain",
         kind: "hotspot",
         nameKey: "hotspot.fountain.name",
-        rect: { x: 405, y: 225, w: 360, h: 300 },
+        rect: { x: 387, y: 434, w: 544, h: 140 },
+        interactionApproach: { x: 735, y: 600 },
+        interactionApproachExact: true,
+        interactionFacingPoint: { x: 650, y: 490 },
         lookKey: "look.square.fountain",
         lookRules: fountainLookRules,
         useRules: fountainUseRules,
@@ -296,8 +305,12 @@ const rawScenes = [
       {
         id: "hotspot.square.kiosk",
         kind: "hotspot",
+        dialogueSpeaker: true,
+        speechAnchor: { x: 1169, y: 321 },
         nameKey: "hotspot.kiosk.name",
-        rect: { x: 1010, y: 185, w: 245, h: 370 },
+        rect: { x: 1125, y: 326, w: 118, h: 117 },
+        interactionApproach: { x: 990, y: 550 },
+        interactionApproachExact: true,
         lookKey: "campaign.kiosk.look",
         dialogueId: "dialogue.penka_kiosk",
         useDialogueId: "dialogue.penka_kiosk",
@@ -307,14 +320,20 @@ const rawScenes = [
         id: "hotspot.square.statue",
         kind: "hotspot",
         nameKey: "hotspot.statue.name",
-        rect: { x: 575, y: 190, w: 185, h: 245 },
-        lookKey: "look.square.statue"
+        rect: { x: 460, y: 249, w: 107, h: 255 },
+        interactionApproach: { x: 735, y: 600 },
+        interactionApproachExact: true,
+        interactionFacingPoint: { x: 543, y: 374 },
+        lookKey: "look.square.statue",
+        useRules: fountainUseRules,
+        itemUseRules: statueItemRules
       },
       {
         id: "hotspot.square.old_men_bench",
         kind: "hotspot",
         nameKey: "hotspot.old_men_bench.name",
-        rect: { x: 480, y: 365, w: 150, h: 70 },
+        rect: { x: 580, y: 322, w: 84, h: 100 },
+        interactionApproach: { x: 780, y: 410 },
         lookKey: "look.square.old_men_bench",
         lookRules: oldMenRules,
         talkRules: oldMenRules,

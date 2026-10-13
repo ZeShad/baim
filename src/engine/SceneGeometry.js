@@ -329,3 +329,9 @@ export function findTargetAt(scene, point, targetAvailable = () => true) {
     return Boolean(target.rect) && pointInRect(point, target.rect);
   });
 }
+
+// A counter vendor retains its shipped hotspot ID and quest interactions.
+export function findSceneSpeaker(scene, id) {
+  return scene.npcs?.find(target => target.id === id)
+    || scene.interactables?.find(target => target.id === id && target.dialogueSpeaker === true);
+}

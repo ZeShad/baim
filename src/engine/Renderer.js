@@ -6,6 +6,7 @@ import { externalAnimationV1 } from "../content/art/externalAnimationRuntime.gen
 import { intoxicationSway } from "./IntoxicationSystem.js";
 import { sceneZDepthT } from "./DepthMath.js";
 import { drawSceneEffect } from "./SceneEffects.js";
+import {findSceneSpeaker} from './SceneGeometry.js';
 
 const PLAYER_SHADOW_FULL_SIZE_Y_OFFSET = -4;
 
@@ -71,6 +72,12 @@ export function sceneLayerAnimationFrame(animation, timeMs = 0) {
   const start = Math.max(0, Math.min(Number(animation?.loopStartFrame) || 0, frameCount - 1));
   const end = Math.max(start, Math.min(animation?.loopEndFrame ?? frameCount - 1, frameCount - 1));
   return elapsedFrame <= end ? elapsedFrame : start + (elapsedFrame - end - 1) % (end - start + 1);
+}
+
+// Opt-in ambient layers keep a local clock; prior scene/NPC timing is untouched.
+export function ambientLayerClock(previous, timeMs, paused, ready) {
+  return { lastTime: timeMs, elapsed: !ready ? 0 : (previous?.elapsed || 0)
+    + (!previous || paused || previous.paused || !previous.ready ? 0 : Math.max(0, timeMs - previous.lastTime)), paused, ready };
 }
 
 // Optional intro -> sustained speech -> return playback. State belongs to the
@@ -241,12 +248,18 @@ export class Renderer {
       return;
     }
     const scene = this.game.currentScene;
+    if (this.ambientSceneId !== scene.id) { this.ambientSceneId = scene.id; this.ambientClocks = new Map(); }
     ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
     const hasRealBackground = this.drawBackground(scene);
     const actors = scene.playerMode !== "closeup" && (!this.game.editMode || this.game.sceneEditor?.shouldRenderPlayer())
       ? [this.game.player]
       : [];
     this.drawSceneZLayers(scene, actors);
+    const fadeOpacity = this.game.sceneAction?.fadeOpacity(scene.id) || 0;
+    if (fadeOpacity) {
+      ctx.save(); ctx.fillStyle = `rgba(0,0,0,${fadeOpacity})`;
+      ctx.fillRect(0, 0, this.canvas.width, this.canvas.height); ctx.restore();
+    }
     if (!hasRealBackground && scene.playerMode === "seated") this.drawSeatedTableFallback(scene);
     if (this.game.editMode) this.game.sceneEditor?.draw(ctx);
     else {
@@ -536,7 +549,10 @@ export class Renderer {
         .map((layer) => ({ kind: "layer", layer, zIndex: Number(layer.zIndex) })),
       ...(scene.effects || [])
         .filter((effect) => this.sceneLayerVisible(effect))
-        .map((effect) => ({ kind: "effect", effect, zIndex: Number(effect.zIndex) }))
+        .flatMap((effect) => Number.isFinite(effect.splashZIndex)
+          ? [{ kind: "effect", effect, part: "stream", zIndex: Number(effect.zIndex) },
+            { kind: "effect", effect, part: "splash", zIndex: effect.splashZIndex }]
+          : [{ kind: "effect", effect, zIndex: Number(effect.zIndex) }])
     ].sort((a, b) => {
       const az = Number.isFinite(a.zIndex) ? a.zIndex : 100;
       const bz = Number.isFinite(b.zIndex) ? b.zIndex : 100;
@@ -547,7 +563,16 @@ export class Renderer {
       else if (entry.kind === "hover") this.drawHoveredTarget(entry.target);
       else if (entry.kind === "droppedItemsPile") this.drawDroppedItemsPile(scene, entry.target);
       else if (entry.kind === "debugTarget") this.drawDebugTarget(entry.target);
-      else if (entry.kind === "effect") drawSceneEffect(this.ctx, entry.effect, (this.game.lastTime || 0) / 1000);
+      else if (entry.kind === "effect") {
+        let elapsed = this.game.lastTime || 0;
+        if (entry.effect.freezeWhenPaused) {
+          this.ambientClocks ||= new Map();
+          const clock = ambientLayerClock(this.ambientClocks.get(entry.effect.id), elapsed,
+            this.game.paused || this.game.menuOpen, true);
+          this.ambientClocks.set(entry.effect.id, clock); elapsed = clock.elapsed;
+        }
+        drawSceneEffect(this.ctx, entry.effect, elapsed / 1000, entry.part);
+      }
       else this.drawSceneRasterLayer(scene, entry.layer);
     }
   }
@@ -737,7 +762,7 @@ export class Renderer {
     if (animation?.quietOnly !== true) return animation;
     const npcId = animation.npcId;
     const game = this.game;
-    if (!npcId || !scene.npcs?.some(npc => npc.id === npcId)
+    if (!npcId || !findSceneSpeaker(scene, npcId)
       || game.paused || game.menuOpen || game.devHome || game.editMode
       || game.content?.dialogues?.[game.dialogue?.current?.id]?.npcId === npcId
       || game.npcSpeechBubble?.npcId === npcId
@@ -746,6 +771,7 @@ export class Renderer {
   }
 
   drawSceneRasterLayer(scene, layer) {
+    if (this.ambientSceneId !== scene.id) { this.ambientSceneId = scene.id; this.ambientClocks = new Map(); }
     const performance = this.game.sceneAction?.presentation(scene.id, layer.id);
     if (performance) {
       const image = this.game.assets.getSceneImage(scene.id, performance.asset);
@@ -819,8 +845,14 @@ export class Renderer {
       ? this.game.assets.getSceneImage(scene.id, animation.asset)
       : null;
     if (animation && this.game.assets.isLoaded(animationImage)) {
+      let ambientTime = this.game.lastTime || 0;
+      if (animation.freezeWhenPaused) {
+        const clock = ambientLayerClock(this.ambientClocks.get(layer.id), ambientTime,
+          Boolean(this.game.paused || this.game.menuOpen || this.game.devHome || this.game.editMode), true);
+        this.ambientClocks.set(layer.id, clock); ambientTime = clock.elapsed;
+      }
       const frameIndex = reacting ? reactionResult.frameIndex : talking && talkFrame != null ? talkFrame
-        : sceneLayerAnimationFrame(animation, talking ? speechTime : this.game.lastTime || 0);
+        : sceneLayerAnimationFrame(animation, talking ? speechTime : ambientTime);
       if (stationarySample && this.drawSceneAnimationSamples(layer,
         [{ animation, image: animationImage, frameIndex, weight: 1 }], stationarySample)) return;
       const source = sceneLayerAnimationSourceRect(animation, frameIndex);
@@ -838,6 +870,7 @@ export class Renderer {
       );
       return;
     }
+    if (animation?.freezeWhenPaused && this.ambientClocks) this.ambientClocks.delete(layer.id);
     if (!this.game.assets.isLoaded(fallbackImage)) return;
     const rect = this.sceneLayerRect(layer, fallbackImage);
     this.ctx.drawImage(fallbackImage, rect.x, rect.y, rect.w, rect.h);
