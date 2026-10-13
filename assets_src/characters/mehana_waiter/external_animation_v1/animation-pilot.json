@@ -108,7 +108,7 @@
       "label": "kiro-sneaky-glass-swap-5s-web-c02",
       "slot": "Secondary Idle",
       "status": "runtime_approved",
-      "use": true,
+      "use": false,
       "loop": false,
       "quietOnly": true,
       "source": {
@@ -455,6 +455,50 @@
         "candidateStatus": "runtime_review",
         "notes": "Owner visually approved connected Kiro motion, full flow, limited tilt/wheel zoom and r12 thicker glass base on10October2026. Workshop r08 actual 200ml oil GLB and r07 fallback are unchanged. Native security verification passed27/27; publication approval remains separate."
       }
+    },
+    "kiro_spitting_fixed_owner_export_c01": {
+      "slot": "Idle",
+      "status": "runtime_approved",
+      "use": true,
+      "generation": {
+        "unavailableEvidenceReason": "Owner supplied corrected export; prompt/model/job/settings not supplied. No new generation or provider retry performed."
+      },
+      "source": {
+        "exportFilename": "sprite--9px-frames-36-rows-6-cols-6.zip",
+        "storedFilename": "../spitting-fixed-owner-export-c01/original-export.zip",
+        "sourceZipSha256": "f09a943c2d56b78fa73d1478fad0c76190797ffa6756d3d4b2599a8603799125",
+        "metadataFile": "../spitting-fixed-owner-export-c01/sprite--9px-frames-36-rows-6-cols-6.json",
+        "metadataSha256": "8b28c839f48de34196bbdf18f40d62f6e3ca70b068411679353c7ed0840cd350"
+      },
+      "import": {
+        "runtime": {
+          "asset": "assets/chapter1/characters/mehana_waiter/kiro-spitting-fixed-owner-export-c01.webp",
+          "frames": 36,
+          "frameWidth": 262,
+          "frameHeight": 614,
+          "columns": 6,
+          "frameDurationMs": 125,
+          "durationMs": 4500
+        },
+        "derivedOutputHashes": {
+          "assets/chapter1/characters/mehana_waiter/kiro-spitting-fixed-owner-export-c01.webp": "c59c1aab94611c79419be23f62880066a48f0b8086d8b3a5fb17c432d9cebf73"
+        }
+      },
+      "review": {
+        "candidateStatus": "runtime_approved",
+        "decision": "Owner accepted revision3 actual-gameplay visuals and separately approved the reviewed publication bundle on2026-10-12",
+        "reviewer": "owner",
+        "publicationApproved": true,
+        "approvedAt": "2026-10-12",
+        "sceneId": "scene.chapter1.mehana"
+      },
+      "scheduling": {
+        "intervalMinMs": 25000,
+        "intervalMaxMs": 50000,
+        "menuBehavior": "freeze",
+        "conversationOrSceneExit": "cancel and sample a fresh interval"
+      },
+      "provenanceFile": "assets_src/characters/mehana_waiter/spitting-fixed-owner-export-c01/provenance.json"
     }
   }
 }

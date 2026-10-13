@@ -6,7 +6,7 @@ import { mkdirSync, writeFileSync } from 'node:fs';
 import { chromium } from 'playwright';
 import { browserAvailable } from './helpers/browser-availability.js';
 
-test('Kiro c02 quiet variation renders behind the counter, cancels safely and decodes inventory/prior animations in BG and EN', {timeout:120000}, async t => {
+test('Kiro fixed export quiet variation renders behind the counter, cancels safely and decodes inventory/prior animations in BG and EN', {timeout:120000}, async t => {
   if (!browserAvailable(t,chromium.executablePath())) return;
   const port=await new Promise((resolve,reject)=>{const probe=createServer();probe.once('error',reject);probe.listen(0,'127.0.0.1',()=>{const value=probe.address().port;probe.close(()=>resolve(value));});});
   const origin=`http://127.0.0.1:${port}`;
@@ -72,19 +72,19 @@ test('Kiro c02 quiet variation renders behind the counter, cancels safely and de
       assert.equal((await page.evaluate(()=>window.__kiroAdvance(1))).phase,'playing');
       const frames=[];let previous=0;
       for(let i=0;i<36;i++) {
-        const elapsed=i*131+0.01;const state=await page.evaluate(ms=>window.__kiroAdvance(ms),elapsed-previous);previous=elapsed;
-        assert.equal(state.phase,'playing');assert.equal(Math.floor(state.elapsed/131),i);frames.push(i);
+        const elapsed=i*125+0.01;const state=await page.evaluate(ms=>window.__kiroAdvance(ms),elapsed-previous);previous=elapsed;
+        assert.equal(state.phase,'playing');assert.equal(Math.floor(state.elapsed/125),i);frames.push(i);
         assert.deepEqual(await page.evaluate(()=>window.__kiroCounterPixels()),baseCounter,'opaque counter must hide all moving lower body/glass pixels');
         if([0,7,13,19,25,35].includes(i))await page.screenshot({path:evidence+'/'+language+'-frame-'+i+'.png'});
       }
-      const returned=await page.evaluate(ms=>window.__kiroAdvance(ms),4716-previous);
+      const returned=await page.evaluate(ms=>window.__kiroAdvance(ms),4500-previous);
       assert.equal(returned.phase,'idle');assert.equal(returned.idleTime,0);assert.equal(returned.remainingMs,25000);
       await page.screenshot({path:evidence+'/'+language+'-handoff.png'});
       await page.evaluate(()=>window.__kiroAdvance(25000));await page.evaluate(()=>window.__kiroAdvance(500));
       const frozen=await page.evaluate(()=>{const {game}=window.__comradeCandidateTest;game.paused=true;return window.__kiroAdvance(0);});
       assert.deepEqual(await page.evaluate(()=>window.__kiroAdvance(30000)),frozen);
       await page.evaluate(()=>{window.__comradeCandidateTest.game.paused=false;});
-      assert.equal((await page.evaluate(()=>window.__kiroAdvance(131))).elapsed,631);
+      assert.equal((await page.evaluate(()=>window.__kiroAdvance(125))).elapsed,625);
       const canceled=await page.evaluate(()=>{const {game}=window.__comradeCandidateTest;game.dialogue.start('dialogue.mehana_waiter');game.renderUi();return window.__kiroAdvance(0);});
       assert.equal(canceled,null);await page.screenshot({path:evidence+'/'+language+'-dialogue.png'});
       assert.equal(await page.evaluate(()=>window.__kiroAdvance(30000)),null);

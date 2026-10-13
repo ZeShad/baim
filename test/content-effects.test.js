@@ -524,7 +524,7 @@ test("apartment bottle, sofa-bed, water, and tripe soup author the intoxication 
   const waiter = chapter1.dialogues.find((dialogue) => dialogue.id === "dialogue.mehana_waiter");
   const bottle = apartment.interactables.find((target) => target.id === "hotspot.apartment.rakia_bottle");
   const bed = apartment.interactables.find((target) => target.id === "hotspot.apartment.bed");
-  const water = mehana.interactables.find((target) => target.id === "hotspot.mehana.water_jug");
+  const water = chapter1.items.find(item=>item.id==='item.glass_of_water');
   const soup = waiter.nodes.tripe_soup_serving.choices
     .find((choice) => choice.textKey === "dialogue.waiter.choice.for_here");
   const inventory = inventoryWith("item.glass_of_water");
@@ -535,7 +535,7 @@ test("apartment bottle, sofa-bed, water, and tripe soup author the intoxication 
   assert.equal(state.rakiaGlasses, 6);
   applyEffects(bed.useRules[0].effects, context);
   assert.equal(state.rakiaGlasses, 3);
-  applyEffects(firstMatchingRule(water.useRules, context).effects, context);
+  applyEffects(firstMatchingRule(water.selfUseRules, context).effects, context);
   assert.equal(state.rakiaGlasses, 2);
   assert.equal(inventory.has("item.glass_of_water"), false);
   applyEffects(soup.effect.effects, context);

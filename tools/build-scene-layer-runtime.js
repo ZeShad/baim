@@ -188,6 +188,7 @@ function runtimeAnimation(animation, sourcePath, layerId) {
   }
   return {
     ...phases,
+    ...(animation.freezeWhenPaused === true ? { freezeWhenPaused: true } : {}),
     ...(animation.quietOnly != null ? { quietOnly: animation.quietOnly } : {}),
     ...(animation.quietOnly === true ? { npcId: animation.npcId } : {}),
     ...(animation.interpolateFrames != null ? { interpolateFrames: animation.interpolateFrames } : {}),

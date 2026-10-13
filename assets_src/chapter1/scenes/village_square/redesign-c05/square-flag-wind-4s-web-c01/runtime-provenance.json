@@ -1,0 +1,30 @@
+{
+  "candidate": "square-flag-wind-4s-web-c01",
+  "sourcePngSha256": "6aafc71fa212419b0a15ff6a84bcb14596b355bd3be0568dc8d0f40e24c51acc",
+  "sourceJsonSha256": "3b7de19ec426b7daf3cde927bd4b40721bd4c98d53edec1b056ce896a03673bf",
+  "frameRange": [
+    0,
+    63
+  ],
+  "frameCount": 64,
+  "frameDurationMs": 57,
+  "durationMs": 3648,
+  "timingOrigin": "native Ludo JSON; GIF rounded to50ms, not used for runtime",
+  "transform": {
+    "width": 55,
+    "height": 98,
+    "left": 860,
+    "top": 26
+  },
+  "patch": {
+    "left": 850,
+    "top": 35,
+    "width": 80,
+    "height": 90
+  },
+  "cleanplateMask": "exact original native cloth contour resized to runtime; background asset unchanged",
+  "cleanplateSha256": "47738109912ac606a318237117d9d98814d22674a7ec32c65afd58335ee3210b",
+  "output": "assets/chapter1/scenes/village_square/flag-wind-c01.png",
+  "outputSha256": "c91b1fd23688d1633d8e2fc4039af750388331f4f81388b7ec8038a553d60e15",
+  "reviewStatus": "local review pending; no publication"
+}

@@ -1,0 +1,2865 @@
+{
+  "baseline": "5931bc03094b5b06ce936830e73bc8a9395de36c",
+  "status": "local_review; final owner runtime/publication approval pending",
+  "records": {
+    "assets_src/chapter1/scenes/village_square/layers.json": {
+      "beforeSHA256": "6fbd04776028514a735a3877d2b8d811d69dcd633159688b82960fdaacadcc84",
+      "afterSHA256": "56d2a1ef57b96d34fc8cf18f7bb73cefb7976c9e4ad37ba136b8c7feaf0ce39d",
+      "hunks": [
+        {
+          "at": 2,
+          "removed": [
+            "  \"sourceBackground\": \"assets/chapter1/scenes/village_square/background.png\","
+          ],
+          "added": [
+            "  \"sourceBackground\": \"assets/chapter1/scenes/village_square/background-redesign-c05.png\","
+          ]
+        },
+        {
+          "at": 22,
+          "removed": [
+            "      \"output\": \"assets/chapter1/scenes/village_square/fountain-foreground-v1.png\","
+          ],
+          "added": [
+            "      \"output\": \"assets/chapter1/scenes/village_square/fountain-foreground-c05.png\","
+          ]
+        },
+        {
+          "at": 40,
+          "removed": [
+            "        \"animatedCutouts\": [[[43.5,56],[47.5,56],[55.5,119],[51.5,119]]]"
+          ],
+          "added": [
+            "        \"animatedCutouts\": [",
+            "          [",
+            "            [",
+            "              43.5,",
+            "              56",
+            "            ],",
+            "            [",
+            "              47.5,",
+            "              56",
+            "            ],",
+            "            [",
+            "              55.5,",
+            "              119",
+            "            ],",
+            "            [",
+            "              51.5,",
+            "              119",
+            "            ]",
+            "          ]",
+            "        ]"
+          ]
+        },
+        {
+          "at": 110,
+          "removed": [
+            "          \"contentBounds\": { \"x\": 0, \"y\": 0, \"w\": 389, \"h\": 636 },",
+            "          \"registrationBounds\": { \"x\": 0, \"y\": 0, \"w\": 389, \"h\": 636 }"
+          ],
+          "added": [
+            "          \"contentBounds\": {",
+            "            \"x\": 0,",
+            "            \"y\": 0,",
+            "            \"w\": 389,",
+            "            \"h\": 636",
+            "          },",
+            "          \"registrationBounds\": {",
+            "            \"x\": 0,",
+            "            \"y\": 0,",
+            "            \"w\": 389,",
+            "            \"h\": 636",
+            "          }"
+          ]
+        },
+        {
+          "at": 156,
+          "removed": [
+            "      \"left\": 488,"
+          ],
+          "added": [
+            "      \"left\": 580,"
+          ]
+        },
+        {
+          "at": 186,
+          "removed": [
+            "      \"output\": \"assets/chapter1/scenes/village_square/campaign-poster-v2.png\","
+          ],
+          "added": [
+            "      \"output\": \"assets/chapter1/scenes/village_square/campaign-poster-c05.png\","
+          ]
+        },
+        {
+          "at": 191,
+          "removed": [],
+          "added": [
+            "    },",
+            "    {",
+            "      \"id\": \"layer.square.shallow_water\",",
+            "      \"enabled\": true,",
+            "      \"asset\": \"fountainShallowWater\",",
+            "      \"output\": \"assets/chapter1/scenes/village_square/fountain-shallow-water-c05.png\",",
+            "      \"left\": 0,",
+            "      \"top\": 0,",
+            "      \"zIndex\": 41,",
+            "      \"visibleWhenFlag\": \"fountainRepaired\"",
+            "    },",
+            "    {",
+            "      \"id\": \"layer.square.kiosk_counter\",",
+            "      \"enabled\": true,",
+            "      \"asset\": \"kioskCounterC05\",",
+            "      \"output\": \"assets/chapter1/scenes/village_square/kiosk-counter-c05.png\",",
+            "      \"left\": 0,",
+            "      \"top\": 0,",
+            "      \"zIndex\": 30",
+            "    },",
+            "    {",
+            "      \"id\": \"layer.square.pepa_idle\",",
+            "      \"enabled\": true,",
+            "      \"asset\": \"squarePepaStill\",",
+            "      \"output\": \"assets/chapter1/scenes/village_square/pepa-idle-hydra-c14-r03-static.png\",",
+            "      \"left\": 1120,",
+            "      \"top\": 315,",
+            "      \"width\": 140,",
+            "      \"height\": 140,",
+            "      \"zIndex\": 89,",
+            "      \"animation\": {",
+            "        \"asset\": \"squarePepaIdle\",",
+            "        \"frameWidth\": 140,",
+            "        \"frameHeight\": 140,",
+            "        \"frameCount\": 36,",
+            "        \"columns\": 6,",
+            "        \"frameDurationMs\": 122,",
+            "        \"loop\": true,",
+            "        \"freezeWhenPaused\": true,",
+            "        \"contentBounds\": {\"x\": 0, \"y\": 0, \"w\": 140, \"h\": 140}",
+            "      }",
+            "    },",
+            "    {",
+            "      \"id\": \"layer.square.flag_wind\",",
+            "      \"enabled\": true,",
+            "      \"asset\": \"squareFlagWind\",",
+            "      \"output\": \"assets/chapter1/scenes/village_square/flag-wind-c01.png\",",
+            "      \"left\": 850,",
+            "      \"top\": 35,",
+            "      \"width\": 80,",
+            "      \"height\": 90,",
+            "      \"zIndex\": 99,",
+            "      \"animation\": {",
+            "        \"asset\": \"squareFlagWind\",",
+            "        \"frameWidth\": 80,",
+            "        \"frameHeight\": 90,",
+            "        \"frameCount\": 64,",
+            "        \"columns\": 8,",
+            "        \"frameDurationMs\": 57,",
+            "        \"loop\": true,",
+            "        \"freezeWhenPaused\": true,",
+            "        \"contentBounds\": {",
+            "          \"x\": 0,",
+            "          \"y\": 0,",
+            "          \"w\": 80,",
+            "          \"h\": 90",
+            "        }",
+            "      }"
+          ]
+        }
+      ]
+    },
+    "assets_src/chapter1/scenes/village_square/object-geometry-v1.json": {
+      "beforeSHA256": "ecd42a653b5c3734d1c05d55570d21cb3eb7385679ed66895ececdbdfd131eab",
+      "afterSHA256": "ae919c2cc8fee74f28b0e86f94eca9313be044ef8153dc5efc353ee240e1c433",
+      "hunks": [
+        {
+          "at": 4,
+          "removed": [
+            "    \"path\": \"assets/chapter1/scenes/village_square/background.png\","
+          ],
+          "added": [
+            "    \"path\": \"assets/chapter1/scenes/village_square/background-redesign-c05.png\","
+          ]
+        },
+        {
+          "at": 17,
+          "removed": [
+            "          \"x\": 365,",
+            "          \"y\": 112"
+          ],
+          "added": [
+            "          \"x\": 356,",
+            "          \"y\": 85"
+          ]
+        },
+        {
+          "at": 21,
+          "removed": [
+            "          \"x\": 468,",
+            "          \"y\": 68"
+          ],
+          "added": [
+            "          \"x\": 446,",
+            "          \"y\": 57"
+          ]
+        },
+        {
+          "at": 26,
+          "removed": [
+            "          \"y\": 109",
+            "        },",
+            "        {",
+            "          \"x\": 570,",
+            "          \"y\": 180",
+            "        },",
+            "        {",
+            "          \"x\": 560,",
+            "          \"y\": 206",
+            "        },",
+            "        {",
+            "          \"x\": 566,",
+            "          \"y\": 241",
+            "        },",
+            "        {",
+            "          \"x\": 587,",
+            "          \"y\": 284"
+          ],
+          "added": [
+            "          \"y\": 94"
+          ]
+        },
+        {
+          "at": 29,
+          "removed": [
+            "          \"x\": 454,",
+            "          \"y\": 296"
+          ],
+          "added": [
+            "          \"x\": 580,",
+            "          \"y\": 237"
+          ]
+        },
+        {
+          "at": 33,
+          "removed": [
+            "          \"x\": 442,",
+            "          \"y\": 266",
+            "        },",
+            "        {",
+            "          \"x\": 375,"
+          ],
+          "added": [
+            "          \"x\": 350,"
+          ]
+        },
+        {
+          "at": 35,
+          "removed": [
+            "        },",
+            "        {",
+            "          \"x\": 371,",
+            "          \"y\": 200"
+          ],
+          "added": []
+        },
+        {
+          "at": 42,
+          "removed": [
+            "          \"x\": 0,",
+            "          \"y\": 430"
+          ],
+          "added": [
+            "          \"x\": 7,",
+            "          \"y\": 241"
+          ]
+        },
+        {
+          "at": 46,
+          "removed": [
+            "          \"x\": 5,",
+            "          \"y\": 216"
+          ],
+          "added": [
+            "          \"x\": 145,",
+            "          \"y\": 251"
+          ]
+        },
+        {
+          "at": 50,
+          "removed": [
+            "          \"x\": 158,",
+            "          \"y\": 234"
+          ],
+          "added": [
+            "          \"x\": 148,",
+            "          \"y\": 533"
+          ]
+        },
+        {
+          "at": 54,
+          "removed": [
+            "          \"x\": 173,",
+            "          \"y\": 513"
+          ],
+          "added": [
+            "          \"x\": 43,",
+            "          \"y\": 550"
+          ]
+        },
+        {
+          "at": 58,
+          "removed": [
+            "          \"x\": 63,",
+            "          \"y\": 536"
+          ],
+          "added": [
+            "          \"x\": 7,",
+            "          \"y\": 510"
+          ]
+        },
+        {
+          "at": 67,
+          "removed": [
+            "          \"x\": 862,",
+            "          \"y\": 261"
+          ],
+          "added": [
+            "          \"x\": 856,",
+            "          \"y\": 245"
+          ]
+        },
+        {
+          "at": 71,
+          "removed": [
+            "          \"x\": 949,",
+            "          \"y\": 251"
+          ],
+          "added": [
+            "          \"x\": 944,",
+            "          \"y\": 239"
+          ]
+        },
+        {
+          "at": 75,
+          "removed": [
+            "          \"x\": 948,",
+            "          \"y\": 372"
+          ],
+          "added": [
+            "          \"x\": 944,",
+            "          \"y\": 378"
+          ]
+        },
+        {
+          "at": 79,
+          "removed": [
+            "          \"x\": 865,",
+            "          \"y\": 371"
+          ],
+          "added": [
+            "          \"x\": 853,",
+            "          \"y\": 378"
+          ]
+        },
+        {
+          "at": 88,
+          "removed": [
+            "          \"x\": 1171,",
+            "          \"y\": 459"
+          ],
+          "added": [
+            "          \"x\": 1148,",
+            "          \"y\": 474"
+          ]
+        },
+        {
+          "at": 92,
+          "removed": [
+            "          \"x\": 1220,",
+            "          \"y\": 476"
+          ],
+          "added": [
+            "          \"x\": 1194,",
+            "          \"y\": 483"
+          ]
+        },
+        {
+          "at": 96,
+          "removed": [
+            "          \"x\": 1205,",
+            "          \"y\": 509"
+          ],
+          "added": [
+            "          \"x\": 1190,",
+            "          \"y\": 507"
+          ]
+        },
+        {
+          "at": 100,
+          "removed": [
+            "          \"x\": 1152,",
+            "          \"y\": 484"
+          ],
+          "added": [
+            "          \"x\": 1147,",
+            "          \"y\": 498"
+          ]
+        },
+        {
+          "at": 109,
+          "removed": [
+            "          \"x\": 1059,",
+            "          \"y\": 252"
+          ],
+          "added": [
+            "          \"x\": 1032,",
+            "          \"y\": 246"
+          ]
+        },
+        {
+          "at": 113,
+          "removed": [
+            "          \"x\": 1161,",
+            "          \"y\": 231"
+          ],
+          "added": [
+            "          \"x\": 1100,",
+            "          \"y\": 241"
+          ]
+        },
+        {
+          "at": 117,
+          "removed": [
+            "          \"x\": 1187,",
+            "          \"y\": 432"
+          ],
+          "added": [
+            "          \"x\": 1115,",
+            "          \"y\": 416"
+          ]
+        },
+        {
+          "at": 121,
+          "removed": [
+            "          \"x\": 1081,",
+            "          \"y\": 433"
+          ],
+          "added": [
+            "          \"x\": 1046,",
+            "          \"y\": 421"
+          ]
+        },
+        {
+          "at": 130,
+          "removed": [
+            "          \"x\": 575,",
+            "          \"y\": 175",
+            "        },",
+            "        {",
+            "          \"x\": 634,",
+            "          \"y\": 172"
+          ],
+          "added": [
+            "          \"x\": 391,",
+            "          \"y\": 460"
+          ]
+        },
+        {
+          "at": 134,
+          "removed": [
+            "          \"x\": 697,",
+            "          \"y\": 180"
+          ],
+          "added": [
+            "          \"x\": 444,",
+            "          \"y\": 441"
+          ]
+        },
+        {
+          "at": 138,
+          "removed": [
+            "          \"x\": 717,",
+            "          \"y\": 135"
+          ],
+          "added": [
+            "          \"x\": 461,",
+            "          \"y\": 445"
+          ]
+        },
+        {
+          "at": 142,
+          "removed": [
+            "          \"x\": 749,",
+            "          \"y\": 163"
+          ],
+          "added": [
+            "          \"x\": 459,",
+            "          \"y\": 483"
+          ]
+        },
+        {
+          "at": 146,
+          "removed": [
+            "          \"x\": 741,",
+            "          \"y\": 195"
+          ],
+          "added": [
+            "          \"x\": 555,",
+            "          \"y\": 500"
+          ]
+        },
+        {
+          "at": 150,
+          "removed": [
+            "          \"x\": 777,",
+            "          \"y\": 215"
+          ],
+          "added": [
+            "          \"x\": 568,",
+            "          \"y\": 444"
+          ]
+        },
+        {
+          "at": 154,
+          "removed": [
+            "          \"x\": 794,",
+            "          \"y\": 238"
+          ],
+          "added": [
+            "          \"x\": 690,",
+            "          \"y\": 434"
+          ]
+        },
+        {
+          "at": 158,
+          "removed": [
+            "          \"x\": 779,",
+            "          \"y\": 277"
+          ],
+          "added": [
+            "          \"x\": 819,",
+            "          \"y\": 443"
+          ]
+        },
+        {
+          "at": 162,
+          "removed": [
+            "          \"x\": 733,",
+            "          \"y\": 303"
+          ],
+          "added": [
+            "          \"x\": 910,",
+            "          \"y\": 460"
+          ]
+        },
+        {
+          "at": 166,
+          "removed": [
+            "          \"x\": 714,",
+            "          \"y\": 408"
+          ],
+          "added": [
+            "          \"x\": 931,",
+            "          \"y\": 485"
+          ]
+        },
+        {
+          "at": 170,
+          "removed": [
+            "          \"x\": 800,",
+            "          \"y\": 430"
+          ],
+          "added": [
+            "          \"x\": 922,",
+            "          \"y\": 526"
+          ]
+        },
+        {
+          "at": 174,
+          "removed": [
+            "          \"x\": 795,",
+            "          \"y\": 503"
+          ],
+          "added": [
+            "          \"x\": 859,",
+            "          \"y\": 551"
+          ]
+        },
+        {
+          "at": 178,
+          "removed": [
+            "          \"x\": 668,",
+            "          \"y\": 503"
+          ],
+          "added": [
+            "          \"x\": 736,",
+            "          \"y\": 570"
+          ]
+        },
+        {
+          "at": 182,
+          "removed": [
+            "          \"x\": 551,",
+            "          \"y\": 480"
+          ],
+          "added": [
+            "          \"x\": 565,",
+            "          \"y\": 574"
+          ]
+        },
+        {
+          "at": 186,
+          "removed": [
+            "          \"x\": 609,",
+            "          \"y\": 283"
+          ],
+          "added": [
+            "          \"x\": 454,",
+            "          \"y\": 565"
+          ]
+        },
+        {
+          "at": 190,
+          "removed": [
+            "          \"x\": 568,",
+            "          \"y\": 240"
+          ],
+          "added": [
+            "          \"x\": 405,",
+            "          \"y\": 548"
+          ]
+        },
+        {
+          "at": 194,
+          "removed": [
+            "          \"x\": 564,",
+            "          \"y\": 202"
+          ],
+          "added": [
+            "          \"x\": 387,",
+            "          \"y\": 515"
+          ]
+        },
+        {
+          "at": 203,
+          "removed": [
+            "          \"x\": 1015,",
+            "          \"y\": 188"
+          ],
+          "added": [
+            "          \"x\": 1126,",
+            "          \"y\": 331"
+          ]
+        },
+        {
+          "at": 207,
+          "removed": [
+            "          \"x\": 1165,",
+            "          \"y\": 146"
+          ],
+          "added": [
+            "          \"x\": 1238,",
+            "          \"y\": 326"
+          ]
+        },
+        {
+          "at": 211,
+          "removed": [
+            "          \"x\": 1276,",
+            "          \"y\": 184"
+          ],
+          "added": [
+            "          \"x\": 1243,",
+            "          \"y\": 443"
+          ]
+        },
+        {
+          "at": 215,
+          "removed": [
+            "          \"x\": 1277,",
+            "          \"y\": 580",
+            "        },",
+            "        {",
+            "          \"x\": 1254,",
+            "          \"y\": 610",
+            "        },",
+            "        {",
+            "          \"x\": 1092,",
+            "          \"y\": 587"
+          ],
+          "added": [
+            "          \"x\": 1125,",
+            "          \"y\": 443"
+          ]
+        },
+        {
+          "at": 224,
+          "removed": [
+            "          \"x\": 634,",
+            "          \"y\": 0"
+          ],
+          "added": [
+            "          \"x\": 475,",
+            "          \"y\": 265",
+            "        },",
+            "        {",
+            "          \"x\": 492,",
+            "          \"y\": 249",
+            "        },",
+            "        {",
+            "          \"x\": 509,",
+            "          \"y\": 250",
+            "        },",
+            "        {",
+            "          \"x\": 510,",
+            "          \"y\": 266",
+            "        },",
+            "        {",
+            "          \"x\": 497,",
+            "          \"y\": 280",
+            "        },",
+            "        {",
+            "          \"x\": 510,",
+            "          \"y\": 292",
+            "        },",
+            "        {",
+            "          \"x\": 531,",
+            "          \"y\": 319",
+            "        },",
+            "        {",
+            "          \"x\": 550,",
+            "          \"y\": 332",
+            "        },",
+            "        {",
+            "          \"x\": 567,",
+            "          \"y\": 332",
+            "        },",
+            "        {",
+            "          \"x\": 565,",
+            "          \"y\": 356",
+            "        },",
+            "        {",
+            "          \"x\": 555,",
+            "          \"y\": 362",
+            "        },",
+            "        {",
+            "          \"x\": 552,",
+            "          \"y\": 435",
+            "        },",
+            "        {",
+            "          \"x\": 550,",
+            "          \"y\": 489",
+            "        },",
+            "        {",
+            "          \"x\": 537,",
+            "          \"y\": 504",
+            "        },",
+            "        {",
+            "          \"x\": 469,",
+            "          \"y\": 497",
+            "        },",
+            "        {",
+            "          \"x\": 460,",
+            "          \"y\": 482",
+            "        },",
+            "        {",
+            "          \"x\": 469,",
+            "          \"y\": 435",
+            "        },",
+            "        {",
+            "          \"x\": 479,",
+            "          \"y\": 394",
+            "        },",
+            "        {",
+            "          \"x\": 483,",
+            "          \"y\": 369"
+          ]
+        },
+        {
+          "at": 300,
+          "removed": [
+            "          \"x\": 667,",
+            "          \"y\": 4"
+          ],
+          "added": [
+            "          \"x\": 473,",
+            "          \"y\": 343",
+            "        },",
+            "        {",
+            "          \"x\": 468,",
+            "          \"y\": 319"
+          ]
+        },
+        {
+          "at": 308,
+          "removed": [
+            "          \"x\": 668,",
+            "          \"y\": 20"
+          ],
+          "added": [
+            "          \"x\": 470,",
+            "          \"y\": 300"
+          ]
+        },
+        {
+          "at": 312,
+          "removed": [
+            "          \"x\": 641,",
+            "          \"y\": 14"
+          ],
+          "added": [
+            "          \"x\": 480,",
+            "          \"y\": 287",
+            "        },",
+            "        {",
+            "          \"x\": 480,",
+            "          \"y\": 277"
+          ]
+        },
+        {
+          "at": 325,
+          "removed": [
+            "          \"x\": 491,",
+            "          \"y\": 362"
+          ],
+          "added": [
+            "          \"x\": 581,",
+            "          \"y\": 326"
+          ]
+        },
+        {
+          "at": 329,
+          "removed": [
+            "          \"x\": 568,",
+            "          \"y\": 366"
+          ],
+          "added": [
+            "          \"x\": 661,",
+            "          \"y\": 326"
+          ]
+        },
+        {
+          "at": 333,
+          "removed": [
+            "          \"x\": 562,",
+            "          \"y\": 405"
+          ],
+          "added": [
+            "          \"x\": 662,",
+            "          \"y\": 417"
+          ]
+        },
+        {
+          "at": 337,
+          "removed": [
+            "          \"x\": 485,",
+            "          \"y\": 401"
+          ],
+          "added": [
+            "          \"x\": 580,",
+            "          \"y\": 417"
+          ]
+        },
+        {
+          "at": 346,
+          "removed": [
+            "          \"x\": 268,",
+            "          \"y\": 308"
+          ],
+          "added": [
+            "          \"x\": 271,",
+            "          \"y\": 317"
+          ]
+        },
+        {
+          "at": 350,
+          "removed": [
+            "          \"x\": 312,",
+            "          \"y\": 307"
+          ],
+          "added": [
+            "          \"x\": 301,",
+            "          \"y\": 316"
+          ]
+        },
+        {
+          "at": 354,
+          "removed": [
+            "          \"x\": 307,",
+            "          \"y\": 422"
+          ],
+          "added": [
+            "          \"x\": 299,",
+            "          \"y\": 371"
+          ]
+        },
+        {
+          "at": 359,
+          "removed": [
+            "          \"y\": 384"
+          ],
+          "added": [
+            "          \"y\": 372"
+          ]
+        },
+        {
+          "at": 424,
+          "removed": [
+            "          \"x\": 169,",
+            "          \"y\": 333"
+          ],
+          "added": [
+            "          \"x\": 166,",
+            "          \"y\": 324"
+          ]
+        },
+        {
+          "at": 428,
+          "removed": [
+            "          \"x\": 216,",
+            "          \"y\": 332"
+          ],
+          "added": [
+            "          \"x\": 220,",
+            "          \"y\": 325"
+          ]
+        },
+        {
+          "at": 432,
+          "removed": [
+            "          \"x\": 219,",
+            "          \"y\": 431"
+          ],
+          "added": [
+            "          \"x\": 226,",
+            "          \"y\": 437"
+          ]
+        },
+        {
+          "at": 436,
+          "removed": [
+            "          \"x\": 168,",
+            "          \"y\": 434"
+          ],
+          "added": [
+            "          \"x\": 163,",
+            "          \"y\": 438"
+          ]
+        }
+      ]
+    },
+    "assets_src/chapter1/scenes/village_square/walk-geometry-v1.json": {
+      "beforeSHA256": "8db991213133ccb41febaa771eb01e5665e2b1267773f3f07159ef69c485816a",
+      "afterSHA256": "65528c025cf64b118271a10200150138f996d932e949420badfbf75f57be6e68",
+      "hunks": [
+        {
+          "at": 4,
+          "removed": [
+            "    \"path\": \"assets/chapter1/scenes/village_square/background.png\","
+          ],
+          "added": [
+            "    \"path\": \"assets/chapter1/scenes/village_square/background-redesign-c05.png\","
+          ]
+        },
+        {
+          "at": 35,
+          "removed": [],
+          "added": [
+            "      \"................................................................\","
+          ]
+        },
+        {
+          "at": 37,
+          "removed": [
+            "      \"...........cccc..........................ccccc..................\",",
+            "      \"..........cc......................ccccccccccc...................\",",
+            "      \"..........c......ccccccc..........cccccccccccccc................\",",
+            "      \"..........ccccccccccccc.................ccc...ccccccc...........\",",
+            "      \"...........cccccccc............................ccccccc..........\",",
+            "      \"............ccccccc.............................cccccc..........\",",
+            "      \"............ccccccc.............................ccccc...........\",",
+            "      \".........ccccccccccc...........................cccccc...........\",",
+            "      \"........ccccccccccccc........................cccccc.............\",",
+            "      \"........ccccccccccccccccc.................cccccccc..............\",",
+            "      \"......ccccccccccccccccccccccccccccccccccccccccc.cc..............\",",
+            "      \"....ccccccccccccccccccccccccccccccccccccccccccccccccccc.........\","
+          ],
+          "added": [
+            "      \".......................................cccccccc.................\",",
+            "      \".........cccccc....ccc.....................ccccccc..............\",",
+            "      \".........ccccccccccc..........................ccccc.............\",",
+            "      \".........cccccccccc............................cccc.............\",",
+            "      \".........cccccccccc............................cccc.............\",",
+            "      \".........cccccccccc............................cccc.............\",",
+            "      \".........cccccccccc............................cccc.............\",",
+            "      \"........cccccccccccc..........................ccccc.............\",",
+            "      \".......cccccccccccccc......................ccccccccc............\",",
+            "      \"......ccccccccccccccccccccc........cccccccccccccccccc...........\",",
+            "      \".....ccccccccccccccccccccccccccccccccccccccccccccccccc..........\","
+          ]
+        },
+        {
+          "at": 49,
+          "removed": [
+            "      \"......cccccccccccccccccccccccccccccccccccccccccccccccc.ccccccc..\",",
+            "      \".......ccccccccccccccccccccccccccccccccccccccccccccccc..ccccc...\",",
+            "      \"........cccccccccccccccccccccccccccccccccccccccccccccccccccc....\","
+          ],
+          "added": [
+            "      \".....ccccccccccccccccccccccccccccccccccccccccccccccccccccccc....\",",
+            "      \"......cccccccccccccccccccccccccccccccccccccccccccccccccccccccc..\",",
+            "      \"................................................................\","
+          ]
+        }
+      ]
+    },
+    "src/content/art/assetManifest.js": {
+      "beforeSHA256": "0e4c9713350e3956be8b2694bf32f47b9b9cf22de459e19ea4e098e9f4473a74",
+      "afterSHA256": "378228df46c862c9c4fa7b0517787e8e69cf9a03fcf602b69282eb130df5232e",
+      "hunks": [
+        {
+          "at": 23,
+          "removed": [
+            "      campaignPoster: \"assets/chapter1/scenes/village_square/campaign-poster-v2.png\",",
+            "      fountainForeground: \"assets/chapter1/scenes/village_square/fountain-foreground-v1.png\","
+          ],
+          "added": [
+            "      campaignPoster: \"assets/chapter1/scenes/village_square/campaign-poster-c05.png\",",
+            "      fountainForeground: \"assets/chapter1/scenes/village_square/fountain-foreground-c05.png\",",
+            "      fountainShallowWater: \"assets/chapter1/scenes/village_square/fountain-shallow-water-c05.png\",",
+            "      squareFlagWind: \"assets/chapter1/scenes/village_square/flag-wind-c01.png\",",
+            "      squarePepaIdle: \"assets/chapter1/scenes/village_square/pepa-idle-hydra-c14-r03.png\",",
+            "      squarePepaStill: \"assets/chapter1/scenes/village_square/pepa-idle-hydra-c14-r03-static.png\",",
+            "      kioskCounterC05: \"assets/chapter1/scenes/village_square/kiosk-counter-c05.png\","
+          ]
+        },
+        {
+          "at": 32,
+          "removed": [
+            "      background: \"assets/chapter1/scenes/village_square/background.png\","
+          ],
+          "added": [
+            "      background: \"assets/chapter1/scenes/village_square/background-redesign-c05.png\","
+          ]
+        }
+      ]
+    },
+    "src/content/chapter1/campaign.js": {
+      "beforeSHA256": "bfec4b3734c9c8fbeb1f27cf384a749f740bfdf19f16eb124819175438b5278e",
+      "afterSHA256": "8e092614a09c37ff6b4f997d45d73d0a45883a95b043e7ce044715cfe0ad5298",
+      "hunks": [
+        {
+          "at": 62,
+          "removed": [],
+          "added": [
+            "  npcId: \"hotspot.square.kiosk\","
+          ]
+        }
+      ]
+    },
+    "src/content/chapter1/sceneLayers.generated.js": {
+      "beforeSHA256": "daa16bf25675722ce6b3559dad1dee82cf8118a2f499b6a347980a037f046ad3",
+      "afterSHA256": "6ebff40e158ec4a4950d550f22d7f1ce6b75a18bfaa85005e1aca27ca8489d43",
+      "hunks": [
+        {
+          "at": 314,
+          "removed": [
+            "        \"left\": 488,"
+          ],
+          "added": [
+            "        \"left\": 580,"
+          ]
+        },
+        {
+          "at": 343,
+          "removed": [],
+          "added": [
+            "      },",
+            "      {",
+            "        \"id\": \"layer.square.shallow_water\",",
+            "        \"asset\": \"fountainShallowWater\",",
+            "        \"zIndex\": 41,",
+            "        \"top\": 0,",
+            "        \"left\": 0,",
+            "        \"visibleWhenFlag\": \"fountainRepaired\"",
+            "      },",
+            "      {",
+            "        \"id\": \"layer.square.kiosk_counter\",",
+            "        \"asset\": \"kioskCounterC05\",",
+            "        \"zIndex\": 30,",
+            "        \"top\": 0,",
+            "        \"left\": 0",
+            "      },",
+            "      {",
+            "        \"id\": \"layer.square.pepa_idle\",",
+            "        \"asset\": \"squarePepaStill\",",
+            "        \"zIndex\": 89,",
+            "        \"top\": 315,",
+            "        \"left\": 1120,",
+            "        \"width\": 140,",
+            "        \"height\": 140,",
+            "        \"animation\": {",
+            "          \"freezeWhenPaused\": true,",
+            "          \"asset\": \"squarePepaIdle\",",
+            "          \"frameWidth\": 140,",
+            "          \"frameHeight\": 140,",
+            "          \"frameCount\": 36,",
+            "          \"columns\": 6,",
+            "          \"frameDurationMs\": 122,",
+            "          \"loop\": true,",
+            "          \"contentBounds\": {",
+            "            \"x\": 0,",
+            "            \"y\": 0,",
+            "            \"w\": 140,",
+            "            \"h\": 140",
+            "          }",
+            "        }",
+            "      },",
+            "      {",
+            "        \"id\": \"layer.square.flag_wind\",",
+            "        \"asset\": \"squareFlagWind\",",
+            "        \"zIndex\": 99,",
+            "        \"top\": 35,",
+            "        \"left\": 850,",
+            "        \"width\": 80,",
+            "        \"height\": 90,",
+            "        \"animation\": {",
+            "          \"freezeWhenPaused\": true,",
+            "          \"asset\": \"squareFlagWind\",",
+            "          \"frameWidth\": 80,",
+            "          \"frameHeight\": 90,",
+            "          \"frameCount\": 64,",
+            "          \"columns\": 8,",
+            "          \"frameDurationMs\": 57,",
+            "          \"loop\": true,",
+            "          \"contentBounds\": {",
+            "            \"x\": 0,",
+            "            \"y\": 0,",
+            "            \"w\": 80,",
+            "            \"h\": 90",
+            "          }",
+            "        }"
+          ]
+        }
+      ]
+    },
+    "src/content/chapter1/sceneObjectGeometry.generated.js": {
+      "beforeSHA256": "92afb4002f1c674260428fc0856410b8a5b49e27a2005a6a22b38831b4ecbc08",
+      "afterSHA256": "64513daeb6632fb73ec520c067907efff24c13a3067f7a2a501a86cf430f21fe",
+      "hunks": [
+        {
+          "at": 758,
+          "removed": [
+            "    \"path\": \"assets/chapter1/scenes/village_square/background.png\","
+          ],
+          "added": [
+            "    \"path\": \"assets/chapter1/scenes/village_square/background-redesign-c05.png\","
+          ]
+        },
+        {
+          "at": 771,
+          "removed": [
+            "          \"x\": 365,",
+            "          \"y\": 112"
+          ],
+          "added": [
+            "          \"x\": 356,",
+            "          \"y\": 85"
+          ]
+        },
+        {
+          "at": 775,
+          "removed": [
+            "          \"x\": 468,",
+            "          \"y\": 68"
+          ],
+          "added": [
+            "          \"x\": 446,",
+            "          \"y\": 57"
+          ]
+        },
+        {
+          "at": 780,
+          "removed": [
+            "          \"y\": 109",
+            "        },",
+            "        {",
+            "          \"x\": 570,",
+            "          \"y\": 180",
+            "        },",
+            "        {",
+            "          \"x\": 560,",
+            "          \"y\": 206",
+            "        },",
+            "        {",
+            "          \"x\": 566,",
+            "          \"y\": 241",
+            "        },",
+            "        {",
+            "          \"x\": 587,",
+            "          \"y\": 284",
+            "        },",
+            "        {",
+            "          \"x\": 454,",
+            "          \"y\": 296"
+          ],
+          "added": [
+            "          \"y\": 94"
+          ]
+        },
+        {
+          "at": 783,
+          "removed": [
+            "          \"x\": 442,",
+            "          \"y\": 266"
+          ],
+          "added": [
+            "          \"x\": 580,",
+            "          \"y\": 237"
+          ]
+        },
+        {
+          "at": 787,
+          "removed": [
+            "          \"x\": 375,"
+          ],
+          "added": [
+            "          \"x\": 350,"
+          ]
+        },
+        {
+          "at": 789,
+          "removed": [
+            "        },",
+            "        {",
+            "          \"x\": 371,",
+            "          \"y\": 200"
+          ],
+          "added": []
+        },
+        {
+          "at": 796,
+          "removed": [
+            "          \"x\": 0,",
+            "          \"y\": 430"
+          ],
+          "added": [
+            "          \"x\": 7,",
+            "          \"y\": 241"
+          ]
+        },
+        {
+          "at": 800,
+          "removed": [
+            "          \"x\": 5,",
+            "          \"y\": 216"
+          ],
+          "added": [
+            "          \"x\": 145,",
+            "          \"y\": 251"
+          ]
+        },
+        {
+          "at": 804,
+          "removed": [
+            "          \"x\": 158,",
+            "          \"y\": 234"
+          ],
+          "added": [
+            "          \"x\": 148,",
+            "          \"y\": 533"
+          ]
+        },
+        {
+          "at": 808,
+          "removed": [
+            "          \"x\": 173,",
+            "          \"y\": 513"
+          ],
+          "added": [
+            "          \"x\": 43,",
+            "          \"y\": 550"
+          ]
+        },
+        {
+          "at": 812,
+          "removed": [
+            "          \"x\": 63,",
+            "          \"y\": 536"
+          ],
+          "added": [
+            "          \"x\": 7,",
+            "          \"y\": 510"
+          ]
+        },
+        {
+          "at": 821,
+          "removed": [
+            "          \"x\": 862,",
+            "          \"y\": 261"
+          ],
+          "added": [
+            "          \"x\": 856,",
+            "          \"y\": 245"
+          ]
+        },
+        {
+          "at": 825,
+          "removed": [
+            "          \"x\": 949,",
+            "          \"y\": 251"
+          ],
+          "added": [
+            "          \"x\": 944,",
+            "          \"y\": 239"
+          ]
+        },
+        {
+          "at": 829,
+          "removed": [
+            "          \"x\": 948,",
+            "          \"y\": 372"
+          ],
+          "added": [
+            "          \"x\": 944,",
+            "          \"y\": 378"
+          ]
+        },
+        {
+          "at": 833,
+          "removed": [
+            "          \"x\": 865,",
+            "          \"y\": 371"
+          ],
+          "added": [
+            "          \"x\": 853,",
+            "          \"y\": 378"
+          ]
+        },
+        {
+          "at": 842,
+          "removed": [
+            "          \"x\": 1171,",
+            "          \"y\": 459"
+          ],
+          "added": [
+            "          \"x\": 1148,",
+            "          \"y\": 474"
+          ]
+        },
+        {
+          "at": 846,
+          "removed": [
+            "          \"x\": 1220,",
+            "          \"y\": 476"
+          ],
+          "added": [
+            "          \"x\": 1194,",
+            "          \"y\": 483"
+          ]
+        },
+        {
+          "at": 850,
+          "removed": [
+            "          \"x\": 1205,",
+            "          \"y\": 509"
+          ],
+          "added": [
+            "          \"x\": 1190,",
+            "          \"y\": 507"
+          ]
+        },
+        {
+          "at": 854,
+          "removed": [
+            "          \"x\": 1152,",
+            "          \"y\": 484"
+          ],
+          "added": [
+            "          \"x\": 1147,",
+            "          \"y\": 498"
+          ]
+        },
+        {
+          "at": 863,
+          "removed": [
+            "          \"x\": 1059,",
+            "          \"y\": 252"
+          ],
+          "added": [
+            "          \"x\": 1032,",
+            "          \"y\": 246"
+          ]
+        },
+        {
+          "at": 867,
+          "removed": [
+            "          \"x\": 1161,",
+            "          \"y\": 231"
+          ],
+          "added": [
+            "          \"x\": 1100,",
+            "          \"y\": 241"
+          ]
+        },
+        {
+          "at": 871,
+          "removed": [
+            "          \"x\": 1187,",
+            "          \"y\": 432"
+          ],
+          "added": [
+            "          \"x\": 1115,",
+            "          \"y\": 416"
+          ]
+        },
+        {
+          "at": 875,
+          "removed": [
+            "          \"x\": 1081,",
+            "          \"y\": 433"
+          ],
+          "added": [
+            "          \"x\": 1046,",
+            "          \"y\": 421"
+          ]
+        },
+        {
+          "at": 884,
+          "removed": [
+            "          \"x\": 575,",
+            "          \"y\": 175",
+            "        },",
+            "        {",
+            "          \"x\": 634,",
+            "          \"y\": 172"
+          ],
+          "added": [
+            "          \"x\": 391,",
+            "          \"y\": 460"
+          ]
+        },
+        {
+          "at": 888,
+          "removed": [
+            "          \"x\": 697,",
+            "          \"y\": 180"
+          ],
+          "added": [
+            "          \"x\": 444,",
+            "          \"y\": 441"
+          ]
+        },
+        {
+          "at": 892,
+          "removed": [
+            "          \"x\": 717,",
+            "          \"y\": 135"
+          ],
+          "added": [
+            "          \"x\": 461,",
+            "          \"y\": 445"
+          ]
+        },
+        {
+          "at": 896,
+          "removed": [
+            "          \"x\": 749,",
+            "          \"y\": 163"
+          ],
+          "added": [
+            "          \"x\": 459,",
+            "          \"y\": 483"
+          ]
+        },
+        {
+          "at": 900,
+          "removed": [
+            "          \"x\": 741,",
+            "          \"y\": 195"
+          ],
+          "added": [
+            "          \"x\": 555,",
+            "          \"y\": 500"
+          ]
+        },
+        {
+          "at": 904,
+          "removed": [
+            "          \"x\": 777,",
+            "          \"y\": 215"
+          ],
+          "added": [
+            "          \"x\": 568,",
+            "          \"y\": 444"
+          ]
+        },
+        {
+          "at": 908,
+          "removed": [
+            "          \"x\": 794,",
+            "          \"y\": 238"
+          ],
+          "added": [
+            "          \"x\": 690,",
+            "          \"y\": 434"
+          ]
+        },
+        {
+          "at": 912,
+          "removed": [
+            "          \"x\": 779,",
+            "          \"y\": 277"
+          ],
+          "added": [
+            "          \"x\": 819,",
+            "          \"y\": 443"
+          ]
+        },
+        {
+          "at": 916,
+          "removed": [
+            "          \"x\": 733,",
+            "          \"y\": 303"
+          ],
+          "added": [
+            "          \"x\": 910,",
+            "          \"y\": 460"
+          ]
+        },
+        {
+          "at": 920,
+          "removed": [
+            "          \"x\": 714,",
+            "          \"y\": 408"
+          ],
+          "added": [
+            "          \"x\": 931,",
+            "          \"y\": 485"
+          ]
+        },
+        {
+          "at": 924,
+          "removed": [
+            "          \"x\": 800,",
+            "          \"y\": 430"
+          ],
+          "added": [
+            "          \"x\": 922,",
+            "          \"y\": 526"
+          ]
+        },
+        {
+          "at": 928,
+          "removed": [
+            "          \"x\": 795,",
+            "          \"y\": 503"
+          ],
+          "added": [
+            "          \"x\": 859,",
+            "          \"y\": 551"
+          ]
+        },
+        {
+          "at": 932,
+          "removed": [
+            "          \"x\": 668,",
+            "          \"y\": 503"
+          ],
+          "added": [
+            "          \"x\": 736,",
+            "          \"y\": 570"
+          ]
+        },
+        {
+          "at": 936,
+          "removed": [
+            "          \"x\": 551,",
+            "          \"y\": 480"
+          ],
+          "added": [
+            "          \"x\": 565,",
+            "          \"y\": 574"
+          ]
+        },
+        {
+          "at": 940,
+          "removed": [
+            "          \"x\": 609,",
+            "          \"y\": 283"
+          ],
+          "added": [
+            "          \"x\": 454,",
+            "          \"y\": 565"
+          ]
+        },
+        {
+          "at": 944,
+          "removed": [
+            "          \"x\": 568,",
+            "          \"y\": 240"
+          ],
+          "added": [
+            "          \"x\": 405,",
+            "          \"y\": 548"
+          ]
+        },
+        {
+          "at": 948,
+          "removed": [
+            "          \"x\": 564,",
+            "          \"y\": 202"
+          ],
+          "added": [
+            "          \"x\": 387,",
+            "          \"y\": 515"
+          ]
+        },
+        {
+          "at": 957,
+          "removed": [
+            "          \"x\": 1015,",
+            "          \"y\": 188",
+            "        },",
+            "        {",
+            "          \"x\": 1165,",
+            "          \"y\": 146"
+          ],
+          "added": [
+            "          \"x\": 1126,",
+            "          \"y\": 331"
+          ]
+        },
+        {
+          "at": 961,
+          "removed": [
+            "          \"x\": 1276,",
+            "          \"y\": 184"
+          ],
+          "added": [
+            "          \"x\": 1238,",
+            "          \"y\": 326"
+          ]
+        },
+        {
+          "at": 965,
+          "removed": [
+            "          \"x\": 1277,",
+            "          \"y\": 580",
+            "        },",
+            "        {",
+            "          \"x\": 1254,",
+            "          \"y\": 610"
+          ],
+          "added": [
+            "          \"x\": 1243,",
+            "          \"y\": 443"
+          ]
+        },
+        {
+          "at": 969,
+          "removed": [
+            "          \"x\": 1092,",
+            "          \"y\": 587"
+          ],
+          "added": [
+            "          \"x\": 1125,",
+            "          \"y\": 443"
+          ]
+        },
+        {
+          "at": 978,
+          "removed": [
+            "          \"x\": 634,",
+            "          \"y\": 0"
+          ],
+          "added": [
+            "          \"x\": 475,",
+            "          \"y\": 265",
+            "        },",
+            "        {",
+            "          \"x\": 492,",
+            "          \"y\": 249",
+            "        },",
+            "        {",
+            "          \"x\": 509,",
+            "          \"y\": 250",
+            "        },",
+            "        {",
+            "          \"x\": 510,",
+            "          \"y\": 266",
+            "        },",
+            "        {",
+            "          \"x\": 497,",
+            "          \"y\": 280",
+            "        },",
+            "        {",
+            "          \"x\": 510,",
+            "          \"y\": 292",
+            "        },",
+            "        {",
+            "          \"x\": 531,",
+            "          \"y\": 319",
+            "        },",
+            "        {",
+            "          \"x\": 550,",
+            "          \"y\": 332",
+            "        },",
+            "        {",
+            "          \"x\": 567,",
+            "          \"y\": 332",
+            "        },",
+            "        {",
+            "          \"x\": 565,",
+            "          \"y\": 356",
+            "        },",
+            "        {",
+            "          \"x\": 555,",
+            "          \"y\": 362",
+            "        },",
+            "        {",
+            "          \"x\": 552,",
+            "          \"y\": 435",
+            "        },",
+            "        {",
+            "          \"x\": 550,",
+            "          \"y\": 489"
+          ]
+        },
+        {
+          "at": 1030,
+          "removed": [
+            "          \"x\": 667,",
+            "          \"y\": 4"
+          ],
+          "added": [
+            "          \"x\": 537,",
+            "          \"y\": 504"
+          ]
+        },
+        {
+          "at": 1034,
+          "removed": [
+            "          \"x\": 668,",
+            "          \"y\": 20"
+          ],
+          "added": [
+            "          \"x\": 469,",
+            "          \"y\": 497",
+            "        },",
+            "        {",
+            "          \"x\": 460,",
+            "          \"y\": 482",
+            "        },",
+            "        {",
+            "          \"x\": 469,",
+            "          \"y\": 435",
+            "        },",
+            "        {",
+            "          \"x\": 479,",
+            "          \"y\": 394",
+            "        },",
+            "        {",
+            "          \"x\": 483,",
+            "          \"y\": 369",
+            "        },",
+            "        {",
+            "          \"x\": 473,",
+            "          \"y\": 343",
+            "        },",
+            "        {",
+            "          \"x\": 468,",
+            "          \"y\": 319",
+            "        },",
+            "        {",
+            "          \"x\": 470,",
+            "          \"y\": 300",
+            "        },",
+            "        {",
+            "          \"x\": 480,",
+            "          \"y\": 287"
+          ]
+        },
+        {
+          "at": 1070,
+          "removed": [
+            "          \"x\": 641,",
+            "          \"y\": 14"
+          ],
+          "added": [
+            "          \"x\": 480,",
+            "          \"y\": 277"
+          ]
+        },
+        {
+          "at": 1079,
+          "removed": [
+            "          \"x\": 491,",
+            "          \"y\": 362"
+          ],
+          "added": [
+            "          \"x\": 581,",
+            "          \"y\": 326"
+          ]
+        },
+        {
+          "at": 1083,
+          "removed": [
+            "          \"x\": 568,",
+            "          \"y\": 366"
+          ],
+          "added": [
+            "          \"x\": 661,",
+            "          \"y\": 326"
+          ]
+        },
+        {
+          "at": 1087,
+          "removed": [
+            "          \"x\": 562,",
+            "          \"y\": 405"
+          ],
+          "added": [
+            "          \"x\": 662,",
+            "          \"y\": 417"
+          ]
+        },
+        {
+          "at": 1091,
+          "removed": [
+            "          \"x\": 485,",
+            "          \"y\": 401"
+          ],
+          "added": [
+            "          \"x\": 580,",
+            "          \"y\": 417"
+          ]
+        },
+        {
+          "at": 1100,
+          "removed": [
+            "          \"x\": 268,",
+            "          \"y\": 308"
+          ],
+          "added": [
+            "          \"x\": 271,",
+            "          \"y\": 317"
+          ]
+        },
+        {
+          "at": 1104,
+          "removed": [
+            "          \"x\": 312,",
+            "          \"y\": 307"
+          ],
+          "added": [
+            "          \"x\": 301,",
+            "          \"y\": 316"
+          ]
+        },
+        {
+          "at": 1108,
+          "removed": [
+            "          \"x\": 307,",
+            "          \"y\": 422"
+          ],
+          "added": [
+            "          \"x\": 299,",
+            "          \"y\": 371"
+          ]
+        },
+        {
+          "at": 1113,
+          "removed": [
+            "          \"y\": 384"
+          ],
+          "added": [
+            "          \"y\": 372"
+          ]
+        },
+        {
+          "at": 1178,
+          "removed": [
+            "          \"x\": 169,",
+            "          \"y\": 333"
+          ],
+          "added": [
+            "          \"x\": 166,",
+            "          \"y\": 324"
+          ]
+        },
+        {
+          "at": 1182,
+          "removed": [
+            "          \"x\": 216,",
+            "          \"y\": 332"
+          ],
+          "added": [
+            "          \"x\": 220,",
+            "          \"y\": 325"
+          ]
+        },
+        {
+          "at": 1186,
+          "removed": [
+            "          \"x\": 219,",
+            "          \"y\": 431"
+          ],
+          "added": [
+            "          \"x\": 226,",
+            "          \"y\": 437"
+          ]
+        },
+        {
+          "at": 1190,
+          "removed": [
+            "          \"x\": 168,",
+            "          \"y\": 434"
+          ],
+          "added": [
+            "          \"x\": 163,",
+            "          \"y\": 438"
+          ]
+        }
+      ]
+    },
+    "src/content/chapter1/scenes.js": {
+      "beforeSHA256": "65e8668145ececd099b467e78012daef6ec5dc3dfee67aa3758c47777773082b",
+      "afterSHA256": "999c97e354b1aa449efe9004ed7706698991e30af8e73172a3afd5322afb4c19",
+      "hunks": [
+        {
+          "at": 196,
+          "removed": [
+            "    effects: [{",
+            "      id: \"effect.chapter1.village_square.fountain_water\",",
+            "      type: \"waterStream\", visibleWhenFlag: \"fountainRepaired\", zIndex: 100,",
+            "      points: [{ x: 704, y: 168 }, { x: 694, y: 182 }, { x: 682, y: 212 }, { x: 684, y: 242 }],",
+            "      width: 3, speed: 0.7",
+            "    }],"
+          ],
+          "added": [
+            "    // Water motion is deferred; the saved repair flag reveals a shallow static pool.",
+            "    effects: [],"
+          ]
+        },
+        {
+          "at": 209,
+          "removed": [
+            "      oldMenChorus: { x: 565, y: 450 },",
+            "      fountain: { x: 650, y: 500 },"
+          ],
+          "added": [
+            "      oldMenChorus: { x: 620, y: 420 },",
+            "      fountain: { x: 650, y: 610 },"
+          ]
+        },
+        {
+          "at": 285,
+          "removed": [
+            "        rect: { x: 405, y: 225, w: 360, h: 300 },"
+          ],
+          "added": [
+            "        rect: { x: 387, y: 434, w: 544, h: 140 },",
+            "        interactionApproach: { x: 650, y: 610 },",
+            "        interactionApproachExact: true,",
+            "        interactionFacingPoint: { x: 650, y: 490 },"
+          ]
+        },
+        {
+          "at": 297,
+          "removed": [],
+          "added": [
+            "        dialogueSpeaker: true,",
+            "        speechAnchor: { x: 1169, y: 321 },"
+          ]
+        },
+        {
+          "at": 300,
+          "removed": [
+            "        rect: { x: 1010, y: 185, w: 245, h: 370 },"
+          ],
+          "added": [
+            "        rect: { x: 1125, y: 326, w: 118, h: 117 },",
+            "        interactionApproach: { x: 990, y: 550 },",
+            "        interactionApproachExact: true,"
+          ]
+        },
+        {
+          "at": 312,
+          "removed": [
+            "        rect: { x: 575, y: 190, w: 185, h: 245 },"
+          ],
+          "added": [
+            "        rect: { x: 460, y: 249, w: 107, h: 255 },"
+          ]
+        },
+        {
+          "at": 319,
+          "removed": [
+            "        rect: { x: 480, y: 365, w: 150, h: 70 },"
+          ],
+          "added": [
+            "        rect: { x: 580, y: 322, w: 84, h: 100 },",
+            "        interactionApproach: { x: 780, y: 410 },"
+          ]
+        }
+      ]
+    },
+    "src/content/chapter1/walkMasks.generated.js": {
+      "beforeSHA256": "bc81296135ad6c3e8fee0ca8656c70bf5f525a5b5b4f1b021259e5edc6e781ba",
+      "afterSHA256": "d39f28ad70415fcba577bc0f02ee15af18aa0efbaa1f99d6357bf7e37fa0546b",
+      "hunks": [
+        {
+          "at": 334,
+          "removed": [
+            "      \"path\": \"assets/chapter1/scenes/village_square/background.png\","
+          ],
+          "added": [
+            "      \"path\": \"assets/chapter1/scenes/village_square/background-redesign-c05.png\","
+          ]
+        },
+        {
+          "at": 372,
+          "removed": [],
+          "added": [
+            "      \"................................................................\","
+          ]
+        },
+        {
+          "at": 374,
+          "removed": [
+            "      \"...........cccc..........................ccccc..................\",",
+            "      \"..........cc......................ccccccccccc...................\",",
+            "      \"..........c......ccccccc..........cccccccccccccc................\",",
+            "      \"..........ccccccccccccc.................ccc...ccccccc...........\",",
+            "      \"...........cccccccc............................ccccccc..........\",",
+            "      \"............ccccccc.............................cccccc..........\",",
+            "      \"............ccccccc.............................ccccc...........\",",
+            "      \".........ccccccccccc...........................cccccc...........\",",
+            "      \"........ccccccccccccc........................cccccc.............\",",
+            "      \"........ccccccccccccccccc.................cccccccc..............\",",
+            "      \"......ccccccccccccccccccccccccccccccccccccccccc.cc..............\",",
+            "      \"....ccccccccccccccccccccccccccccccccccccccccccccccccccc.........\","
+          ],
+          "added": [
+            "      \".......................................cccccccc.................\",",
+            "      \".........cccccc....ccc.....................ccccccc..............\",",
+            "      \".........ccccccccccc..........................ccccc.............\",",
+            "      \".........cccccccccc............................cccc.............\",",
+            "      \".........cccccccccc............................cccc.............\",",
+            "      \".........cccccccccc............................cccc.............\",",
+            "      \".........cccccccccc............................cccc.............\",",
+            "      \"........cccccccccccc..........................ccccc.............\",",
+            "      \".......cccccccccccccc......................ccccccccc............\",",
+            "      \"......ccccccccccccccccccccc........cccccccccccccccccc...........\",",
+            "      \".....ccccccccccccccccccccccccccccccccccccccccccccccccc..........\","
+          ]
+        },
+        {
+          "at": 386,
+          "removed": [
+            "      \"......cccccccccccccccccccccccccccccccccccccccccccccccc.ccccccc..\",",
+            "      \".......ccccccccccccccccccccccccccccccccccccccccccccccc..ccccc...\",",
+            "      \"........cccccccccccccccccccccccccccccccccccccccccccccccccccc....\","
+          ],
+          "added": [
+            "      \".....ccccccccccccccccccccccccccccccccccccccccccccccccccccccc....\",",
+            "      \"......cccccccccccccccccccccccccccccccccccccccccccccccccccccccc..\",",
+            "      \"................................................................\","
+          ]
+        }
+      ]
+    },
+    "src/content/localization/bg.js": {
+      "beforeSHA256": "9886e819ad48b771066ac1c818305f68a8f02a99d00aad5e25c706ba44c1d422",
+      "afterSHA256": "28375d9461813d4acd07c769bc7c9ad0911d80a91cbcb77435851f1e01030ee4",
+      "hunks": [
+        {
+          "at": 153,
+          "removed": [
+            "  \"hotspot.kiosk.name\": \"Вестникарска будка\","
+          ],
+          "added": [
+            "  \"hotspot.kiosk.name\": \"Леля Пепа\","
+          ]
+        },
+        {
+          "at": 203,
+          "removed": [
+            "  \"look.square.statue\": \"Паметник на местен герой от бюста нагоре. Отдолу бюджетът е свършил.\","
+          ],
+          "added": [
+            "  \"look.square.statue\": \"Бронзов герой. Гордостта го държи изправен. Пушката помага.\","
+          ]
+        },
+        {
+          "at": 329,
+          "removed": [
+            "  \"dialogue.square.mehana_menu.title\": \"МЕХАНА „ДВЕТЕ КОЗИ“ — ДНЕШНО МЕНЮ\","
+          ],
+          "added": [
+            "  \"dialogue.square.mehana_menu.title\": \"МЕХАНА „ПРИ БАЙ КИРО“ — ДНЕШНО МЕНЮ\","
+          ]
+        }
+      ]
+    },
+    "src/content/localization/chapter1Campaign.js": {
+      "beforeSHA256": "6de9fbc0656838e072223e09fb781b629d37f0599e30e99013245f971a6ad9e5",
+      "afterSHA256": "a89b5e2d9e84c63fc79158757fff516f369f153818ba7a92af2e6de84b8bf362",
+      "hunks": [
+        {
+          "at": 5,
+          "removed": [
+            "    \"Ще взема сметките и акордеона. Леля Дочева от будката ще знае какви документи трябват.\""
+          ],
+          "added": [
+            "    \"Ще взема сметките и акордеона. Леля Пепа от будката ще знае какви документи трябват.\""
+          ]
+        },
+        {
+          "at": 8,
+          "removed": [
+            "  \"campaign.kiosk.start\": \"Леля Дочева: Вестници, копия и кандидатски документи. Лошите новини са готови. За добрите трябва хартия.\","
+          ],
+          "added": [
+            "  \"campaign.kiosk.start\": \"Леля Пепа: Вестници, копия и кандидатски документи. Лошите новини са готови. За добрите трябва хартия.\","
+          ]
+        },
+        {
+          "at": 15,
+          "removed": [
+            "  \"campaign.kiosk.requirements\": \"Леля Дочева: Диплома за общината, листовки за хората. Донеси сметките от масата вкъщи — отпред си ти, отзад има място за бъдеще.\","
+          ],
+          "added": [
+            "  \"campaign.kiosk.requirements\": \"Леля Пепа: Диплома за общината, листовки за хората. Донеси сметките от масата вкъщи — отпред си ти, отзад има място за бъдеще.\","
+          ]
+        },
+        {
+          "at": 17,
+          "removed": [
+            "    \"Леля Дочева: Име, адрес, три просрочени задължения. Биографията е готова.\","
+          ],
+          "added": [
+            "    \"Леля Пепа: Име, адрес, три просрочени задължения. Биографията е готова.\","
+          ]
+        },
+        {
+          "at": 20,
+          "removed": [
+            "  \"campaign.kiosk.pamphlets_ready\": \"Леля Дочева: Щом дипломата е готова, остава рекламата. Ето листовките — залепи ги на таблото до будката.\",",
+            "  \"campaign.kiosk.posters\": \"Леля Дочева: Избери листовките, после „Използвай“ и таблото до будката. Ако си ги оставил някъде, първо си ги прибери. Не печатам тираж за всяка разходка.\",",
+            "  \"campaign.kiosk.posted\": \"Леля Дочева: Вече си обявен. За признат — при Баба и Тони. За регистриран — с дипломата в общината.\",",
+            "  \"campaign.kiosk.look\": \"Будката на леля Дочева. Между вестниците се виждат очила и молив. Тук документите се оправят с разговор и малко хартия.\",",
+            "  \"campaign.poster.hint\": \"От старата обява е останала само хартията. Тъкмо място за моя плакат! Леля Дочева от будката може да отпечата листовки.\","
+          ],
+          "added": [
+            "  \"campaign.kiosk.pamphlets_ready\": \"Леля Пепа: Щом дипломата е готова, остава рекламата. Ето листовките — залепи ги на таблото до будката.\",",
+            "  \"campaign.kiosk.posters\": \"Леля Пепа: Избери листовките, после „Използвай“ и таблото до будката. Ако си ги оставил някъде, първо си ги прибери. Не печатам тираж за всяка разходка.\",",
+            "  \"campaign.kiosk.posted\": \"Леля Пепа: Вече си обявен. За признат — при Баба и Тони. За регистриран — с дипломата в общината.\",",
+            "  \"campaign.kiosk.look\": \"Будката на леля Пепа. С подпряна буза тя следи площада над вестниците. Тук документите се оправят с разговор и малко хартия.\",",
+            "  \"campaign.poster.hint\": \"От старата обява е останала само хартията. Тъкмо място за моя плакат! Леля Пепа от будката може да отпечата листовки.\","
+          ]
+        },
+        {
+          "at": 29,
+          "removed": [
+            "  \"campaign.quest.pamphlets\": \"Вземи листовки от леля Дочева в будката на площада.\","
+          ],
+          "added": [
+            "  \"campaign.quest.pamphlets\": \"Вземи листовки от леля Пепа в будката на площада.\","
+          ]
+        },
+        {
+          "at": 38,
+          "removed": [
+            "    \"I'll take the bills and accordion. Aunt Docheva at the square's kiosk will know which papers I need.\""
+          ],
+          "added": [
+            "    \"I'll take the bills and accordion. Aunt Pepa at the square's kiosk will know which papers I need.\""
+          ]
+        },
+        {
+          "at": 41,
+          "removed": [
+            "  \"campaign.kiosk.start\": \"Aunt Docheva: Newspapers, copies, candidate paperwork. Bad news is ready. Good news needs paper.\","
+          ],
+          "added": [
+            "  \"campaign.kiosk.start\": \"Aunt Pepa: Newspapers, copies, candidate paperwork. Bad news is ready. Good news needs paper.\","
+          ]
+        },
+        {
+          "at": 48,
+          "removed": [
+            "  \"campaign.kiosk.requirements\": \"Aunt Docheva: A diploma for the municipality, pamphlets for the voters. Bring the bills from your table at home. Your past is on the front; the back still has room for a future.\","
+          ],
+          "added": [
+            "  \"campaign.kiosk.requirements\": \"Aunt Pepa: A diploma for the municipality, pamphlets for the voters. Bring the bills from your table at home. Your past is on the front; the back still has room for a future.\","
+          ]
+        },
+        {
+          "at": 50,
+          "removed": [
+            "    \"Aunt Docheva: Name, address, three overdue payments. That's your biography sorted.\","
+          ],
+          "added": [
+            "    \"Aunt Pepa: Name, address, three overdue payments. That's your biography sorted.\","
+          ]
+        },
+        {
+          "at": 53,
+          "removed": [
+            "  \"campaign.kiosk.pamphlets_ready\": \"Aunt Docheva: Qualifications sorted, publicity next. Here are your pamphlets. Put them on the board beside the kiosk.\",",
+            "  \"campaign.kiosk.posters\": \"Aunt Docheva: Select the pamphlets, choose Use, then click the board beside the kiosk. If you dropped them, fetch them. I don't print a new edition for every outing.\",",
+            "  \"campaign.kiosk.posted\": \"Aunt Docheva: You're advertised. For support, see Baba and Tony. For registration, take your diploma to the municipality.\",",
+            "  \"campaign.kiosk.look\": \"Aunt Docheva's kiosk. Glasses and a pencil peek through the newspapers. Paperwork here starts with a conversation and something to print on.\",",
+            "  \"campaign.poster.hint\": \"An old notice, worn blank. Just the spot for my campaign poster! Aunt Docheva at the kiosk can print the pamphlets.\","
+          ],
+          "added": [
+            "  \"campaign.kiosk.pamphlets_ready\": \"Aunt Pepa: Qualifications sorted, publicity next. Here are your pamphlets. Put them on the board beside the kiosk.\",",
+            "  \"campaign.kiosk.posters\": \"Aunt Pepa: Select the pamphlets, choose Use, then click the board beside the kiosk. If you dropped them, fetch them. I don't print a new edition for every outing.\",",
+            "  \"campaign.kiosk.posted\": \"Aunt Pepa: You're advertised. For support, see Baba and Tony. For registration, take your diploma to the municipality.\",",
+            "  \"campaign.kiosk.look\": \"Aunt Pepa's kiosk. Chin in hand, she watches the square over the newspapers. Paperwork here starts with a conversation and something to print on.\",",
+            "  \"campaign.poster.hint\": \"An old notice, worn blank. Just the spot for my campaign poster! Aunt Pepa at the kiosk can print the pamphlets.\","
+          ]
+        },
+        {
+          "at": 62,
+          "removed": [
+            "  \"campaign.quest.pamphlets\": \"Collect campaign pamphlets from Aunt Docheva at the square's kiosk.\","
+          ],
+          "added": [
+            "  \"campaign.quest.pamphlets\": \"Collect campaign pamphlets from Aunt Pepa at the square's kiosk.\","
+          ]
+        }
+      ]
+    },
+    "src/content/localization/chapter1Fountain.js": {
+      "beforeSHA256": "3f2c3325647ab7550eb7e11c63e52ff1801e1daaa54015bcc72ea85085815407",
+      "afterSHA256": "1b4ee15d13c82c41e477edb3dffa9f4b9e7a2f649f15ad180c1982b3f24c8cae",
+      "hunks": [
+        {
+          "at": 3,
+          "removed": [
+            "  \"fountain.look.repaired\": \"Тънка струйка, но истинска. Не е нарисувана в отчета.\","
+          ],
+          "added": [
+            "  \"fountain.look.repaired\": \"Малко мътна вода на дъното. Поне не е само в отчета.\","
+          ]
+        },
+        {
+          "at": 38,
+          "removed": [
+            "  \"fountain.look.repaired\": \"A thin stream, but a real one. It doesn't just exist in the report.\","
+          ],
+          "added": [
+            "  \"fountain.look.repaired\": \"A little murky water at the bottom. At least it isn't only in the report.\","
+          ]
+        }
+      ]
+    },
+    "src/content/localization/en.js": {
+      "beforeSHA256": "47cbd69ae2d01d63ba981ef714e3aa8954b1b6c9e18fda087803c0c6c25bf50e",
+      "afterSHA256": "680feeecdf1b69dee7e9c62b94304a28ecfd69031b87096cea8b8225e9e38218",
+      "hunks": [
+        {
+          "at": 153,
+          "removed": [
+            "  \"hotspot.kiosk.name\": \"News Kiosk\","
+          ],
+          "added": [
+            "  \"hotspot.kiosk.name\": \"Aunt Pepa\","
+          ]
+        },
+        {
+          "at": 203,
+          "removed": [
+            "  \"look.square.statue\": \"A monument to a local hero from the bust upward. Below that, the budget ran out.\","
+          ],
+          "added": [
+            "  \"look.square.statue\": \"A bronze hero. Pride keeps him upright. The rifle helps.\","
+          ]
+        },
+        {
+          "at": 329,
+          "removed": [
+            "  \"dialogue.square.mehana_menu.title\": \"MEHANA “THE TWO GOATS” — TODAY'S MENU\","
+          ],
+          "added": [
+            "  \"dialogue.square.mehana_menu.title\": \"BAI KIRO'S MEHANA — TODAY'S MENU\","
+          ]
+        }
+      ]
+    },
+    "src/engine/Game.js": {
+      "beforeSHA256": "cfd0e37e9ac4d7e71010b2c256f19f9e8972114ed2d438e6a0b15a58a9e388f2",
+      "afterSHA256": "2be4e429eef69cc8e1d5bf8caa92443d6185d655f14167cd6b3d39905bb98038",
+      "hunks": [
+        {
+          "at": 21,
+          "removed": [
+            "import { findTargetAt, findWalkPath, isWalkable, nearestReachableWalkablePoint, nearestWalkablePoint, walkPathDistance } from \"./SceneGeometry.js\";"
+          ],
+          "added": [
+            "import { findSceneSpeaker, findTargetAt, findWalkPath, isWalkable, nearestReachableWalkablePoint, nearestWalkablePoint, walkPathDistance } from \"./SceneGeometry.js\";"
+          ]
+        },
+        {
+          "at": 2912,
+          "removed": [
+            "    const npc = this.currentScene.npcs?.find((candidate) => candidate.id === npcId);"
+          ],
+          "added": [
+            "    const npc = findSceneSpeaker(this.currentScene, npcId);"
+          ]
+        },
+        {
+          "at": 2947,
+          "removed": [
+            "    const npc = this.currentScene.npcs?.find((candidate) => candidate.id === (node.npcId || dialogue.npcId));"
+          ],
+          "added": [
+            "    const npc = findSceneSpeaker(this.currentScene, node.npcId || dialogue.npcId);"
+          ]
+        },
+        {
+          "at": 2955,
+          "removed": [
+            "    const npc = this.currentScene.npcs?.find((candidate) => candidate.id === speech.npcId);"
+          ],
+          "added": [
+            "    const npc = findSceneSpeaker(this.currentScene, speech.npcId);"
+          ]
+        }
+      ]
+    },
+    "src/engine/Renderer.js": {
+      "beforeSHA256": "504035b611e56b870e5b10da815309b38673429d958c7673a4e3690736def64b",
+      "afterSHA256": "4a08b009ddb8e520259b45ae3f6f2b779e362f901499582d5964aa34f304e331",
+      "hunks": [
+        {
+          "at": 8,
+          "removed": [],
+          "added": [
+            "import {findSceneSpeaker} from './SceneGeometry.js';"
+          ]
+        },
+        {
+          "at": 76,
+          "removed": [],
+          "added": [
+            "// Opt-in ambient layers keep a local clock; prior scene/NPC timing is untouched.",
+            "export function ambientLayerClock(previous, timeMs, paused, ready) {",
+            "  return { lastTime: timeMs, elapsed: !ready ? 0 : (previous?.elapsed || 0)",
+            "    + (!previous || paused || previous.paused || !previous.ready ? 0 : Math.max(0, timeMs - previous.lastTime)), paused, ready };",
+            "}",
+            ""
+          ]
+        },
+        {
+          "at": 250,
+          "removed": [],
+          "added": [
+            "    if (this.ambientSceneId !== scene.id) { this.ambientSceneId = scene.id; this.ambientClocks = new Map(); }"
+          ]
+        },
+        {
+          "at": 747,
+          "removed": [
+            "    if (!npcId || !scene.npcs?.some(npc => npc.id === npcId)"
+          ],
+          "added": [
+            "    if (!npcId || !findSceneSpeaker(scene, npcId)"
+          ]
+        },
+        {
+          "at": 756,
+          "removed": [],
+          "added": [
+            "    if (this.ambientSceneId !== scene.id) { this.ambientSceneId = scene.id; this.ambientClocks = new Map(); }"
+          ]
+        },
+        {
+          "at": 830,
+          "removed": [],
+          "added": [
+            "      let ambientTime = this.game.lastTime || 0;",
+            "      if (animation.freezeWhenPaused) {",
+            "        const clock = ambientLayerClock(this.ambientClocks.get(layer.id), ambientTime,",
+            "          Boolean(this.game.paused || this.game.menuOpen || this.game.devHome || this.game.editMode), true);",
+            "        this.ambientClocks.set(layer.id, clock); ambientTime = clock.elapsed;",
+            "      }"
+          ]
+        },
+        {
+          "at": 837,
+          "removed": [
+            "        : sceneLayerAnimationFrame(animation, talking ? speechTime : this.game.lastTime || 0);"
+          ],
+          "added": [
+            "        : sceneLayerAnimationFrame(animation, talking ? speechTime : ambientTime);"
+          ]
+        },
+        {
+          "at": 855,
+          "removed": [],
+          "added": [
+            "    if (animation?.freezeWhenPaused && this.ambientClocks) this.ambientClocks.delete(layer.id);"
+          ]
+        }
+      ]
+    },
+    "src/engine/SceneGeometry.js": {
+      "beforeSHA256": "31314dc212b1208e89da97fbed38a371d7608dc2b3ea3a50bc2e6e1a97caa9b2",
+      "afterSHA256": "db2039a4d8aceac5b67dddabacffa3bf9dcffd74b6fdb4c0cec2c7e7a0f24dee",
+      "hunks": [
+        {
+          "at": 308,
+          "removed": [],
+          "added": [
+            "",
+            "// A counter vendor retains its shipped hotspot ID and quest interactions.",
+            "export function findSceneSpeaker(scene, id) {",
+            "  return scene.npcs?.find(target => target.id === id)",
+            "    || scene.interactables?.find(target => target.id === id && target.dialogueSpeaker === true);",
+            "}"
+          ]
+        }
+      ]
+    },
+    "src/engine/SceneNpcSpeech.js": {
+      "beforeSHA256": "e9fc3c7c64f86ec326793aa178bbdda58ccc2808aca3d9ad1820083ab6b9317d",
+      "afterSHA256": "9a0e4fef464b932e309586fff04c84d6a15433af23be4394294a9f328ce635fa",
+      "hunks": [
+        {
+          "at": 13,
+          "removed": [
+            "      if (!config || !visible(layer) || !scene.npcs?.some(n => n.id === config.npcId)) continue;"
+          ],
+          "added": [
+            "      if (!config || !visible(layer) || !findSceneSpeaker(scene, config.npcId)) continue;"
+          ]
+        },
+        {
+          "at": 124,
+          "removed": [],
+          "added": [
+            "import {findSceneSpeaker} from './SceneGeometry.js';"
+          ]
+        }
+      ]
+    },
+    "test/baba-skeptical-animation.test.js": {
+      "beforeSHA256": "bbbaac409aa9ee3c1be61d749a04bbe0b1dafb9ee4c6b2e7fcb9652538702997",
+      "afterSHA256": "1441f47a70a06a0b0b088c3fef02b12b55e0c13e01111c75f3c71ef0f3a9a95d",
+      "hunks": [
+        {
+          "at": 82,
+          "removed": [
+            " const source='assets_src/chapter1/scenes/village_square/layers.json';const layers=JSON.parse(readFileSync(source));"
+          ],
+          "added": [
+            " const source='assets_src/chapter1/scenes/village_square/layers.json';const layers=JSON.parse(stripKiroOilIntegration(source,readFileSync(source)));"
+          ]
+        }
+      ]
+    },
+    "test/browser-smoke.test.js": {
+      "beforeSHA256": "e51233da5ce876ac1f57a279714c1fb95520a109c973c32650cfabda13dede4b",
+      "afterSHA256": "265e6d00833b09d21bd5e1aca88d7845bbbef9da50896c7c95b4a60d01d96c29",
+      "hunks": [
+        {
+          "at": 311,
+          "removed": [
+            "      const posterBefore = await page.screenshot({ clip: { x: 1090, y: 255, width: 85, height: 160 } });"
+          ],
+          "added": [
+            "      const posterBefore = await page.screenshot({ clip: { x: 1047, y: 255, width: 60, height: 153 } });"
+          ]
+        },
+        {
+          "at": 321,
+          "removed": [
+            "      assert.notDeepEqual(await page.screenshot({ clip: { x: 1090, y: 255, width: 85, height: 160 } }), posterBefore);"
+          ],
+          "added": [
+            "      assert.notDeepEqual(await page.screenshot({ clip: { x: 1047, y: 255, width: 60, height: 153 } }), posterBefore);"
+          ]
+        },
+        {
+          "at": 596,
+          "removed": [
+            "    const waterClip = { x: 670, y: 166, width: 45, height: 85 };"
+          ],
+          "added": [
+            "    const waterClip = { x: 650, y: 480, width: 70, height: 14 };"
+          ]
+        },
+        {
+          "at": 601,
+          "removed": [
+            "    // A new animation frame makes the restored/stateful water effect observable."
+          ],
+          "added": [
+            "    // Paint the repaired static pool; the retired tap stream is intentionally absent."
+          ]
+        },
+        {
+          "at": 605,
+          "removed": [
+            "      return game.renderer.sceneLayerVisible(game.currentScene.effects[0]);"
+          ],
+          "added": [
+            "      const pool = game.currentScene.foregroundLayers.find(layer => layer.asset === \"fountainShallowWater\");",
+            "      return game.renderer.sceneLayerVisible(pool) && !pool.animation && game.currentScene.effects.length === 0;"
+          ]
+        }
+      ]
+    },
+    "test/chapter1-fountain.test.js": {
+      "beforeSHA256": "7635040d136cc22d9a9ed57924a4f56330ac088ccea8dab80ed0fec1331ee617",
+      "afterSHA256": "c3284746767c76dda8320c1f94ef7e24aec83cd3937e43f8c6ae06d1746cd6b1",
+      "hunks": [
+        {
+          "at": 11,
+          "removed": [
+            "import { drawSceneEffect, streamPoint } from \"../src/engine/SceneEffects.js\";"
+          ],
+          "added": []
+        },
+        {
+          "at": 155,
+          "removed": [
+            "test(\"fountain stream follows saved visibility and remains within its authored nozzle/basin area\", () => {",
+            "  const effect = square.effects[0];"
+          ],
+          "added": [
+            "test(\"repaired fountain reveals only a static shallow pool and never the retired tap stream\", () => {",
+            "  assert.deepEqual(square.effects, []);",
+            "  const effect = square.foregroundLayers.find(layer => layer.asset === 'fountainShallowWater');",
+            "  assert.ok(effect);",
+            "  assert.equal(effect.animation, undefined);"
+          ]
+        },
+        {
+          "at": 165,
+          "removed": [
+            "  assert.deepEqual(streamPoint(effect.points, 0), effect.points[0]);",
+            "  assert.deepEqual(streamPoint(effect.points, 1), effect.points[3]);",
+            "  for (let t = 0; t <= 1; t += 0.1) {",
+            "    const point = streamPoint(effect.points, t);",
+            "    assert.ok(point.x >= 682 && point.x <= 704 && point.y >= 168 && point.y <= 243);",
+            "  }",
+            "  const frames = [];",
+            "  const ctx = { save() {}, restore() {}, beginPath() {}, stroke() {}, bezierCurveTo() {}, quadraticCurveTo() {},",
+            "    moveTo(x, y) { frames.push([x, y]); }, lineTo(x, y) { frames.push([x, y]); } };",
+            "  drawSceneEffect(ctx, effect, 0);",
+            "  const first = [...frames];",
+            "  frames.length = 0;",
+            "  drawSceneEffect(ctx, effect, 0.2);",
+            "  assert.notDeepEqual(frames, first);"
+          ],
+          "added": []
+        }
+      ]
+    },
+    "test/engine.test.js": {
+      "beforeSHA256": "aff976b91e0625fe07d8abedf216c981222c60bae75ebe91f85485910d7cd7e9",
+      "afterSHA256": "5e789622e69790dd4942cac3f229e98ff27002f75e0c2180a2821840dd940f24",
+      "hunks": [
+        {
+          "at": 477,
+          "removed": [
+            "    { x: 169, y: 333 },",
+            "    { x: 216, y: 332 },",
+            "    { x: 219, y: 431 },",
+            "    { x: 168, y: 434 }"
+          ],
+          "added": [
+            "    { x: 166, y: 324 },",
+            "    { x: 220, y: 325 },",
+            "    { x: 226, y: 437 },",
+            "    { x: 163, y: 438 }"
+          ]
+        },
+        {
+          "at": 3391,
+          "removed": [
+            "  assert.equal(assetManifest.scenes[scene.id][layer.asset], \"assets/chapter1/scenes/village_square/campaign-poster-v2.png\");"
+          ],
+          "added": [
+            "  assert.equal(assetManifest.scenes[scene.id][layer.asset], \"assets/chapter1/scenes/village_square/campaign-poster-c05.png\");"
+          ]
+        }
+      ]
+    },
+    "test/helpers/effect-repair-preservation.js": {
+      "beforeSHA256": "59ceef9498c80ca128a7fe3f44ae1f0f105f7b1fb328c886a6370677b7d5b5d4",
+      "afterSHA256": "c6f1239dbf40fed8daaed71055654256ca9e940733ce2b55bd05dcaac68f0be7",
+      "hunks": [
+        {
+          "at": 7,
+          "removed": [],
+          "added": [
+            "  source=stripSquareRedesign(path,source);"
+          ]
+        },
+        {
+          "at": 18,
+          "removed": [],
+          "added": [
+            "import {stripSquareRedesign} from './square-redesign-preservation.js';"
+          ]
+        }
+      ]
+    },
+    "test/kiro-talking-polishing.test.js": {
+      "beforeSHA256": "4fad71f13a046eab94b4d7a1182ba3bb3a9b53b18b968356abb44c536059651d",
+      "afterSHA256": "e09c75b35a7d1a744f0629bdfe03223bf7f014d26623151e620b627bc85422ea",
+      "hunks": [
+        {
+          "at": 1,
+          "removed": [],
+          "added": [
+            "import {restoreSquareSnapshot} from './helpers/square-redesign-preservation.js';"
+          ]
+        },
+        {
+          "at": 103,
+          "removed": [
+            "  const manifest=structuredClone(assetManifest);delete manifest.items['item.empty_rakia_bottle'];delete manifest.items['item.fountain_water_bottle'];for(const key of ['kiroOilScale','kiroOilHandover','mehanaWaiterTonyGlanceC05','mehanaWaiterTalkingPolishing','mehanaWaiterTalkingPolishingC07','mehanaWaiterListeningC07','mehanaWaiterListeningFinal'])delete manifest.scenes[scene.id][key];assert.equal(manifest.items['item.sunflower_oil'].icon,'assets/chapter1/items/kiro-bottle/oil-200ml-r07.png');manifest.items['item.sunflower_oil']=structuredClone(baseline.manifest.items['item.sunflower_oil']);assert.deepEqual(manifest,baseline.manifest);",
+            "  const runtime=structuredClone(sceneLayerGeometry);delete runtime[scene.id].foregroundLayers.find(l=>l.id===layer.id).speechAnimation;assert.deepEqual(runtime,baseline.runtimeScenes);"
+          ],
+          "added": [
+            "  const manifest=restoreSquareSnapshot('manifest',assetManifest);delete manifest.items['item.empty_rakia_bottle'];delete manifest.items['item.fountain_water_bottle'];for(const key of ['kiroOilScale','kiroOilHandover','mehanaWaiterTonyGlanceC05','mehanaWaiterTalkingPolishing','mehanaWaiterTalkingPolishingC07','mehanaWaiterListeningC07','mehanaWaiterListeningFinal'])delete manifest.scenes[scene.id][key];assert.equal(manifest.items['item.sunflower_oil'].icon,'assets/chapter1/items/kiro-bottle/oil-200ml-r07.png');manifest.items['item.sunflower_oil']=structuredClone(baseline.manifest.items['item.sunflower_oil']);assert.deepEqual(manifest,baseline.manifest);",
+            "  const runtime=restoreSquareSnapshot('runtime',sceneLayerGeometry);delete runtime[scene.id].foregroundLayers.find(l=>l.id===layer.id).speechAnimation;assert.deepEqual(runtime,baseline.runtimeScenes);"
+          ]
+        }
+      ]
+    },
+    "test/mehana-bottle.test.js": {
+      "beforeSHA256": "fe8548a2df705eac479fcaa98758ef857dff0c43acffa73c7fc26c934c893474",
+      "afterSHA256": "e9e91aa2360bc705fc152283f1bce8def6b0506a2144b10599181128bc9724f9",
+      "hunks": [
+        {
+          "at": 67,
+          "removed": [],
+          "added": [
+            "import {stripSquareRedesign} from './helpers/square-redesign-preservation.js';"
+          ]
+        },
+        {
+          "at": 72,
+          "removed": [
+            "  const data=readFileSync(path);assert.equal(createHash('sha1').update('blob '+data.length+'\\0').update(data).digest('hex'),objectId,path);"
+          ],
+          "added": [
+            "  const data=Buffer.from(stripSquareRedesign(path,readFileSync(path)));assert.equal(createHash('sha1').update('blob '+data.length+'\\0').update(data).digest('hex'),objectId,path);"
+          ]
+        }
+      ]
+    },
+    "tools/build-scene-layer-runtime.js": {
+      "beforeSHA256": "d2118e5e7ec670641dfb26c831734b3ad078003787f96767bd435528d4717692",
+      "afterSHA256": "62f03576cb473b7cb58ecc82ab9c9882dfb5f131b2a448ea90fe737dae59fe14",
+      "hunks": [
+        {
+          "at": 190,
+          "removed": [],
+          "added": [
+            "    ...(animation.freezeWhenPaused === true ? { freezeWhenPaused: true } : {}),"
+          ]
+        }
+      ]
+    }
+  },
+  "snapshots": {
+    "manifest": {
+      "before": {
+        "campaignPoster": "assets/chapter1/scenes/village_square/campaign-poster-v2.png",
+        "fountainForeground": "assets/chapter1/scenes/village_square/fountain-foreground-v1.png",
+        "electionSign": "assets/chapter1/scenes/village_square/election-sign-v1.png",
+        "journalistStanding": "assets/chapter1/characters/journalist/standing-v2.png",
+        "background": "assets/chapter1/scenes/village_square/background.png",
+        "oldMenChorusSeated": "assets/chapter1/characters/old_men_chorus/seated-pair-v1.png",
+        "posterBefore": "assets/chapter1/scenes/village_square/poster-before-v1.png",
+        "babaStoyankaSeated": "assets/chapter1/characters/baba_stoyanka/seated-v2.png",
+        "babaStoyankaIdleSeated": "assets/chapter1/characters/baba_stoyanka/idle-seated-v1.webp",
+        "babaStoyankaTalkSeated": "assets/chapter1/characters/baba_stoyanka/talk-seated-v1.webp",
+        "babaStoyankaDelightedSeated": "assets/chapter1/characters/baba_stoyanka/delighted-seated-v1.webp",
+        "babaStoyankaSkepticalSeated": "assets/chapter1/characters/baba_stoyanka/skeptical-seated-v1.webp",
+        "kioskPapersPile": "assets/chapter1/scenes/village_square/kiosk-papers-pile-v1.png",
+        "droppedBelongingsPile": "assets/chapter1/items/dropped-belongings-pile-v1.png"
+      },
+      "afterSHA256": "68b3a9e4564a27d03188e2c213f619ee2683cb14a4ac876deb98a1d0b8fe05ec"
+    },
+    "runtime": {
+      "before": {
+        "sceneId": "scene.chapter1.village_square",
+        "foregroundLayers": [
+          {
+            "id": "layer.square.fountain_foreground",
+            "asset": "fountainForeground",
+            "zIndex": 42,
+            "top": 0,
+            "left": 0
+          },
+          {
+            "id": "layer.square.baba_stoyanka_seated",
+            "asset": "babaStoyankaSeated",
+            "zIndex": 90,
+            "top": 330,
+            "left": 325,
+            "height": 122,
+            "animation": {
+              "asset": "babaStoyankaIdleSeated",
+              "frameWidth": 384,
+              "frameHeight": 384,
+              "frameCount": 25,
+              "columns": 5,
+              "frameDurationMs": 198,
+              "loop": true,
+              "contentBounds": {
+                "x": 132,
+                "y": 95,
+                "w": 119,
+                "h": 193
+              }
+            },
+            "stationaryLowerBody": {
+              "frameIndex": 0,
+              "fromY": 60,
+              "featherHeight": 6,
+              "animatedCutouts": [
+                [
+                  [
+                    43.5,
+                    56
+                  ],
+                  [
+                    47.5,
+                    56
+                  ],
+                  [
+                    55.5,
+                    119
+                  ],
+                  [
+                    51.5,
+                    119
+                  ]
+                ]
+              ]
+            },
+            "talkAnimation": {
+              "registrationBounds": {
+                "x": 132,
+                "y": 95,
+                "w": 119,
+                "h": 193
+              },
+              "asset": "babaStoyankaTalkSeated",
+              "frameWidth": 384,
+              "frameHeight": 384,
+              "frameCount": 25,
+              "columns": 5,
+              "frameDurationMs": 190,
+              "loop": true,
+              "contentBounds": {
+                "x": 132,
+                "y": 94,
+                "w": 119,
+                "h": 194
+              },
+              "npcId": "npc.baba_stoyanka"
+            },
+            "reactionAnimations": {
+              "skeptical_disapproval": {
+                "interpolateFrames": true,
+                "transitionDurationMs": 148,
+                "registrationBounds": {
+                  "x": 0,
+                  "y": 0,
+                  "w": 389,
+                  "h": 636
+                },
+                "asset": "babaStoyankaSkepticalSeated",
+                "frameWidth": 389,
+                "frameHeight": 636,
+                "frameCount": 36,
+                "columns": 6,
+                "frameDurationMs": 78.70370370370371,
+                "loop": false,
+                "contentBounds": {
+                  "x": 0,
+                  "y": 0,
+                  "w": 389,
+                  "h": 636
+                },
+                "npcId": "npc.baba_stoyanka"
+              },
+              "delighted_approval": {
+                "interpolateFrames": true,
+                "transitionDurationMs": 148,
+                "registrationBounds": {
+                  "x": 0,
+                  "y": 0,
+                  "w": 389,
+                  "h": 636
+                },
+                "asset": "babaStoyankaDelightedSeated",
+                "frameWidth": 389,
+                "frameHeight": 636,
+                "frameCount": 36,
+                "columns": 6,
+                "frameDurationMs": 74.07407407407408,
+                "loop": false,
+                "contentBounds": {
+                  "x": 0,
+                  "y": 0,
+                  "w": 389,
+                  "h": 636
+                },
+                "npcId": "npc.baba_stoyanka"
+              }
+            }
+          },
+          {
+            "id": "layer.square.old_men_chorus",
+            "asset": "oldMenChorusSeated",
+            "zIndex": 91,
+            "top": 322,
+            "left": 488,
+            "height": 99
+          },
+          {
+            "id": "layer.square.journalist",
+            "asset": "journalistStanding",
+            "zIndex": 46,
+            "top": 305,
+            "left": 930,
+            "height": 220,
+            "visibleWhenTargetId": "npc.journalist",
+            "hiddenWhenState": "chapter1Completed"
+          },
+          {
+            "id": "layer.square.election_sign",
+            "asset": "electionSign",
+            "zIndex": 30,
+            "top": 448,
+            "left": 205,
+            "width": 190,
+            "visibleWhenTargetId": "exit.square.to_election_booth"
+          },
+          {
+            "id": "layer.square.campaign_poster",
+            "asset": "campaignPoster",
+            "zIndex": 100,
+            "top": 0,
+            "left": 0,
+            "visibleWhenFlag": "campaignPosted"
+          }
+        ]
+      },
+      "afterSHA256": "29b9deac8784862e0cdcb7fb11f92a18242cd3b137ba3d502c0e62bb5d124e5c"
+    }
+  }
+}

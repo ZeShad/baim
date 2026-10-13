@@ -1,0 +1,50 @@
+{
+  "sourceSha256": "e787244e68ac05e1b752931cca18d048ba9d4f444df417b8675ed6b1d3706df6",
+  "sourceWidth": 1672,
+  "sourceHeight": 941,
+  "runtimeWidth": 1280,
+  "runtimeHeight": 720,
+  "mapping": "x * 1280 / sourceWidth; y * 720 / sourceHeight; whole canvas, no crop",
+  "derivatives": [
+    {
+      "name": "fountainForeground",
+      "path": "assets/chapter1/scenes/village_square/fountain-foreground-c05.png",
+      "sha256": "3a6fe32210467304424b221a2e0535245524956d27a8944aab6c899fb3cd156e",
+      "crop": null
+    },
+    {
+      "name": "flagReference",
+      "path": "assets_src/chapter1/scenes/village_square/redesign-c05/flag-reference-r01.png",
+      "sha256": "7022745580afad30f44a98239b780f4b7f456c9c72cd039fcc7baabe5ea74374",
+      "crop": {
+        "left": 852,
+        "top": 36,
+        "width": 72,
+        "height": 82
+      }
+    },
+    {
+      "name": "pepaReference",
+      "path": "assets_src/chapter1/scenes/village_square/redesign-c05/pepa-counter-reference-r01.png",
+      "sha256": "fc200f1ba609a668f998c6451c36a142a47b2b1cb41017afff5707a6809af94d",
+      "crop": {
+        "left": 1120,
+        "top": 320,
+        "width": 124,
+        "height": 136
+      }
+    },
+    {
+      "name": "shallowWater",
+      "path": "assets/chapter1/scenes/village_square/fountain-shallow-water-c05.png",
+      "sha256": "18ce9e2223f33a240e983eae6c2df13b2e902a9bf20f832c4cd1d89f6ff5fdde",
+      "crop": null
+    },
+    {
+      "name": "kioskCounter",
+      "path": "assets/chapter1/scenes/village_square/kiosk-counter-c05.png",
+      "sha256": "98d13ad75e1693d61c4724ef3910702b338d039eb341633708cc5cdd22a0be84",
+      "crop": null
+    }
+  ]
+}

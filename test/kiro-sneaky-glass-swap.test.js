@@ -39,7 +39,7 @@ test('Kiro plays once, returns to polishing frame zero, and restarts a full fres
   update(25000);
   for(let i=0;i<36;i++) {
     assert.equal(sceneLayerAnimationFrame(view(controller).animation,view(controller).elapsed),i);
-    update(131);
+    update(125);
   }
   assert.equal(view(controller).phase,'idle');assert.equal(view(controller).idleTime,0);
   assert.equal(view(controller).remainingMs,37500);assert.equal(calls,2);
@@ -50,9 +50,9 @@ test('Kiro plays once, returns to polishing frame zero, and restarts a full fres
 test('Menu/pause time counts neither toward the quiet interval nor toward an active variation', () => {
   const {controller,update}=fixture();update(15000);
   const before=view(controller);update(100000,{paused:true});assert.deepEqual(view(controller),before);
-  update(10000);update(131);const active=view(controller);
+  update(10000);update(125);const active=view(controller);
   update(100000,{paused:true});assert.deepEqual(view(controller),active);
-  update(131);assert.equal(view(controller).elapsed,262);
+  update(125);assert.equal(view(controller).elapsed,250);
 });
 
 test('Conversation takes priority on a due tick, cancels a playing occurrence, and never resumes it', () => {
@@ -132,10 +132,10 @@ test('Candidate geometry, original timing, source hashes and every fixed approve
   assert.equal(sha(readFileSync(root+candidate.source.storedFilename)),candidate.source.sourceZipSha256);
   assert.equal(sha(readFileSync(root+candidate.source.metadataFile)),candidate.source.metadataSha256);
   assert.equal(sha(readFileSync(candidate.import.runtime.asset)),candidate.import.derivedOutputHashes[candidate.import.runtime.asset]);
-  assert.equal(assetManifest.scenes[scene.id].mehanaWaiterSneakyGlassSwap,candidate.import.runtime.asset);
+  assert.equal(assetManifest.scenes[scene.id].mehanaWaiterSneakyGlassSwap,'assets/chapter1/characters/mehana_waiter/kiro-spitting-fixed-owner-export-c01.webp');
   assert.deepEqual([layer.left,layer.top,layer.height,layer.zIndex],[727,222,265,50]);
   assert.deepEqual([config.intervalMinMs,config.intervalMaxMs],[25000,50000]);
-  assert.equal(config.animation.loop,false);assert.equal(config.animation.frameCount*config.animation.frameDurationMs,4716);
-  assert.deepEqual(config.animation.contentBounds,{x:0,y:0,w:170,h:512});
+  assert.equal(config.animation.loop,false);assert.equal(config.animation.frameCount*config.animation.frameDurationMs,4500);
+  assert.deepEqual(config.animation.contentBounds,{x:0,y:0,w:262,h:614});
   for(const s of chapter1.scenes.filter(s=>s.id!==scene.id))assert.ok(s.foregroundLayers.every(l=>!l.idleVariation));
 });

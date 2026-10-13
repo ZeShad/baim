@@ -312,7 +312,7 @@ export const sceneLayerGeometry = {
         "asset": "oldMenChorusSeated",
         "zIndex": 91,
         "top": 322,
-        "left": 488,
+        "left": 580,
         "height": 99
       },
       {
@@ -341,6 +341,71 @@ export const sceneLayerGeometry = {
         "top": 0,
         "left": 0,
         "visibleWhenFlag": "campaignPosted"
+      },
+      {
+        "id": "layer.square.shallow_water",
+        "asset": "fountainShallowWater",
+        "zIndex": 41,
+        "top": 0,
+        "left": 0,
+        "visibleWhenFlag": "fountainRepaired"
+      },
+      {
+        "id": "layer.square.kiosk_counter",
+        "asset": "kioskCounterC05",
+        "zIndex": 30,
+        "top": 0,
+        "left": 0
+      },
+      {
+        "id": "layer.square.pepa_idle",
+        "asset": "squarePepaStill",
+        "zIndex": 89,
+        "top": 315,
+        "left": 1120,
+        "width": 140,
+        "height": 140,
+        "animation": {
+          "freezeWhenPaused": true,
+          "asset": "squarePepaIdle",
+          "frameWidth": 140,
+          "frameHeight": 140,
+          "frameCount": 36,
+          "columns": 6,
+          "frameDurationMs": 122,
+          "loop": true,
+          "contentBounds": {
+            "x": 0,
+            "y": 0,
+            "w": 140,
+            "h": 140
+          }
+        }
+      },
+      {
+        "id": "layer.square.flag_wind",
+        "asset": "squareFlagWind",
+        "zIndex": 99,
+        "top": 35,
+        "left": 850,
+        "width": 80,
+        "height": 90,
+        "animation": {
+          "freezeWhenPaused": true,
+          "asset": "squareFlagWind",
+          "frameWidth": 80,
+          "frameHeight": 90,
+          "frameCount": 64,
+          "columns": 8,
+          "frameDurationMs": 57,
+          "loop": true,
+          "contentBounds": {
+            "x": 0,
+            "y": 0,
+            "w": 80,
+            "h": 90
+          }
+        }
       }
     ]
   },
@@ -439,18 +504,24 @@ export const sceneLayerGeometry = {
           "intervalMaxMs": 50000,
           "animation": {
             "transitionDurationMs": 148,
+            "registrationBounds": {
+              "x": 46,
+              "y": 102,
+              "w": 170,
+              "h": 512
+            },
             "asset": "mehanaWaiterSneakyGlassSwap",
-            "frameWidth": 170,
-            "frameHeight": 512,
+            "frameWidth": 262,
+            "frameHeight": 614,
             "frameCount": 36,
             "columns": 6,
-            "frameDurationMs": 131,
+            "frameDurationMs": 125,
             "loop": false,
             "contentBounds": {
               "x": 0,
               "y": 0,
-              "w": 170,
-              "h": 512
+              "w": 262,
+              "h": 614
             }
           }
         }
@@ -594,46 +665,6 @@ export const sceneLayerGeometry = {
         }
       },
       {
-        "id": "layer.mehana.kaliakra_oil",
-        "asset": "kaliakraOil",
-        "zIndex": 30,
-        "top": 273,
-        "left": 1033,
-        "height": 65,
-        "hiddenWhenState": "hasSunflowerOil"
-      },
-      {
-        "id": "layer.mehana.water_jug",
-        "asset": "waterJug",
-        "zIndex": 30,
-        "top": 293,
-        "left": 1080,
-        "height": 50,
-        "hiddenWhenState": "hasGlassOfWater"
-      },
-      {
-        "id": "layer.mehana.table_group_left",
-        "asset": "tableGroupLeft",
-        "zIndex": 20,
-        "top": 0,
-        "left": 0
-      },
-      {
-        "id": "layer.mehana.table_group_right",
-        "asset": "tableGroupRight",
-        "zIndex": 20,
-        "top": 0,
-        "left": 0
-      },
-      {
-        "id": "layer.mehana.newspaper_left_table",
-        "asset": "todayNewspaper",
-        "zIndex": 19,
-        "top": 405,
-        "left": 400,
-        "width": 120
-      },
-      {
         "id": "layer.mehana.mitko_competition_glass",
         "asset": "mitkoCompetitionGlass",
         "zIndex": 18,
@@ -642,13 +673,6 @@ export const sceneLayerGeometry = {
         "height": 38,
         "visibleWhenFlag": "tonyChallengeStarted",
         "hiddenWhenState": "tonyVote"
-      },
-      {
-        "id": "layer.mehana.rear_chairs",
-        "asset": "mehanaRearChairs",
-        "zIndex": 40,
-        "top": 0,
-        "left": 0
       },
       {
         "id": "layer.mehana.counter_front",
@@ -666,6 +690,20 @@ export const sceneLayerGeometry = {
         "height": 34,
         "visibleWhenFlag": "tonyChallengeStarted",
         "hiddenWhenState": "tonyVote"
+      },
+      {
+        "id": "layer.mehana.tony_table_occluder",
+        "asset": "rightTablePlayerOccluder",
+        "zIndex": 10,
+        "top": 0,
+        "left": 0
+      },
+      {
+        "id": "layer.mehana.left_table_player_occluder",
+        "asset": "leftTablePlayerOccluder",
+        "zIndex": 20,
+        "top": 0,
+        "left": 0
       }
     ]
   },

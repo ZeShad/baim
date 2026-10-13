@@ -1,0 +1,30 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import sharp from 'sharp';
+import {readFileSync} from 'node:fs';
+import {createHash} from 'node:crypto';
+import {ambientLayerClock,sceneLayerAnimationFrame} from '../src/engine/Renderer.js';
+import {chapter1} from '../src/content/chapter1/index.js';
+import {assetManifest} from '../src/content/art/assetManifest.js';
+const square=chapter1.scenes.find(s=>s.id==='scene.chapter1.village_square');
+test('flag native timing, exact original sheet, bounded atlas and static background remain bound',async()=>{
+ const dir='assets_src/chapter1/scenes/village_square/redesign-c05/square-flag-wind-4s-web-c01';
+ const sha=p=>createHash('sha256').update(readFileSync(p)).digest('hex');
+ assert.equal(sha(dir+'/original.png'),'6aafc71fa212419b0a15ff6a84bcb14596b355bd3be0568dc8d0f40e24c51acc');
+ assert.equal(sha(assetManifest.scenes[square.id].background),'e59e6870fa2fba824d22cc0da8045d9643222d47ebe33e4500e506e5f1e57950');
+ const original=JSON.parse(readFileSync(dir+'/original.json')),layer=square.foregroundLayers.find(l=>l.id==='layer.square.flag_wind');
+ assert.equal(Object.values(original.frames).reduce((n,f)=>n+f.duration,0),3648);
+ assert.equal(layer.animation.frameCount,64);assert.equal(layer.animation.frameDurationMs,57);assert.equal(layer.animation.freezeWhenPaused,true);
+ const meta=await sharp(assetManifest.scenes[square.id].squareFlagWind).metadata();assert.equal(meta.width,640);assert.equal(meta.height,720);assert.equal(meta.hasAlpha,true);
+ assert.equal(sceneLayerAnimationFrame(layer.animation,3647),63);assert.equal(sceneLayerAnimationFrame(layer.animation,3648),0);
+});
+test('ambient flag clock freezes and resumes without a pause/menu or missing-art time jump',()=>{
+ let c=ambientLayerClock(null,100,false,true);assert.equal(c.elapsed,0);
+ c=ambientLayerClock(c,157,false,true);assert.equal(c.elapsed,57);
+ c=ambientLayerClock(c,200,true,true);assert.equal(c.elapsed,57);
+ c=ambientLayerClock(c,2000,true,true);assert.equal(c.elapsed,57);
+ c=ambientLayerClock(c,2050,false,true);assert.equal(c.elapsed,57);
+ c=ambientLayerClock(c,2107,false,true);assert.equal(c.elapsed,114);
+ c=ambientLayerClock(c,2200,false,false);assert.equal(c.elapsed,0);
+ c=ambientLayerClock(c,9000,false,true);assert.equal(c.elapsed,0);
+});

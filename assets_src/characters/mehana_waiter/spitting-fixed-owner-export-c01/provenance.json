@@ -1,0 +1,59 @@
+{
+  "candidateId": "kiro-spitting-fixed-owner-export-c01",
+  "status": "runtime_approved",
+  "ownerInstruction": "Replace clipping spitting-on-glass animation with supplied fixed export",
+  "source": [
+    {
+      "path": "assets_src/characters/mehana_waiter/spitting-fixed-owner-export-c01/original-export.zip",
+      "bytes": 11640908,
+      "sha256": "f09a943c2d56b78fa73d1478fad0c76190797ffa6756d3d4b2599a8603799125"
+    },
+    {
+      "path": "assets_src/characters/mehana_waiter/spitting-fixed-owner-export-c01/sprite--9px-frames-36-rows-6-cols-6.png",
+      "bytes": 11627270,
+      "sha256": "6e34999db11f918a9962fac1a2e9e12fb58295a8deb851ce77d099438f84b953"
+    },
+    {
+      "path": "assets_src/characters/mehana_waiter/spitting-fixed-owner-export-c01/sprite--9px-frames-36-rows-6-cols-6.json",
+      "bytes": 13306,
+      "sha256": "8b28c839f48de34196bbdf18f40d62f6e3ca70b068411679353c7ed0840cd350"
+    }
+  ],
+  "provider": {
+    "model": null,
+    "jobId": null,
+    "prompt": null,
+    "requestedDuration": null,
+    "spriteSize": null,
+    "note": "Not supplied; do not infer from filename/export geometry"
+  },
+  "measured": {
+    "frames": 36,
+    "frameWidth": 416,
+    "frameHeight": 976,
+    "durationsMs": 125,
+    "wholeDurationMs": 4500,
+    "selectedRange": "0-35 inclusive; all frames unchanged in order"
+  },
+  "runtime": {
+    "path": "assets/chapter1/characters/mehana_waiter/kiro-spitting-fixed-owner-export-c01.webp",
+    "sha256": "c59c1aab94611c79419be23f62880066a48f0b8086d8b3a5fb17c432d9cebf73",
+    "frameWidth": 262,
+    "frameHeight": 614,
+    "columns": 6,
+    "frames": 36,
+    "frameDurationMs": 125,
+    "loop": false,
+    "registrationBounds": {
+      "x": 46,
+      "y": 102,
+      "w": 170,
+      "h": 512
+    },
+    "recipe": "Per-frame Lanczos resize to262x614, lossless WebP; no cropping, frame deletion, retiming, body deformation or regeneration",
+    "alignment": "First-frame alpha bounds aligned approximately to original c02 head/feet at unchanged layer727,222,height265; verify visual transitions"
+  },
+  "preservation": "Original c02 export/runtime and all accepted Kiro speaking/listening/handover/glance remain unchanged",
+  "approval": "Owner accepted revision3 actual-gameplay visuals and separately approved commit/push/PR/merge-if-green and the reviewed local verification/cleanup bundle on2026-10-12",
+  "approvedAt": "2026-10-12"
+}

@@ -1,0 +1,25 @@
+{
+  "fountainForeground": {
+    "path": "M 490,249 Q 512,250 507,266 L 495,280 Q 500,285 508,289 L 523,313 L 541,328 L 552,336 L 558,332 L 565,335 L 563,348 L 554,355 L 553,399 L 548,440 L 550,486 L 556,490 L 570,490 L 570,482 Q 749,474 870,455 Q 912,462 930,482 L 922,521 Q 899,550 807,563 Q 623,590 474,567 L 433,562 L 403,548 L 389,517 L 388,472 Q 402,450 464,440 L 474,417 L 477,390 L 486,363 L 480,343 L 469,324 L 470,304 L 475,291 L 481,286 L 481,277 L 476,275 L 478,266 Z",
+    "output": "assets/chapter1/scenes/village_square/fountain-foreground-c05.png"
+  },
+  "flagReference": {
+    "path": "M 862,45 Q 871,51 887,53 Q 901,56 905,61 L 908,67 L 908,76 L 910,91 L 909,103 Q 900,98 891,99 L 879,97 L 863,91 Z",
+    "crop": {"left":852,"top":36,"width":72,"height":82},
+    "output": "assets_src/chapter1/scenes/village_square/redesign-c05/flag-reference-r01.png"
+  },
+  "pepaReference": {
+    "path": "M 1131,437 L 1132,426 L 1136,415 L 1141,409 L 1142,397 L 1140,391 L 1144,384 L 1149,381 L 1152,379 L 1155,371 L 1152,369 L 1154,364 L 1160,360 L 1163,350 L 1164,341 L 1169,335 L 1177,334 L 1183,337 L 1186,331 L 1193,332 L 1201,338 L 1211,341 L 1222,347 L 1229,355 L 1225,365 L 1212,370 L 1207,374 L 1212,383 L 1218,388 L 1224,399 L 1228,415 L 1228,432 L 1221,442 L 1202,444 L 1193,438 L 1184,441 L 1172,436 L 1162,441 L 1148,439 Z",
+    "crop": {"left":1120,"top":320,"width":124,"height":136},
+    "output": "assets_src/chapter1/scenes/village_square/redesign-c05/pepa-counter-reference-r01.png"
+  },
+  "shallowWater": {
+    "path": "M 556,477 Q 675,460 808,473 L 854,480 Q 860,486 848,488 Q 715,511 555,492 Z",
+    "source": "assets_src/chapter1/scenes/village_square/redesign-c05/repaired-water-edit-r01.png",
+    "output": "assets/chapter1/scenes/village_square/fountain-shallow-water-c05.png"
+  },
+  "kioskCounter": {
+    "path": "M 1027,432 L 1051,426 L 1082,432 L 1090,437 L 1105,434 L 1119,439 L 1133,434 L 1155,439 L 1172,436 L 1187,444 L 1205,441 L 1223,446 L 1240,447 L 1280,441 L 1280,626 L 1001,626 Z",
+    "output": "assets/chapter1/scenes/village_square/kiosk-counter-c05.png"
+  }
+}

@@ -5,6 +5,7 @@ const fixture=JSON.parse(readFileSync(new URL('../fixtures/effect-repair-reviewe
 const sha=value=>createHash('sha256').update(value).digest('hex');
 // Normalize only this exact repair before the immutable PR54/older comparisons.
 export function stripEffectRepair(path,source) {
+  source=stripSquareRedesign(path,source);
   const record=fixture.records[path];if(!record)return source;
   source=source.toString();assert.equal(sha(source),record.afterSHA256,'bound effect repair: '+path);
   const lines=source.split('\n');
@@ -15,3 +16,4 @@ export function stripEffectRepair(path,source) {
   const original=lines.join('\n');assert.equal(sha(original),record.beforeSHA256,'fixed PR54 baseline: '+path);
   return original;
 }
+import {stripSquareRedesign} from './square-redesign-preservation.js';

@@ -28,7 +28,8 @@ export const fountainUseRules = [
   }
 ];
 
-export const fountainItemRules = [
+// Both targets reference these same rules: one reusable container, explicit Use only.
+export const fountainRefillRules = [
   {
     itemId: "item.empty_rakia_bottle",
     requirements: { items: ["item.empty_rakia_bottle"], flags: ["fountainRepaired"], state: active },
@@ -39,23 +40,39 @@ export const fountainItemRules = [
     itemId: "item.empty_rakia_bottle",
     requirements: { items: ["item.empty_rakia_bottle"], notFlags: ["fountainRepaired"], state: active },
     messageKey: "bottle.no_flow", reject: true
-  },
+  }
+];
+
+export const fountainRepairSequence = {
+  id: "statue-fountain-repair", sceneId: "scene.chapter1.village_square",
+  type: "fade", frames: [], durationMs: 850, commitAtMs: 350, revealAtMs: 500,
+  requiredAssets: ["background", "fountainShallowWater", "fountainForeground"]
+};
+
+export const statueItemRules = [
+  ...fountainRefillRules,
   {
     itemId: "item.sunflower_oil",
-    requirements: { flags: ["fountainValveOiled"] },
-    messageKey: "fountain.oil.already"
+    requirements: { flags: ["fountainRepaired"] },
+    messageKey: "fountain.oil.already", reject: true
   },
   {
     itemId: "item.sunflower_oil",
     requirements: { items: ["item.sunflower_oil"], notFlags: ["fountainRepaired"], state: active },
+    sceneSequence: fountainRepairSequence.id,
     effects: [diagnosed, clue, { type: "replaceItem", itemId: "item.sunflower_oil", withItemId: "item.empty_rakia_bottle" },
-      { type: "setFlag", key: "fountainValveOiled" }],
+      { type: "setFlag", key: "fountainValveOiled" }, { type: "setFlag", key: "fountainRepaired" }],
     messageKey: "fountain.oil.applied"
   },
   ...["item.glass_of_water", "item.rakia", "item.village_wine"].map(itemId => ({
-    itemId, requirements: { state: active, notFlags: ["fountainRepaired"] },
-    effects: [diagnosed, clue], messageKey: "fountain.wrong_liquid", reject: true
+    itemId, messageKey: "fountain.wrong_liquid", reject: true
   }))
+];
+
+export const fountainItemRules = [
+  ...fountainRefillRules,
+  { itemId: "item.sunflower_oil", messageKey: "fountain.oil.statue_only", reject: true },
+  ...statueItemRules.filter(rule => ["item.glass_of_water", "item.rakia", "item.village_wine"].includes(rule.itemId))
 ];
 
 export const oldMenRules = [

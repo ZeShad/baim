@@ -1,6 +1,6 @@
 {
   "sceneId": "scene.chapter1.village_square",
-  "sourceBackground": "assets/chapter1/scenes/village_square/background.png",
+  "sourceBackground": "assets/chapter1/scenes/village_square/background-redesign-c05.png",
   "zScale": {
     "frontmost": 0,
     "horizon": 100
@@ -20,7 +20,7 @@
       "id": "layer.square.fountain_foreground",
       "enabled": true,
       "asset": "fountainForeground",
-      "output": "assets/chapter1/scenes/village_square/fountain-foreground-v1.png",
+      "output": "assets/chapter1/scenes/village_square/fountain-foreground-c05.png",
       "left": 0,
       "top": 0,
       "zIndex": 42
@@ -38,7 +38,26 @@
         "frameIndex": 0,
         "fromY": 60,
         "featherHeight": 6,
-        "animatedCutouts": [[[43.5,56],[47.5,56],[55.5,119],[51.5,119]]]
+        "animatedCutouts": [
+          [
+            [
+              43.5,
+              56
+            ],
+            [
+              47.5,
+              56
+            ],
+            [
+              55.5,
+              119
+            ],
+            [
+              51.5,
+              119
+            ]
+          ]
+        ]
       },
       "animation": {
         "asset": "babaStoyankaIdleSeated",
@@ -89,8 +108,18 @@
           "interpolateFrames": true,
           "transitionDurationMs": 148,
           "loop": false,
-          "contentBounds": { "x": 0, "y": 0, "w": 389, "h": 636 },
-          "registrationBounds": { "x": 0, "y": 0, "w": 389, "h": 636 }
+          "contentBounds": {
+            "x": 0,
+            "y": 0,
+            "w": 389,
+            "h": 636
+          },
+          "registrationBounds": {
+            "x": 0,
+            "y": 0,
+            "w": 389,
+            "h": 636
+          }
         },
         "delighted_approval": {
           "npcId": "npc.baba_stoyanka",
@@ -125,7 +154,7 @@
       "output": "assets/chapter1/characters/old_men_chorus/seated-pair-v1.png",
       "zIndex": 91,
       "top": 322,
-      "left": 488,
+      "left": 580,
       "height": 99
     },
     {
@@ -155,11 +184,79 @@
       "id": "layer.square.campaign_poster",
       "enabled": true,
       "asset": "campaignPoster",
-      "output": "assets/chapter1/scenes/village_square/campaign-poster-v2.png",
+      "output": "assets/chapter1/scenes/village_square/campaign-poster-c05.png",
       "left": 0,
       "top": 0,
       "zIndex": 100,
       "visibleWhenFlag": "campaignPosted"
+    },
+    {
+      "id": "layer.square.shallow_water",
+      "enabled": true,
+      "asset": "fountainShallowWater",
+      "output": "assets/chapter1/scenes/village_square/fountain-shallow-water-c05.png",
+      "left": 0,
+      "top": 0,
+      "zIndex": 41,
+      "visibleWhenFlag": "fountainRepaired"
+    },
+    {
+      "id": "layer.square.kiosk_counter",
+      "enabled": true,
+      "asset": "kioskCounterC05",
+      "output": "assets/chapter1/scenes/village_square/kiosk-counter-c05.png",
+      "left": 0,
+      "top": 0,
+      "zIndex": 30
+    },
+    {
+      "id": "layer.square.pepa_idle",
+      "enabled": true,
+      "asset": "squarePepaStill",
+      "output": "assets/chapter1/scenes/village_square/pepa-idle-hydra-c14-r03-static.png",
+      "left": 1120,
+      "top": 315,
+      "width": 140,
+      "height": 140,
+      "zIndex": 89,
+      "animation": {
+        "asset": "squarePepaIdle",
+        "frameWidth": 140,
+        "frameHeight": 140,
+        "frameCount": 36,
+        "columns": 6,
+        "frameDurationMs": 122,
+        "loop": true,
+        "freezeWhenPaused": true,
+        "contentBounds": {"x": 0, "y": 0, "w": 140, "h": 140}
+      }
+    },
+    {
+      "id": "layer.square.flag_wind",
+      "enabled": true,
+      "asset": "squareFlagWind",
+      "output": "assets/chapter1/scenes/village_square/flag-wind-c01.png",
+      "left": 850,
+      "top": 35,
+      "width": 80,
+      "height": 90,
+      "zIndex": 99,
+      "animation": {
+        "asset": "squareFlagWind",
+        "frameWidth": 80,
+        "frameHeight": 90,
+        "frameCount": 64,
+        "columns": 8,
+        "frameDurationMs": 57,
+        "loop": true,
+        "freezeWhenPaused": true,
+        "contentBounds": {
+          "x": 0,
+          "y": 0,
+          "w": 80,
+          "h": 90
+        }
+      }
     }
   ]
 }

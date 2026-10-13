@@ -11,26 +11,27 @@ test('mehana redesign preserves the approved Tony animation layer with owner-req
  assert.deepEqual(layers.layers.find(l=>l.id===baseline.tony.id),{...baseline.tony,left:877,top:296,height:320});
 });
 test('mehana full-canvas foregrounds preserve real transparency and room resolution',async()=>{
- const keys=['background','tableGroupLeft','tableGroupRight','mehanaRearChairs','mehanaCounterFront','mehanaCellarHatch'];
+ const keys=['background','tonyTableOccluder','mehanaCounterFront','mehanaCellarHatch'];
  for(const key of keys){const path=assetManifest.scenes['scene.chapter1.mehana'][key],im=sharp(path),meta=await im.metadata();assert.deepEqual([meta.width,meta.height],[1280,720]);if(key!=='background'){const {data,info}=await im.ensureAlpha().raw().toBuffer({resolveWithObject:true});assert.equal(data[3],0);assert.ok(Array.from(data.filter((_,i)=>i%info.channels===3)).some(a=>a>0),key);}}
 });
 test('new furniture depth retains conditional oil, water, newspaper, both contest glasses and cellar semantics',()=>{
  const scene=chapter1.scenes.find(s=>s.id==='scene.chapter1.mehana');const layer=id=>scene.foregroundLayers.find(l=>l.id==='layer.mehana.'+id);
- assert.equal(layer('kaliakra_oil').hiddenWhenState,'hasSunflowerOil');assert.equal(layer('water_jug').hiddenWhenState,'hasGlassOfWater');assert.equal(layer('newspaper_left_table').asset,'todayNewspaper');
+ for(const id of ['kaliakra_oil','water_jug','newspaper_left_table','rear_chairs','table_group_left','table_group_right'])assert.equal(layer(id),undefined);
+ for(const id of ['oil','water_jug','newspaper'])assert.equal(scene.interactables.find(t=>t.id==='hotspot.mehana.'+id).requirements.disabled,true);
  for(const id of ['mitko_competition_glass','tony_competition_glass']){assert.equal(layer(id).visibleWhenFlag,'tonyChallengeStarted');assert.equal(layer(id).hiddenWhenState,'tonyVote');}
  assert.equal(scene.interactables.find(i=>i.id==='hotspot.mehana.cellar_hatch').useRules[0].reject,true);
  assert.equal(scene.interactables.find(i=>i.id==='hotspot.mehana.cellar_hatch').requirements.disabled,true);
  assert.equal(JSON.parse(readFileSync('assets_src/chapter1/scenes/mehana/layers.json')).layers.find(l=>l.id==='layer.mehana.cellar_hatch_preserved').enabled,false);
  assert.equal(scene.interactables.find(i=>i.id==='hotspot.mehana.ballot_box').requirements.disabled,true);
- assert.ok(layer('counter_front').zIndex<layer('waiter_idle').zIndex);assert.ok(layer('table_group_right').zIndex<layer('tony_fridge_seated').zIndex);
+ assert.ok(layer('counter_front').zIndex<layer('waiter_idle').zIndex);assert.ok(layer('tony_table_occluder').zIndex<layer('tony_fridge_seated').zIndex);
 });
-test('the room omits counter interiors only where its always-enabled foreground restores full coverage',async()=>{
+test('the room retains the complete opaque painting and counter occlusion is bounded to Kiro',async()=>{
  const map=assetManifest.scenes['scene.chapter1.mehana'];
  const room=await sharp(map.background).ensureAlpha().raw().toBuffer();
  const counter=await sharp(map.mehanaCounterFront).ensureAlpha().raw().toBuffer();
- let holes=0;
- for(let i=3;i<room.length;i+=4){if(room[i]===0){holes++;assert.equal(counter[i],255,'every room hole must be covered fully by the counter');}if(counter[i]===255)assert.equal(room[i],0,'counter interiors must be separated from the room');}
- assert.ok(holes>30000,'counter must be an independent asset, not a duplicated background decoration');
+ let retained=0;
+ for(let y=0;y<720;y++)for(let x=0;x<1280;x++){const i=(y*1280+x)*4;assert.equal(room[i+3],255,'no obsolete counter holes');if(x<690||x>=850||y<343||y>=505)assert.equal(counter[i+3],0,'counter cannot mask the player aisle');else if(counter[i+3])retained++;}
+ assert.ok(retained>15000,'Kiro still has a foreground counter');
  const source=JSON.parse(readFileSync('assets_src/chapter1/scenes/mehana/layers.json')).layers.find(l=>l.id==='layer.mehana.counter_front');
  assert.equal(source.enabled,true);assert.equal(source.visibleWhenFlag,undefined);assert.equal(source.hiddenWhenState,undefined);
 });
