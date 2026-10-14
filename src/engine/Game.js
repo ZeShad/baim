@@ -1802,6 +1802,9 @@ export class Game {
       this.protectCurrentAssetWorkingSet();
       this.save();
       this.scheduleAdjacentScenePrefetch(this.currentScene);
+    } catch (error) {
+      // A superseded load no longer belongs to this game/transition.
+      if (this.sceneLoadToken === sceneLoadToken) throw error;
     } finally {
       if (this.sceneLoadToken === sceneLoadToken) this.sceneTransitionPending = false;
     }
@@ -1822,6 +1825,12 @@ export class Game {
   }
 
   reset() {
+    // Invalidate old continuations before replacing state or clearing storage.
+    this.sceneLoadToken = null;
+    this.sceneTransitionPending = false;
+    this.dialogue.close();
+    this.dialogueChoicePointerLock = null;
+    this.npcDialogueSpeech = null;
     this.sceneAction?.reset(); this.sceneActionEffect = null;
     this.state = this.saveSystem.reset();
     this.localization.setLanguage(this.state.language);
@@ -2920,9 +2929,10 @@ node tools/build-external-runtime-staging.js</pre>
       panel.appendChild(entries);
     }
     const choiceNode = node.choicesFrom ? dialogue?.nodes?.[node.choicesFrom] : node;
+    const entry = this.dialogue.entry;
     const choices = element("div", "dialogue-choice-list");
     for (const choice of (choiceNode?.choices || []).filter((candidate) => this.dialogueChoiceAvailable(candidate))) {
-      choices.appendChild(button(this.t(choice.textKey), (event) => this.chooseDialogueChoice(choice, event)));
+      choices.appendChild(button(this.t(choice.textKey), (event) => this.chooseDialogueChoice(choice, event, entry)));
     }
     if (choices.childElementCount) panel.appendChild(choices);
     return panel;
@@ -3008,7 +3018,14 @@ node tools/build-external-runtime-staging.js</pre>
     return bubble;
   }
 
-  chooseDialogueChoice(choice, event) {
+  chooseDialogueChoice(choice, event, entry = this.dialogue.entry) {
+    // Content choice objects are shared across sessions. Bind UI callbacks to
+    // the actual node entry, including re-entry into the same node after Restart.
+    if (!entry || entry !== this.dialogue.entry) return false;
+    const node = this.dialogue.getNode();
+    const dialogue = this.content.dialogues[this.dialogue.current?.id];
+    const choiceNode = node?.choicesFrom ? dialogue?.nodes?.[node.choicesFrom] : node;
+    if (!choiceNode?.choices?.includes(choice)) return false;
     if (this.sceneAction?.active || !this.dialogueChoiceAvailable(choice)) return false;
     if (this.dialogueChoicePointerLock !== null && event?.detail !== 0) return false;
     if (this.dialogue.choose(choice) === false) return false;

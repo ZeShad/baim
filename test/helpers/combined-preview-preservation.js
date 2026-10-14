@@ -1,3 +1,4 @@
+import {stripRestartLifecycle} from './restart-lifecycle-preservation.js';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {createHash} from 'node:crypto';
@@ -12,7 +13,7 @@ function invert(fixture,path,source){
  return record.before;
 }
 // Always remove the newest exact change first. Unknown bytes fail, never bypass.
-export function stripCombinedPreview(path,source){return invert(combined,path,invert(repair,path,invert(counter,path,source)));}
+export function stripCombinedPreview(path,source){return invert(combined,path,invert(repair,path,invert(counter,path,stripRestartLifecycle(path,source))));}
 export function restoreCombinedSnapshot(kind,value){
  const newest=counter.snapshots?.[kind];
  if(newest){assert.equal(sha(JSON.stringify(value)),newest.afterSHA256,'exact counter occlusion '+kind);value=newest.before;}

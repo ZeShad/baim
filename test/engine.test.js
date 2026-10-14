@@ -1546,15 +1546,18 @@ test("the pointer gesture that opens a dialogue cannot also choose its first opt
   let choices = 0;
   let renders = 0;
   game.dialogueChoicePointerLock = 7;
-  game.dialogue = { choose: () => { choices += 1; } };
+  const choice = { effect: {}, next: "start" };
+  game.content = { dialogues: { test: { nodes: { start: { choices: [choice] } } } } };
+  game.dialogue = new DialogueSystem(game.content.dialogues, null, () => { choices += 1; });
+  game.dialogue.start("test");
   game.renderUi = () => { renders += 1; };
 
-  assert.equal(game.chooseDialogueChoice({}, { detail: 1 }), false);
+  assert.equal(game.chooseDialogueChoice(choice, { detail: 1 }), false);
   assert.equal(choices, 0);
   assert.equal(renders, 0);
 
   game.dialogueChoicePointerLock = null;
-  assert.equal(game.chooseDialogueChoice({}, { detail: 1 }), true);
+  assert.equal(game.chooseDialogueChoice(choice, { detail: 1 }), true);
   assert.equal(choices, 1);
   assert.equal(renders, 1);
 });
