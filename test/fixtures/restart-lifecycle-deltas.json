@@ -1,0 +1,142 @@
+{
+  "baseline": "f7b2f4d6cf15c511e43f3820221f0cb5733b49f7",
+  "scope": "Exact proposed restart-safety delta; publication not approved",
+  "records": {
+    "src/engine/Game.js": {
+      "beforeSHA256": "73b11f19ad1f587a028cd832bddc8bab4d7a3c3a9af79fc36d8d35912813b41f",
+      "afterSHA256": "2571b5831443b3ff19ecb7a7c52aba3ef3eaa48a67ec60df92dc36571272719c",
+      "hunks": [
+        {
+          "at": 1804,
+          "removed": [],
+          "added": [
+            "    } catch (error) {",
+            "      // A superseded load no longer belongs to this game/transition.",
+            "      if (this.sceneLoadToken === sceneLoadToken) throw error;"
+          ]
+        },
+        {
+          "at": 1827,
+          "removed": [],
+          "added": [
+            "    // Invalidate old continuations before replacing state or clearing storage.",
+            "    this.sceneLoadToken = null;",
+            "    this.sceneTransitionPending = false;",
+            "    this.dialogue.close();",
+            "    this.dialogueChoicePointerLock = null;",
+            "    this.npcDialogueSpeech = null;"
+          ]
+        },
+        {
+          "at": 2931,
+          "removed": [],
+          "added": [
+            "    const entry = this.dialogue.entry;"
+          ]
+        },
+        {
+          "at": 2934,
+          "removed": [
+            "      choices.appendChild(button(this.t(choice.textKey), (event) => this.chooseDialogueChoice(choice, event)));"
+          ],
+          "added": [
+            "      choices.appendChild(button(this.t(choice.textKey), (event) => this.chooseDialogueChoice(choice, event, entry)));"
+          ]
+        },
+        {
+          "at": 3020,
+          "removed": [
+            "  chooseDialogueChoice(choice, event) {"
+          ],
+          "added": [
+            "  chooseDialogueChoice(choice, event, entry = this.dialogue.entry) {",
+            "    // Content choice objects are shared across sessions. Bind UI callbacks to",
+            "    // the actual node entry, including re-entry into the same node after Restart.",
+            "    if (!entry || entry !== this.dialogue.entry) return false;",
+            "    const node = this.dialogue.getNode();",
+            "    const dialogue = this.content.dialogues[this.dialogue.current?.id];",
+            "    const choiceNode = node?.choicesFrom ? dialogue?.nodes?.[node.choicesFrom] : node;",
+            "    if (!choiceNode?.choices?.includes(choice)) return false;"
+          ]
+        }
+      ]
+    },
+    "src/engine/DialogueSystem.js": {
+      "beforeSHA256": "58959bb2436802a08e3f9e166bf8051c1f74b544f3c6bd8fddce4a0b11266b8b",
+      "afterSHA256": "a66600e4e2dcd24a85bd56e5cbd22d9c6d1afae5dcb79d2a461c43fde8763cb5",
+      "hunks": [
+        {
+          "at": 32,
+          "removed": [],
+          "added": [
+            "    if (!this.current || !choice) return false;"
+          ]
+        }
+      ]
+    },
+    "test/engine.test.js": {
+      "beforeSHA256": "ff62fa433fe30e1ec4715c8d3fdb6774a6e0501ea86ff4a13ae757bc7bb5d283",
+      "afterSHA256": "9be1fff9de88447c0d93487310339ecdb4dc5a8d95a0f9189a478a52b52f8855",
+      "hunks": [
+        {
+          "at": 1548,
+          "removed": [
+            "  game.dialogue = { choose: () => { choices += 1; } };"
+          ],
+          "added": [
+            "  const choice = { effect: {}, next: \"start\" };",
+            "  game.content = { dialogues: { test: { nodes: { start: { choices: [choice] } } } } };",
+            "  game.dialogue = new DialogueSystem(game.content.dialogues, null, () => { choices += 1; });",
+            "  game.dialogue.start(\"test\");"
+          ]
+        },
+        {
+          "at": 1554,
+          "removed": [
+            "  assert.equal(game.chooseDialogueChoice({}, { detail: 1 }), false);"
+          ],
+          "added": [
+            "  assert.equal(game.chooseDialogueChoice(choice, { detail: 1 }), false);"
+          ]
+        },
+        {
+          "at": 1559,
+          "removed": [
+            "  assert.equal(game.chooseDialogueChoice({}, { detail: 1 }), true);"
+          ],
+          "added": [
+            "  assert.equal(game.chooseDialogueChoice(choice, { detail: 1 }), true);"
+          ]
+        }
+      ]
+    },
+    "test/effect-failure.test.js": {
+      "beforeSHA256": "ed05c7d5dcc56282d31aa47bc985c7c0a9ec03a48c3f725265d5f7a068760d39",
+      "afterSHA256": "1b7dc315fbfaae97337891f9892fc7c5f77c323877da9f19f67f246514b67b7e",
+      "hunks": [
+        {
+          "at": 62,
+          "removed": [
+            "  g.dialogue=new DialogueSystem({dialogue:{nodes:{start:{},reward:{}}}},null,e=>g.applyDialogueEffect(e));"
+          ],
+          "added": [
+            "  const choice={effect:{effects:[...prefix,replace]},next};",
+            "  g.content={dialogues:{dialogue:{nodes:{start:{choices:[choice]},reward:{}}}}};",
+            "  let attempts=0;",
+            "  g.dialogue=new DialogueSystem(g.content.dialogues,null,e=>{attempts++;return g.applyDialogueEffect(e);});"
+          ]
+        },
+        {
+          "at": 67,
+          "removed": [
+            "  assert.equal(g.chooseDialogueChoice({effect:{effects:[...prefix,replace]},next},{detail:0}),false);"
+          ],
+          "added": [
+            "  assert.equal(g.chooseDialogueChoice(choice,{detail:0}),false);",
+            "  assert.equal(attempts,1,'valid choice reaches real effect rollback');"
+          ]
+        }
+      ]
+    }
+  }
+}

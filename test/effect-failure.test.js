@@ -60,9 +60,13 @@ test('intentional reject effects and successful messaging still apply',()=>{
 });
 for(const next of [undefined,'reward']) test('failed dialogue choice does not advance or close '+next,()=>{
   const g=gameFor(context({inventory:[]}));g.player.speaking=true;
-  g.dialogue=new DialogueSystem({dialogue:{nodes:{start:{},reward:{}}}},null,e=>g.applyDialogueEffect(e));
+  const choice={effect:{effects:[...prefix,replace]},next};
+  g.content={dialogues:{dialogue:{nodes:{start:{choices:[choice]},reward:{}}}}};
+  let attempts=0;
+  g.dialogue=new DialogueSystem(g.content.dialogues,null,e=>{attempts++;return g.applyDialogueEffect(e);});
   g.dialogue.start('dialogue');const entry=g.dialogue.entry;
-  assert.equal(g.chooseDialogueChoice({effect:{effects:[...prefix,replace]},next},{detail:0}),false);
+  assert.equal(g.chooseDialogueChoice(choice,{detail:0}),false);
+  assert.equal(attempts,1,'valid choice reaches real effect rollback');
   assert.equal(g.dialogue.entry,entry);assert.equal(g.dialogue.current.nodeId,'start');assert.equal(g.player.speaking,true);
 });
 test('failed pickup rolls back item grant and take flags',()=>{
