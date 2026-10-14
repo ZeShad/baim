@@ -1,0 +1,30 @@
+{
+  "candidate": "mitko-walk-toward-loop-4s-web-c01",
+  "status": "runtime_review",
+  "date": "2026-10-14",
+  "ownerSourceAcceptance": "approved",
+  "originalZip": "mitko-walk-toward-loop-4s-web-c01.zip",
+  "sha256": "b1c8ae2333a1c4751dace02f2868ee751d70f8067c57c4631d3355724c26b455",
+  "reference": "mitko-toward-rest-still-r01",
+  "referenceSha256": "c110d14d3f9ebc81927d2bc6ef27e55f5b761f6784e0a7a853808a3eaeb877f4",
+  "requestedDurationMs": 4000,
+  "measuredFrames": 64,
+  "measuredFrameMs": 59,
+  "measuredDurationMs": 3776,
+  "jobId": null,
+  "jobIdUnavailableReason": "Owner supplied local website ZIP without result ID",
+  "route": "manual Ludo Animate",
+  "observedSetup": {
+    "model": "Hydra",
+    "durationSeconds": 4,
+    "animationMargin": "Auto",
+    "maxFrames": 64,
+    "spriteSize": "Max",
+    "loop": true,
+    "trimWhitespace": false,
+    "displayedCredits": 12
+  },
+  "settingsLimit": "Screenshot is setup evidence, not independent job settings or billed charge",
+  "runtimeApproval": false,
+  "publicationApproval": false
+}

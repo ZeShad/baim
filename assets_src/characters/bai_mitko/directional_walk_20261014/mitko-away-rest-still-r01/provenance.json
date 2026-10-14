@@ -1,0 +1,116 @@
+{
+  "candidate": "mitko-away-rest-still-r01",
+  "date": "2026-10-14",
+  "tool": "built-in image_gen",
+  "approval": "Owner replied approved on2026-10-14 after inline rear-r01 light-background review; visual acceptance of this still only, no Ludo spending/runtime publication.",
+  "path": "C:\\Users\\SveBiS\\Desktop\\myStuff\\2026_GitPro\\baim-local-active\\assets_src\\characters\\bai_mitko\\directional_walk_20261014\\mitko-away-rest-still-r01\\original.png",
+  "sha256": "999ebef35a344b55bbbf81715fa79685f978f2aafaa8f9bd789e5afe34af6427",
+  "bytes": 1862389,
+  "width": 1024,
+  "height": 1536,
+  "hasAlpha": true,
+  "alpha": {
+    "clear": 1000476,
+    "partial": 572388,
+    "opaque": 0,
+    "corners": [
+      {
+        "x": 0,
+        "y": 0,
+        "rgba": [
+          1,
+          0,
+          0,
+          0
+        ]
+      },
+      {
+        "x": 1023,
+        "y": 0,
+        "rgba": [
+          1,
+          0,
+          0,
+          0
+        ]
+      },
+      {
+        "x": 0,
+        "y": 1535,
+        "rgba": [
+          1,
+          1,
+          1,
+          0
+        ]
+      },
+      {
+        "x": 1023,
+        "y": 1535,
+        "rgba": [
+          1,
+          2,
+          0,
+          0
+        ]
+      },
+      {
+        "x": 20,
+        "y": 768,
+        "rgba": [
+          4,
+          2,
+          3,
+          0
+        ]
+      }
+    ],
+    "maxAlpha": 254,
+    "dominantCharacterAlpha": [
+      252,
+      253
+    ],
+    "boundsOver10": [
+      181,
+      76,
+      841,
+      1451
+    ]
+  },
+  "promptSha256": "1fab758039a03fa9859591d148c60fd76f88feb063ee7901751d1ba52560ff66",
+  "inputs": [
+    {
+      "role": "primary appearance",
+      "path": "C:\\Users\\SveBiS\\Desktop\\myStuff\\2026_GitPro\\baim-local-active\\assets_src\\characters\\bai-mitko-idle-east-chroma-v1.png",
+      "sha256": "c27c934e45c149d60c53c9195514609b780a8e8ca452b222a7117ec557b32e23"
+    },
+    {
+      "role": "accepted walking appearance/arms",
+      "path": "C:\\Users\\SveBiS\\Desktop\\myStuff\\2026_GitPro\\extraFixes\\mitko-directional-walk-20261014\\accepted-east-frame-0.png",
+      "sha256": "115de5204cfee503386dd5ccbd159c8324799733eadb8fb7e76cd990c50f9d63"
+    },
+    {
+      "role": "rear costume",
+      "path": "C:\\Users\\SveBiS\\Desktop\\myStuff\\2026_GitPro\\baim-local-active\\assets\\chapter1\\characters\\bai_mitko\\idle_north.png",
+      "sha256": "3785ee6381a99b439f757ce57d7c61c4a30937d61bc9ba605a2d3e2254bab3a2"
+    },
+    {
+      "role": "secondary model design",
+      "path": "C:\\Users\\SveBiS\\Desktop\\myStuff\\2026_GitPro\\baim-local-active\\assets_src\\characters\\bai-mitko-model-sheet-v1.png",
+      "sha256": "c1d126c0cbdae1a987b07f5f9c4a77b7e57d4a9453156dfd82b2f9875ab8891d"
+    }
+  ],
+  "settings": {
+    "transparent_background": true
+  },
+  "status": "reference visually approved",
+  "visualInspection": "Straight rear head/body; exposed relaxed hands; full shoes and clear framing. Proposed still only, no runtime replacement.",
+  "limitations": "Body alpha mostly252–253/max254; original bytes preserved. No gait or runtime acceptance implied.",
+  "visualApproval": {
+    "date": "2026-10-14",
+    "chat": "01a138b9-a208-7073-ae67-f597a63ed055",
+    "ownerReply": "approved",
+    "scope": "rear still r01 appearance and pose only",
+    "sha256": "999ebef35a344b55bbbf81715fa79685f978f2aafaa8f9bd789e5afe34af6427"
+  }
+}

@@ -1,7 +1,7 @@
 import { requirementsMet } from "./EffectSystem.js";
 import { clamp } from "./geometry.js";
 import { characterHeight } from "./CharacterRenderMath.js";
-import { canExitToStop, eastWestFallbackFacing, stopExitFrameForPlayer } from "./MovementSystem.js";
+import { canExitToStop, eastWestFallbackFacing, stopExitFrameForPlayer, walkFacing } from "./MovementSystem.js";
 import { externalAnimationV1 } from "../content/art/externalAnimationRuntime.generated.js";
 import { intoxicationSway } from "./IntoxicationSystem.js";
 import { sceneZDepthT } from "./DepthMath.js";
@@ -178,7 +178,7 @@ export function stableExternalVisualBounds(definition) {
   const bounds = [];
   for (const parts of Object.values(definition?.animations?.walk?.parts || {})) {
     for (const frame of Object.values(parts || {})) {
-      if (frame?.role === "loop") continue;
+      if (frame?.role === "loop" || frame?.settleOnStop) continue;
       const isFullFrame = (bound) => bound && frame?.frameWidth && frame?.frameHeight
         && bound.w >= frame.frameWidth * 0.98 && bound.h >= frame.frameHeight * 0.98;
       if (frame?.contentBounds && !isFullFrame(frame.contentBounds)) bounds.push(frame.contentBounds);
@@ -406,8 +406,9 @@ export class Renderer {
     const walk = definition.animations.walk;
     const partsByFacing = player.walkPartsByFacing || walk.parts || {};
     if (walk.type === "phasedStrip" && Object.keys(partsByFacing).length) {
-      const direction = eastWestFallbackFacing(facing) || "east";
-      const frame = partsByFacing?.[direction]?.start || partsByFacing?.east?.start;
+      const direction = walkFacing({ walkPartsByFacing: partsByFacing }, facing) || "east";
+      const parts = partsByFacing[direction];
+      const frame = parts?.rest || parts?.start || (parts?.loop?.settleOnStop ? parts.loop : null) || partsByFacing?.east?.start;
       if (!frame?.slot) return null;
       return { facing, frameIndex: 0, frame: Renderer.holdFrameFromWalkStart(frame), slot: frame.slot, mirrored: Boolean(frame.mirrored) };
     }
@@ -426,7 +427,7 @@ export class Renderer {
       frameEndTrim: 0,
       frameRects: [frame.sourceFrameRects[0]],
       frameContentBounds: frame.sourceFrameContentBounds?.[0] ? [frame.sourceFrameContentBounds[0]] : undefined,
-      contentBounds: frame.sourceFrameContentBounds?.[0] || frame.contentBounds,
+      contentBounds: frame.settleOnStop ? frame.contentBounds : frame.sourceFrameContentBounds?.[0] || frame.contentBounds,
       movementSpeedMultipliers: [0],
       stopRenderOffsetXStart: 0
     };
@@ -1195,7 +1196,10 @@ export class Renderer {
     const boundsForSize = spriteInfo.frame?.contentBounds || null;
     const sourceWidth = preserveFrameLayout && spriteInfo.frame ? spriteInfo.frame.frameWidth : boundsForSize?.w || spriteInfo.frame?.frameWidth || sprite.width;
     const sourceHeight = preserveFrameLayout && spriteInfo.frame ? spriteInfo.frame.frameHeight : boundsForSize?.h || spriteInfo.frame?.frameHeight || sprite.height;
-    const stableBounds = preserveFrameLayout && usesExternalWalkPose(p, definition) ? stableExternalVisualBounds(definition) : null;
+    const directionalBounds = spriteInfo.frame?.settleOnStop ? spriteInfo.frame.contentBounds : null;
+    const stableBounds = directionalBounds
+      ? { ...directionalBounds, baselineY: directionalBounds.y + directionalBounds.h }
+      : preserveFrameLayout && usesExternalWalkPose(p, definition) ? stableExternalVisualBounds(definition) : null;
     const logicalFrameIndex = spriteInfo.frame
       ? Number.isInteger(spriteInfo.staticFrameIndex) ? spriteInfo.staticFrameIndex : this.game.player.animator.frameIndex % spriteInfo.frame.frameCount
       : 0;
@@ -1215,9 +1219,17 @@ export class Renderer {
     const renderOffsetY = stopRenderOffsetY(spriteInfo.frame, frameIndex) + renderOffset.y;
     const sway = intoxicationSway(this.game.state?.rakiaGlasses, p.animationTime);
     const drawX = p.position.x + renderOffsetX + sway.x - width * anchor.x;
-    const baselineOffset = preserveFrameLayout && spriteInfo.frame
+    let baselineOffset = preserveFrameLayout && spriteInfo.frame
       ? stableBounds?.baselineY || spriteInfo.frame.baselineY || sourceHeight
       : spriteInfo.frame?.baselineY && boundsForSize ? spriteInfo.frame.baselineY - boundsForSize.y : sourceHeight * anchor.y;
+    if (directionalBounds && (p.animation !== "walk" || spriteInfo.frame.role === "stop")) {
+      const contact = spriteInfo.frame.frameContentBounds?.[frameIndex];
+      if (contact) {
+        const groundedBaseline = contact.y + contact.h;
+        const progress = p.animation !== "walk" ? 1 : frameIndex / Math.max(1, spriteInfo.frame.frameCount - 1);
+        baselineOffset += (groundedBaseline - baselineOffset) * progress;
+      }
+    }
     const drawY = p.position.y + renderOffsetY + sway.y - baselineOffset * scale + verticalOffset;
     ctx.save();
     ctx.fillStyle = "rgba(0, 0, 0, 0.26)";
@@ -1360,10 +1372,12 @@ export class Renderer {
   }
 
   resolveWalkPartFrame(player, definition, facing) {
-    const direction = eastWestFallbackFacing(facing);
+    const direction = walkFacing(player, facing);
     if (!direction) return null;
     const part = player.walkPart || "loop";
-    const frame = definition.animations.walk.parts?.[direction]?.[part] || definition.animations.walk.parts?.[direction]?.loop;
+    const frame = part === "stop" && player.directionalStopFrame?.facing === direction
+      ? player.directionalStopFrame
+      : definition.animations.walk.parts?.[direction]?.[part] || definition.animations.walk.parts?.[direction]?.loop;
     if (!frame?.slot) return null;
     return { ...frame, loop: Boolean(frame.loop), resolvedFrom: `${direction}.${part}`, mirrored: Boolean(frame.mirrored) };
   }

@@ -1,4 +1,5 @@
 import { dirname, join } from "node:path";
+import { makePng, writePng } from "./character-frame-utils.mjs";
 import { copyFileSync, existsSync, writeFileSync } from "node:fs";
 import {
   INPUT_DIR,
@@ -133,6 +134,9 @@ for (const [key, config] of Object.entries(selection.animations || {})) {
     loop: Boolean(config.loop),
     pingPong: Boolean(config.pingPong),
     role,
+    ...(config.facing ? { facing: config.facing } : {}),
+    ...(config.settleOnStop ? { settleOnStop: true, restFrames: config.restFrames } : {}),
+    ...(config.gaitSpeedPerVisualHeight ? { gaitSpeedPerVisualHeight: config.gaitSpeedPerVisualHeight } : {}),
     ...(stopExitFrame === undefined ? {} : { stopExitFrame }),
     ...(stopRenderOffsetXStart === undefined ? {} : { stopRenderOffsetXStart }),
     ...(stopRenderOffsetYStart === undefined ? {} : { stopRenderOffsetYStart }),
@@ -186,8 +190,28 @@ for (const [key, config] of Object.entries(selection.animations || {})) {
       mirrorSource: "east"
     });
   } else {
-    generated.walkParts.east[metadata.role] = { ...metadata, slot };
-    generated.walkParts.west[metadata.role] = { ...metadata, slot, mirrored: true, mirrorSource: "east" };
+    if (config.facing === "north" || config.facing === "south") {
+      generated.walkParts[config.facing] ||= {};
+      generated.walkParts[config.facing][metadata.role] = { ...metadata, slot, mirroredWest: false };
+      const restOutput = `assets/chapter1/characters/bai_mitko/${key}-rest.png`;
+      const rect = sourceFrameRects[0];
+      const restImage = makePng(rect.w, rect.h);
+      for (let y = 0; y < rect.h; y++) {
+        const row = ((rect.y + y) * sourceSheet.width + rect.x) * 4;
+        restImage.data.set(sourceSheet.data.subarray(row, row + rect.w * 4), y * rect.w * 4);
+      }
+      writePng(restOutput, restImage);
+      const restSlot = `external_${key}_rest`;
+      generated.characterAssets[restSlot] = restOutput;
+      const rest = { ...metadata, slot: restSlot, src: restOutput, role: "hold", loop: false,
+        frameCount: 1, initialFrame: 0, frameRects: [{ x: 0, y: 0, w: rect.w, h: rect.h }],
+        sourceFrameRects: [{ x: 0, y: 0, w: rect.w, h: rect.h }],
+        frameContentBounds: [sourceFrameContentBounds[0]], sourceFrameContentBounds: [sourceFrameContentBounds[0]] };
+      generated.walkParts[config.facing].rest = rest;
+    } else {
+      generated.walkParts.east[metadata.role] = { ...metadata, slot };
+      generated.walkParts.west[metadata.role] = { ...metadata, slot, mirrored: true, mirrorSource: "east" };
+    }
   }
   report.push({
     key,

@@ -55,6 +55,7 @@ function contentSource() {
 }
 
 function usageFor(key, config, category, source) {
+  if (config.reviewStatus === "runtime_review") return { status: "Runtime review", usage: "Local directional walking candidate; owner gameplay review/publication pending" };
   if (["Walk", "Idle", "Talk", "Reaction"].includes(category)) {
     return { status: "Live", usage: `Character controller - automatic ${category.toLowerCase()} selection` };
   }
@@ -114,11 +115,11 @@ export async function buildCatalogData() {
       status: usage.status,
       usage: usage.usage,
       frameCount: frames.length,
-      fps,
+      fps: Number(fps.toFixed(2)),
       duration: frames.length / fps,
       loop: Boolean(config.loop),
       source: config.source || "Unknown source ZIP",
-      directions: selection.mirrors && Object.values(selection.mirrors).some((value) => value.includes(key)) ? "East source + mirrored west" : "East source",
+      directions: config.facing === "north" ? "North source / back view" : config.facing === "south" ? "South source / front view" : selection.mirrors && Object.values(selection.mirrors).some((value) => value.includes(key)) ? "East source + mirrored west" : "East source",
       images
     });
   }
@@ -171,7 +172,7 @@ async function renderPdf() {
 
 async function main() {
   const entries = await buildCatalogData();
-  const html = renderHtml(entries);
+  const html = renderHtml(entries).replace(/[ \t]+$/gm, "");
   if (args.has("--check")) {
     if (!existsSync(OUTPUT_HTML) || readFileSync(OUTPUT_HTML, "utf8") !== html) {
       console.error("Animation catalog is stale. Run npm run build:animation-catalog.");

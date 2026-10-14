@@ -28,6 +28,7 @@ export class MovementSystem {
       return;
     }
     this.player.idleHoldFrame = null;
+    this.player.directionalStopFrame = null;
     this.player.idleVariant = null;
     this.player.idleVariantQueue = [];
     this.player.facing = facingFromDelta(firstPoint.x - this.player.position.x, firstPoint.y - this.player.position.y, this.player);
@@ -82,7 +83,7 @@ export class MovementSystem {
     const previous = { ...this.player.position };
     const motionMultiplier = walkMotionMultiplierForFrame(this.player);
     if (motionMultiplier <= 0) return;
-    this.player.position = moveToward(this.player.position, this.player.target, this.player.speed * motionMultiplier * dt);
+    this.player.position = moveToward(this.player.position, this.player.target, walkingTravelSpeed(this.player) * motionMultiplier * dt);
     this.player.facing = facingFromDelta(this.player.position.x - previous.x, this.player.position.y - previous.y, this.player);
     if (this.player.position.x === this.player.target.x && this.player.position.y === this.player.target.y) {
       if (this.player.walkPath?.length) {
@@ -92,7 +93,9 @@ export class MovementSystem {
       this.player.target = null;
       this.player.walkPath = [];
       const parts = walkPartsForFacing(this.player);
-      if (this.player.shortWalk) {
+      if (parts?.loop?.settleOnStop) {
+        requestWalkStop(this.player);
+      } else if (this.player.shortWalk) {
         this.player.animation = this.player.speaking ? "talk" : "idle";
         this.player.walkPart = null;
         this.player.shortWalk = false;
@@ -123,6 +126,14 @@ function syncAnimatorToWalkPartStart(player, frame) {
 
 export function requestWalkStop(player) {
   const parts = walkPartsForFacing(player);
+  if (parts?.loop?.settleOnStop) {
+    player.directionalStopFrame = directionalSettleFrame(parts.loop, player.animator?.frameIndex || 0);
+    player.target = null;
+    player.walkPath = [];
+    player.shortWalk = false;
+    beginWalkStop(player);
+    return;
+  }
   if (!parts?.stop) {
     player.target = null;
     player.walkPath = [];
@@ -173,8 +184,36 @@ export function stopExitFrameForPlayer(player) {
 }
 
 export function walkPartsForFacing(player) {
-  const facing = eastWestFallbackFacing(player.facing);
+  const facing = walkFacing(player, player.facing);
   return facing ? player.walkPartsByFacing?.[facing] : null;
+}
+
+export function walkFacing(player, facing = player.facing) {
+  if (player.walkPartsByFacing?.[facing]?.loop) return facing;
+  return eastWestFallbackFacing(facing);
+}
+
+export function walkingTravelSpeed(player) {
+  const loop = walkPartsForFacing(player)?.loop;
+  if (loop?.gaitSpeedPerVisualHeight && player.walkVisualHeight > 0) {
+    return loop.gaitSpeedPerVisualHeight * player.walkVisualHeight * (player.directionalSpeedScale || 1);
+  }
+  return player.speed;
+}
+
+// Settle through the remaining native half-stride, never through a side-facing clip.
+export function directionalSettleFrame(loop, frameIndex) {
+  const count = loop.frameCount;
+  const start = ((Math.trunc(frameIndex) % count) + count) % count;
+  const rests = loop.restFrames || [0];
+  let end = start;
+  while (!rests.includes(end % count) && end - start < count) end++;
+  const indices = Array.from({ length: end - start + 1 }, (_, i) => (start + i) % count);
+  const bounds = indices.map(i => loop.frameContentBounds[i]);
+  return { ...loop, role: "stop", loop: false, initialFrame: 0, frameStart: 0,
+    frameCount: indices.length, frameRects: indices.map(i => loop.frameRects[i]),
+    frameContentBounds: bounds, movementSpeedMultipliers: indices.map(() => 0),
+    nativeSettleIndices: indices };
 }
 
 export function eastWestFallbackFacing(facing) {
@@ -185,7 +224,7 @@ export function eastWestFallbackFacing(facing) {
 
 export function walkMotionMultiplierForFrame(player) {
   const facing = player.facing || "south";
-  const fallbackFacing = eastWestFallbackFacing(facing) || {
+  const fallbackFacing = walkFacing(player, facing) || {
     south_east: "south",
     south_west: "south",
     north_east: "north",
@@ -233,6 +272,13 @@ export function facingFromDelta(dx, dy, player) {
     if (dx > 0.01) facing = "east";
     else if (dx < -0.01) facing = "west";
     else facing = eastWestFallbackFacing(player.facing) || "east";
+  } else if (player.walkPartsByFacing?.north?.loop && player.walkPartsByFacing?.south?.loop) {
+    // Preserve side-facing diagonals with a small dead band at vertical sector edges.
+    const vertical = degrees < 0 ? "north" : "south";
+    const center = degrees < 0 ? -90 : 90;
+    const distance = Math.abs(degrees - center);
+    if (player.facing === vertical && distance < 27.5) facing = vertical;
+    else if (facing === vertical && player.facing && player.facing !== vertical && distance > 17.5) facing = player.facing;
   }
   player.facingDebug = { dx, dy, adjustedDx: dx, adjustedDy, angle: degrees, selectedFacing: facing };
   return facing;
