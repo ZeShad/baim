@@ -24,10 +24,10 @@ export const characterDefinitions = {
         fps: 6,
         loop: true,
         directions: {
-          south: externalAnimationV1.walkParts?.east?.start,
+          south: externalAnimationV1.walkParts?.south?.rest,
           east: externalAnimationV1.walkParts?.east?.start,
           west: externalAnimationV1.walkParts?.west?.start,
-          north: externalAnimationV1.walkParts?.east?.start
+          north: externalAnimationV1.walkParts?.north?.rest
         },
         fallback: "walkStartFrame0"
       },
@@ -37,11 +37,15 @@ export const characterDefinitions = {
         loop: true,
         parts: {
           east: externalAnimationV1.walkParts?.east,
-          west: externalAnimationV1.walkParts?.west
+          west: externalAnimationV1.walkParts?.west,
+          north: externalAnimationV1.walkParts?.north,
+          south: externalAnimationV1.walkParts?.south
         },
         directions: {
           east: externalAnimationV1.walkParts?.east?.loop,
-          west: externalAnimationV1.walkParts?.west?.loop
+          west: externalAnimationV1.walkParts?.west?.loop,
+          north: externalAnimationV1.walkParts?.north?.loop,
+          south: externalAnimationV1.walkParts?.south?.loop
         },
         fallback: "directionalIdle"
       }

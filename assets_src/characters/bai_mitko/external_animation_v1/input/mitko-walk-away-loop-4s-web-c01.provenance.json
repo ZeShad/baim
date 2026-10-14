@@ -1,0 +1,30 @@
+{
+  "candidate": "mitko-walk-away-loop-4s-web-c01",
+  "status": "runtime_review",
+  "date": "2026-10-14",
+  "ownerSourceAcceptance": "looks good",
+  "originalZip": "mitko-walk-away-loop-4s-web-c01.zip",
+  "sha256": "a0c3cc5562ed6756abee2c0b627697c1fbb5e7cfc5189ffef2d18bdf27255558",
+  "reference": "mitko-away-rest-still-r01",
+  "referenceSha256": "999ebef35a344b55bbbf81715fa79685f978f2aafaa8f9bd789e5afe34af6427",
+  "requestedDurationMs": 4000,
+  "measuredFrames": 64,
+  "measuredFrameMs": 56,
+  "measuredDurationMs": 3584,
+  "jobId": null,
+  "jobIdUnavailableReason": "Owner supplied local website ZIP without result ID",
+  "route": "manual Ludo Animate",
+  "observedSetup": {
+    "model": "Hydra",
+    "durationSeconds": 4,
+    "animationMargin": "Auto",
+    "maxFrames": 64,
+    "spriteSize": "Max",
+    "loop": true,
+    "trimWhitespace": false,
+    "displayedCredits": 12
+  },
+  "settingsLimit": "Screenshot is setup evidence, not independent job settings or billed charge",
+  "runtimeApproval": false,
+  "publicationApproval": false
+}

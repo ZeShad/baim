@@ -66,5 +66,13 @@
   "opens_window": {
     "label": "Open Apartment Window",
     "description": "Bai Mitko approaches and opens the apartment window as part of the window interaction."
+  },
+  "walk_north_loop": {
+    "label": "Walk - Away / Back",
+    "description": "Owner-supplied genuine rear-facing shuffle, 64 x 56 ms = 3.584 s; local runtime review, with same-source settling. Not publication-approved."
+  },
+  "walk_south_loop": {
+    "label": "Walk - Toward / Front",
+    "description": "Owner-supplied genuine front-facing shuffle, 64 x 59 ms = 3.776 s; local runtime review, with same-source settling. Not publication-approved."
   }
 }

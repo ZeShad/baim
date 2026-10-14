@@ -1,0 +1,97 @@
+{
+  "candidate": "mitko-toward-rest-still-r01",
+  "date": "2026-10-14",
+  "tool": "built-in image_gen",
+  "settings": {
+    "transparent_background": true
+  },
+  "path": "C:\\Users\\SveBiS\\Desktop\\myStuff\\2026_GitPro\\baim-local-active\\assets_src\\characters\\bai_mitko\\directional_walk_20261014\\mitko-toward-rest-still-r01\\original.png",
+  "sha256": "c110d14d3f9ebc81927d2bc6ef27e55f5b761f6784e0a7a853808a3eaeb877f4",
+  "bytes": 2047082,
+  "width": 1024,
+  "height": 1536,
+  "hasAlpha": true,
+  "alpha": {
+    "clear": 951773,
+    "partial": 621091,
+    "opaque": 0,
+    "maxAlpha": 254,
+    "boundsOver10": [
+      159,
+      50,
+      870,
+      1466
+    ],
+    "dominant": [
+      [
+        "0",
+        951773
+      ],
+      [
+        "253",
+        504086
+      ],
+      [
+        "252",
+        64269
+      ],
+      [
+        "251",
+        9047
+      ],
+      [
+        "1",
+        8768
+      ],
+      [
+        "2",
+        4184
+      ],
+      [
+        "250",
+        3906
+      ],
+      [
+        "254",
+        3324
+      ]
+    ]
+  },
+  "inputs": [
+    {
+      "role": "front appearance edit target",
+      "path": "C:\\Users\\SveBiS\\Desktop\\myStuff\\2026_GitPro\\baim-local-active\\assets\\chapter1\\characters\\bai_mitko\\idle_south.png",
+      "sha256": "eb6c357eeb538ec61588574051618fd43f1cf9678246e464ea4ccb110e8f2244"
+    },
+    {
+      "role": "primary render style",
+      "path": "C:\\Users\\SveBiS\\Desktop\\myStuff\\2026_GitPro\\baim-local-active\\assets_src\\characters\\bai-mitko-idle-east-chroma-v1.png",
+      "sha256": "c27c934e45c149d60c53c9195514609b780a8e8ca452b222a7117ec557b32e23"
+    },
+    {
+      "role": "approved rear companion",
+      "path": "C:\\Users\\SveBiS\\Desktop\\myStuff\\2026_GitPro\\baim-local-active\\assets_src\\characters\\bai_mitko\\directional_walk_20261014\\mitko-away-rest-still-r01\\original.png",
+      "sha256": "999ebef35a344b55bbbf81715fa79685f978f2aafaa8f9bd789e5afe34af6427"
+    },
+    {
+      "role": "secondary design",
+      "path": "C:\\Users\\SveBiS\\Desktop\\myStuff\\2026_GitPro\\baim-local-active\\assets_src\\characters\\bai-mitko-model-sheet-v1.png",
+      "sha256": "c1d126c0cbdae1a987b07f5f9c4a77b7e57d4a9453156dfd82b2f9875ab8891d"
+    }
+  ],
+  "promptSha256": "9469cd13c53f0ed3c9a775e1067237d30fe5060aa2b37eeaaa708249b31be63b",
+  "approval": "Owner replied approved on2026-10-14 following inline front-r01 review; front still appearance and pose only, not Ludo spending/runtime publication.",
+  "status": "reference visually approved",
+  "capacityFreeBytesBefore": 211926294528,
+  "estimatedPeakBytes": 50000000,
+  "reserveBytes": 10000000000,
+  "visualInspection": "Front-facing head/torso, forward gaze, relaxed exposed hands, planted full shoes, clear canvas margins; recognizable accepted character family. Exact visual acceptance pending.",
+  "limitations": "Character alpha mostly253/max254; minor translucency retained unchanged. No gait/runtime acceptance implied.",
+  "visualApproval": {
+    "date": "2026-10-14",
+    "chat": "01a138b9-a208-7073-ae67-f597a63ed055",
+    "ownerReply": "approved",
+    "scope": "front still r01 appearance and pose only",
+    "sha256": "c110d14d3f9ebc81927d2bc6ef27e55f5b761f6784e0a7a853808a3eaeb877f4"
+  }
+}

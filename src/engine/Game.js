@@ -5,7 +5,7 @@ import { applyEffects, firstMatchingRule, requirementsMet } from "./EffectSystem
 import { resolveEnding } from "./EndingSystem.js";
 import { InventorySystem } from "./InventorySystem.js";
 import { Localization } from "./Localization.js";
-import { eastWestFallbackFacing, facingFromDelta, motionMultiplierAtFrame, MovementSystem } from "./MovementSystem.js";
+import { eastWestFallbackFacing, facingFromDelta, motionMultiplierAtFrame, MovementSystem, walkFacing } from "./MovementSystem.js";
 import { QuestSystem } from "./QuestSystem.js";
 import { Renderer } from "./Renderer.js";
 import { SceneIdleVariations, sceneIdleVariationsBlocked } from "./SceneIdleVariations.js";
@@ -181,8 +181,8 @@ export class Game {
   }
 
   bootstrapCharacterSlots() {
-    const parts = externalAnimationV1.walkParts?.east || {};
-    return [...new Set([parts.start?.slot, parts.loop?.slot, parts.short?.slot, parts.stop?.slot].filter(Boolean))];
+    return [...new Set(Object.values(externalAnimationV1.walkParts || {}).flatMap(parts =>
+      [parts.start?.slot, parts.loop?.slot, parts.short?.slot, parts.stop?.slot, parts.rest?.slot]).filter(Boolean))];
   }
 
   protectCurrentAssetWorkingSet(sceneIds = [this.currentScene.id]) {
@@ -218,6 +218,8 @@ export class Game {
       this.player.animator.beginTick();
       const finishingStopFrame = this.finishingStopFrame();
       const feetBefore = { ...this.player.position };
+      this.player.walkVisualHeight = characterHeight(this.characterDefinitions[this.player.id], this.currentScene, this.player.position);
+      this.player.directionalSpeedScale = this.walkSpeedMultiplier * intoxicationMovementMultiplier(this.state?.rakiaGlasses);
       const wasWalking = this.player.animation === "walk";
       this.movement.update(dt);
       const walked = Math.hypot(this.player.position.x - feetBefore.x, this.player.position.y - feetBefore.y);
@@ -431,6 +433,7 @@ export class Game {
   }
 
   idleVariantsForFacing(facing = this.player.facing) {
+    if (this.player.walkPartsByFacing?.[facing]?.loop?.settleOnStop) return [];
     const fallbackFacing = eastWestFallbackFacing(facing) || "east";
     return externalAnimationV1.idleVariants?.[fallbackFacing] || externalAnimationV1.idleVariants?.east || [];
   }
@@ -533,10 +536,11 @@ export class Game {
 
   currentAnimationFrame() {
     const facing = this.player.facing || "south";
-    const fallbackFacing = eastWestFallbackFacing(facing);
+    const fallbackFacing = walkFacing(this.player, facing);
     if (fallbackFacing) {
       const parts = this.player.walkPartsByFacing?.[fallbackFacing];
       const part = this.player.walkPart || "loop";
+      if (part === "stop" && this.player.directionalStopFrame?.facing === fallbackFacing) return this.player.directionalStopFrame;
       return parts?.[part] || parts?.loop || null;
     }
     return this.characterDefinitions["npc.bai_mitko"].animations.walk.directions[fallbackFacing] || null;
@@ -548,7 +552,7 @@ export class Game {
       return `${action?.slot || "action"}:action:${this.player.facing || "east"}`;
     }
     if (this.player.animation === "walk") {
-      const facing = eastWestFallbackFacing(this.player.facing) || this.player.facing || "south";
+      const facing = walkFacing(this.player) || this.player.facing || "south";
       const part = this.player.walkPart || "loop";
       const frame = this.currentAnimationFrame();
       return `${frame?.slot || "walk"}:${facing}:${part}`;
@@ -1374,7 +1378,15 @@ export class Game {
 
   facePoint(point) {
     if (!point) return;
+    const previous = walkFacing(this.player);
     this.player.facing = facingFromDelta(point.x - this.player.position.x, point.y - this.player.position.y, this.player);
+    const next = walkFacing(this.player);
+    if (previous !== next && (this.player.walkPartsByFacing?.[previous]?.loop?.settleOnStop || this.player.walkPartsByFacing?.[next]?.loop?.settleOnStop)) {
+      this.player.idleHoldFrame = null;
+      this.player.idleVariant = null;
+      this.player.idleVariantQueue = [];
+      this.player.directionalStopFrame = null;
+    }
   }
 
   walkToPoint(point, facingPoint = point) {
@@ -1799,6 +1811,8 @@ export class Game {
       this.player.actionAnimation = null;
       this.player.animation = "idle";
       this.player.speed = this.sceneMovementSpeed(this.currentScene);
+      this.player.directionalStopFrame = null;
+      if (this.player.idleHoldFrame?.frame?.settleOnStop) this.player.idleHoldFrame = null;
       this.protectCurrentAssetWorkingSet();
       this.save();
       this.scheduleAdjacentScenePrefetch(this.currentScene);

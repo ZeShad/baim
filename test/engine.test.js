@@ -128,7 +128,9 @@ test("game start waits only for bootstrap character, current scene, and owned it
       "external_walk_east_start",
       "external_walk_east_loop",
       "external_walk_east_short",
-      "external_walk_east_stop"
+      "external_walk_east_stop",
+      "external_walk_north_loop", "external_walk_north_loop_rest",
+      "external_walk_south_loop", "external_walk_south_loop_rest"
     ]);
     assert.equal(requestedSceneId, "scene.chapter1.apartment");
     assert.deepEqual(requestedItemIds, ["item.unpaid_bills"]);
@@ -1340,16 +1342,16 @@ test("authored actions can keep one visual scale while the silhouette changes", 
   assert.equal(externalFrameVisualBounds(frame, 1, stableBounds), stableBounds);
 });
 
-test("Bai Mitko idle directions use walk-start animation frames instead of static images", () => {
+test("Bai Mitko idles use preserved side starts and genuine directional resting frames", () => {
   const idle = characterDefinitions["npc.bai_mitko"].animations.idle.directions;
   const baiMitkoAssets = assetManifest.characters["npc.bai_mitko"];
   assert.equal(idle.east.slot, "external_walk_east_start");
-  assert.equal(idle.south.slot, "external_walk_east_start");
-  assert.equal(idle.north.slot, "external_walk_east_start");
+  assert.equal(idle.south.slot, "external_walk_south_loop_rest");
+  assert.equal(idle.north.slot, "external_walk_north_loop_rest");
   assert.equal(idle.west.slot, "external_walk_east_start");
   assert.equal(idle.west.mirrored, true);
   assert.equal(baiMitkoAssets.type, "externalAnimation");
-  assert.equal(Object.values(baiMitkoAssets).some((value) => typeof value === "string" && value.startsWith("assets/")), false);
+  for (const direction of ["north", "south"]) assert.equal(baiMitkoAssets[idle[direction].slot], `assets/chapter1/characters/bai_mitko/walk_${direction}_loop-rest.png`);
 });
 
 test("Bai Mitko external idle variants are generated for east and mirrored west", () => {
