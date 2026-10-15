@@ -1368,14 +1368,27 @@ export class Renderer {
   }
 
   resolveExternalWalkStartFrame(player, definition, facing) {
-    return Renderer.resolveExternalWalkStartFrameForDefinition(player, definition, facing);
+    const fallback = Renderer.resolveExternalWalkStartFrameForDefinition(player, definition, facing);
+    if (!Number.isInteger(player.walkPartsByFacing?.[walkFacing(player, facing)]?.start?.pocketExitFrame)
+      || this.game.assets.isLoaded(this.game.assets.getCharacterImage(player.id, fallback?.slot))) return fallback;
+    const stop = player.walkPartsByFacing?.[walkFacing(player, facing)]?.stop;
+    if (stop?.slot && this.game.assets.isLoaded(this.game.assets.getCharacterImage(player.id, stop.slot))) {
+      const index = stop.frameCount - 1;
+      const frame = { ...stop, role: "hold", loop: false, frameCount: 1, initialFrame: 0,
+        frameRects: [stop.frameRects[index]], frameContentBounds: [stop.frameContentBounds[index]],
+        movementSpeedMultipliers: [0], stopRenderOffsetXStart: 0 };
+      return { facing, frameIndex: 0, frame, slot: stop.slot, mirrored: Boolean(stop.mirrored) };
+    }
+    return fallback;
   }
 
   resolveWalkPartFrame(player, definition, facing) {
     const direction = walkFacing(player, facing);
     if (!direction) return null;
     const part = player.walkPart || "loop";
-    const frame = part === "stop" && player.directionalStopFrame?.facing === direction
+    const frame = part === "start" && player.locomotionStartFrame?.facing === direction
+      ? player.locomotionStartFrame
+      : part === "stop" && player.directionalStopFrame?.facing === direction
       ? player.directionalStopFrame
       : definition.animations.walk.parts?.[direction]?.[part] || definition.animations.walk.parts?.[direction]?.loop;
     if (!frame?.slot) return null;

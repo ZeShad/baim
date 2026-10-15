@@ -1,6 +1,27 @@
 import { moveToward } from "./geometry.js";
 
 const WALK_TARGET_EPSILON = 4;
+// Shorter than half the accepted 864–1088ms gait cycles. Units are seconds,
+// so the ramp follows world travel/cadence rather than viewport pixels.
+export const WALK_ACCELERATION_SECONDS = 0.24;
+export const WALK_START_SPEED_RATIO = 0.35;
+
+export function walkSpeedRatio(elapsed = 0) {
+  const t = Math.max(0, Math.min(1, elapsed / WALK_ACCELERATION_SECONDS));
+  return WALK_START_SPEED_RATIO + (1 - WALK_START_SPEED_RATIO) * t * t * (3 - 2 * t);
+}
+
+function rampIntegral(elapsed) {
+  const time = Math.max(0, elapsed);
+  const t = Math.min(1, time / WALK_ACCELERATION_SECONDS);
+  return WALK_START_SPEED_RATIO * time + (1 - WALK_START_SPEED_RATIO)
+    * (WALK_ACCELERATION_SECONDS * (t ** 3 - t ** 4 / 2) + Math.max(0, time - WALK_ACCELERATION_SECONDS));
+}
+
+export function walkRampTime(elapsed, dt) {
+  if (elapsed >= WALK_ACCELERATION_SECONDS) return dt;
+  return rampIntegral(elapsed + dt) - rampIntegral(elapsed);
+}
 
 export class MovementSystem {
   constructor(player) {
@@ -8,54 +29,74 @@ export class MovementSystem {
   }
 
   walkTo(point, facingPoint = point, path = null, options = {}) {
+    const previousPart = this.player.walkPart;
+    const previousParts = walkPartsForFacing(this.player);
+    const previousStart = this.player.locomotionStartFrame || previousParts?.start;
+    const previousStop = this.player.directionalStopFrame || previousParts?.stop;
+    const previousIndex = this.player.animator?.frameIndex || 0;
+    const wasStopping = this.player.animation === "walk" && previousPart === "stop";
     const wasWalking = this.player.animation === "walk" && (this.player.target || this.player.walkPart === "start" || this.player.walkPart === "loop" || this.player.walkPart === "short");
-    const wasShortWalk = Boolean(this.player.shortWalk) || this.player.walkPart === "short";
     const waypoints = Array.isArray(path) && path.length ? path.map((waypoint) => ({ ...waypoint })) : [{ ...point }];
     while (waypoints.length > 1 && pointDistance(this.player.position, waypoints[0]) <= WALK_TARGET_EPSILON) waypoints.shift();
     const firstPoint = waypoints.shift() || { ...point };
     const finalPoint = waypoints.length ? waypoints.at(-1) : firstPoint;
     const dx = finalPoint.x - this.player.position.x;
     const dy = finalPoint.y - this.player.position.y;
-    if (!wasWalking && Math.hypot(dx, dy) <= WALK_TARGET_EPSILON) {
-      this.player.target = null;
-      this.player.walkPath = [];
-      this.player.animation = this.player.speaking ? "talk" : "idle";
-      this.player.walkPart = null;
-      this.player.shortWalk = false;
-      this.player.pendingStop = false;
-      this.player.movementStopping = false;
-      this.player.stopAnimationStarted = false;
-      return;
-    }
+    // Preserve no-op state; reset acceleration only for a genuine new walk.
+    if (Math.hypot(dx, dy) <= WALK_TARGET_EPSILON) return false;
+    if (!wasWalking) this.player.walkTravelElapsed = 0;
     this.player.idleHoldFrame = null;
     this.player.directionalStopFrame = null;
     this.player.idleVariant = null;
     this.player.idleVariantQueue = [];
     this.player.facing = facingFromDelta(firstPoint.x - this.player.position.x, firstPoint.y - this.player.position.y, this.player);
     this.player.target = { ...firstPoint };
+    this.player.arrivalFacing = options.arrivalFacing || null;
     this.player.walkPath = waypoints;
     this.player.animation = "walk";
-    const isActiveFullWalk = wasWalking && !wasShortWalk;
-    this.player.shortWalk = wasShortWalk || (Boolean(options.shortWalk) && !isActiveFullWalk);
+    this.player.shortWalk = false;
     this.player.pendingStop = false;
     this.player.movementStopping = false;
     this.player.stopAnimationStarted = false;
     this.player.stopAnimationFinished = false;
     const parts = walkPartsForFacing(this.player);
+    const pocketStart = Number.isInteger(parts?.start?.pocketExitFrame);
+    if (pocketStart) this.player.shortWalk = false;
+    this.player.locomotionStartFrame = null;
     this.player.walkPart = this.player.shortWalk && parts?.short ? "short" : wasWalking ? "loop" : parts?.start ? "start" : "loop";
+    if (pocketStart && wasWalking && previousPart === "start" && Number.isInteger(previousStart?.pocketExitFrame)) {
+      this.player.walkPart = "start";
+      this.player.locomotionStartFrame = {
+        ...(previousStart?.resumePocketExit ? previousStart : parts.start),
+        initialFrame: previousIndex, facing: walkFacing(this.player), mirrored: Boolean(parts.start.mirrored)
+      };
+    } else if (pocketStart && wasStopping && Number.isInteger(previousStop?.pocketEntryFrame)) {
+      if (previousIndex < previousStop.pocketEntryFrame) this.player.walkPart = "loop";
+      else {
+        this.player.locomotionStartFrame = reversePocketEntry(previousStop, previousIndex, parts.start);
+        this.player.locomotionStartFrame.facing = walkFacing(this.player);
+        this.player.locomotionStartFrame.mirrored = Boolean(parts.start.mirrored);
+        this.player.walkPart = "start";
+        syncAnimatorToWalkPartStart(this.player, this.player.locomotionStartFrame);
+      }
+    }
     if (!wasWalking && (this.player.walkPart === "start" || this.player.walkPart === "short")) {
       syncAnimatorToWalkPartStart(this.player, parts?.[this.player.walkPart]);
     }
+    return true;
   }
 
   update(dt) {
     if (this.player.animation === "action") return;
     if (!this.player.target) {
+      this.player.walkTravelElapsed = 0;
+      this.player.walkCadenceRatio = 1;
       if (this.player.animation === "walk" && this.player.walkPart === "stop" && !this.player.animator?.isFinished()) {
         this.player.movementStopping = true;
         return;
       }
       if (this.player.animation === "walk" && this.player.walkPart === "stop") {
+        this.player.locomotionStartFrame = null;
         this.player.stopAnimationFinished = true;
         this.player.movementStopping = false;
         this.player.pendingStop = false;
@@ -78,20 +119,41 @@ export class MovementSystem {
     }
     if (this.player.animation === "walk" && this.player.walkPart === "start" && this.player.animator?.isFinished()) {
       this.player.walkPart = "loop";
+      this.player.locomotionStartFrame = null;
       return;
     }
-    const previous = { ...this.player.position };
     const motionMultiplier = walkMotionMultiplierForFrame(this.player);
     if (motionMultiplier <= 0) return;
-    this.player.position = moveToward(this.player.position, this.player.target, walkingTravelSpeed(this.player) * motionMultiplier * dt);
-    this.player.facing = facingFromDelta(this.player.position.x - previous.x, this.player.position.y - previous.y, this.player);
+    const elapsed = this.player.walkTravelElapsed || 0;
+    const duration = Math.max(0, Number(dt) || 0);
+    const rampTime = walkRampTime(elapsed, duration);
+    this.player.walkTravelElapsed = elapsed + duration;
+    this.player.walkCadenceRatio = duration > 0 ? rampTime / duration : walkSpeedRatio(elapsed);
+    let travel = walkingTravelSpeed(this.player) * motionMultiplier * rampTime;
+    // Consume the same distance budget across corners; do not lose a frame at
+    // each waypoint or round the destination to an anticipatory stop radius.
+    while (this.player.target) {
+      const from = this.player.position;
+      const segment = pointDistance(from, this.player.target);
+      this.player.position = moveToward(from, this.player.target, travel);
+      if (segment > 0) this.player.facing = facingFromDelta(this.player.target.x - from.x, this.player.target.y - from.y, this.player);
+      if (travel < segment) break;
+      travel = Math.max(0, travel - segment);
+      if (!this.player.walkPath?.length) break;
+      this.player.target = this.player.walkPath.shift();
+      if (travel === 0) break;
+    }
     if (this.player.position.x === this.player.target.x && this.player.position.y === this.player.target.y) {
       if (this.player.walkPath?.length) {
         this.player.target = this.player.walkPath.shift();
         return;
       }
       this.player.target = null;
+      this.player.walkTravelElapsed = 0;
+      this.player.walkCadenceRatio = 1;
       this.player.walkPath = [];
+      if (this.player.arrivalFacing) this.player.facing = this.player.arrivalFacing;
+      this.player.arrivalFacing = null;
       const parts = walkPartsForFacing(this.player);
       if (parts?.loop?.settleOnStop) {
         requestWalkStop(this.player);
@@ -125,7 +187,25 @@ function syncAnimatorToWalkPartStart(player, frame) {
 }
 
 export function requestWalkStop(player) {
+  player.walkTravelElapsed = 0;
+  player.walkCadenceRatio = 1;
   const parts = walkPartsForFacing(player);
+  const start = player.locomotionStartFrame || parts?.start;
+  if (player.walkPart === "start" && !start?.resumePocketExit && Number.isInteger(start?.pocketExitFrame)
+    && (player.animator?.frameIndex || 0) < start.pocketExitFrame) {
+    const sourceIndex = start.frameRects[player.animator?.frameIndex || 0].sourceFrameIndex;
+    const indices = Array.from({ length: sourceIndex + 1 }, (_, i) => sourceIndex - i);
+    player.directionalStopFrame = pocketFrameRange(start, indices, "stop", true);
+    player.directionalStopFrame.facing = walkFacing(player);
+    player.directionalStopFrame.pocketEntryFrame = 0;
+    player.directionalStopFrame.pocketCancellation = true;
+    player.locomotionStartFrame = null;
+    player.target = null;
+    player.walkPath = [];
+    player.shortWalk = false;
+    beginWalkStop(player);
+    return;
+  }
   if (parts?.loop?.settleOnStop) {
     player.directionalStopFrame = directionalSettleFrame(parts.loop, player.animator?.frameIndex || 0);
     player.target = null;
@@ -223,6 +303,9 @@ export function eastWestFallbackFacing(facing) {
 }
 
 export function walkMotionMultiplierForFrame(player) {
+  if (player.animation === "walk" && player.walkPart === "start" && player.locomotionStartFrame) {
+    return motionMultiplierAtFrame(player.locomotionStartFrame.movementSpeedMultipliers, player.animator?.frameIndex || 0, 0);
+  }
   const facing = player.facing || "south";
   const fallbackFacing = walkFacing(player, facing) || {
     south_east: "south",
@@ -287,4 +370,33 @@ export function facingFromDelta(dx, dy, player) {
 export function hasEastWestWalkOnly(player) {
   const parts = player.walkPartsByFacing || {};
   return Boolean(parts.east && parts.west && !parts.north && !parts.south);
+}
+
+// Reverse only existing approved hand-entry frames when a stop is interrupted.
+function reversePocketEntry(stop, index, start) {
+  if (stop.pocketCancellation) {
+    const first = Math.max(start.frameStart, stop.frameRects[Math.min(index, stop.frameCount - 1)].sourceFrameIndex);
+    const last = start.frameStart + start.pocketExitFrame;
+    const indices = Array.from({ length: Math.max(1, last - first + 1) }, (_, i) => first + i);
+    const frame = pocketFrameRange(start, indices, "start", true);
+    return { ...frame, pocketExitFrame: indices.length - 1, resumePocketExit: true };
+  }
+  const end = Math.max(0, stop.pocketEntryFrame - 1);
+  const first = Math.min(index, stop.frameCount - 1);
+  const indices = Array.from({ length: first - end + 1 }, (_, i) => first - i);
+  const frame = pocketFrameRange(stop, indices, "start");
+  return { ...frame, pocketExitFrame: indices.length - 1, resumePocketExit: true };
+}
+
+export function walkCommandHasDistance(distance) {
+  return Number.isFinite(distance) && distance > WALK_TARGET_EPSILON;
+}
+
+function pocketFrameRange(frame, indices, role, original = false) {
+  const rects = original ? frame.sourceFrameRects : frame.frameRects;
+  const bounds = original ? frame.sourceFrameContentBounds : frame.frameContentBounds;
+  return { ...frame, role, loop: false, initialFrame: 0, frameStart: 0,
+    frameCount: indices.length, frameRects: indices.map(i => rects[i]),
+    frameContentBounds: indices.map(i => bounds[i]), movementSpeedMultipliers: indices.map(() => 0),
+    nativePocketIndices: indices };
 }

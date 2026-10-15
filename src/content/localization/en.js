@@ -232,6 +232,7 @@ export const en = {
   "look.election_booth.commission_table": "Three members guard two protocols and a pen tied to the state with string.",
 
   "msg.walk": "Bai Mitko walks like a man who owes money in three directions.",
+  "msg.side_approach_blocked": "I can't approach from the side here. I'll need to go around.",
   "msg.no_use": "Morally questionable, administratively impossible.",
   "msg.taken": "Taken. This looks useful, or at least deniable.",
   "msg.already_taken": "Already pocketed. Bai Mitko does not repeat theft without a reason.",

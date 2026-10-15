@@ -1,7 +1,7 @@
 {
   "walk_east_start": {
     "label": "Walk - Start",
-    "description": "Bai Mitko shifts out of his standing pose and commits his weight into the first east-facing steps."
+    "description": "Both hands leave the pockets before actual side travel starts. Runtime selects original source frames8-15 at20fps:200ms stationary withdrawal followed by moving start. The preserved whole export is16x65ms=1040ms; moving playback follows the travel ramp."
   },
   "walk_east_loop": {
     "label": "Walk - Loop",
@@ -9,11 +9,12 @@
   },
   "walk_east_short": {
     "label": "Walk - Short",
-    "description": "A compact east-facing walk cycle for short movements where the full start-loop-stop sequence would feel too long."
+    "description": "Preserved pocketed short-walk source, retained and enabled for inspection. Current gameplay uses the hands-out start/loop/stop sequence for every actual walk; this source is not automatically selected.",
+    "runtimeUsage": "retained"
   },
   "walk_east_stop": {
     "label": "Walk - Stop",
-    "description": "Bai Mitko slows from his east-facing walk and settles back into a stable standing pose."
+    "description": "After world travel reaches its exact destination without an arrival slowdown, the side pocket-entry one-shot runs. Runtime selects original frames2-15 at20fps,700ms,initial frame1; the preserved whole export is16x68ms=1088ms."
   },
   "idle_east_1": {
     "label": "Idle - Variant 1",

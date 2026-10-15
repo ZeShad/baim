@@ -331,6 +331,7 @@ const rawScenes = [
       {
         id: "hotspot.square.old_men_bench",
         kind: "hotspot",
+        characterInteraction: true,
         nameKey: "hotspot.old_men_bench.name",
         rect: { x: 580, y: 322, w: 84, h: 100 },
         interactionApproach: { x: 780, y: 410 },

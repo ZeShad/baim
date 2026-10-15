@@ -137,6 +137,8 @@ for (const [key, config] of Object.entries(selection.animations || {})) {
     ...(config.facing ? { facing: config.facing } : {}),
     ...(config.settleOnStop ? { settleOnStop: true, restFrames: config.restFrames } : {}),
     ...(config.gaitSpeedPerVisualHeight ? { gaitSpeedPerVisualHeight: config.gaitSpeedPerVisualHeight } : {}),
+    ...(Number.isInteger(config.pocketExitFrame) ? { pocketExitFrame: config.pocketExitFrame } : {}),
+    ...(Number.isInteger(config.pocketEntryFrame) ? { pocketEntryFrame: config.pocketEntryFrame } : {}),
     ...(stopExitFrame === undefined ? {} : { stopExitFrame }),
     ...(stopRenderOffsetXStart === undefined ? {} : { stopRenderOffsetXStart }),
     ...(stopRenderOffsetYStart === undefined ? {} : { stopRenderOffsetYStart }),
