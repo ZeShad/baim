@@ -1,0 +1,50 @@
+{
+  "candidate": "mitko-fast-walk-toward-loop-3s-new-direction-c11",
+  "date": "2026-10-15",
+  "ownerInstruction": "this is an updated front, replace the previous one with this one",
+  "supersedes": "mitko-fast-walk-toward-loop-3s-new-direction-c09",
+  "status": "runtime_approved",
+  "route": "New Direction lineage from conversation; actual new submission route/settings not independently captured",
+  "requestedDurationSeconds": 3,
+  "requestedDurationEvidence": "Inherited naming convention only; updated job duration not independently verified",
+  "actualGenerationSettings": null,
+  "sourceCardId": null,
+  "jobId": null,
+  "frameCount": 16,
+  "nativeDurationMs": 960,
+  "frameDurationsMs": [
+    60
+  ],
+  "frameSize": {
+    "x": 0,
+    "y": 0,
+    "w": 440,
+    "h": 884
+  },
+  "scope": "Replace current front source selection only; no game integration or publication performed",
+  "hashes": {
+    "original-export.zip": "aa1b7a5680db3ba8cc84b43df5a17c93b27e071dff834c12a12974da2b2ab870",
+    "original-preview.gif": "f49d1b0ab2840f41b07540d83817d0086e11e6b39849aa150ce8845361810a50",
+    "sprite-max-px-frames-16-rows-4-cols-4.json": "0b8a1e2711be04feaa5e4a8b9cc3171b11f67512239656927a09fefa442b1eb6",
+    "sprite-max-px-frames-16-rows-4-cols-4.png": "d0abad05c04861888a3e4726741b3eaa6849d49ec6cd86dca0921d56abd7bc41"
+  },
+  "ownerSourceSelection": "Owner asks approve/publish these two exports on15October2026",
+  "runtimeApproval": true,
+  "publicationApproval": true,
+  "originalZip": "mitko-fast-walk-toward-loop-3s-new-direction-c11.zip",
+  "originalZipSHA256": "aa1b7a5680db3ba8cc84b43df5a17c93b27e071dff834c12a12974da2b2ab870",
+  "runtimeFrameRange": [
+    0,
+    15
+  ],
+  "nativeTimingPreserved": true,
+  "calibration": {
+    "method": "mean positive native boot-bottom displacement / native duration / union visual height; steady movement multiplier1",
+    "visualHeight": 879,
+    "bootDisplacementSum": 238,
+    "gaitSpeedPerVisualHeight": 0.28204398938187336,
+    "limitations": "2D boot-bound proxy, not physical sole tracking; actual gameplay requires review"
+  },
+  "ownerPublicationDecision": "approve runtime and publish",
+  "approvalDate": "2026-10-15"
+}

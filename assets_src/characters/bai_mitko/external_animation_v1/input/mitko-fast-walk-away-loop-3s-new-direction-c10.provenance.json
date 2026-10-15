@@ -1,0 +1,57 @@
+{
+  "candidate": "mitko-fast-walk-away-loop-3s-new-direction-c10",
+  "date": "2026-10-15",
+  "source": "Owner original side walk, shown in setup. Exact cloud source/card ID and input bytes unconfirmed.",
+  "firstFrame": "Rear-facing Mitko reference shown; exact uploaded bytes unconfirmed.",
+  "observedSettings": {
+    "mode": "New Direction",
+    "model": "Hydra",
+    "requestedDurationSeconds": 3,
+    "animationMargin": "Auto",
+    "maxFrames": 36,
+    "spriteSize": "Max",
+    "loop": true,
+    "trimWhitespace": false,
+    "optionalInstructions": "",
+    "optionalFinalFrame": null
+  },
+  "frameCount": 36,
+  "nativeDurationMs": 864,
+  "frameDurationsMs": [
+    24
+  ],
+  "frameSize": {
+    "x": 0,
+    "y": 0,
+    "w": 504,
+    "h": 896
+  },
+  "review": "Owner identifies back result and explicitly requests settings retained for future workflow. No game integration/publication approval inferred.",
+  "hashes": {
+    "original-export.zip": "37283ee520f350d750d34971d961fc36c9f831dfee3ffdf71f13de5ca8e952d2",
+    "original-preview.gif": "5aefbab754f2e68e11fa1dc8cd4fcfad04a772b5618b30aea8643715414122ea",
+    "owner-new-direction-setup.png": "5a549846d2e4122f21560a1517b3ff50bd40928e3c077a39ab80f71c51e703a6",
+    "sprite-max-px-frames-36-rows-6-cols-6.json": "6e07d76016dbadb005bb30efc5467f2acd4b4d086d05f97c24629658bcdeb416",
+    "sprite-max-px-frames-36-rows-6-cols-6.png": "1c1cfcc8102b64b6003a90bc41455d47f2b6fc16e751a5561452c355c0394067"
+  },
+  "status": "runtime_approved",
+  "ownerSourceSelection": "Owner asks approve/publish these two exports on15October2026",
+  "runtimeApproval": true,
+  "publicationApproval": true,
+  "originalZip": "mitko-fast-walk-away-loop-3s-new-direction-c10.zip",
+  "originalZipSHA256": "37283ee520f350d750d34971d961fc36c9f831dfee3ffdf71f13de5ca8e952d2",
+  "runtimeFrameRange": [
+    0,
+    35
+  ],
+  "nativeTimingPreserved": true,
+  "calibration": {
+    "method": "mean positive native boot-bottom displacement / native duration / union visual height; steady movement multiplier1",
+    "visualHeight": 751,
+    "bootDisplacementSum": 246,
+    "gaitSpeedPerVisualHeight": 0.3791241307885782,
+    "limitations": "2D boot-bound proxy, not physical sole tracking; actual gameplay requires review"
+  },
+  "ownerPublicationDecision": "approve runtime and publish",
+  "approvalDate": "2026-10-15"
+}
