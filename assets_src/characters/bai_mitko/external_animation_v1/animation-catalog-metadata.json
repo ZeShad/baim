@@ -68,11 +68,11 @@
     "description": "Bai Mitko approaches and opens the apartment window as part of the window interaction."
   },
   "walk_north_loop": {
-    "label": "Walk - Away / Back",
-    "description": "Owner-supplied genuine rear-facing shuffle, 64 x 56 ms = 3.584 s; local runtime review, with same-source settling. Not publication-approved."
+    "label": "Walk - Brisk Away / Back",
+    "description": "Owner-selected original-walk New Direction export mitko-fast-walk-away-loop-3s-new-direction-c10; 36 frames / 864 ms native timing. Owner-approved runtime with same-source settling. Previous source retained."
   },
   "walk_south_loop": {
-    "label": "Walk - Toward / Front",
-    "description": "Owner-supplied genuine front-facing shuffle, 64 x 59 ms = 3.776 s; local runtime review, with same-source settling. Not publication-approved."
+    "label": "Walk - Brisk Toward / Front",
+    "description": "Owner-selected original-walk New Direction export mitko-fast-walk-toward-loop-3s-new-direction-c11; 16 frames / 960 ms native timing. Owner-approved runtime with same-source settling. Previous source retained."
   }
 }

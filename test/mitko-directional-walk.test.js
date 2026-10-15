@@ -28,9 +28,9 @@ test("direction changes near vertical boundaries have a dead band", () => {
   p.facing=facingFromDelta(...delta(-70),p);assert.equal(p.facing,"north_east");
   p.facing=facingFromDelta(...delta(-80),p);assert.equal(p.facing,"north");
 });
-test("directional shuffle travel follows visual scale and speed controls without changing side speed", () => {
+test("directional brisk travel follows visual scale and speed controls without changing side speed", () => {
   const p=player("north");p.walkVisualHeight=300;p.directionalSpeedScale=1;
-  const near=walkingTravelSpeed(p);assert.ok(near>20&&near<45);
+  const near=walkingTravelSpeed(p);assert.ok(near>60&&near<180);
   p.walkVisualHeight=150;assert.equal(walkingTravelSpeed(p),near/2);
   p.directionalSpeedScale=2;assert.equal(walkingTravelSpeed(p),near);
   p.facing="east";assert.equal(walkingTravelSpeed(p),100);
@@ -45,7 +45,7 @@ test("interaction facing changes discard directional resting and idle pool state
 for(const facing of ["north","south"]) {
   test(facing+" native timing, resting pose and directional motion curve resolve together",()=>{
     const p=player(facing),loop=parts[facing].loop;
-    assert.equal(loop.frameCount,64);assert.equal(loop.fps,1000/(facing==="north"?56:59));
+    assert.equal(loop.frameCount,facing==="north"?36:16);assert.equal(loop.fps,1000/(facing==="north"?24:60));
     assert.equal(walkMotionMultiplierForFrame(p),loop.movementSpeedMultipliers[6]);
     const rest=Renderer.resolveIdleWalkFrameForDefinition(p,definition,facing);
     assert.equal(rest.slot,parts[facing].rest.slot);assert.equal(rest.frame.frameCount,1);
@@ -53,13 +53,13 @@ for(const facing of ["north","south"]) {
     assert.deepEqual(Game.prototype.idleVariantsForFacing.call({player:p},facing),[]);
   });
   test(facing+" stops and short clicks settle only through contiguous native frames",()=>{
-    for(let i=0;i<64;i++){
+    for(let i=0;i<parts[facing].loop.frameCount;i++){
       const p=player(facing);p.animator.frameIndex=i;p.target={x:500,y:500};p.shortWalk=true;
       new MovementSystem(p).update(.01);
       assert.equal(p.walkPart,"stop");assert.equal(p.directionalStopFrame.facing,facing);
       const indices=p.directionalStopFrame.nativeSettleIndices;
       assert.equal(indices[0],i);assert.ok(parts[facing].loop.restFrames.includes(indices.at(-1)));
-      assert.ok(indices.length<=14);
+      assert.ok(indices.length / parts[facing].loop.fps <= .5, "settling completes within half a second");
       indices.forEach((f,j)=>assert.deepEqual(p.directionalStopFrame.frameRects[j],parts[facing].loop.frameRects[f]));
       assert.equal(Game.prototype.currentAnimationFrame.call({player:p}),p.directionalStopFrame);
       p.animator.isFinished=()=>true;new MovementSystem(p).update(.01);assert.equal(p.animation,"idle");
