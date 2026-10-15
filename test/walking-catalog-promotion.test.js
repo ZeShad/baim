@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {createHash} from 'node:crypto';
 import {usageFor,catalogRuntimeTiming} from '../tools/build-animation-catalog.mjs';
+import {stripWalkingCatalogPromotion,stripMitkoDirectional} from './helpers/mitko-directional-preservation.js';
 const fixture=JSON.parse(readFileSync('test/fixtures/walking-catalog-promotion.json','utf8'));
 const sha=b=>createHash('sha256').update(b).digest('hex');
 test('catalog timing uses accepted runtime cadence and rejects stale selected ranges',()=>{
@@ -28,7 +29,31 @@ test('catalog promotion changes only three descriptions and preserves every acce
   assert.match(after.walk_east_start.description,/1040ms/);
   assert.match(after.walk_east_stop.description,/without an arrival slowdown/);
   assert.match(after.walk_east_stop.description,/1088ms/);
-  for(const [p,h]of Object.entries(fixture.acceptedRuntimeSHA256))assert.equal(sha(readFileSync(p)),h,p);
+  for(const [p,h]of Object.entries(fixture.acceptedRuntimeSHA256)){
+    let bytes=readFileSync(p);const correction=fixture.helperCorrection;
+    if(p===correction.path){
+      assert.equal(sha(bytes),correction.afterSHA256,'exact reviewed preservation helper correction');
+      assert.equal(sha(correction.before),correction.beforeSHA256,'original accepted helper bytes');
+      bytes=correction.before;
+    }
+    assert.equal(sha(bytes),h,p);
+  }
+});
+
+test('newest catalog inverse restores exact input before unchanged historical directional checks',()=>{
+  const p=fixture.metadata.path,current=readFileSync(p),older=JSON.parse(readFileSync('test/fixtures/mitko-directional-deltas.json','utf8')).records[p];
+  assert.equal(stripWalkingCatalogPromotion(p,current),fixture.metadata.before);
+  assert.equal(sha(fixture.metadata.before),older.afterSHA256);
+  assert.equal(stripMitkoDirectional(p,current),older.before);
+  assert.equal(sha(stripMitkoDirectional(p,current)),older.beforeSHA256);
+});
+
+test('catalog inverse rejects unknown bytes and passes unrelated paths through unchanged',()=>{
+  const p=fixture.metadata.path,current=readFileSync(p,'utf8');
+  assert.throws(()=>stripMitkoDirectional(p,current+'\n'),/exact bound walking catalog promotion/);
+  const changed=JSON.parse(current);changed.idle_east_1.description+=' unexpected edit';
+  assert.throws(()=>stripMitkoDirectional(p,JSON.stringify(changed,null,2)+'\n'),/exact bound walking catalog promotion/);
+  const unrelated=Buffer.from('unchanged');assert.equal(stripWalkingCatalogPromotion('unrelated/path',unrelated),unrelated);
 });
 test('generated catalog reflects the selected start and retained unused short source',()=>{
   const html=readFileSync('docs/bai-mitko-animation-catalog.html','utf8');

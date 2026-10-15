@@ -28,6 +28,13 @@
       "walk_east_start",
       "walk_east_short",
       "walk_east_stop"
-    ]
+    ],
+    "afterSHA256": "c47f707dc18180a2e681f629d5f568180c2f48641a529e64c0edb8c888c9a66e"
+  },
+  "helperCorrection": {
+    "path": "test/helpers/mitko-directional-preservation.js",
+    "before": "import assert from 'node:assert/strict';\nimport {stripWalkingSide} from './walking-side-preservation.js';\nimport {readFileSync} from 'node:fs';\nimport {createHash} from 'node:crypto';\nimport {stripMitkoPocket} from './mitko-pocket-preservation.js';\nconst fixture=JSON.parse(readFileSync(new URL('../fixtures/mitko-directional-deltas.json',import.meta.url)));\nconst sha=v=>createHash('sha256').update(v).digest('hex');\n// Only invert the exact reviewed directional change before older fixed checks.\nexport function stripMitkoDirectional(path,source){\n source=stripWalkingSide(path,source);\n source=stripMitkoPocket(path,source);\n const r=fixture.records[path];if(!r)return source;\n assert.equal(sha(source),r.afterSHA256,'exact bound Mitko directional change: '+path);\n assert.equal(sha(r.before),r.beforeSHA256,'fixed pre-directional source: '+path);\n return r.before;\n}\n\nexport function restoreMitkoDirectionalSnapshot(kind,value){\n const r=fixture.snapshots?.[kind];if(!r)return value;\n assert.equal(sha(JSON.stringify(value)),r.afterSHA256,'exact bound Mitko directional snapshot: '+kind);\n assert.equal(sha(JSON.stringify(r.before)),r.beforeSHA256,'fixed pre-directional snapshot: '+kind);\n return structuredClone(r.before);\n}\n",
+    "beforeSHA256": "ea611d73dc94e954345b9133414f4dcb348f4941647a4c05d3ecbb274457bcc6",
+    "afterSHA256": "ac31a450b3df38541569d93a0fb37b22e8c5f9001bbe9088db51e040eab5a693"
   }
 }
