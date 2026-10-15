@@ -16,26 +16,20 @@
       "use": true,
       "source": "bai-mitko-walk-east-start.zip",
       "loop": false,
-      "frameStart": 0,
+      "frameStart": 8,
       "frameEndTrim": 0,
       "movementSpeedMultipliers": [
         0,
         0,
         0,
         0,
-        0,
-        0.6,
-        0.7,
-        0.3,
-        0.4,
-        0.8,
-        1,
-        1,
         0.7,
         0.6,
         0.5,
         0.4
-      ]
+      ],
+      "initialFrame": 0,
+      "pocketExitFrame": 4
     },
     "walk_east_loop": {
       "use": true,
@@ -94,7 +88,8 @@
         0.76,
         0.76,
         0.76
-      ]
+      ],
+      "pocketEntryFrame": 6
     },
     "idle_east_1": {
       "use": true,

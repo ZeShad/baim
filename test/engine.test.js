@@ -1835,11 +1835,11 @@ test("east movement exposes start loop short stop walk parts without mirroring m
   assert.equal(east.loop.slot, "external_walk_east_loop");
   assert.equal(east.short.slot, "external_walk_east_short");
   assert.equal(east.stop.slot, "external_walk_east_stop");
-  assert.equal(east.start.frameCount, 16);
+  assert.equal(east.start.frameCount, 8);
   assert.equal(east.loop.frameCount, 16);
   assert.equal(east.short.frameCount, 16);
   assert.equal(east.stop.frameCount, 14);
-  assert.equal(east.start.initialFrame, 1);
+  assert.equal(east.start.initialFrame, 0);
   assert.equal(east.loop.initialFrame, 1);
   assert.equal(east.short.initialFrame, 1);
   assert.equal(east.stop.initialFrame, 1);
@@ -1853,7 +1853,7 @@ test("east movement exposes start loop short stop walk parts without mirroring m
   assert.equal(east.loop.loop, true);
   assert.equal(east.short.loop, true);
   assert.equal(east.stop.loop, false);
-  assert.deepEqual(east.start.movementSpeedMultipliers, [0, 0, 0, 0, 0, 0.6, 0.7, 0.3, 0.4, 0.8, 1, 1, 0.7, 0.6, 0.5, 0.4]);
+  assert.deepEqual(east.start.movementSpeedMultipliers, [0, 0, 0, 0, 0.7, 0.6, 0.5, 0.4]);
   assert.deepEqual(east.short.movementSpeedMultipliers, east.loop.movementSpeedMultipliers);
   assert.equal(Boolean(east.loop.mirrored), false);
 });
@@ -2139,7 +2139,7 @@ test("new walk from idle uses start part when available", () => {
   assert.equal(player.walkPart, "start");
 });
 
-test("short walk uses short loop and skips stop animation when destination is reached", () => {
+test("short destination uses normal start and existing stop instead of pocketed moving gait", () => {
   const player = {
     position: { x: 0, y: 0 },
     target: null,
@@ -2166,19 +2166,19 @@ test("short walk uses short loop and skips stop animation when destination is re
   };
   const movement = new MovementSystem(player);
   movement.walkTo({ x: 20, y: 0 }, { x: 20, y: 0 }, [{ x: 0, y: 0 }, { x: 20, y: 0 }], { shortWalk: true });
-  assert.equal(player.walkPart, "short");
+  assert.equal(player.walkPart, "start");
   assert.equal(player.facing, "east");
   assert.equal(player.idleHoldFrame, null);
   assert.equal(player.idleVariant, null);
   assert.deepEqual(player.idleVariantQueue, []);
 
   movement.update(1);
-  assert.equal(player.animation, "idle");
-  assert.equal(player.walkPart, null);
+  assert.equal(player.animation, "walk");
+  assert.equal(player.walkPart, "stop");
   assert.equal(player.shortWalk, false);
   assert.equal(player.facing, "east");
   assert.equal(player.idleHoldFrame, null);
-  assert.equal(player.stopAnimationStarted, false);
+  assert.equal(player.stopAnimationStarted, true);
 });
 
 test("game chooses short walk from routed path distance threshold", () => {
@@ -2225,7 +2225,7 @@ test("reclicking during short walk uses current routed distance only", () => {
   assert.equal(captured.options.shortWalk, true);
 });
 
-test("active short walk does not switch into full walk on a long retarget", () => {
+test("legacy short state retargets into normal loop without restarting", () => {
   const player = {
     position: { x: 60, y: 0 },
     target: { x: 100, y: 0 },
@@ -2251,8 +2251,8 @@ test("active short walk does not switch into full walk on a long retarget", () =
   const movement = new MovementSystem(player);
   movement.walkTo({ x: 110, y: 0 }, { x: 110, y: 0 }, [{ x: 110, y: 0 }], { shortWalk: false });
 
-  assert.equal(player.shortWalk, true);
-  assert.equal(player.walkPart, "short");
+  assert.equal(player.shortWalk, false);
+  assert.equal(player.walkPart, "loop");
   assert.equal(player.animator.frameIndex, 9);
 });
 
@@ -2744,6 +2744,7 @@ test("empty walkable click uses the clicked point as the feet pivot destination"
   game.movement = {
     walkTo(point) {
       game.walkedTo = { ...point };
+      return new MovementSystem(game.player).walkTo(point);
     }
   };
   game.t = (key) => key;

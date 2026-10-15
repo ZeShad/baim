@@ -3,6 +3,7 @@ import { dirname, join, resolve } from "node:path";
 import { pathToFileURL } from "node:url";
 import { PNG } from "pngjs";
 import sharp from "sharp";
+import { externalAnimationV1 } from "../src/content/art/externalAnimationV1.generated.js";
 import {
   CLEANED_DIR,
   SELECTION_PATH,
@@ -12,7 +13,6 @@ import {
   inspectAnimationFolder,
   readJson,
   readPng,
-  resolveConfiguredFps,
   robustChromaKeyGreenToAlpha
 } from "./external-animation-utils.mjs";
 
@@ -54,7 +54,8 @@ function contentSource() {
   return chunks.join("\n");
 }
 
-function usageFor(key, config, category, source) {
+export function usageFor(key, config, category, source, metadata = {}) {
+  if (metadata.runtimeUsage === "retained" && config.reviewStatus !== "runtime_review") return { status: "Runtime-ready", usage: "Retained source; not selected by the current automatic controller" };
   if (config.reviewStatus === "runtime_review") return { status: "Runtime review", usage: "Local directional walking candidate; owner gameplay review/publication pending" };
   if (["Walk", "Idle", "Talk", "Reaction"].includes(category)) {
     return { status: "Live", usage: `Character controller - automatic ${category.toLowerCase()} selection` };
@@ -66,6 +67,14 @@ function usageFor(key, config, category, source) {
     ? [registration.sceneId, registration.sceneObjectId || registration.verb].filter(Boolean).join(" / ")
     : "Not assigned to a scene hotspot";
   return { status: live ? "Live" : "Runtime-ready", usage: live ? location : "Not assigned to a story hotspot" };
+}
+
+export function catalogRuntimeTiming(key, frameCount) {
+  const runtime = externalAnimationV1.animations[key];
+  if (!runtime || runtime.frameCount !== frameCount || !(runtime.fps > 0)) {
+    throw new Error(`Catalog/runtime range mismatch: ${key}; rebuild runtime metadata first`);
+  }
+  return { fps: runtime.fps, duration: frameCount / runtime.fps };
 }
 
 async function thumbnail(frame) {
@@ -103,9 +112,9 @@ export async function buildCatalogData() {
       return thumbnail(prepared);
     }));
     const category = categoryFor(key, config);
-    const usage = usageFor(key, config, category, source);
     const authored = metadata[key] || {};
-    const fps = resolveConfiguredFps(config, info);
+    const usage = usageFor(key, config, category, source, authored);
+    const { fps, duration } = catalogRuntimeTiming(key, frames.length);
     entries.push({
       id: key,
       label: authored.label || titleize(key),
@@ -116,7 +125,7 @@ export async function buildCatalogData() {
       usage: usage.usage,
       frameCount: frames.length,
       fps: Number(fps.toFixed(2)),
-      duration: frames.length / fps,
+      duration,
       loop: Boolean(config.loop),
       source: config.source || "Unknown source ZIP",
       directions: config.facing === "north" ? "North source / back view" : config.facing === "south" ? "South source / front view" : selection.mirrors && Object.values(selection.mirrors).some((value) => value.includes(key)) ? "East source + mirrored west" : "East source",

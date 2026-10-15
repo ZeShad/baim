@@ -1,0 +1,33 @@
+{
+  "acceptedRuntimeSHA256": {
+    "src/content/art/externalAnimationV1.generated.js": "bbdf271edd2f7260a470029afa0a5067c0a22d009281d99e4ab998bb0677ac72",
+    "src/content/art/externalAnimationRuntime.generated.js": "ee1a498ae495e22b4b11abfcf48084f46284f6b30647b5864007d1720a0ed4ac",
+    "test/helpers/mitko-directional-preservation.js": "ea611d73dc94e954345b9133414f4dcb348f4941647a4c05d3ecbb274457bcc6",
+    "test/helpers/mitko-pocket-preservation.js": "81e2350e3519db16cc8570cd909d2b753f9684397c8e7e2c89bf2f27d135c9a9",
+    "test/fixtures/mitko-pocket-deltas.json": "89d3cd1fff51bdbe4356ee6e3a2b276a848d7082cde542b4ae48d421404db9c2",
+    "src/engine/Game.js": "9da5dbed28bd519dd9316d7344005546a134296f1256ecc25f01dce4e25b9561",
+    "tools/build-external-runtime-staging.js": "82a788343691f6e49397f61a6be54321d7ad3fe4bb9d52a5fefd3ad6d1dac2b6",
+    "src/engine/MovementSystem.js": "3708373e99c70fb7619e22ce802e25e1af9d2c92241cc7b2b81c9cfe725f264e",
+    "test/engine.test.js": "3cf210490f42925456b2ee0af1646fd3bbde2443a14fd1a8ead8650bd8a31eb5",
+    "assets_src/characters/bai_mitko/external_animation_v1/external-animation-selection.json": "3618d3c3c56e946826d9973ad6afef49e5ccc35f0e189c963516e2421bb15c02",
+    "src/engine/Renderer.js": "d6495470a3dfcafe10c290a5d1c2561fa0f980d316fcccf24a46998632a89bb4",
+    "test/mitko-pocket-transitions.test.js": "f82773016e87d36dcdcce6b1daef774b7a2998bb42a7b459a99445fce11e9250",
+    "src/engine/InteractionApproach.js": "f80c818fbc8474facc618984a46c2caff556bb57f4e0892f5e7324ab3424595e",
+    "src/content/chapter1/scenes.js": "38c35b9e6b1417d8a5420551bb6b7970c65706a166ed21d9341277e0146b3c20",
+    "src/content/localization/bg.js": "b31ac7940ac1e57dd237ecc2d9fb4884eb0d1d92a80c95133915d038abd849dd",
+    "src/content/localization/en.js": "fa7afd6b6b3734170c055744dc802391901630f400ed6d138aa7c734a22166b3",
+    "test/walking-side-interactions.test.js": "1d01ec535d4523ede74459be88b980510325fac9e68de2c187465f505ea49c51",
+    "test/helpers/walking-side-preservation.js": "0149d792a58847d6b47bc1bc4cf7f8ec4a1b2be1cf492a17ddcb5770d2af4883",
+    "test/fixtures/walking-side-deltas.json": "44774f9cce43bee8df5002ea578c57fa91b743d66517afa694a082fccdf9be2f"
+  },
+  "metadata": {
+    "path": "assets_src/characters/bai_mitko/external_animation_v1/animation-catalog-metadata.json",
+    "before": "{\n  \"walk_east_start\": {\n    \"label\": \"Walk - Start\",\n    \"description\": \"Bai Mitko shifts out of his standing pose and commits his weight into the first east-facing steps.\"\n  },\n  \"walk_east_loop\": {\n    \"label\": \"Walk - Loop\",\n    \"description\": \"The repeatable middle section of Bai Mitko's east-facing walk, used while he crosses longer distances.\"\n  },\n  \"walk_east_short\": {\n    \"label\": \"Walk - Short\",\n    \"description\": \"A compact east-facing walk cycle for short movements where the full start-loop-stop sequence would feel too long.\"\n  },\n  \"walk_east_stop\": {\n    \"label\": \"Walk - Stop\",\n    \"description\": \"Bai Mitko slows from his east-facing walk and settles back into a stable standing pose.\"\n  },\n  \"idle_east_1\": {\n    \"label\": \"Idle - Variant 1\",\n    \"description\": \"A one-shot east-facing idle performance used by the automatic idle pool before returning to the neutral stance.\"\n  },\n  \"idle_east_2\": {\n    \"label\": \"Idle - Variant 2\",\n    \"description\": \"A second one-shot east-facing idle performance that adds variety while Bai Mitko is waiting.\"\n  },\n  \"idle_east_3\": {\n    \"label\": \"Idle - Variant 3\",\n    \"description\": \"A third one-shot east-facing idle performance selected automatically during inactive moments.\"\n  },\n  \"idle_east_4\": {\n    \"label\": \"Idle - Variant 4\",\n    \"description\": \"A fourth one-shot east-facing idle performance that breaks up repeated neutral poses.\"\n  },\n  \"idle_east_5\": {\n    \"label\": \"Idle - Variant 5\",\n    \"description\": \"A fifth one-shot east-facing idle performance used as part of the character's randomized idle behavior.\"\n  },\n  \"idle_east_6\": {\n    \"label\": \"Idle - Variant 6\",\n    \"description\": \"A sixth one-shot east-facing idle performance that returns cleanly to Bai Mitko's neutral stance.\"\n  },\n  \"talk_east_long_1\": {\n    \"label\": \"Talk - Long Sentence\",\n    \"description\": \"An east-facing speaking performance timed for a longer sentence, with broader sustained conversational movement.\"\n  },\n  \"talk_east_long_2\": {\n    \"label\": \"Talk - Short Sentence\",\n    \"description\": \"An east-facing speaking performance for a short sentence, ending sooner than the long dialogue variant.\"\n  },\n  \"talk_east_short_1\": {\n    \"label\": \"Talk - Single Word\",\n    \"description\": \"A brief east-facing speaking gesture intended for a single word or very short reply.\"\n  },\n  \"reject_east_1\": {\n    \"label\": \"Reject Action\",\n    \"description\": \"Bai Mitko gives a negative or refusing response when the player tries an action that he will not perform.\"\n  },\n  \"look_into_distance_east_1\": {\n    \"label\": \"Look Into the Distance\",\n    \"description\": \"Bai Mitko shades his eyes and looks into the distance with a slightly confused expression.\"\n  },\n  \"take_east_forward_default\": {\n    \"label\": \"Take Object - Forward\",\n    \"description\": \"Bai Mitko reaches forward to collect an object; currently staged for taking the unpaid bills in the apartment.\"\n  },\n  \"opens_window\": {\n    \"label\": \"Open Apartment Window\",\n    \"description\": \"Bai Mitko approaches and opens the apartment window as part of the window interaction.\"\n  },\n  \"walk_north_loop\": {\n    \"label\": \"Walk - Brisk Away / Back\",\n    \"description\": \"Owner-selected original-walk New Direction export mitko-fast-walk-away-loop-3s-new-direction-c10; 36 frames / 864 ms native timing. Owner-approved runtime with same-source settling. Previous source retained.\"\n  },\n  \"walk_south_loop\": {\n    \"label\": \"Walk - Brisk Toward / Front\",\n    \"description\": \"Owner-selected original-walk New Direction export mitko-fast-walk-toward-loop-3s-new-direction-c11; 16 frames / 960 ms native timing. Owner-approved runtime with same-source settling. Previous source retained.\"\n  }\n}\n",
+    "beforeSHA256": "ff8f1c6299018c4ad67a5e15a630bae3d02cd3548a85ae8fb7cdacbba1289106",
+    "changedKeys": [
+      "walk_east_start",
+      "walk_east_short",
+      "walk_east_stop"
+    ]
+  }
+}

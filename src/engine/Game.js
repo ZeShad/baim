@@ -4,8 +4,9 @@ import { DialogueSystem } from "./DialogueSystem.js";
 import { applyEffects, firstMatchingRule, requirementsMet } from "./EffectSystem.js";
 import { resolveEnding } from "./EndingSystem.js";
 import { InventorySystem } from "./InventorySystem.js";
+import { isCharacterInteraction, planCharacterApproach, characterInteractionBounds } from "./InteractionApproach.js";
 import { Localization } from "./Localization.js";
-import { eastWestFallbackFacing, facingFromDelta, motionMultiplierAtFrame, MovementSystem, walkFacing } from "./MovementSystem.js";
+import { eastWestFallbackFacing, facingFromDelta, motionMultiplierAtFrame, MovementSystem, walkFacing, walkMotionMultiplierForFrame, requestWalkStop, walkCommandHasDistance } from "./MovementSystem.js";
 import { QuestSystem } from "./QuestSystem.js";
 import { Renderer } from "./Renderer.js";
 import { SceneIdleVariations, sceneIdleVariationsBlocked } from "./SceneIdleVariations.js";
@@ -131,6 +132,7 @@ export class Game {
       idleVariant: null,
       idleVariantQueue: [],
       idleHoldFrame: null,
+      locomotionStartFrame: null,
       idleVariantTimer: this.randomIdleVariantDelay(),
       actionAnimation: null,
       actionSequence: null,
@@ -221,7 +223,8 @@ export class Game {
       this.player.walkVisualHeight = characterHeight(this.characterDefinitions[this.player.id], this.currentScene, this.player.position);
       this.player.directionalSpeedScale = this.walkSpeedMultiplier * intoxicationMovementMultiplier(this.state?.rakiaGlasses);
       const wasWalking = this.player.animation === "walk";
-      this.movement.update(dt);
+      const locomotionArtReady = this.locomotionArtReady();
+      if (locomotionArtReady) this.movement.update(dt);
       const walked = Math.hypot(this.player.position.x - feetBefore.x, this.player.position.y - feetBefore.y);
       const height = characterHeight(this.characterDefinitions[this.player.id], this.currentScene, this.player.position);
       this.audio.updateFootsteps(walked, height, this.currentScene.footsteps,
@@ -238,7 +241,7 @@ export class Game {
       this.player.animator.loopOverride = this.currentAnimationLoop();
       this.player.animator.pingPongOverride = this.currentAnimationPingPong();
       this.player.animator.play(this.player.animation, this.currentAnimationKey());
-      this.player.animator.update(dt);
+      this.player.animator.update(locomotionArtReady ? dt * this.locomotionCadenceRatio() : 0);
       this.updateActionSequence();
       this.updateSpeechAnimationHold();
       this.updateSpeechBubble(dt);
@@ -534,12 +537,31 @@ export class Game {
     return frame.fps;
   }
 
+  locomotionCadenceRatio() {
+    // Integrate playback time rather than multiplying FPS by total elapsed
+    // time (which would jump phase). Stationary withdrawal/stop keep their timing;
+    // only moving start/loop frames follow the same ramp as world distance.
+    return this.player.animation === "walk" && this.player.target
+      && (this.player.walkPart === "loop" || this.player.walkPart === "start")
+      && walkMotionMultiplierForFrame(this.player) > 0
+      ? (this.player.walkCadenceRatio ?? 1) : 1;
+  }
+
+  locomotionArtReady() {
+    if (this.player.animation !== "walk") return true;
+    const parts = this.player.walkPartsByFacing?.[walkFacing(this.player)];
+    if (!Number.isInteger(parts?.start?.pocketExitFrame)) return true;
+    return [parts.start, parts.loop, parts.stop].every(frame =>
+      frame?.slot && this.assets.isLoaded(this.assets.getCharacterImage(this.player.id, frame.slot)));
+  }
+
   currentAnimationFrame() {
     const facing = this.player.facing || "south";
     const fallbackFacing = walkFacing(this.player, facing);
     if (fallbackFacing) {
       const parts = this.player.walkPartsByFacing?.[fallbackFacing];
       const part = this.player.walkPart || "loop";
+      if (part === "start" && this.player.locomotionStartFrame?.facing === fallbackFacing) return this.player.locomotionStartFrame;
       if (part === "stop" && this.player.directionalStopFrame?.facing === fallbackFacing) return this.player.directionalStopFrame;
       return parts?.[part] || parts?.loop || null;
     }
@@ -1147,7 +1169,7 @@ export class Game {
       this.selectedInventoryItemId = null;
       this.renderUi();
     }
-    const target = findTargetAt(this.currentScene, point, (candidate) => this.targetAvailable(candidate));
+    const target = this.sceneTargetAt(point);
     if (target) {
       this.handleTarget(target, point);
       return;
@@ -1157,19 +1179,17 @@ export class Game {
       this.renderUi();
     }
     if (this.currentScene?.playerMode === "closeup") return;
-    this.player.pendingInteraction = null;
     const destination = isWalkable(this.currentScene, point)
       ? point
       : nearestReachableWalkablePoint(this.currentScene, this.player.position, point);
-    if (destination) {
-      this.facePoint(point);
+    if (destination && this.walkToPoint(destination, point)) {
+      this.player.pendingInteraction = null;
       this.player.pendingFacingPoint = { ...point };
       this.player.interactionDebug = {
         kind: "move",
         click: { ...point },
         feet: { ...destination }
       };
-      this.walkToPoint(destination, point);
       this.clearStatusMessage();
     }
   }
@@ -1179,11 +1199,24 @@ export class Game {
       || this.sceneTransitionPending || this.player?.actionSequence || this.player?.animation === "action";
     const previousTargetId = this.hoveredTarget?.id || null;
     this.hoveredTarget = !blocked && point
-      ? findTargetAt(this.currentScene, point, (candidate) => this.targetAvailable(candidate))
+      ? this.sceneTargetAt(point)
       : null;
     if (this.canvas?.style) this.canvas.style.cursor = this.hoveredTarget ? "pointer" : "default";
     if (this.inventoryUseItemId && previousTargetId !== (this.hoveredTarget?.id || null)) this.renderUi();
     return this.hoveredTarget;
+  }
+
+  sceneTargetAt(point) {
+    // The approved square painting moved Baba independently of the old hotspot.
+    // Admit clicks on her visible body, keeping original targets/quest IDs intact.
+    if (this.currentScene.id === "scene.chapter1.village_square") {
+      const baba = this.currentScene.npcs.find(t => t.id === "npc.baba_stoyanka");
+      if (baba && this.targetAvailable(baba)) {
+        const r = this.characterApproachBounds(baba);
+        if (point.x >= r.x && point.x <= r.x + r.w && point.y >= r.y && point.y <= r.y + r.h) return baba;
+      }
+    }
+    return findTargetAt(this.currentScene, point, candidate => this.targetAvailable(candidate));
   }
 
   targetAvailable(target) {
@@ -1200,6 +1233,10 @@ export class Game {
 
   shouldApproachTargetBeforeAction(target, clickPoint = null) {
     if (target.kind === "exit") return false;
+    const characterTarget = this.interactionCharacterTarget(target);
+    if (characterTarget && !this.actionSequenceApproachPoint(this.actionSequenceForTarget(target, this.selectedVerb))) {
+      return this.approachCharacter(target, characterTarget);
+    }
     if (this.currentScene?.playerMode === "closeup" || (this.currentScene?.playerMode === "seated" && !target.interactionApproach)) return false;
     const actionSequence = this.actionSequenceForTarget(target, this.selectedVerb);
     const actionApproach = this.actionSequenceApproachPoint(actionSequence);
@@ -1319,12 +1356,69 @@ export class Game {
     const pending = this.player.pendingInteraction;
     if (!pending || this.player.target || this.player.animation === "walk") return;
     this.player.pendingInteraction = null;
-    if (pending.hand) this.facePoint(pending.hand);
+    if (pending.sideFacing) this.faceInteractionSide(pending.sideFacing);
+    else if (pending.hand) this.facePoint(pending.hand);
     const previousVerb = this.selectedVerb;
     this.selectedVerb = pending.verb;
     if (pending.inventoryUseItemId) this.inventoryUseItemId = pending.inventoryUseItemId;
     this.performTargetAction(pending.target, pending.actionSequence);
     this.selectedVerb = previousVerb;
+  }
+
+  interactionCharacterTarget(target) {
+    if (isCharacterInteraction(target)) return target;
+    const dialogueId = target.dialogueId || target.useDialogueId;
+    const npcId = this.content?.dialogues?.[dialogueId]?.npcId;
+    return npcId ? findSceneSpeaker(this.currentScene, npcId) : null;
+  }
+
+  approachCharacter(target, characterTarget = target) {
+    const height = point => characterHeight(this.characterDefinitions["npc.bai_mitko"], this.currentScene, point);
+    const interactionBody = this.characterApproachBounds(characterTarget);
+    const planningScene = { ...this.currentScene, npcs: this.currentScene.npcs.filter(n => !this.state || this.targetAvailable(n))
+      .map(n => ({ ...n, interactionBody: this.characterApproachBounds(n) })) };
+    const plan = planCharacterApproach(planningScene, { ...characterTarget, interactionBody }, this.player.position, height);
+    if (!plan) {
+      this.player.pendingInteraction = null;
+      this.player.pendingFacingPoint = null;
+      this.player.interactionDebug = { kind: "blocked-side-approach", targetId: target.id };
+      this.setStatusMessage(this.t("msg.side_approach_blocked"));
+      return true;
+    }
+    this.player.interactionDebug = { kind: "character-side", targetId: target.id,
+      feet: { ...plan.point }, facing: plan.facing, customerSide: Boolean(plan.customerSide), spatialException: Boolean(plan.spatialException) };
+    if (distance(this.player.position, plan.point) <= 4 && !this.player.target && this.player.animation !== "walk") {
+      this.faceInteractionSide(plan.facing);
+      return false;
+    }
+    const pending = { target, verb: this.selectedVerb, approach: plan.point,
+      sideFacing: plan.facing, inventoryUseItemId: this.inventoryUseItemId };
+    if (distance(this.player.position, plan.point) <= 4) {
+      this.player.pendingFacingPoint = null;
+      this.player.pendingInteraction = pending;
+      if (this.player.target) requestWalkStop(this.player);
+      return true;
+    }
+    if (!this.walkToPoint(plan.point, plan.point, { path: plan.path, arrivalFacing: plan.facing })) return true;
+    this.player.pendingFacingPoint = null;
+    this.player.pendingInteraction = pending;
+    this.clearStatusMessage();
+    return true;
+  }
+
+  faceInteractionSide(facing) {
+    this.player.facing = facing;
+    this.player.idleHoldFrame = null;
+    this.player.idleVariant = null;
+    this.player.idleVariantQueue = [];
+    this.player.directionalStopFrame = null;
+  }
+
+  characterApproachBounds(target) {
+    return characterInteractionBounds(this.currentScene, target, layer => {
+      const image = this.assets?.getSceneImage?.(this.currentScene.id, layer.asset);
+      return image && this.assets.isLoaded(image) ? this.renderer.sceneLayerRect(layer, image) : null;
+    });
   }
 
   targetCenter(target) {
@@ -1389,17 +1483,20 @@ export class Game {
     }
   }
 
-  walkToPoint(point, facingPoint = point) {
+  walkToPoint(point, facingPoint = point, options = {}) {
     if (this.inspectedItemId || this.sceneAction?.active) return;
-    const path = findWalkPath(this.currentScene, this.player.position, point);
-    const route = path.length ? path : [{ ...point }];
+    if (!isWalkable(this.currentScene, point)) return false;
+    const path = options.path || findWalkPath(this.currentScene, this.player.position, point);
+    if (!path.length) return false;
+    const route = path;
     const routeDistance = walkPathDistance(this.player.position, route);
+    if (!walkCommandHasDistance(routeDistance)) return false;
     const shortWalk = routeDistance > 0 && routeDistance <= SHORT_WALK_PATH_DISTANCE;
     this.hideSpeechBubble(true);
     this.npcSpeechBubble = null;
     this.player.actionSequence = null;
     this.player.actionAnimation = null;
-    this.movement.walkTo(point, facingPoint, route, { shortWalk });
+    return this.movement.walkTo(point, facingPoint, route, { shortWalk, arrivalFacing: options.arrivalFacing });
   }
 
   performTargetAction(target, forcedActionSequence = null) {
@@ -1811,7 +1908,13 @@ export class Game {
       this.player.actionAnimation = null;
       this.player.animation = "idle";
       this.player.speed = this.sceneMovementSpeed(this.currentScene);
+      this.player.walkTravelElapsed = 0;
+      this.player.walkCadenceRatio = 1;
       this.player.directionalStopFrame = null;
+      this.player.locomotionStartFrame = null;
+      this.player.walkPart = null;
+      this.player.pendingStop = false;
+      this.player.movementStopping = false;
       if (this.player.idleHoldFrame?.frame?.settleOnStop) this.player.idleHoldFrame = null;
       this.protectCurrentAssetWorkingSet();
       this.save();
@@ -1867,7 +1970,14 @@ export class Game {
     this.player.actionSequence = null;
     this.player.actionAnimation = null;
     this.player.animation = "idle";
+    this.player.locomotionStartFrame = null;
+    this.player.directionalStopFrame = null;
+    this.player.walkPart = null;
+    this.player.pendingStop = false;
+    this.player.movementStopping = false;
     this.hoveredTarget = null;
+    this.player.walkTravelElapsed = 0;
+    this.player.walkCadenceRatio = 1;
     this.message = this.t("ui.hint");
     this.menuOpen = true;
     this.paused = false;
@@ -2960,6 +3070,12 @@ node tools/build-external-runtime-staging.js</pre>
     const dialogue = this.content.dialogues[session?.id];
     const npcId = node?.npcId || dialogue?.npcId;
     const npc = findSceneSpeaker(this.currentScene, npcId);
+    if (npc?.rect && this.player?.position && !this.player.target && this.player.animation !== "action"
+      && !this.player.actionAnimation && !this.player.actionSequence && !this.sceneAction?.active) {
+      const body = this.characterApproachBounds(npc);
+      const facing = body.x + body.w / 2 >= this.player.position.x ? "east" : "west";
+      if (this.player.facing !== facing) this.faceInteractionSide(facing);
+    }
     if (!node?.lineKey || !dialogue?.npcId || !npc) {
       this.npcDialogueSpeech = null;
       return;

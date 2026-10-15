@@ -48,16 +48,17 @@ export const externalAnimationV1 = {
         "frameHeight": 1198,
         "sheetWidth": 3192,
         "sheetHeight": 4792,
-        "frameCount": 16,
+        "frameCount": 8,
         "sourceFrameCount": 16,
-        "frameStart": 0,
+        "frameStart": 8,
         "frameEndTrim": 0,
         "configuredFrameCount": null,
         "fps": 20,
         "loop": false,
         "pingPong": false,
         "role": "start",
-        "initialFrame": 1,
+        "pocketExitFrame": 4,
+        "initialFrame": 0,
         "anchorX": 0.5,
         "anchorY": 1,
         "anchor": {
@@ -323,54 +324,6 @@ export const externalAnimationV1 = {
         ],
         "frameContentBounds": [
           {
-            "x": 227,
-            "y": 158,
-            "w": 313,
-            "h": 858
-          },
-          {
-            "x": 221,
-            "y": 158,
-            "w": 318,
-            "h": 858
-          },
-          {
-            "x": 215,
-            "y": 156,
-            "w": 324,
-            "h": 860
-          },
-          {
-            "x": 204,
-            "y": 152,
-            "w": 335,
-            "h": 864
-          },
-          {
-            "x": 198,
-            "y": 149,
-            "w": 341,
-            "h": 867
-          },
-          {
-            "x": 188,
-            "y": 147,
-            "w": 333,
-            "h": 870
-          },
-          {
-            "x": 184,
-            "y": 147,
-            "w": 336,
-            "h": 870
-          },
-          {
-            "x": 179,
-            "y": 152,
-            "w": 341,
-            "h": 866
-          },
-          {
             "x": 179,
             "y": 159,
             "w": 343,
@@ -420,78 +373,6 @@ export const externalAnimationV1 = {
           }
         ],
         "frameRects": [
-          {
-            "x": 0,
-            "y": 0,
-            "w": 798,
-            "h": 1198,
-            "name": "frame_000",
-            "duration": 65,
-            "sourceFrameIndex": 0
-          },
-          {
-            "x": 798,
-            "y": 0,
-            "w": 798,
-            "h": 1198,
-            "name": "frame_001",
-            "duration": 65,
-            "sourceFrameIndex": 1
-          },
-          {
-            "x": 1596,
-            "y": 0,
-            "w": 798,
-            "h": 1198,
-            "name": "frame_002",
-            "duration": 65,
-            "sourceFrameIndex": 2
-          },
-          {
-            "x": 2394,
-            "y": 0,
-            "w": 798,
-            "h": 1198,
-            "name": "frame_003",
-            "duration": 65,
-            "sourceFrameIndex": 3
-          },
-          {
-            "x": 0,
-            "y": 1198,
-            "w": 798,
-            "h": 1198,
-            "name": "frame_004",
-            "duration": 65,
-            "sourceFrameIndex": 4
-          },
-          {
-            "x": 798,
-            "y": 1198,
-            "w": 798,
-            "h": 1198,
-            "name": "frame_005",
-            "duration": 65,
-            "sourceFrameIndex": 5
-          },
-          {
-            "x": 1596,
-            "y": 1198,
-            "w": 798,
-            "h": 1198,
-            "name": "frame_006",
-            "duration": 65,
-            "sourceFrameIndex": 6
-          },
-          {
-            "x": 2394,
-            "y": 1198,
-            "w": 798,
-            "h": 1198,
-            "name": "frame_007",
-            "duration": 65,
-            "sourceFrameIndex": 7
-          },
           {
             "x": 0,
             "y": 2396,
@@ -570,14 +451,6 @@ export const externalAnimationV1 = {
           0,
           0,
           0,
-          0,
-          0.6,
-          0.7,
-          0.3,
-          0.4,
-          0.8,
-          1,
-          1,
           0.7,
           0.6,
           0.5,
@@ -1714,6 +1587,7 @@ export const externalAnimationV1 = {
         "loop": false,
         "pingPong": false,
         "role": "stop",
+        "pocketEntryFrame": 6,
         "stopRenderOffsetXStart": -8,
         "stopRenderOffsetYStart": 0,
         "initialFrame": 1,
@@ -2229,16 +2103,17 @@ export const externalAnimationV1 = {
         "frameHeight": 1198,
         "sheetWidth": 3192,
         "sheetHeight": 4792,
-        "frameCount": 16,
+        "frameCount": 8,
         "sourceFrameCount": 16,
-        "frameStart": 0,
+        "frameStart": 8,
         "frameEndTrim": 0,
         "configuredFrameCount": null,
         "fps": 20,
         "loop": false,
         "pingPong": false,
         "role": "start",
-        "initialFrame": 1,
+        "pocketExitFrame": 4,
+        "initialFrame": 0,
         "anchorX": 0.5,
         "anchorY": 1,
         "anchor": {
@@ -2504,54 +2379,6 @@ export const externalAnimationV1 = {
         ],
         "frameContentBounds": [
           {
-            "x": 227,
-            "y": 158,
-            "w": 313,
-            "h": 858
-          },
-          {
-            "x": 221,
-            "y": 158,
-            "w": 318,
-            "h": 858
-          },
-          {
-            "x": 215,
-            "y": 156,
-            "w": 324,
-            "h": 860
-          },
-          {
-            "x": 204,
-            "y": 152,
-            "w": 335,
-            "h": 864
-          },
-          {
-            "x": 198,
-            "y": 149,
-            "w": 341,
-            "h": 867
-          },
-          {
-            "x": 188,
-            "y": 147,
-            "w": 333,
-            "h": 870
-          },
-          {
-            "x": 184,
-            "y": 147,
-            "w": 336,
-            "h": 870
-          },
-          {
-            "x": 179,
-            "y": 152,
-            "w": 341,
-            "h": 866
-          },
-          {
             "x": 179,
             "y": 159,
             "w": 343,
@@ -2601,78 +2428,6 @@ export const externalAnimationV1 = {
           }
         ],
         "frameRects": [
-          {
-            "x": 0,
-            "y": 0,
-            "w": 798,
-            "h": 1198,
-            "name": "frame_000",
-            "duration": 65,
-            "sourceFrameIndex": 0
-          },
-          {
-            "x": 798,
-            "y": 0,
-            "w": 798,
-            "h": 1198,
-            "name": "frame_001",
-            "duration": 65,
-            "sourceFrameIndex": 1
-          },
-          {
-            "x": 1596,
-            "y": 0,
-            "w": 798,
-            "h": 1198,
-            "name": "frame_002",
-            "duration": 65,
-            "sourceFrameIndex": 2
-          },
-          {
-            "x": 2394,
-            "y": 0,
-            "w": 798,
-            "h": 1198,
-            "name": "frame_003",
-            "duration": 65,
-            "sourceFrameIndex": 3
-          },
-          {
-            "x": 0,
-            "y": 1198,
-            "w": 798,
-            "h": 1198,
-            "name": "frame_004",
-            "duration": 65,
-            "sourceFrameIndex": 4
-          },
-          {
-            "x": 798,
-            "y": 1198,
-            "w": 798,
-            "h": 1198,
-            "name": "frame_005",
-            "duration": 65,
-            "sourceFrameIndex": 5
-          },
-          {
-            "x": 1596,
-            "y": 1198,
-            "w": 798,
-            "h": 1198,
-            "name": "frame_006",
-            "duration": 65,
-            "sourceFrameIndex": 6
-          },
-          {
-            "x": 2394,
-            "y": 1198,
-            "w": 798,
-            "h": 1198,
-            "name": "frame_007",
-            "duration": 65,
-            "sourceFrameIndex": 7
-          },
           {
             "x": 0,
             "y": 2396,
@@ -2751,14 +2506,6 @@ export const externalAnimationV1 = {
           0,
           0,
           0,
-          0,
-          0.6,
-          0.7,
-          0.3,
-          0.4,
-          0.8,
-          1,
-          1,
           0.7,
           0.6,
           0.5,
@@ -3901,6 +3648,7 @@ export const externalAnimationV1 = {
         "loop": false,
         "pingPong": false,
         "role": "stop",
+        "pocketEntryFrame": 6,
         "stopRenderOffsetXStart": -8,
         "stopRenderOffsetYStart": 0,
         "initialFrame": 1,
@@ -30688,16 +30436,17 @@ export const externalAnimationV1 = {
       "frameHeight": 1198,
       "sheetWidth": 3192,
       "sheetHeight": 4792,
-      "frameCount": 16,
+      "frameCount": 8,
       "sourceFrameCount": 16,
-      "frameStart": 0,
+      "frameStart": 8,
       "frameEndTrim": 0,
       "configuredFrameCount": null,
       "fps": 20,
       "loop": false,
       "pingPong": false,
       "role": "start",
-      "initialFrame": 1,
+      "pocketExitFrame": 4,
+      "initialFrame": 0,
       "anchorX": 0.5,
       "anchorY": 1,
       "anchor": {
@@ -30963,54 +30712,6 @@ export const externalAnimationV1 = {
       ],
       "frameContentBounds": [
         {
-          "x": 227,
-          "y": 158,
-          "w": 313,
-          "h": 858
-        },
-        {
-          "x": 221,
-          "y": 158,
-          "w": 318,
-          "h": 858
-        },
-        {
-          "x": 215,
-          "y": 156,
-          "w": 324,
-          "h": 860
-        },
-        {
-          "x": 204,
-          "y": 152,
-          "w": 335,
-          "h": 864
-        },
-        {
-          "x": 198,
-          "y": 149,
-          "w": 341,
-          "h": 867
-        },
-        {
-          "x": 188,
-          "y": 147,
-          "w": 333,
-          "h": 870
-        },
-        {
-          "x": 184,
-          "y": 147,
-          "w": 336,
-          "h": 870
-        },
-        {
-          "x": 179,
-          "y": 152,
-          "w": 341,
-          "h": 866
-        },
-        {
           "x": 179,
           "y": 159,
           "w": 343,
@@ -31060,78 +30761,6 @@ export const externalAnimationV1 = {
         }
       ],
       "frameRects": [
-        {
-          "x": 0,
-          "y": 0,
-          "w": 798,
-          "h": 1198,
-          "name": "frame_000",
-          "duration": 65,
-          "sourceFrameIndex": 0
-        },
-        {
-          "x": 798,
-          "y": 0,
-          "w": 798,
-          "h": 1198,
-          "name": "frame_001",
-          "duration": 65,
-          "sourceFrameIndex": 1
-        },
-        {
-          "x": 1596,
-          "y": 0,
-          "w": 798,
-          "h": 1198,
-          "name": "frame_002",
-          "duration": 65,
-          "sourceFrameIndex": 2
-        },
-        {
-          "x": 2394,
-          "y": 0,
-          "w": 798,
-          "h": 1198,
-          "name": "frame_003",
-          "duration": 65,
-          "sourceFrameIndex": 3
-        },
-        {
-          "x": 0,
-          "y": 1198,
-          "w": 798,
-          "h": 1198,
-          "name": "frame_004",
-          "duration": 65,
-          "sourceFrameIndex": 4
-        },
-        {
-          "x": 798,
-          "y": 1198,
-          "w": 798,
-          "h": 1198,
-          "name": "frame_005",
-          "duration": 65,
-          "sourceFrameIndex": 5
-        },
-        {
-          "x": 1596,
-          "y": 1198,
-          "w": 798,
-          "h": 1198,
-          "name": "frame_006",
-          "duration": 65,
-          "sourceFrameIndex": 6
-        },
-        {
-          "x": 2394,
-          "y": 1198,
-          "w": 798,
-          "h": 1198,
-          "name": "frame_007",
-          "duration": 65,
-          "sourceFrameIndex": 7
-        },
         {
           "x": 0,
           "y": 2396,
@@ -31210,14 +30839,6 @@ export const externalAnimationV1 = {
         0,
         0,
         0,
-        0,
-        0.6,
-        0.7,
-        0.3,
-        0.4,
-        0.8,
-        1,
-        1,
         0.7,
         0.6,
         0.5,
@@ -32351,6 +31972,7 @@ export const externalAnimationV1 = {
       "loop": false,
       "pingPong": false,
       "role": "stop",
+      "pocketEntryFrame": 6,
       "stopRenderOffsetXStart": -8,
       "stopRenderOffsetYStart": 0,
       "initialFrame": 1,
