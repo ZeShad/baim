@@ -2756,7 +2756,8 @@ test("empty walkable click uses the clicked point as the feet pivot destination"
   assert.equal(game.message, "");
   assert.deepEqual(game.player.interactionDebug, { kind: "move", click: { x: 650, y: 520 }, feet: { x: 650, y: 520 } });
   assert.equal(game.player.pendingInteraction, null);
-  assert.deepEqual(game.player.pendingFacingPoint, { x: 650, y: 520 });
+  // Ordinary arrival follows its final locomotion segment, not a later click-facing swivel.
+  assert.equal(game.player.pendingFacingPoint, null);
 });
 
 test("finished empty move turns toward the requested walk point", () => {

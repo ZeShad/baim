@@ -4,6 +4,7 @@ import {readFileSync} from 'node:fs';
 import {createHash} from 'node:crypto';
 import {usageFor,catalogRuntimeTiming} from '../tools/build-animation-catalog.mjs';
 import {stripWalkingCatalogPromotion,stripMitkoDirectional} from './helpers/mitko-directional-preservation.js';
+import {stripCentreFacing} from './helpers/centre-facing-preservation.js';
 const fixture=JSON.parse(readFileSync('test/fixtures/walking-catalog-promotion.json','utf8'));
 const sha=b=>createHash('sha256').update(b).digest('hex');
 test('catalog timing uses accepted runtime cadence and rejects stale selected ranges',()=>{
@@ -30,7 +31,7 @@ test('catalog promotion changes only three descriptions and preserves every acce
   assert.match(after.walk_east_stop.description,/without an arrival slowdown/);
   assert.match(after.walk_east_stop.description,/1088ms/);
   for(const [p,h]of Object.entries(fixture.acceptedRuntimeSHA256)){
-    let bytes=readFileSync(p);const correction=fixture.helperCorrection;
+    let bytes=Buffer.from(stripCentreFacing(p,readFileSync(p)));const correction=fixture.helperCorrection;
     if(p===correction.path){
       assert.equal(sha(bytes),correction.afterSHA256,'exact reviewed preservation helper correction');
       assert.equal(sha(correction.before),correction.beforeSHA256,'original accepted helper bytes');

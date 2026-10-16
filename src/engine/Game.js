@@ -1184,7 +1184,7 @@ export class Game {
       : nearestReachableWalkablePoint(this.currentScene, this.player.position, point);
     if (destination && this.walkToPoint(destination, point)) {
       this.player.pendingInteraction = null;
-      this.player.pendingFacingPoint = { ...point };
+      this.player.pendingFacingPoint = null;
       this.player.interactionDebug = {
         kind: "move",
         click: { ...point },
@@ -1496,7 +1496,8 @@ export class Game {
     this.npcSpeechBubble = null;
     this.player.actionSequence = null;
     this.player.actionAnimation = null;
-    return this.movement.walkTo(point, facingPoint, route, { shortWalk, arrivalFacing: options.arrivalFacing });
+    return this.movement.walkTo(point, facingPoint, route, { shortWalk, arrivalFacing: options.arrivalFacing,
+      sceneCentreX: (Number(this.currentScene.walkMask?.worldWidth) || 1280) / 2 });
   }
 
   performTargetAction(target, forcedActionSequence = null) {
@@ -1912,6 +1913,8 @@ export class Game {
       this.player.walkCadenceRatio = 1;
       this.player.directionalStopFrame = null;
       this.player.locomotionStartFrame = null;
+      this.player.arrivalSceneCentreX = null;
+      this.player.lastLocomotionFacing = null;
       this.player.walkPart = null;
       this.player.pendingStop = false;
       this.player.movementStopping = false;
@@ -1972,6 +1975,8 @@ export class Game {
     this.player.animation = "idle";
     this.player.locomotionStartFrame = null;
     this.player.directionalStopFrame = null;
+    this.player.arrivalSceneCentreX = null;
+    this.player.lastLocomotionFacing = null;
     this.player.walkPart = null;
     this.player.pendingStop = false;
     this.player.movementStopping = false;
