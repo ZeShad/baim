@@ -1497,6 +1497,9 @@ export class Game {
     this.player.actionSequence = null;
     this.player.actionAnimation = null;
     return this.movement.walkTo(point, facingPoint, route, { shortWalk, arrivalFacing: options.arrivalFacing,
+      calibrateLongJourney: true,
+      heightAt: position => characterHeight(this.characterDefinitions?.[this.player.id]
+        || characterDefinitions["npc.bai_mitko"], this.currentScene, position),
       sceneCentreX: (Number(this.currentScene.walkMask?.worldWidth) || 1280) / 2 });
   }
 

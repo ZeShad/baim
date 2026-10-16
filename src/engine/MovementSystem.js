@@ -5,6 +5,61 @@ const WALK_TARGET_EPSILON = 4;
 // so the ramp follows world travel/cadence rather than viewport pixels.
 export const WALK_ACCELERATION_SECONDS = 0.24;
 export const WALK_START_SPEED_RATIO = 0.35;
+// Three complete published side cycles (16 / 20fps), measured before calibration.
+// This is reachable-route cruise time, independent of viewport/window size.
+export const LONG_WALK_CRUISE_SECONDS = 2.4;
+export const LONG_WALK_RATIO = 1.2;
+
+export function plannedWalkSeconds(player, path, heightAt = () => player.walkVisualHeight) {
+  let previous = player.position, seconds = 0;
+  const probe = { ...player };
+  for (const point of path) {
+    const length = pointDistance(previous, point);
+    if (!length) continue;
+    probe.facing = facingFromDelta(point.x - previous.x, point.y - previous.y, probe);
+    const loop = walkPartsForFacing(probe)?.loop;
+    const multipliers = loop?.movementSpeedMultipliers;
+    const mean = multipliers?.length ? multipliers.reduce((a, b) => a + b, 0) / multipliers.length : 1;
+    const samples = Math.max(1, Math.ceil(length / Math.max(1, heightAt(previous) || 300) * 4));
+    for (let i = 0; i < samples; i++) {
+      const t = (i + .5) / samples;
+      probe.walkVisualHeight = heightAt({ x: previous.x + (point.x - previous.x) * t,
+        y: previous.y + (point.y - previous.y) * t });
+      seconds += length / samples / Math.max(.001, walkingTravelSpeed(probe) * mean);
+    }
+    previous = point;
+  }
+  return seconds;
+}
+
+function journeyRatioAt(player, elapsed) {
+  const from = player.walkJourneyFromRatio ?? 1, to = player.walkJourneyRatio ?? 1;
+  const t = Math.max(0, Math.min(1, elapsed / WALK_ACCELERATION_SECONDS));
+  return from + (to - from) * t * t * (3 - 2 * t);
+}
+
+export function calibratedWalkTime(player, elapsed, dt) {
+  if ((player.walkJourneyFromRatio ?? 1) === (player.walkJourneyRatio ?? 1)
+    || (player.walkJourneyElapsed || 0) >= WALK_ACCELERATION_SECONDS) {
+    return walkRampTime(elapsed, dt) * (player.walkJourneyRatio ?? 1);
+  }
+  // Four-point Gauss integration is exact for the product of the two cubic ramps.
+  // Split their endpoints so frame rate/retarget timing cannot change distance.
+  const boostElapsed = player.walkJourneyElapsed || 0;
+  const cuts = [0, dt, WALK_ACCELERATION_SECONDS - elapsed, WALK_ACCELERATION_SECONDS - boostElapsed]
+    .filter(t => t >= 0 && t <= dt).sort((a, b) => a - b);
+  const nodes = [-.8611363115940526, -.3399810435848563, .3399810435848563, .8611363115940526];
+  const weights = [.3478548451374538, .6521451548625461, .6521451548625461, .3478548451374538];
+  let total = 0;
+  for (let i = 1; i < cuts.length; i++) {
+    const half = (cuts[i] - cuts[i - 1]) / 2, mid = (cuts[i] + cuts[i - 1]) / 2;
+    for (let j = 0; j < nodes.length; j++) {
+      const t = mid + half * nodes[j];
+      total += half * weights[j] * walkSpeedRatio(elapsed + t) * journeyRatioAt(player, boostElapsed + t);
+    }
+  }
+  return total;
+}
 
 export function walkSpeedRatio(elapsed = 0) {
   const t = Math.max(0, Math.min(1, elapsed / WALK_ACCELERATION_SECONDS));
@@ -44,6 +99,28 @@ export class MovementSystem {
     const dy = finalPoint.y - this.player.position.y;
     // Preserve no-op state; reset acceleration only for a genuine new walk.
     if (Math.hypot(dx, dy) <= WALK_TARGET_EPSILON) return false;
+    // Choose from the whole reachable command once, never remaining distance.
+    // A short retarget keeps established brisk travel until actual arrival;
+    // upgrading a moving short command eases in without replaying its start.
+    if (options.calibrateLongJourney) {
+      const seconds = plannedWalkSeconds(this.player, [firstPoint, ...waypoints], options.heightAt);
+      const requested = seconds >= LONG_WALK_CRUISE_SECONDS ? LONG_WALK_RATIO : 1;
+      const previousRatio = wasWalking ? this.player.walkJourneyRatio ?? 1 : 1;
+      if (!wasWalking) {
+        this.player.walkJourneyRatio = requested;
+        this.player.walkJourneyFromRatio = requested;
+        this.player.walkJourneyElapsed = 0;
+      } else if (requested > previousRatio) {
+        this.player.walkJourneyFromRatio = journeyRatioAt(this.player, this.player.walkJourneyElapsed || 0);
+        this.player.walkJourneyRatio = requested;
+        this.player.walkJourneyElapsed = 0;
+      }
+      this.player.walkPlannedSeconds = seconds;
+    } else if (!wasWalking) {
+      this.player.walkJourneyRatio = 1;
+      this.player.walkJourneyFromRatio = 1;
+      this.player.walkJourneyElapsed = 0;
+    }
     rememberHorizontalFacing(this.player, this.player.facing);
     this.player.arrivalSceneCentreX = options.sceneCentreX;
     this.player.lastLocomotionFacing = null;
@@ -94,6 +171,7 @@ export class MovementSystem {
     if (!this.player.target) {
       this.player.walkTravelElapsed = 0;
       this.player.walkCadenceRatio = 1;
+      this.player.walkJourneyRatio = 1;
       if (this.player.animation === "walk" && this.player.walkPart === "stop" && !this.player.animator?.isFinished()) {
         this.player.movementStopping = true;
         return;
@@ -129,8 +207,9 @@ export class MovementSystem {
     if (motionMultiplier <= 0) return;
     const elapsed = this.player.walkTravelElapsed || 0;
     const duration = Math.max(0, Number(dt) || 0);
-    const rampTime = walkRampTime(elapsed, duration);
+    const rampTime = calibratedWalkTime(this.player, elapsed, duration);
     this.player.walkTravelElapsed = elapsed + duration;
+    this.player.walkJourneyElapsed = (this.player.walkJourneyElapsed || 0) + duration;
     this.player.walkCadenceRatio = duration > 0 ? rampTime / duration : walkSpeedRatio(elapsed);
     let travel = walkingTravelSpeed(this.player) * motionMultiplier * rampTime;
     // Consume the same distance budget across corners; do not lose a frame at
