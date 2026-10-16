@@ -44,6 +44,9 @@ export class MovementSystem {
     const dy = finalPoint.y - this.player.position.y;
     // Preserve no-op state; reset acceleration only for a genuine new walk.
     if (Math.hypot(dx, dy) <= WALK_TARGET_EPSILON) return false;
+    rememberHorizontalFacing(this.player, this.player.facing);
+    this.player.arrivalSceneCentreX = options.sceneCentreX;
+    this.player.lastLocomotionFacing = null;
     if (!wasWalking) this.player.walkTravelElapsed = 0;
     this.player.idleHoldFrame = null;
     this.player.directionalStopFrame = null;
@@ -137,6 +140,10 @@ export class MovementSystem {
       const segment = pointDistance(from, this.player.target);
       this.player.position = moveToward(from, this.player.target, travel);
       if (segment > 0) this.player.facing = facingFromDelta(this.player.target.x - from.x, this.player.target.y - from.y, this.player);
+      if (pointDistance(from, this.player.position) > 0) {
+        this.player.lastLocomotionFacing = walkFacing(this.player);
+        rememberHorizontalFacing(this.player, this.player.lastLocomotionFacing);
+      }
       if (travel < segment) break;
       travel = Math.max(0, travel - segment);
       if (!this.player.walkPath?.length) break;
@@ -152,8 +159,14 @@ export class MovementSystem {
       this.player.walkTravelElapsed = 0;
       this.player.walkCadenceRatio = 1;
       this.player.walkPath = [];
+      const restFacing = centreFacingAtArrival(this.player);
+      this.player.arrivalSceneCentreX = null;
       if (this.player.arrivalFacing) this.player.facing = this.player.arrivalFacing;
       this.player.arrivalFacing = null;
+      if (restFacing) {
+        holdSidePocketRest(this.player, restFacing);
+        return;
+      }
       const parts = walkPartsForFacing(this.player);
       if (parts?.loop?.settleOnStop) {
         requestWalkStop(this.player);
@@ -171,6 +184,44 @@ export class MovementSystem {
       }
     }
   }
+}
+
+function rememberHorizontalFacing(player, facing) {
+  const horizontal = eastWestFallbackFacing(facing);
+  if (horizontal) player.lastHorizontalFacing = horizontal;
+}
+
+// Only an actual final vertical locomotion segment earns this ordinary-rest
+// default. Interaction/object facing and authored actions own their own stops.
+export function centreFacingAtArrival(player) {
+  if (!Number.isFinite(player.arrivalSceneCentreX) || player.arrivalFacing
+    || player.pendingInteraction || player.pendingFacingPoint || player.speaking
+    || player.actionSequence || player.actionAnimation
+    || !["north", "south"].includes(player.lastLocomotionFacing)) return null;
+  const delta = player.position.x - player.arrivalSceneCentreX;
+  if (Math.abs(delta) <= 1e-6) return eastWestFallbackFacing(player.lastHorizontalFacing) || "east";
+  return delta < 0 ? "east" : "west";
+}
+
+function holdSidePocketRest(player, facing) {
+  // Honest facing/pose switch, not a turning animation. The side stop's first
+  // frames still step; hold its accepted final pocketed pose at the same feet.
+  const frame = player.walkPartsByFacing?.[facing]?.stop;
+  player.facing = facing;
+  rememberHorizontalFacing(player, facing);
+  player.idleHoldFrame = frame?.slot ? {
+    frame, slot: frame.slot, mirrored: Boolean(frame.mirrored),
+    frameIndex: Math.max(0, frame.frameCount - 1)
+  } : null;
+  player.animation = "idle";
+  player.walkPart = null;
+  player.shortWalk = false;
+  player.pendingStop = false;
+  player.movementStopping = false;
+  player.stopAnimationStarted = false;
+  player.stopAnimationFinished = true;
+  player.directionalStopFrame = null;
+  player.locomotionStartFrame = null;
 }
 
 function pointDistance(a, b) {
