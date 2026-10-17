@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';
+import {restoreTurningSnapshot} from './turning-pilot-preservation.js';
 import {stripWalkingSide} from './walking-side-preservation.js';
 import {readFileSync} from 'node:fs';
 import {createHash} from 'node:crypto';
@@ -25,6 +26,7 @@ export function stripMitkoDirectional(path,source){
 }
 
 export function restoreMitkoDirectionalSnapshot(kind,value){
+ value=restoreTurningSnapshot(kind,value);
  const r=fixture.snapshots?.[kind];if(!r)return value;
  assert.equal(sha(JSON.stringify(value)),r.afterSHA256,'exact bound Mitko directional snapshot: '+kind);
  assert.equal(sha(JSON.stringify(r.before)),r.beforeSHA256,'fixed pre-directional snapshot: '+kind);

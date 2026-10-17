@@ -16,7 +16,7 @@ test('newest preservation inverse restores fixed PR66 code/helper bytes and reje
  for(const [path,record]of Object.entries(fixture.records)){
   const source=readFileSync(path);assert.equal(stripLongDistance(path,source),record.before);
   assert.equal(createHash('sha256').update(record.before).digest('hex'),record.beforeSHA256);
-  assert.throws(()=>stripLongDistance(path,Buffer.concat([source,Buffer.from('\n')])),/exact long-distance candidate/);
+  assert.throws(()=>stripLongDistance(path,Buffer.concat([source,Buffer.from('\n')])),/exact (long-distance|turning pilot) candidate/);
  }
  const unrelated=Buffer.from('unchanged');assert.equal(stripLongDistance('unrelated',unrelated),unrelated);
 });

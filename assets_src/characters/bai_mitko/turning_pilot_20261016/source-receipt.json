@@ -1,0 +1,597 @@
+{
+  "candidate": "mitko-turn-front-to-east-c01",
+  "date": "2026-10-16",
+  "ownerVisualAcceptance": {
+    "text": "looks fine to me",
+    "scope": "Owner visual acceptance of supplied source GIF. Runtime join/interruption/publication and other directions not approved by this statement."
+  },
+  "sourceOriginalPaths": {
+    "zip": "C:/Users/SveBiS/Downloads/sprite-max-px-frames-36-rows-6-cols-6 (1).zip",
+    "gif": "C:/Users/SveBiS/Downloads/sprite-max-px-frames-36-rows-6-cols-6 (1).gif"
+  },
+  "hashes": {
+    "zip": "476abe3b02de7e97b0dbbd15bece46f8d2fbbfeb292ef9614ae9d50b13c76405",
+    "gif": "cc5e1133eb707ccd30529de29552a67682128eca0ca96fc4bd9e49389e6390a3",
+    "sheet": "5ac5e4fea6f83cd327128dbc6e28da6103d1df54cffbc60c28168f47b6f96d27",
+    "metadata": "25c361f7989181f1de995f0d7a17d55d93bd89b51145e1fcd226aec0b5e022b4"
+  },
+  "frameCount": 36,
+  "nativeDurationMs": 2736,
+  "uniqueFrameDurationsMs": [
+    76
+  ],
+  "frameSize": {
+    "width": 576,
+    "height": 1024
+  },
+  "gif": {
+    "pages": 36,
+    "width": 576,
+    "pageHeight": 1024,
+    "delaysMs": [
+      70,
+      70,
+      70,
+      70,
+      70,
+      70,
+      70,
+      70,
+      70,
+      70,
+      70,
+      70,
+      70,
+      70,
+      70,
+      70,
+      70,
+      70,
+      70,
+      70,
+      70,
+      70,
+      70,
+      70,
+      70,
+      70,
+      70,
+      70,
+      70,
+      70,
+      70,
+      70,
+      70,
+      70,
+      70,
+      70
+    ],
+    "durationMs": 2520
+  },
+  "reviewGif": {
+    "frames": 110,
+    "durationMs": 9010,
+    "resets": 2,
+    "resetEachMs": 400,
+    "operation": "Full unchanged frame order ×3; original metadata timing cumulatively rounded to GIF10ms ticks, labelled reset between sequential one-shots; no runtime capture or source retiming"
+  },
+  "frames": [
+    {
+      "index": 0,
+      "durationMs": 76,
+      "bounds": {
+        "left": 90,
+        "top": 75,
+        "width": 412,
+        "height": 852,
+        "bottom": 926
+      },
+      "edgePixels": 0,
+      "visiblePixels": 204623,
+      "SHA256": "10a0802b48d04b73afe4160d0239cd6086f592f866ca40b9fcc176d46c6ebf27"
+    },
+    {
+      "index": 1,
+      "durationMs": 76,
+      "bounds": {
+        "left": 90,
+        "top": 74,
+        "width": 414,
+        "height": 853,
+        "bottom": 926
+      },
+      "edgePixels": 0,
+      "visiblePixels": 205754,
+      "SHA256": "4ed1558b2bdef49dbc4a5cbad211c2832aa49e4821d449c2a571b36929bf5510"
+    },
+    {
+      "index": 2,
+      "durationMs": 76,
+      "bounds": {
+        "left": 90,
+        "top": 74,
+        "width": 415,
+        "height": 856,
+        "bottom": 929
+      },
+      "edgePixels": 0,
+      "visiblePixels": 206418,
+      "SHA256": "973a4a4649c67d20cddb0aace4ce92dce31b219963c46efc1aa3712a4a5b0a84"
+    },
+    {
+      "index": 3,
+      "durationMs": 76,
+      "bounds": {
+        "left": 89,
+        "top": 73,
+        "width": 416,
+        "height": 857,
+        "bottom": 929
+      },
+      "edgePixels": 0,
+      "visiblePixels": 206181,
+      "SHA256": "960e189621df52fbe2ab8eafc24b1a36d76e2b734dd24fa1efbb11ebddb05d18"
+    },
+    {
+      "index": 4,
+      "durationMs": 76,
+      "bounds": {
+        "left": 88,
+        "top": 74,
+        "width": 416,
+        "height": 852,
+        "bottom": 925
+      },
+      "edgePixels": 0,
+      "visiblePixels": 206253,
+      "SHA256": "176af0d9e57611c34bfa3be72a8fe63e7245cbbd6f0267fc2e46bc20e9b3eebb"
+    },
+    {
+      "index": 5,
+      "durationMs": 76,
+      "bounds": {
+        "left": 84,
+        "top": 74,
+        "width": 418,
+        "height": 853,
+        "bottom": 926
+      },
+      "edgePixels": 0,
+      "visiblePixels": 207990,
+      "SHA256": "21695e54ef23a9e9dbb926ebef062b337c253a208bcb32789a942f8c6fb52bd2"
+    },
+    {
+      "index": 6,
+      "durationMs": 76,
+      "bounds": {
+        "left": 78,
+        "top": 75,
+        "width": 419,
+        "height": 866,
+        "bottom": 940
+      },
+      "edgePixels": 0,
+      "visiblePixels": 209188,
+      "SHA256": "5b5a272f450d0068aefaf3428ed7e64b3984ba13577ce9c514b312021b0d7eaa"
+    },
+    {
+      "index": 7,
+      "durationMs": 76,
+      "bounds": {
+        "left": 72,
+        "top": 76,
+        "width": 417,
+        "height": 877,
+        "bottom": 952
+      },
+      "edgePixels": 0,
+      "visiblePixels": 208906,
+      "SHA256": "ecb9bd80a1064b7b9043a3d174c19a4d8ba1e3036284c23193c8de43a3ebeaad"
+    },
+    {
+      "index": 8,
+      "durationMs": 76,
+      "bounds": {
+        "left": 67,
+        "top": 74,
+        "width": 410,
+        "height": 879,
+        "bottom": 952
+      },
+      "edgePixels": 0,
+      "visiblePixels": 208154,
+      "SHA256": "bb5dd2e52932dffa0ca818dd9b890226b6216be577342aaa291bc48a710fbbbc"
+    },
+    {
+      "index": 9,
+      "durationMs": 76,
+      "bounds": {
+        "left": 66,
+        "top": 71,
+        "width": 397,
+        "height": 882,
+        "bottom": 952
+      },
+      "edgePixels": 0,
+      "visiblePixels": 206240,
+      "SHA256": "7222db56daab66ec4596d824c09b7842094972dbbb4496c09870e10e65f246c3"
+    },
+    {
+      "index": 10,
+      "durationMs": 76,
+      "bounds": {
+        "left": 69,
+        "top": 70,
+        "width": 377,
+        "height": 883,
+        "bottom": 952
+      },
+      "edgePixels": 0,
+      "visiblePixels": 202187,
+      "SHA256": "06eb4fb519c272914d944bfefd7ec953f528a28f9542ad139c62428dad951eb2"
+    },
+    {
+      "index": 11,
+      "durationMs": 76,
+      "bounds": {
+        "left": 72,
+        "top": 71,
+        "width": 365,
+        "height": 881,
+        "bottom": 951
+      },
+      "edgePixels": 0,
+      "visiblePixels": 199407,
+      "SHA256": "151163b34be12d3c051a1c3486b1582f785ebf4957168c3405d080e810cd3fe8"
+    },
+    {
+      "index": 12,
+      "durationMs": 76,
+      "bounds": {
+        "left": 81,
+        "top": 72,
+        "width": 346,
+        "height": 880,
+        "bottom": 951
+      },
+      "edgePixels": 0,
+      "visiblePixels": 192579,
+      "SHA256": "7d152614e08808eebed7231766461631050ebe6802887f103524e57a232e3889"
+    },
+    {
+      "index": 13,
+      "durationMs": 76,
+      "bounds": {
+        "left": 99,
+        "top": 72,
+        "width": 334,
+        "height": 879,
+        "bottom": 950
+      },
+      "edgePixels": 0,
+      "visiblePixels": 178234,
+      "SHA256": "885ca7188e77ba1994c2ed2cbc6b708fa2d9a2eb6b47726d1a8212fe00aab9fd"
+    },
+    {
+      "index": 14,
+      "durationMs": 76,
+      "bounds": {
+        "left": 119,
+        "top": 72,
+        "width": 303,
+        "height": 879,
+        "bottom": 950
+      },
+      "edgePixels": 0,
+      "visiblePixels": 167529,
+      "SHA256": "a65048534e68b5c4177af732bf93e8cde8aae1f3c9f6b2025cb4722fc350c958"
+    },
+    {
+      "index": 15,
+      "durationMs": 76,
+      "bounds": {
+        "left": 130,
+        "top": 73,
+        "width": 277,
+        "height": 877,
+        "bottom": 949
+      },
+      "edgePixels": 0,
+      "visiblePixels": 159277,
+      "SHA256": "4e98077a5ef3fbaffcb27cdf969821f5bbfb0ce4c462ff86f09d21a92891d393"
+    },
+    {
+      "index": 16,
+      "durationMs": 76,
+      "bounds": {
+        "left": 141,
+        "top": 76,
+        "width": 262,
+        "height": 873,
+        "bottom": 948
+      },
+      "edgePixels": 0,
+      "visiblePixels": 149604,
+      "SHA256": "3c4f6536625249f3211d39d8eef4891436a1756af3465a5b0c55b87f151fdca7"
+    },
+    {
+      "index": 17,
+      "durationMs": 76,
+      "bounds": {
+        "left": 152,
+        "top": 79,
+        "width": 259,
+        "height": 869,
+        "bottom": 947
+      },
+      "edgePixels": 0,
+      "visiblePixels": 143695,
+      "SHA256": "fa04791d4f6ab8192ee028107a5a1390a6fecf1815ab095c2561fe1f2c7fb27e"
+    },
+    {
+      "index": 18,
+      "durationMs": 76,
+      "bounds": {
+        "left": 160,
+        "top": 80,
+        "width": 255,
+        "height": 869,
+        "bottom": 948
+      },
+      "edgePixels": 0,
+      "visiblePixels": 142023,
+      "SHA256": "fe031d443fade912522c70daa2833965d337241b9aef8e0c293d989f61fcca55"
+    },
+    {
+      "index": 19,
+      "durationMs": 76,
+      "bounds": {
+        "left": 162,
+        "top": 81,
+        "width": 255,
+        "height": 868,
+        "bottom": 948
+      },
+      "edgePixels": 0,
+      "visiblePixels": 141271,
+      "SHA256": "6c398bb510e6925e4c5206f2beeb6f36c7cf9ee6815682e1d89a677a34af43ca"
+    },
+    {
+      "index": 20,
+      "durationMs": 76,
+      "bounds": {
+        "left": 166,
+        "top": 85,
+        "width": 253,
+        "height": 863,
+        "bottom": 947
+      },
+      "edgePixels": 0,
+      "visiblePixels": 138139,
+      "SHA256": "fc6695880ac74789e9621fbf90e3b3819ff8128d596ec23bba3e9a23cd2cf4ba"
+    },
+    {
+      "index": 21,
+      "durationMs": 76,
+      "bounds": {
+        "left": 168,
+        "top": 88,
+        "width": 251,
+        "height": 855,
+        "bottom": 942
+      },
+      "edgePixels": 0,
+      "visiblePixels": 133956,
+      "SHA256": "4710802b74e437cd61cdd294dfb9903a090df688a0be970cf60c77654b592ee8"
+    },
+    {
+      "index": 22,
+      "durationMs": 76,
+      "bounds": {
+        "left": 169,
+        "top": 88,
+        "width": 252,
+        "height": 846,
+        "bottom": 933
+      },
+      "edgePixels": 0,
+      "visiblePixels": 132465,
+      "SHA256": "0e2d8c2cf95e2b0e672c94dd7f494bcf8681ca07800a1fc87c98dc4cac9d45ba"
+    },
+    {
+      "index": 23,
+      "durationMs": 76,
+      "bounds": {
+        "left": 171,
+        "top": 86,
+        "width": 251,
+        "height": 838,
+        "bottom": 923
+      },
+      "edgePixels": 0,
+      "visiblePixels": 131216,
+      "SHA256": "6f6abd88edfab4e9dd0f736147a5be323bacf8f80aefaa4cde8bdd700c1ec4cf"
+    },
+    {
+      "index": 24,
+      "durationMs": 76,
+      "bounds": {
+        "left": 172,
+        "top": 85,
+        "width": 252,
+        "height": 836,
+        "bottom": 920
+      },
+      "edgePixels": 0,
+      "visiblePixels": 130923,
+      "SHA256": "445dfb3eea40105205b2639a1b785adb0a2adbc4f2e554db43cd4f6d129ab78e"
+    },
+    {
+      "index": 25,
+      "durationMs": 76,
+      "bounds": {
+        "left": 173,
+        "top": 85,
+        "width": 251,
+        "height": 837,
+        "bottom": 921
+      },
+      "edgePixels": 0,
+      "visiblePixels": 130974,
+      "SHA256": "bd6537364b792f58edb2f21de77950ad0dd25e74e74ad1d53a1399c02bd6c0d3"
+    },
+    {
+      "index": 26,
+      "durationMs": 76,
+      "bounds": {
+        "left": 174,
+        "top": 86,
+        "width": 252,
+        "height": 844,
+        "bottom": 929
+      },
+      "edgePixels": 0,
+      "visiblePixels": 132400,
+      "SHA256": "c401806f8b0b3f89cea4c1320a92f394d2f2f008b3a31451fb8340c24d0709d9"
+    },
+    {
+      "index": 27,
+      "durationMs": 76,
+      "bounds": {
+        "left": 174,
+        "top": 86,
+        "width": 253,
+        "height": 844,
+        "bottom": 929
+      },
+      "edgePixels": 0,
+      "visiblePixels": 133628,
+      "SHA256": "40f6bac2086790f2d6a9f832bd8e997f519fbf4c7741bf3d344148599928477a"
+    },
+    {
+      "index": 28,
+      "durationMs": 76,
+      "bounds": {
+        "left": 174,
+        "top": 84,
+        "width": 255,
+        "height": 846,
+        "bottom": 929
+      },
+      "edgePixels": 0,
+      "visiblePixels": 134111,
+      "SHA256": "778b6020ddfba33942dabc8b1f02fc2180ecb98838777cf18b5e5f14bfff924b"
+    },
+    {
+      "index": 29,
+      "durationMs": 76,
+      "bounds": {
+        "left": 174,
+        "top": 83,
+        "width": 255,
+        "height": 847,
+        "bottom": 929
+      },
+      "edgePixels": 0,
+      "visiblePixels": 134543,
+      "SHA256": "8d3dba619eabd283c3e6d3bd9073d677f5cc82307727289a41ef98845f831878"
+    },
+    {
+      "index": 30,
+      "durationMs": 76,
+      "bounds": {
+        "left": 173,
+        "top": 82,
+        "width": 257,
+        "height": 848,
+        "bottom": 929
+      },
+      "edgePixels": 0,
+      "visiblePixels": 135062,
+      "SHA256": "6a57952a048631e1374ec1068d5febcdb6aeeb09945cb94c59f3c68efc5f4e41"
+    },
+    {
+      "index": 31,
+      "durationMs": 76,
+      "bounds": {
+        "left": 172,
+        "top": 82,
+        "width": 259,
+        "height": 848,
+        "bottom": 929
+      },
+      "edgePixels": 0,
+      "visiblePixels": 136098,
+      "SHA256": "65cfafebf4f9742ff9e43218ed5dcc6815f1ff000d013005aa92dadd437cdeea"
+    },
+    {
+      "index": 32,
+      "durationMs": 76,
+      "bounds": {
+        "left": 171,
+        "top": 81,
+        "width": 260,
+        "height": 849,
+        "bottom": 929
+      },
+      "edgePixels": 0,
+      "visiblePixels": 137078,
+      "SHA256": "160fc19f2117003ad89479e1edf285f1a9f73a7632096952c57255ea7f78c7e5"
+    },
+    {
+      "index": 33,
+      "durationMs": 76,
+      "bounds": {
+        "left": 169,
+        "top": 79,
+        "width": 262,
+        "height": 851,
+        "bottom": 929
+      },
+      "edgePixels": 0,
+      "visiblePixels": 139685,
+      "SHA256": "3dc3f16202746f3433e239d4a021537221561c7057963be33a01a1215b5672bf"
+    },
+    {
+      "index": 34,
+      "durationMs": 76,
+      "bounds": {
+        "left": 167,
+        "top": 77,
+        "width": 264,
+        "height": 853,
+        "bottom": 929
+      },
+      "edgePixels": 0,
+      "visiblePixels": 144243,
+      "SHA256": "5158ccc0abbddc3c8225de53a007eba8f1e619beacc5b0414e71d53989b01780"
+    },
+    {
+      "index": 35,
+      "durationMs": 76,
+      "bounds": {
+        "left": 165,
+        "top": 76,
+        "width": 267,
+        "height": 854,
+        "bottom": 929
+      },
+      "edgePixels": 0,
+      "visiblePixels": 149329,
+      "SHA256": "77d4cb407b75549284b33a3b979da5937c48ba173d5d3d1719dc57934eec7da6"
+    }
+  ],
+  "edgeContactFrames": [],
+  "groundBottomRange": [
+    920,
+    952
+  ],
+  "modelBinding": "Hydra+ selected in owner setup screenshot and explicit preference; actual job/card ID and final submitted settings not independently captured",
+  "settings": "Proposed/visible setup Animate Sprite Hydra+3s Auto36Max LoopOff TrimOff; exact export native timing measured separately",
+  "scope": "Source inspection only; no runtime/build/test/shared-preview mutation or handoff",
+  "capacity": {
+    "freeBytesBefore": 199293992960,
+    "outputBudgetBytes": 200000000,
+    "reserveBytes": 10000000000
+  }
+}

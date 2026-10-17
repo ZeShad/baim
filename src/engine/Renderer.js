@@ -1197,14 +1197,17 @@ export class Renderer {
     const sourceWidth = preserveFrameLayout && spriteInfo.frame ? spriteInfo.frame.frameWidth : boundsForSize?.w || spriteInfo.frame?.frameWidth || sprite.width;
     const sourceHeight = preserveFrameLayout && spriteInfo.frame ? spriteInfo.frame.frameHeight : boundsForSize?.h || spriteInfo.frame?.frameHeight || sprite.height;
     const directionalBounds = spriteInfo.frame?.settleOnStop ? spriteInfo.frame.contentBounds : null;
-    const stableBounds = directionalBounds
+    const stableBounds = spriteInfo.frame?.registration
+      ? { ...spriteInfo.frame.contentBounds, h: spriteInfo.frame.registration.visualHeight, baselineY: spriteInfo.frame.registration.baselineY }
+      : directionalBounds
       ? { ...directionalBounds, baselineY: directionalBounds.y + directionalBounds.h }
       : preserveFrameLayout && usesExternalWalkPose(p, definition) ? stableExternalVisualBounds(definition) : null;
     const logicalFrameIndex = spriteInfo.frame
       ? Number.isInteger(spriteInfo.staticFrameIndex) ? spriteInfo.staticFrameIndex : this.game.player.animator.frameIndex % spriteInfo.frame.frameCount
       : 0;
     const frameIndex = animationRenderFrameIndex(spriteInfo.frame, logicalFrameIndex);
-    const currentVisualBounds = stableBounds ? externalFrameVisualBounds(spriteInfo.frame, frameIndex, stableBounds) : null;
+    const currentVisualBounds = spriteInfo.frame?.registration ? stableBounds
+      : stableBounds ? externalFrameVisualBounds(spriteInfo.frame, frameIndex, stableBounds) : null;
     const visualHeight = currentVisualBounds?.h || (preserveFrameLayout ? sourceHeight : boundsForSize?.h || sourceHeight);
     const animationScale = animationRenderScale(spriteInfo.frame);
     const scale = (height / visualHeight) * animationScale;
