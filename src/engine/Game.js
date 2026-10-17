@@ -28,6 +28,7 @@ import { chapter1 } from "../content/chapter1/index.js";
 import { characterDefinitions } from "../content/art/characters.js";
 import { assetManifest } from "../content/art/assetManifest.js";
 import { externalAnimationV1 } from "../content/art/externalAnimationRuntime.generated.js";
+import { mitkoTurnPilot } from "../content/art/mitkoTurnPilot.generated.js";
 import {
   applyTimedSobering,
   intoxicationBandKey,
@@ -123,6 +124,8 @@ export class Game {
       animationFpsByFacing: this.usesExternalCharacterAnimation() ? this.defaultAnimationFpsByFacing() : {},
       walkPartsByFacing: this.usesExternalCharacterAnimation() ? this.defaultWalkPartsByFacing() : {},
       walkPart: null,
+      arrivalTurnPilot: this.usesExternalCharacterAnimation() ? mitkoTurnPilot : null,
+      arrivalTurn: null,
       pendingStop: false,
       stopExitFrame: 0,
       canExitToStop: false,
@@ -183,8 +186,9 @@ export class Game {
   }
 
   bootstrapCharacterSlots() {
-    return [...new Set(Object.values(externalAnimationV1.walkParts || {}).flatMap(parts =>
-      [parts.start?.slot, parts.loop?.slot, parts.short?.slot, parts.stop?.slot, parts.rest?.slot]).filter(Boolean))];
+    return [...new Set([...Object.values(externalAnimationV1.walkParts || {}).flatMap(parts =>
+      [parts.start?.slot, parts.loop?.slot, parts.short?.slot, parts.stop?.slot, parts.rest?.slot]),
+      mitkoTurnPilot.frame.slot].filter(Boolean))];
   }
 
   protectCurrentAssetWorkingSet(sceneIds = [this.currentScene.id]) {
@@ -548,6 +552,7 @@ export class Game {
   }
 
   locomotionArtReady() {
+    this.player.arrivalTurnArtReady = this.assets.isLoaded(this.assets.getCharacterImage(this.player.id, mitkoTurnPilot.frame.slot));
     if (this.player.animation !== "walk") return true;
     const parts = this.player.walkPartsByFacing?.[walkFacing(this.player)];
     if (!Number.isInteger(parts?.start?.pocketExitFrame)) return true;
@@ -1407,6 +1412,7 @@ export class Game {
   }
 
   faceInteractionSide(facing) {
+    this.player.arrivalTurn = null;
     this.player.facing = facing;
     this.player.idleHoldFrame = null;
     this.player.idleVariant = null;
@@ -1480,6 +1486,7 @@ export class Game {
       this.player.idleVariant = null;
       this.player.idleVariantQueue = [];
       this.player.directionalStopFrame = null;
+      this.player.arrivalTurn = null;
     }
   }
 
@@ -1915,6 +1922,7 @@ export class Game {
       this.player.walkTravelElapsed = 0;
       this.player.walkCadenceRatio = 1;
       this.player.directionalStopFrame = null;
+      this.player.arrivalTurn = null;
       this.player.locomotionStartFrame = null;
       this.player.arrivalSceneCentreX = null;
       this.player.lastLocomotionFacing = null;
@@ -1978,6 +1986,7 @@ export class Game {
     this.player.animation = "idle";
     this.player.locomotionStartFrame = null;
     this.player.directionalStopFrame = null;
+    this.player.arrivalTurn = null;
     this.player.arrivalSceneCentreX = null;
     this.player.lastLocomotionFacing = null;
     this.player.walkPart = null;

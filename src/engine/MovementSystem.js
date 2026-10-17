@@ -1,4 +1,5 @@
 import { moveToward } from "./geometry.js";
+import { beginArrivalTurn, cancelArrivalTurn, updateArrivalTurn } from "./ArrivalTurn.js";
 
 const WALK_TARGET_EPSILON = 4;
 // Shorter than half the accepted 864–1088ms gait cycles. Units are seconds,
@@ -89,6 +90,7 @@ export class MovementSystem {
     const previousStart = this.player.locomotionStartFrame || previousParts?.start;
     const previousStop = this.player.directionalStopFrame || previousParts?.stop;
     const previousIndex = this.player.animator?.frameIndex || 0;
+    const wasTurning = this.player.arrivalTurn?.phase === "turn";
     const wasStopping = this.player.animation === "walk" && previousPart === "stop";
     const wasWalking = this.player.animation === "walk" && (this.player.target || this.player.walkPart === "start" || this.player.walkPart === "loop" || this.player.walkPart === "short");
     const waypoints = Array.isArray(path) && path.length ? path.map((waypoint) => ({ ...waypoint })) : [{ ...point }];
@@ -99,6 +101,7 @@ export class MovementSystem {
     const dy = finalPoint.y - this.player.position.y;
     // Preserve no-op state; reset acceleration only for a genuine new walk.
     if (Math.hypot(dx, dy) <= WALK_TARGET_EPSILON) return false;
+    cancelArrivalTurn(this.player);
     // Choose from the whole reachable command once, never remaining distance.
     // A short retarget keeps established brisk travel until actual arrival;
     // upgrading a moving short command eases in without replaying its start.
@@ -144,7 +147,9 @@ export class MovementSystem {
     if (pocketStart) this.player.shortWalk = false;
     this.player.locomotionStartFrame = null;
     this.player.walkPart = this.player.shortWalk && parts?.short ? "short" : wasWalking ? "loop" : parts?.start ? "start" : "loop";
-    if (pocketStart && wasWalking && previousPart === "start" && Number.isInteger(previousStart?.pocketExitFrame)) {
+    if (pocketStart && wasTurning) {
+      this.player.walkPart = "loop"; // Pivot hands are already outside pockets.
+    } else if (pocketStart && wasWalking && previousPart === "start" && Number.isInteger(previousStart?.pocketExitFrame)) {
       this.player.walkPart = "start";
       this.player.locomotionStartFrame = {
         ...(previousStart?.resumePocketExit ? previousStart : parts.start),
@@ -167,11 +172,12 @@ export class MovementSystem {
   }
 
   update(dt) {
-    if (this.player.animation === "action") return;
+    if (this.player.animation === "action") { cancelArrivalTurn(this.player); return; }
     if (!this.player.target) {
       this.player.walkTravelElapsed = 0;
       this.player.walkCadenceRatio = 1;
       this.player.walkJourneyRatio = 1;
+      if (updateArrivalTurn(this.player)) return;
       if (this.player.animation === "walk" && this.player.walkPart === "stop" && !this.player.animator?.isFinished()) {
         this.player.movementStopping = true;
         return;
@@ -243,6 +249,7 @@ export class MovementSystem {
       if (this.player.arrivalFacing) this.player.facing = this.player.arrivalFacing;
       this.player.arrivalFacing = null;
       if (restFacing) {
+        if (beginArrivalTurn(this.player, restFacing)) return;
         holdSidePocketRest(this.player, restFacing);
         return;
       }
