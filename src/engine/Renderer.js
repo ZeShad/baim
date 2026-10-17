@@ -174,7 +174,7 @@ function usesExternalWalkPose(player, definition) {
   return player?.id === "npc.bai_mitko" && definition?.animationSource === "external_animation_v1";
 }
 
-export function stableExternalVisualBounds(definition) {
+export function stableExternalVisualBounds(definition, groundedLocomotion = false) {
   const bounds = [];
   for (const parts of Object.values(definition?.animations?.walk?.parts || {})) {
     for (const frame of Object.values(parts || {})) {
@@ -189,13 +189,20 @@ export function stableExternalVisualBounds(definition) {
   return {
     w: Math.max(...bounds.map((bound) => bound.w || 0)),
     h: Math.max(...bounds.map((bound) => bound.h || 0)),
-    baselineY: Math.max(...bounds.map((bound) => (bound.y || 0) + (bound.h || 0))) - 40
+    // The old 40px subtraction put side boots below the logical ground, causing
+    // a body drop at a handoff from a correctly grounded turn. Use the median
+    // observed contact instead of the extremity of one silhouette.
+    baselineY: groundedLocomotion
+      ? bounds.map(bound => (bound.y || 0) + (bound.h || 0)).sort((a, b) => a - b)[Math.floor(bounds.length / 2)]
+      : Math.max(...bounds.map(bound => (bound.y || 0) + (bound.h || 0))) - 40
   };
 }
 
 export function externalFrameVisualBounds(frame, frameIndex, stableBounds = null) {
   if (frame?.stableVisualBounds && stableBounds) return stableBounds;
-  const bounds = frame?.sourceFrameContentBounds?.[frameIndex] || frame?.contentBounds || stableBounds;
+  // Sliced starts have local indices; the original source array is not sliced.
+  const local = ["start", "loop", "short", "stop"].includes(frame?.role) ? frame?.frameContentBounds?.[frameIndex] : null;
+  const bounds = local || frame?.sourceFrameContentBounds?.[frameIndex] || frame?.contentBounds || stableBounds;
   if (!bounds || !Number.isFinite(bounds.h) || bounds.h <= 0) return stableBounds;
   return bounds;
 }
@@ -1201,7 +1208,8 @@ export class Renderer {
       ? { ...spriteInfo.frame.contentBounds, h: spriteInfo.frame.registration.visualHeight, baselineY: spriteInfo.frame.registration.baselineY }
       : directionalBounds
       ? { ...directionalBounds, baselineY: directionalBounds.y + directionalBounds.h }
-      : preserveFrameLayout && usesExternalWalkPose(p, definition) ? stableExternalVisualBounds(definition) : null;
+      : preserveFrameLayout && usesExternalWalkPose(p, definition)
+      ? stableExternalVisualBounds(definition, /^external_walk_/.test(spriteInfo.frame?.slot || "")) : null;
     const logicalFrameIndex = spriteInfo.frame
       ? Number.isInteger(spriteInfo.staticFrameIndex) ? spriteInfo.staticFrameIndex : this.game.player.animator.frameIndex % spriteInfo.frame.frameCount
       : 0;

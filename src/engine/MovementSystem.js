@@ -88,11 +88,13 @@ export class MovementSystem {
     const previousPart = this.player.walkPart;
     const previousParts = walkPartsForFacing(this.player);
     const previousStart = this.player.locomotionStartFrame || previousParts?.start;
-    const previousStop = this.player.directionalStopFrame || previousParts?.stop;
-    const previousIndex = this.player.animator?.frameIndex || 0;
+    const restingPocket = this.player.animation === "idle" && this.player.idleHoldFrame?.frame?.continuousPocket
+      ? this.player.idleHoldFrame : null;
+    const previousStop = restingPocket?.frame || this.player.directionalStopFrame || previousParts?.stop;
+    const previousIndex = restingPocket?.frameIndex ?? this.player.animator?.frameIndex ?? 0;
     const wasTurning = this.player.arrivalTurn?.phase === "turn"
       && (!Number.isInteger(previousStop?.pocketEntryFrame) || previousIndex < previousStop.pocketEntryFrame);
-    const wasStopping = this.player.animation === "walk" && previousPart === "stop";
+    const wasStopping = Boolean(restingPocket) || this.player.animation === "walk" && previousPart === "stop";
     const wasWalking = this.player.animation === "walk" && (this.player.target || this.player.walkPart === "start" || this.player.walkPart === "loop" || this.player.walkPart === "short");
     const waypoints = Array.isArray(path) && path.length ? path.map((waypoint) => ({ ...waypoint })) : [{ ...point }];
     while (waypoints.length > 1 && pointDistance(this.player.position, waypoints[0]) <= WALK_TARGET_EPSILON) waypoints.shift();
@@ -148,7 +150,17 @@ export class MovementSystem {
     if (pocketStart) this.player.shortWalk = false;
     this.player.locomotionStartFrame = null;
     this.player.walkPart = this.player.shortWalk && parts?.short ? "short" : wasWalking ? "loop" : parts?.start ? "start" : "loop";
-    if (pocketStart && wasTurning) {
+    if (wasWalking && previousPart === "start" && previousStart?.continuousPocket && previousStart.resumePocketExit) {
+      // A vertical or repeated retarget must not abandon unfinished withdrawal.
+      this.player.walkPart = "start";
+      this.player.locomotionStartFrame = {...previousStart,initialFrame:previousIndex,facing:walkFacing(this.player)};
+    } else if (wasStopping && previousStop?.continuousPocket && previousIndex >= previousStop.pocketEntryFrame) {
+      // Continue from the exact held/visible c05 pose, for every target direction.
+      this.player.walkPart = "start";
+      this.player.locomotionStartFrame = reversePocketEntry(previousStop, previousIndex, parts?.start);
+      this.player.locomotionStartFrame.facing = walkFacing(this.player);
+      syncAnimatorToWalkPartStart(this.player, this.player.locomotionStartFrame);
+    } else if (pocketStart && wasTurning) {
       this.player.walkPart = "loop"; // Pivot hands are already outside pockets.
     } else if (pocketStart && wasWalking && previousPart === "start" && Number.isInteger(previousStart?.pocketExitFrame)) {
       this.player.walkPart = "start";
@@ -205,7 +217,25 @@ export class MovementSystem {
       this.player.shortWalk = false;
       return;
     }
-    if (this.player.animation === "walk" && this.player.walkPart === "start" && this.player.animator?.isFinished()) {
+    const selectedStart = this.player.locomotionStartFrame;
+    const startFinished = selectedStart?.continuousPocket || selectedStart?.nativeGaitStartBridge
+      ? (this.player.animator?.elapsed || 0) * selectedStart.fps + 1e-9 >= selectedStart.frameCount
+      : this.player.animator?.isFinished();
+    if (this.player.animation === "walk" && this.player.walkPart === "start" && startFinished) {
+      const previous = this.player.locomotionStartFrame;
+      const start = walkPartsForFacing(this.player)?.start;
+      if (previous?.continuousPocket && Number.isInteger(start?.pocketExitFrame)) {
+        // Hands are out: retain the accepted complete stepping portion of the
+        // ordinary start instead of jumping straight into an extended gait pose.
+        const first = start.pocketExitFrame;
+        this.player.locomotionStartFrame = {...start,initialFrame:0,frameStart:0,
+          facing:walkFacing(this.player),frameCount:start.frameCount-first,
+          frameRects:start.frameRects.slice(first),frameContentBounds:start.frameContentBounds.slice(first),
+          movementSpeedMultipliers:start.movementSpeedMultipliers.slice(first),
+          pocketExitFrame:0,resumePocketExit:true,nativeGaitStartBridge:true};
+        syncAnimatorToWalkPartStart(this.player,this.player.locomotionStartFrame);
+        return;
+      }
       this.player.walkPart = "loop";
       this.player.locomotionStartFrame = null;
       return;
