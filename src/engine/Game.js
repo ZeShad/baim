@@ -28,6 +28,7 @@ import { chapter1 } from "../content/chapter1/index.js";
 import { characterDefinitions } from "../content/art/characters.js";
 import { assetManifest } from "../content/art/assetManifest.js";
 import { externalAnimationV1 } from "../content/art/externalAnimationRuntime.generated.js";
+import { mitkoTurnPocket } from "../content/art/mitkoTurnPocket.generated.js";
 import { mitkoTurnPilot } from "../content/art/mitkoTurnPilot.generated.js";
 import {
   applyTimedSobering,
@@ -125,6 +126,7 @@ export class Game {
       walkPartsByFacing: this.usesExternalCharacterAnimation() ? this.defaultWalkPartsByFacing() : {},
       walkPart: null,
       arrivalTurnPilot: this.usesExternalCharacterAnimation() ? mitkoTurnPilot : null,
+      arrivalTurnPilots: this.usesExternalCharacterAnimation() ? [mitkoTurnPilot, mitkoTurnPocket] : [],
       arrivalTurn: null,
       pendingStop: false,
       stopExitFrame: 0,
@@ -188,7 +190,7 @@ export class Game {
   bootstrapCharacterSlots() {
     return [...new Set([...Object.values(externalAnimationV1.walkParts || {}).flatMap(parts =>
       [parts.start?.slot, parts.loop?.slot, parts.short?.slot, parts.stop?.slot, parts.rest?.slot]),
-      mitkoTurnPilot.frame.slot].filter(Boolean))];
+      mitkoTurnPilot.frame.slot, mitkoTurnPocket.frame.slot].filter(Boolean))];
   }
 
   protectCurrentAssetWorkingSet(sceneIds = [this.currentScene.id]) {
@@ -245,7 +247,7 @@ export class Game {
       this.player.animator.loopOverride = this.currentAnimationLoop();
       this.player.animator.pingPongOverride = this.currentAnimationPingPong();
       this.player.animator.play(this.player.animation, this.currentAnimationKey());
-      this.player.animator.update(locomotionArtReady ? dt * this.locomotionCadenceRatio() : 0);
+      this.player.animator.update(locomotionArtReady ? dt * this.locomotionCadenceRatio(dt) : 0);
       this.updateActionSequence();
       this.updateSpeechAnimationHold();
       this.updateSpeechBubble(dt);
@@ -541,7 +543,18 @@ export class Game {
     return frame.fps;
   }
 
-  locomotionCadenceRatio() {
+  locomotionCadenceRatio(dt = 0) {
+    const pocket = dt > 0 && this.currentAnimationFrame?.();
+    if (this.player.animation === "walk" && pocket?.continuousPocket && dt > 0) {
+      // The owner requested a quicker pivot as well as the hand action. Keep
+      // source order/support poses intact, separately from moving gait cadence.
+      const native = 1 / pocket.fps;
+      const boundary = this.player.walkPart === "start" ? 0 : pocket.pocketEntryFrame * native;
+      const elapsed = this.player.animator.elapsed;
+      const pivotRatio = native / (pocket.pivotFrameMs / 1000);
+      const before = Math.min(dt, Math.max(0, boundary - elapsed) / pivotRatio);
+      return (before * pivotRatio + (dt - before) * native / (pocket.pocketFrameMs / 1000)) / dt;
+    }
     // Integrate playback time rather than multiplying FPS by total elapsed
     // time (which would jump phase). Stationary withdrawal/stop keep their timing;
     // only moving start/loop frames follow the same ramp as world distance.
@@ -553,6 +566,8 @@ export class Game {
 
   locomotionArtReady() {
     this.player.arrivalTurnArtReady = this.assets.isLoaded(this.assets.getCharacterImage(this.player.id, mitkoTurnPilot.frame.slot));
+    this.player.arrivalTurnReadySlots = Object.fromEntries((this.player.arrivalTurnPilots || []).map(pilot =>
+      [pilot.frame.slot, this.assets.isLoaded(this.assets.getCharacterImage(this.player.id, pilot.frame.slot))]));
     if (this.player.animation !== "walk") return true;
     const parts = this.player.walkPartsByFacing?.[walkFacing(this.player)];
     if (!Number.isInteger(parts?.start?.pocketExitFrame)) return true;

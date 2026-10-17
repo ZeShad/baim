@@ -1,0 +1,18 @@
+import fs from 'node:fs';
+import {createHash} from 'node:crypto';
+import sharp from 'sharp';
+const dir='assets_src/characters/bai_mitko/turning_front_west_pocket_c05_20261017/';
+const sha=b=>createHash('sha256').update(b).digest('hex'),r=JSON.parse(fs.readFileSync(dir+'provenance.json'));
+for(const[file,key]of [['original-export.zip','sprite-max-px-frames-36-rows-6-cols-6.zip'],['original-preview.gif','sprite-max-px-frames-36-rows-6-cols-6.gif'],['sheet.png','sprite-max-px-frames-36-rows-6-cols-6.png'],['sheet.json','sprite-max-px-frames-36-rows-6-cols-6.json']])if(sha(fs.readFileSync(dir+file))!==r.hashes[key])throw Error('Source changed: '+file);
+const frames=Object.values(JSON.parse(fs.readFileSync(dir+'sheet.json')).frames);
+if(frames.length!==36||frames.some(f=>f.duration!==76))throw Error('Unexpected c05 native timing');
+const rects=frames.map((f,i)=>({x:f.frame.x/2,y:f.frame.y/2,w:f.frame.w/2,h:f.frame.h/2,duration:f.duration,sourceFrameIndex:i}));
+const bounds=r.frames.map(f=>{const b=f.alphaBoundsThreshold8;return{x:b[0]/2,y:b[1]/2,w:(b[2]-b[0])/2,h:(b[3]-b[1])/2};});
+const selected=rects.slice(0,14);
+const frame={slot:'turn_front_west_pocket_c05',facing:'south',role:'stop',loop:false,frameCount:14,fps:20,initialFrame:0,frameWidth:288,frameHeight:512,usesOriginalLudoLayout:true,anchor:{x:.5,y:1},contentBounds:bounds[0],registration:{visualHeight:438.5,baselineY:474},frameRects:selected,frameContentBounds:bounds.slice(0,14),movementSpeedMultipliers:selected.map(()=>0),flipX:false};
+const pilot={id:r.candidate,from:'south',to:'west',entryFrameIndices:[0],continuous:false,exitSourceFrame:6,pocketFps:20,pocketJoin:{visualHeight:442,baselineY:508,anchorX:.5},nativeDurationMs:2736,selectedNativeDurationMs:14*76,runtimeDurationMs:14*50+10*50,sourceRange:[0,13],reviewStatus:'runtime_review',frame};
+const metadataOnly=process.argv.includes('--metadata-only');
+const asset='assets/chapter1/characters/bai_mitko/turn-front-west-pocket-c05.webp',bytes=metadataOnly?fs.readFileSync(asset):await sharp(dir+'sheet.png').resize(1728,3072).webp({lossless:true,effort:4}).toBuffer();
+const module='// Complete c05 pivot0–13 at50ms; original side pocket/rest/start follows. Full36-frame source/atlas retained.\nexport const mitkoTurnPocket = '+JSON.stringify(pilot,null,2)+';\nexport const mitkoTurnPocketAssets = '+JSON.stringify({[frame.slot]:asset},null,2)+';\n';
+for(const[file,b]of [...(metadataOnly?[]:[[asset,bytes]]),['src/content/art/mitkoTurnPocket.generated.js',Buffer.from(module)]])if(process.argv.includes('--check')){if(sha(fs.readFileSync(file))!==sha(b))throw Error('Derivative stale: '+file);}else fs.writeFileSync(file,b);
+console.log(JSON.stringify({asset,SHA256:sha(bytes),bytes:bytes.length,nativeMs:2736,sourceFrames:36,selectedFrames:14,metadataOnly}));
