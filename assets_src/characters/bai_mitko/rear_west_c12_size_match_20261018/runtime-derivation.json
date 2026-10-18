@@ -1,0 +1,28 @@
+{
+  "method": "Canvas uniform scale/translation per original source pose, first unchanged; smoothstep registration to original pocket6. No new poses, morph/alpha blend, source cropping, timing/controller changes. Derived atlases; originals remain intact.",
+  "ownerReviewSHA256": "dcf9c70eb65551d627dbcee3a7384700b6a00a7550ec61075f8a871a632fc561",
+  "bindings": [
+    {
+      "kind": "front",
+      "source": "assets/chapter1/characters/bai_mitko/turn-front-west-pocket-c05.webp",
+      "sourceSHA256": "7f97203b16442ab6561aa7ab9d8d84bb7b45c653d6c592703f9bca29ad821901",
+      "asset": "assets/chapter1/characters/bai_mitko/turn-front-west-size-matched-c05.webp",
+      "sha256": "59fceb481afa237504500540925d9c176e012e50564e317913770bf799ba0c02",
+      "bytes": 2650390,
+      "frameCount": 14,
+      "endScale": 0.9935064935064936,
+      "referenceScale": 0.7072908981152324
+    },
+    {
+      "kind": "rear",
+      "source": "assets_src/characters/bai_mitko/rear_west_c12_size_match_20261018/sheet.png",
+      "sourceSHA256": "3a47daf393879d4717b26c1a2e0331151b7a2c01240c73e12f76e05bcfce7d2f",
+      "asset": "assets/chapter1/characters/bai_mitko/turn-rear-west-size-matched-c12.webp",
+      "sha256": "183edcf1a7e770845233345914e7e99e98ca041664ed284d92e01009cf7924d8",
+      "bytes": 6940988,
+      "frameCount": 36,
+      "endScale": 1.0588235294117647,
+      "referenceScale": 0.3315699080312603
+    }
+  ]
+}

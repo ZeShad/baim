@@ -1,0 +1,29 @@
+{
+  "candidate": "mitko-turn-rear-to-west-short-prompt-c12",
+  "ownerReport": "with just a this prompt it generated a better result, not sure if its usable though, can you estamate?",
+  "prompt": "do a fast turn",
+  "wordCount": 4,
+  "screenshot": "owner-current-setup.png",
+  "screenshotSHA256": "fca2b7de4c5a88b5d175d877874ea46e16e716b1bbdd649f5fc4bb4e6747f504",
+  "visibleCurrentSettings": {
+    "mode": "Keyframe Animation",
+    "model": "Hydra+",
+    "maxDurationSeconds": 3,
+    "margin": "Auto",
+    "maxFrames": 16,
+    "spriteSize": "Max",
+    "loop": false,
+    "trimWhitespace": false,
+    "inputs": "Rear / rear-left middle / original west images visibly loaded; uploaded bytes unverified"
+  },
+  "actualExport": {
+    "frames": 36,
+    "durationPerFrameMs": 73,
+    "nativeMs": 2628,
+    "gifMs": 2520
+  },
+  "limitations": "Current screenshot is not independent submission receipt.16selected does not rewrite measured36frame export. Prompt brevity and possibly other settings/random variation differ; no causal quality guarantee from prompt alone.",
+  "sourceAccepted": false,
+  "productionIntegrated": false,
+  "jobGeneratedByAgent": false
+}

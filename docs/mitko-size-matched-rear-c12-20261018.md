@@ -1,0 +1,29 @@
+# Mitko size-matched turn handoffs — local runtime review
+
+Owner approved the complete r02 front/rear comparison on18October2026: **better like that, approved**. Reviewed GIF SHA256 dcf9c70eb65551d627dbcee3a7384700b6a00a7550ec61075f8a871a632fc561. Earlier interpolation approval was withdrawn; no morph/crossfade images are integrated. Local implementation/testing is authorized; publication remains separate.
+
+## Behavior and bounded coverage
+
+Existing front/south contact0→west c05 uses every pivot0–13 at20fps700ms, with a small registration correction to original west pocket6. New rear/north contact0→west c12 uses ALL36poses at20fps1800ms (native36×73ms2628ms). Both then play ORIGINAL pocket6–15 at20fps500ms, hold ORIGINAL15 and respond through ORIGINAL start8–15/gait/stop. No bridge/generated rest/reversed c05 startup. Existing c01south0→east is unchanged. Other arrival phases/rear→east/180° turning remain unsupported and retain existing fallback; no arrival wait or phase reset widens the gate.
+
+## Approved correction and preserved originals
+
+The owner identified smaller turn art becoming larger at pocket entry. Reconstructed rear height289→306 and sole422→436 in400×500 review coordinates; exit correction scale306/289=1.0588235294. Front height308→306, scale306/308=0.9935064935. Constant whole-turn resizing shifted the mismatch to entry and was rejected locally. Approved r02 leaves source0 unchanged and distributes uniform scale/translation by source-pose index: a=smoothstep(i/(count−1)). No new in-between drawings, image morph, alpha blend or timing change. Residual face/stance/boot drawing differences remain owner-visible; registration is not a biomechanical repair.
+
+`tools/build-mitko-size-matched-turns.mjs` reproduces the correction in SPRITE coordinates, baking separate lossless atlases. Transform uses the original frame anchor/baseline and measured reference render scale, so normal scene scaling applies to the derived artwork; no world900,535 render hook ships. Renderer/MovementSystem/ArrivalTurn sources remain unchanged. Original native ZIP/GIF/PNG/JSON, c05atlas and all accepted original-family assets remain intact. The original atlas dimensions/source rectangles/timing metadata remain valid; corrected sprites retain full support motion and no alpha>8edge clipping across selected poses. Pixel resampling occurs during uniform resize; no claim of byte-identical derived pixels.
+
+Source receipts, exact owner-observed settings and original hashes: `assets_src/characters/bai_mitko/rear_west_c12_size_match_20261018/`. Prompt **do a fast turn**, Hydra+; observed screenshot maximum16 versus received36 is retained as uncertainty, not rewritten. Actual native export36×73ms. Generated runtime bindings and atlas hashes are in runtime-derivation.json. Derive/check from repo cwd: node tools/build-mitko-size-matched-turns.mjs [--check]. Requires existing Sharp/Playwright/Chromium; no provider calls.
+
+## Local integration and verification
+
+Only Game imports/pilot/preload lists and assetManifest source mapping change in runtime code. Both atlases resolve through normal content-hashed manifest URLs at the established5173bookmark. Scoped additive manifest promotion preserves previous records/atlas files and unrelated dirty preview work; replaced source/manifest bytes are backed up in the owning task evidence. No full build, deletion, listener restart, new port or VPS change.
+
+Normal BG/EN full arrival→turn→original pocket/rest→next actual400unitwalk→stop passes with all turn/pocket poses retained and65+gait phase changes. First meaningful travel211–216ms. Nominal rear turn1800ms, normal observed handoff1949–1950ms; front700nominal/699–716ms observed. Tests do not reinterpret frame-clock nominal timing as measured wall time.60normal controls cover actual interruption/retarget, authored window-action priority, readiness before/during turn/pocket with no late replay, menu/pause, scene exit/re-entry, short exact command, brisk-retarget ramp and unchanged right pilot. No injected pilot/art/controller for these controls.
+
+Separate clock-controlled complete comparison captures EVERY turn/pocket pose at25msnear-boundary sampling; owner-approved/reference versus installed atlas is a drawing-only comparison, not a new wall-clock benchmark. A fresh installed full-chain GIF is retained in the owning task evidence; no isolated still substitutes for motion review.
+
+304/304 historical/source/controller/preservation regressions pass, including all affected fixed baseline/inverse checks. New exact size-match inverse runs before prior c05/PR68/older inverses, restores immutable PR69 source/snapshot bytes and rejects unknown changes. Existing baseline hashes were NOT advanced. Initial targeted failures were error-message contract mismatches, corrected without relaxing assertions; later historical test correctly required adding the new rear preload slot to its exact expectation, with that test delta independently inverted. Original failed logs retained. Derivative --check, whitespace/manual scope review recorded externally.
+
+Full Windows suite remains pending: bounded symlink preflight returns EPERM in the agent sandbox. Assertions stay enabled; hash-bound administrator runner prepared by owning task. No skipped assertion or partial run is a full pass. Repo workflow review still reports its historical /home/ZeShad/baim-only path guard; workspace owner explicitly directs this Windows task/single local preview, so no VPS operation or rule rewriting follows. Git commit/push/PR/merge/postmerge gates remain separate; nothing published by this local integration.
+
+Current evidence/status: workspace `extraFixes/mitko-turning-pilot-20261016/size-match-implementation-20261018/`; animation checklist and complete turning audit are in workspace workflow_evidence. All earlier accepted residuals/releases and failed sources remain preserved. Telegram/recurring monitoring remain deferred.

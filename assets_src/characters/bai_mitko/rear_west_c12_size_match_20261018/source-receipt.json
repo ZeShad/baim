@@ -1,0 +1,746 @@
+{
+  "candidate": "mitko-turn-rear-to-west-short-prompt-c12",
+  "receivedAt": "2026-10-18T05:56:36.884Z",
+  "binding": "Owner independently supplied new result with reported short prompt do a fast turn and current Keyframe screenshot. Exact submission frame maximum/cloud ID/upload bytes not independently established; current screenshot shows16max but received export has36frames.",
+  "sourceZIP": {
+    "sha256": "d0e3f96c1dd781173c79b354c20f6b79d20cabbcca868b56675197b72946c4ac"
+  },
+  "sourceGIF": {
+    "sha256": "05ec53e5cbc62a3884b1ea276809b0a542f8e65525ee5b58d29e5fa4afb55201",
+    "frames": 36,
+    "durationsMs": [
+      70,
+      70,
+      70,
+      70,
+      70,
+      70,
+      70,
+      70,
+      70,
+      70,
+      70,
+      70,
+      70,
+      70,
+      70,
+      70,
+      70,
+      70,
+      70,
+      70,
+      70,
+      70,
+      70,
+      70,
+      70,
+      70,
+      70,
+      70,
+      70,
+      70,
+      70,
+      70,
+      70,
+      70,
+      70,
+      70
+    ],
+    "totalMs": 2520
+  },
+  "sheet": {
+    "sha256": "3a47daf393879d4717b26c1a2e0331151b7a2c01240c73e12f76e05bcfce7d2f",
+    "metadataSHA256": "9e440198f8084de28f36bb9a4e75dd56abdbdbc1e644230125a383d0f1fd9af3",
+    "width": 3456,
+    "height": 6336
+  },
+  "frames": [
+    {
+      "index": 0,
+      "atMs": 0,
+      "durationMs": 73,
+      "rect": {
+        "x": 0,
+        "y": 0,
+        "w": 576,
+        "h": 1056
+      },
+      "bounds": {
+        "x": 92,
+        "y": 73,
+        "w": 406,
+        "h": 913
+      },
+      "edgePixels": 0,
+      "sha256": "20d679476a6ca078295382e33df8a0002f7749602b6f81ac74d98bf2fe4091a5"
+    },
+    {
+      "index": 1,
+      "atMs": 73,
+      "durationMs": 73,
+      "rect": {
+        "x": 576,
+        "y": 0,
+        "w": 576,
+        "h": 1056
+      },
+      "bounds": {
+        "x": 95,
+        "y": 75,
+        "w": 391,
+        "h": 911
+      },
+      "edgePixels": 0,
+      "sha256": "91bd09bd9b216abba648c2422141d04876da3cf1df9e4497932335afd9b8636c"
+    },
+    {
+      "index": 2,
+      "atMs": 146,
+      "durationMs": 73,
+      "rect": {
+        "x": 1152,
+        "y": 0,
+        "w": 576,
+        "h": 1056
+      },
+      "bounds": {
+        "x": 109,
+        "y": 75,
+        "w": 378,
+        "h": 910
+      },
+      "edgePixels": 0,
+      "sha256": "cf66e0f32ecc2bb75b537e3f22098150b4a2b9ff271912ce4f7ec104b359ca92"
+    },
+    {
+      "index": 3,
+      "atMs": 219,
+      "durationMs": 73,
+      "rect": {
+        "x": 1728,
+        "y": 0,
+        "w": 576,
+        "h": 1056
+      },
+      "bounds": {
+        "x": 111,
+        "y": 75,
+        "w": 377,
+        "h": 910
+      },
+      "edgePixels": 0,
+      "sha256": "3d2f465e942755e4729f28efce3fdd3578c8010c0f005ca7e678291806a26c8d"
+    },
+    {
+      "index": 4,
+      "atMs": 292,
+      "durationMs": 73,
+      "rect": {
+        "x": 2304,
+        "y": 0,
+        "w": 576,
+        "h": 1056
+      },
+      "bounds": {
+        "x": 113,
+        "y": 77,
+        "w": 381,
+        "h": 907
+      },
+      "edgePixels": 0,
+      "sha256": "4c78a3cda539e78c9a41499369167906cf103bbec8ec0931d51d4d9eee01e6b7"
+    },
+    {
+      "index": 5,
+      "atMs": 365,
+      "durationMs": 73,
+      "rect": {
+        "x": 2880,
+        "y": 0,
+        "w": 576,
+        "h": 1056
+      },
+      "bounds": {
+        "x": 116,
+        "y": 80,
+        "w": 384,
+        "h": 903
+      },
+      "edgePixels": 0,
+      "sha256": "41f631fffba0d47bc6d8dc7430d07360a29b910e13860209ee79c2abedfb1e84"
+    },
+    {
+      "index": 6,
+      "atMs": 438,
+      "durationMs": 73,
+      "rect": {
+        "x": 0,
+        "y": 1056,
+        "w": 576,
+        "h": 1056
+      },
+      "bounds": {
+        "x": 116,
+        "y": 80,
+        "w": 387,
+        "h": 903
+      },
+      "edgePixels": 0,
+      "sha256": "4e2953de39fb7450b6a2b930ddb93da431ad87babba4388738ab6df42ae66e35"
+    },
+    {
+      "index": 7,
+      "atMs": 511,
+      "durationMs": 73,
+      "rect": {
+        "x": 576,
+        "y": 1056,
+        "w": 576,
+        "h": 1056
+      },
+      "bounds": {
+        "x": 116,
+        "y": 79,
+        "w": 386,
+        "h": 904
+      },
+      "edgePixels": 0,
+      "sha256": "20bfb976ba8f7ebb0b22cb4cdebedb77fe83ae6e616d662f11febbc61b3dfa09"
+    },
+    {
+      "index": 8,
+      "atMs": 584,
+      "durationMs": 73,
+      "rect": {
+        "x": 1152,
+        "y": 1056,
+        "w": 576,
+        "h": 1056
+      },
+      "bounds": {
+        "x": 113,
+        "y": 79,
+        "w": 387,
+        "h": 904
+      },
+      "edgePixels": 0,
+      "sha256": "ddaa360bb900f11653ac5d91e8873e54f5b20c2de2d2755200be52ff4325450d"
+    },
+    {
+      "index": 9,
+      "atMs": 657,
+      "durationMs": 73,
+      "rect": {
+        "x": 1728,
+        "y": 1056,
+        "w": 576,
+        "h": 1056
+      },
+      "bounds": {
+        "x": 107,
+        "y": 81,
+        "w": 390,
+        "h": 902
+      },
+      "edgePixels": 0,
+      "sha256": "2ecf8de29fe84650c73f1793ca6b8d82076e700349a78c5da5bf1401d3713473"
+    },
+    {
+      "index": 10,
+      "atMs": 730,
+      "durationMs": 73,
+      "rect": {
+        "x": 2304,
+        "y": 1056,
+        "w": 576,
+        "h": 1056
+      },
+      "bounds": {
+        "x": 99,
+        "y": 80,
+        "w": 389,
+        "h": 903
+      },
+      "edgePixels": 0,
+      "sha256": "071f5d164d22a7055d5804f47568062c95eddfdac3b636b27e0546a647489836"
+    },
+    {
+      "index": 11,
+      "atMs": 803,
+      "durationMs": 73,
+      "rect": {
+        "x": 2880,
+        "y": 1056,
+        "w": 576,
+        "h": 1056
+      },
+      "bounds": {
+        "x": 93,
+        "y": 80,
+        "w": 386,
+        "h": 903
+      },
+      "edgePixels": 0,
+      "sha256": "5b68f10d7317d70d8155c00f16a35a80f32b9a3ba90360c8096e0ead35ddcb86"
+    },
+    {
+      "index": 12,
+      "atMs": 876,
+      "durationMs": 73,
+      "rect": {
+        "x": 0,
+        "y": 2112,
+        "w": 576,
+        "h": 1056
+      },
+      "bounds": {
+        "x": 89,
+        "y": 82,
+        "w": 385,
+        "h": 899
+      },
+      "edgePixels": 0,
+      "sha256": "599ee522209f377cd978bba8a5404aeae8d2be73fe0a5ec54265c7d5513a6ac5"
+    },
+    {
+      "index": 13,
+      "atMs": 949,
+      "durationMs": 73,
+      "rect": {
+        "x": 576,
+        "y": 2112,
+        "w": 576,
+        "h": 1056
+      },
+      "bounds": {
+        "x": 84,
+        "y": 84,
+        "w": 382,
+        "h": 894
+      },
+      "edgePixels": 0,
+      "sha256": "117f8543118882743a03c8eda2f64a25b06cbc25b77f30c0b1792915d171f3c2"
+    },
+    {
+      "index": 14,
+      "atMs": 1022,
+      "durationMs": 73,
+      "rect": {
+        "x": 1152,
+        "y": 2112,
+        "w": 576,
+        "h": 1056
+      },
+      "bounds": {
+        "x": 77,
+        "y": 89,
+        "w": 383,
+        "h": 881
+      },
+      "edgePixels": 0,
+      "sha256": "50645ab0892997625726be2b3bc5c230394e3ac2c661e22d4fc9a997dcbfb3c2"
+    },
+    {
+      "index": 15,
+      "atMs": 1095,
+      "durationMs": 73,
+      "rect": {
+        "x": 1728,
+        "y": 2112,
+        "w": 576,
+        "h": 1056
+      },
+      "bounds": {
+        "x": 74,
+        "y": 90,
+        "w": 379,
+        "h": 880
+      },
+      "edgePixels": 0,
+      "sha256": "7f82db85eb2efd5d69d3e0c571dde9a79271c8b421b74e6bd4c0f542426dc944"
+    },
+    {
+      "index": 16,
+      "atMs": 1168,
+      "durationMs": 73,
+      "rect": {
+        "x": 2304,
+        "y": 2112,
+        "w": 576,
+        "h": 1056
+      },
+      "bounds": {
+        "x": 74,
+        "y": 90,
+        "w": 376,
+        "h": 880
+      },
+      "edgePixels": 0,
+      "sha256": "926b8c17c856eba8a06a1f72c40402bb2a3c1a7d3d729c62c6237ae567a8ad15"
+    },
+    {
+      "index": 17,
+      "atMs": 1241,
+      "durationMs": 73,
+      "rect": {
+        "x": 2880,
+        "y": 2112,
+        "w": 576,
+        "h": 1056
+      },
+      "bounds": {
+        "x": 73,
+        "y": 91,
+        "w": 374,
+        "h": 879
+      },
+      "edgePixels": 0,
+      "sha256": "d39a4d71c27596e7f1f8a65aa0a1bd9dce639da5d4d7433cd1cf3c0a27007724"
+    },
+    {
+      "index": 18,
+      "atMs": 1314,
+      "durationMs": 73,
+      "rect": {
+        "x": 0,
+        "y": 3168,
+        "w": 576,
+        "h": 1056
+      },
+      "bounds": {
+        "x": 76,
+        "y": 93,
+        "w": 370,
+        "h": 877
+      },
+      "edgePixels": 0,
+      "sha256": "538e7a7d8d7ef3d67b66fc2875edba0358a62c02d909feed611d9310de3462e4"
+    },
+    {
+      "index": 19,
+      "atMs": 1387,
+      "durationMs": 73,
+      "rect": {
+        "x": 576,
+        "y": 3168,
+        "w": 576,
+        "h": 1056
+      },
+      "bounds": {
+        "x": 80,
+        "y": 96,
+        "w": 362,
+        "h": 874
+      },
+      "edgePixels": 0,
+      "sha256": "89c6cce2bfbe119a51a4ecd76239dfb4fc9d13d8398edf4efce0abf46fffdf02"
+    },
+    {
+      "index": 20,
+      "atMs": 1460,
+      "durationMs": 73,
+      "rect": {
+        "x": 1152,
+        "y": 3168,
+        "w": 576,
+        "h": 1056
+      },
+      "bounds": {
+        "x": 84,
+        "y": 99,
+        "w": 353,
+        "h": 871
+      },
+      "edgePixels": 0,
+      "sha256": "089fc83c5b5f647721f3329a6c2bccfca4cffca61f44b3cd7b4b2bd1b6c2760c"
+    },
+    {
+      "index": 21,
+      "atMs": 1533,
+      "durationMs": 73,
+      "rect": {
+        "x": 1728,
+        "y": 3168,
+        "w": 576,
+        "h": 1056
+      },
+      "bounds": {
+        "x": 105,
+        "y": 102,
+        "w": 310,
+        "h": 868
+      },
+      "edgePixels": 0,
+      "sha256": "af3b34e745840d37cce5d1400cff8b7b92c636347635aa2cd14b59bb6f69230b"
+    },
+    {
+      "index": 22,
+      "atMs": 1606,
+      "durationMs": 73,
+      "rect": {
+        "x": 2304,
+        "y": 3168,
+        "w": 576,
+        "h": 1056
+      },
+      "bounds": {
+        "x": 152,
+        "y": 103,
+        "w": 241,
+        "h": 865
+      },
+      "edgePixels": 0,
+      "sha256": "be52360e2102c717312e541b7eb194b3fc79ec6ed9ddc9119d47d488a60f0990"
+    },
+    {
+      "index": 23,
+      "atMs": 1679,
+      "durationMs": 73,
+      "rect": {
+        "x": 2880,
+        "y": 3168,
+        "w": 576,
+        "h": 1056
+      },
+      "bounds": {
+        "x": 143,
+        "y": 106,
+        "w": 259,
+        "h": 853
+      },
+      "edgePixels": 0,
+      "sha256": "8b76f2f183429198b08c80ad7704f6a399573fd087da403625d0973c9567d110"
+    },
+    {
+      "index": 24,
+      "atMs": 1752,
+      "durationMs": 73,
+      "rect": {
+        "x": 0,
+        "y": 4224,
+        "w": 576,
+        "h": 1056
+      },
+      "bounds": {
+        "x": 178,
+        "y": 107,
+        "w": 227,
+        "h": 860
+      },
+      "edgePixels": 0,
+      "sha256": "32a23c8f260439b084f27c4e651b038c4b66df1a5434581724f1257728a5010d"
+    },
+    {
+      "index": 25,
+      "atMs": 1825,
+      "durationMs": 73,
+      "rect": {
+        "x": 576,
+        "y": 4224,
+        "w": 576,
+        "h": 1056
+      },
+      "bounds": {
+        "x": 179,
+        "y": 107,
+        "w": 227,
+        "h": 861
+      },
+      "edgePixels": 0,
+      "sha256": "c92c0acd2959eb18d646f2c07ac8abc6b1bfa1b022f601525c05fb68251e5dbe"
+    },
+    {
+      "index": 26,
+      "atMs": 1898,
+      "durationMs": 73,
+      "rect": {
+        "x": 1152,
+        "y": 4224,
+        "w": 576,
+        "h": 1056
+      },
+      "bounds": {
+        "x": 178,
+        "y": 106,
+        "w": 228,
+        "h": 864
+      },
+      "edgePixels": 0,
+      "sha256": "1ea8180856b00a03c68f2517140ff6ef7c59a676f6ac4c1c16822443abc0ad2d"
+    },
+    {
+      "index": 27,
+      "atMs": 1971,
+      "durationMs": 73,
+      "rect": {
+        "x": 1728,
+        "y": 4224,
+        "w": 576,
+        "h": 1056
+      },
+      "bounds": {
+        "x": 177,
+        "y": 106,
+        "w": 234,
+        "h": 865
+      },
+      "edgePixels": 0,
+      "sha256": "04f342a0b9e4ef654879e8abc36b7dea5af1bb695c7ff44a3056c05bed310193"
+    },
+    {
+      "index": 28,
+      "atMs": 2044,
+      "durationMs": 73,
+      "rect": {
+        "x": 2304,
+        "y": 4224,
+        "w": 576,
+        "h": 1056
+      },
+      "bounds": {
+        "x": 173,
+        "y": 106,
+        "w": 240,
+        "h": 865
+      },
+      "edgePixels": 0,
+      "sha256": "f915edf39013e48964c51ed5ea73edc1d24b37f9df27033abb1db288c14872bb"
+    },
+    {
+      "index": 29,
+      "atMs": 2117,
+      "durationMs": 73,
+      "rect": {
+        "x": 2880,
+        "y": 4224,
+        "w": 576,
+        "h": 1056
+      },
+      "bounds": {
+        "x": 173,
+        "y": 104,
+        "w": 240,
+        "h": 867
+      },
+      "edgePixels": 0,
+      "sha256": "398327bdb1d7f940323d2aaf9f622e53076dc53012650497bef360cd001a9780"
+    },
+    {
+      "index": 30,
+      "atMs": 2190,
+      "durationMs": 73,
+      "rect": {
+        "x": 0,
+        "y": 5280,
+        "w": 576,
+        "h": 1056
+      },
+      "bounds": {
+        "x": 174,
+        "y": 102,
+        "w": 239,
+        "h": 869
+      },
+      "edgePixels": 0,
+      "sha256": "5f2d42a6117f27a9dcda351b5cd8be60595fde29faccee39110b85039ab329de"
+    },
+    {
+      "index": 31,
+      "atMs": 2263,
+      "durationMs": 73,
+      "rect": {
+        "x": 576,
+        "y": 5280,
+        "w": 576,
+        "h": 1056
+      },
+      "bounds": {
+        "x": 172,
+        "y": 101,
+        "w": 240,
+        "h": 870
+      },
+      "edgePixels": 0,
+      "sha256": "132a32f65b7a6c4de3b5bd4520863c9a7f982577da53312a2a63ac337a2f1893"
+    },
+    {
+      "index": 32,
+      "atMs": 2336,
+      "durationMs": 73,
+      "rect": {
+        "x": 1152,
+        "y": 5280,
+        "w": 576,
+        "h": 1056
+      },
+      "bounds": {
+        "x": 170,
+        "y": 100,
+        "w": 241,
+        "h": 871
+      },
+      "edgePixels": 0,
+      "sha256": "da63c8b4182baf385abc0f5781163fecafed9cef8dc04d13a0086be857b0e90b"
+    },
+    {
+      "index": 33,
+      "atMs": 2409,
+      "durationMs": 73,
+      "rect": {
+        "x": 1728,
+        "y": 5280,
+        "w": 576,
+        "h": 1056
+      },
+      "bounds": {
+        "x": 169,
+        "y": 99,
+        "w": 242,
+        "h": 872
+      },
+      "edgePixels": 0,
+      "sha256": "4a4e86d4d6af2d68e2eb9262d9f90dccbd0474094eeaed8ed81a06bc0b423f39"
+    },
+    {
+      "index": 34,
+      "atMs": 2482,
+      "durationMs": 73,
+      "rect": {
+        "x": 2304,
+        "y": 5280,
+        "w": 576,
+        "h": 1056
+      },
+      "bounds": {
+        "x": 169,
+        "y": 98,
+        "w": 242,
+        "h": 873
+      },
+      "edgePixels": 0,
+      "sha256": "763bee34e5f5dafcdb841a128e647db9a10fcb54939a4192e229ee1043d10f6b"
+    },
+    {
+      "index": 35,
+      "atMs": 2555,
+      "durationMs": 73,
+      "rect": {
+        "x": 2880,
+        "y": 5280,
+        "w": 576,
+        "h": 1056
+      },
+      "bounds": {
+        "x": 159,
+        "y": 96,
+        "w": 266,
+        "h": 874
+      },
+      "edgePixels": 0,
+      "sha256": "093617cd394f2a96ee938b994926909e288638ad10882e5755ba12247a54794f"
+    }
+  ],
+  "nativeDurationMs": 2628,
+  "sourceAccepted": false,
+  "runtimeIntegrated": false
+}
