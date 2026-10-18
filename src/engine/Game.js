@@ -28,7 +28,7 @@ import { chapter1 } from "../content/chapter1/index.js";
 import { characterDefinitions } from "../content/art/characters.js";
 import { assetManifest } from "../content/art/assetManifest.js";
 import { externalAnimationV1 } from "../content/art/externalAnimationRuntime.generated.js";
-import { mitkoTurnPocket } from "../content/art/mitkoTurnPocket.generated.js";
+import { mitkoSizeMatchedFront as mitkoTurnPocket, mitkoSizeMatchedRear } from "../content/art/mitkoSizeMatchedTurns.generated.js";
 import { mitkoTurnPilot } from "../content/art/mitkoTurnPilot.generated.js";
 import {
   applyTimedSobering,
@@ -126,7 +126,7 @@ export class Game {
       walkPartsByFacing: this.usesExternalCharacterAnimation() ? this.defaultWalkPartsByFacing() : {},
       walkPart: null,
       arrivalTurnPilot: this.usesExternalCharacterAnimation() ? mitkoTurnPilot : null,
-      arrivalTurnPilots: this.usesExternalCharacterAnimation() ? [mitkoTurnPilot, mitkoTurnPocket] : [],
+      arrivalTurnPilots: this.usesExternalCharacterAnimation() ? [mitkoTurnPilot, mitkoTurnPocket, mitkoSizeMatchedRear] : [],
       arrivalTurn: null,
       pendingStop: false,
       stopExitFrame: 0,
@@ -190,7 +190,7 @@ export class Game {
   bootstrapCharacterSlots() {
     return [...new Set([...Object.values(externalAnimationV1.walkParts || {}).flatMap(parts =>
       [parts.start?.slot, parts.loop?.slot, parts.short?.slot, parts.stop?.slot, parts.rest?.slot]),
-      mitkoTurnPilot.frame.slot, mitkoTurnPocket.frame.slot].filter(Boolean))];
+      mitkoTurnPilot.frame.slot, mitkoTurnPocket.frame.slot, mitkoSizeMatchedRear.frame.slot].filter(Boolean))];
   }
 
   protectCurrentAssetWorkingSet(sceneIds = [this.currentScene.id]) {

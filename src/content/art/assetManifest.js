@@ -2,6 +2,7 @@ import { kiroOilAssets } from "./kiroOilHandover.generated.js";
 import { externalAnimationV1 } from "./externalAnimationRuntime.generated.js";
 import { mitkoTurnPocketAssets } from "./mitkoTurnPocket.generated.js";
 import { mitkoTurnAssets } from "./mitkoTurnPilot.generated.js";
+import { mitkoSizeMatchedAssets } from "./mitkoSizeMatchedTurns.generated.js";
 
 export const assetManifest = {
   baseResolution: { width: 1280, height: 720 },
@@ -105,7 +106,8 @@ export const assetManifest = {
       type: "externalAnimation",
       ...externalAnimationV1.characterAssets,
       ...mitkoTurnAssets,
-      ...mitkoTurnPocketAssets
+      ...mitkoTurnPocketAssets,
+      ...mitkoSizeMatchedAssets
     }
   },
   items: {

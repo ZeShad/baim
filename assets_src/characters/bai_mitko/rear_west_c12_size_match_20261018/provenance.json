@@ -1,0 +1,29 @@
+{
+  "candidate": "mitko-turn-rear-to-west-c12",
+  "originalHashes": {
+    "original-export.zip": "d0e3f96c1dd781173c79b354c20f6b79d20cabbcca868b56675197b72946c4ac",
+    "original-preview.gif": "05ec53e5cbc62a3884b1ea276809b0a542f8e65525ee5b58d29e5fa4afb55201",
+    "sheet.png": "3a47daf393879d4717b26c1a2e0331151b7a2c01240c73e12f76e05bcfce7d2f",
+    "sheet.json": "9e440198f8084de28f36bb9a4e75dd56abdbdbc1e644230125a383d0f1fd9af3",
+    "source-receipt.json": "289052dcddd54e0e2bb0c49a2a7b1aae69ac05810499010ffe0a39b6adc4ed68",
+    "owner-observed-setup.json": "483af81878b83475b0cdd6fdb0ea6c8ef3b46ae82984ec00b91474c1cf144e06"
+  },
+  "sourceFrames": 36,
+  "nativeFrameMs": 73,
+  "nativeDurationMs": 2628,
+  "runtimeFrames": 36,
+  "runtimeFps": 20,
+  "entryFacing": "north",
+  "entryFrameIndices": [
+    0
+  ],
+  "exitFacing": "west",
+  "originalPocketSourceFrames": [
+    6,
+    15
+  ],
+  "prompt": "do a fast turn",
+  "ownerApproval": "better like that, approved",
+  "reviewArtifactSHA256": "dcf9c70eb65551d627dbcee3a7384700b6a00a7550ec61075f8a871a632fc561",
+  "registration": "Uniform scale and translation by source index, entry unchanged, final matched to original pocket6. Source bytes remain unchanged; native source and calibrated1800ms playback reviewed previously. Narrow pilot only."
+}
