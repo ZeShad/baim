@@ -4,7 +4,7 @@ import { findWalkPath, isWalkable } from "./SceneGeometry.js";
 const customerStops = {
   "scene.chapter1.village_square": {
     "npc.journalist": { x: 850, y: 590 },
-    "npc.baba_stoyanka": { x: 430, y: 430 }
+    "npc.baba_stoyanka": { x: 442.5, y: 477.5 }
   },
   "scene.chapter1.municipality": {
     "npc.municipality_colleague": { x: 750, y: 450 },
@@ -19,7 +19,7 @@ const customerStops = {
 
 const constrainedStops = {
   "scene.chapter1.mayor_office": { "npc.mayor": { x: 408, y: 564 } },
-  "scene.chapter1.village_square": { "hotspot.square.kiosk": { x: 1090, y: 630 } },
+  "scene.chapter1.village_square": { "hotspot.square.kiosk": { x: 1077.5, y: 655 } },
   "scene.chapter1.election_booth": {
     "npc.journalist": { x: 228, y: 564 },
     "npc.tony_fridge": { x: 228, y: 564 },

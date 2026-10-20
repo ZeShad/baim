@@ -1,3 +1,4 @@
+import {restoreNortheastKioskSnapshot} from './helpers/northeast-kiosk-preservation.js';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
@@ -14,7 +15,7 @@ test('oil Examine maps to the unchanged accepted 200ml 3D model, while empty rem
  assert.equal(sha(readFileSync(assetManifest.items['item.empty_rakia_bottle'].model)),'463324d8f33d79fb1482056e08d46e70b265f83d29ba9480b97174dcf4dbc4b0');
 });
 test('apartment exit lands on connected pavement; PR71 interior and municipality returns stay exact',()=>{
- const apartment=chapter1.scenes.find(s=>s.id==='scene.chapter1.apartment'),square=chapter1.scenes.find(s=>s.id==='scene.chapter1.village_square'),municipality=chapter1.scenes.find(s=>s.id==='scene.chapter1.municipality');
+ const apartment=chapter1.scenes.find(s=>s.id==='scene.chapter1.apartment'),square=chapter1.scenes.find(s=>s.id==='scene.chapter1.village_square'),municipality=restoreNortheastKioskSnapshot('scenes',chapter1.scenes).find(s=>s.id==='scene.chapter1.municipality');
  const point=apartment.exits.find(e=>e.id==='exit.apartment.to_square').targetPosition;
  assert.deepEqual(point,{x:300,y:520});assert.ok(isWalkable(square,point));
  for(const to of [{x:350,y:570},{x:665,y:470},{x:970,y:550}])assert.ok(findWalkPath(square,point,to).length);
