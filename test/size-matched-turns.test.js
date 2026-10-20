@@ -48,6 +48,6 @@ test('derived atlases retain full cell layout, first-pose size and unclipped mea
 });
 test('new inverse restores fixed PR69 bytes and snapshot, rejects unknown modifications',()=>{
  const f=JSON.parse(fs.readFileSync('test/fixtures/size-matched-turn-deltas.json'));
- for(const[p,r]of Object.entries(f.records)){const b=fs.readFileSync(p);assert.equal(stripSizeMatchedTurn(p,b),r.before);assert.throws(()=>stripSizeMatchedTurn(p,Buffer.concat([b,Buffer.from('tamper')])),/size-match inverse/);}
+ for(const[p,r]of Object.entries(f.records)){const b=fs.readFileSync(p);assert.equal(stripSizeMatchedTurn(p,b),r.before);assert.throws(()=>stripSizeMatchedTurn(p,Buffer.concat([b,Buffer.from('tamper')])),/size-match inverse|exact scene fix/);}
  assert.deepEqual(restoreSizeMatchedSnapshot('manifest',assetManifest),f.snapshots.manifest.before);
 });

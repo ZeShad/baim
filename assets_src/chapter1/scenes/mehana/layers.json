@@ -34,8 +34,8 @@
       },
       "idleVariation": {
         "npcId": "npc.mehana_waiter",
-        "intervalMinMs": 25000,
-        "intervalMaxMs": 50000,
+        "intervalMinMs": 12000,
+        "intervalMaxMs": 24000,
         "animation": {
           "asset": "mehanaWaiterSneakyGlassSwap",
           "frameWidth": 262,

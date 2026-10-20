@@ -573,8 +573,10 @@ test("fountain repair supports real clicks, safe oil self-use and mid-puzzle rel
     await verb("look");
     await click("hotspot.square.fountain");
     await waitFor(() => window.__comradeCandidateTest.game.state.flags.fountainDiagnosed);
-    await verb("talk");
-    await click("hotspot.square.old_men_bench");
+    await verb("use");
+    await click("hotspot.square.fountain");
+    await waitFor(() => window.__comradeCandidateTest.game.state.flags.fountainValveTried);
+    await click("hotspot.square.fountain");
     await waitFor(() => window.__comradeCandidateTest.game.state.flags.fountainOilClue);
     await click("exit.square.to_mehana");
     await waitFor(() => window.__comradeCandidateTest.game.currentScene.id === "scene.chapter1.mehana");

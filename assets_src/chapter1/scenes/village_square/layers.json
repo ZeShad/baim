@@ -20,7 +20,7 @@
       "id": "layer.square.fountain_foreground",
       "enabled": true,
       "asset": "fountainForeground",
-      "output": "assets/chapter1/scenes/village_square/fountain-foreground-c05.png",
+      "output": "assets/chapter1/scenes/village_square/fountain-stone-foreground-affinity-r01.png",
       "left": 0,
       "top": 0,
       "zIndex": 42
@@ -149,7 +149,7 @@
     },
     {
       "id": "layer.square.old_men_chorus",
-      "enabled": true,
+      "enabled": false,
       "asset": "oldMenChorusSeated",
       "output": "assets/chapter1/characters/old_men_chorus/seated-pair-v1.png",
       "zIndex": 91,
@@ -228,7 +228,12 @@
         "frameDurationMs": 122,
         "loop": true,
         "freezeWhenPaused": true,
-        "contentBounds": {"x": 0, "y": 0, "w": 140, "h": 140}
+        "contentBounds": {
+          "x": 0,
+          "y": 0,
+          "w": 140,
+          "h": 140
+        }
       }
     },
     {

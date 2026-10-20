@@ -1,0 +1,12 @@
+{
+  "source": "assets/chapter1/scenes/village_square/background-redesign-c05.png",
+  "width": 1280,
+  "height": 720,
+  "paths": [
+    "M 490,249 Q 512,250 507,266 L 495,280 Q 500,285 508,289 L 523,313 L 541,328 L 552,336 L 558,332 L 565,335 L 563,348 L 554,355 L 553,399 L 548,440 L 550,486 L 556,490 L 570,490 L 570,482 Q 749,474 870,455 Q 912,462 930,482 L 922,521 Q 899,550 807,563 Q 623,590 474,567 L 433,562 L 403,548 L 389,517 L 388,472 Q 402,450 464,440 L 474,417 L 477,390 L 486,363 L 480,343 L 469,324 L 470,304 L 475,291 L 481,286 L 481,277 L 476,275 L 478,266 Z",
+    "M 388,472 Q 398,446 470,440 Q 623,420 768,436 Q 875,438 920,465 L 930,482 L 922,521 Q 899,550 807,563 Q 623,590 474,567 L 433,562 L 403,548 L 389,517 Z"
+  ],
+  "output": "assets/chapter1/scenes/village_square/fountain-foreground-perimeter-r01.png",
+  "method": "Exact approved background RGB clipped with union of original editable foreground path and complete basin exterior. Native mask derivative, not generative art.",
+  "sourceSha256": "e59e6870fa2fba824d22cc0da8045d9643222d47ebe33e4500e506e5f1e57950"
+}

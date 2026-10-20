@@ -63,7 +63,7 @@ test('no-op preserves active one-shot; interaction priority or missing art cance
 });
 test('newest inverse restores exact PR67 sources/manifest and rejects unknown bytes',()=>{
  const f=JSON.parse(readFileSync('test/fixtures/turning-pilot-deltas.json'));
- for(const [p,r]of Object.entries(f.records)){const source=readFileSync(p);assert.equal(stripTurningPilot(p,source),r.before);assert.throws(()=>stripTurningPilot(p,Buffer.concat([source,Buffer.from('tamper')])),/exact turning pilot candidate/);}
+ for(const [p,r]of Object.entries(f.records)){const source=readFileSync(p);assert.equal(stripTurningPilot(p,source),r.before);assert.throws(()=>stripTurningPilot(p,Buffer.concat([source,Buffer.from('tamper')])),/exact turning pilot candidate|exact scene fix/);}
  assert.deepEqual(restoreTurningSnapshot('manifest',assetManifest),f.snapshots.manifest.before);
- const tampered=structuredClone(assetManifest);tampered.characters['npc.bai_mitko'].turn_front_east_c01+='x';assert.throws(()=>restoreTurningSnapshot('manifest',tampered),/exact turning pilot snapshot/);
+ const tampered=structuredClone(assetManifest);tampered.characters['npc.bai_mitko'].turn_front_east_c01+='x';assert.throws(()=>restoreTurningSnapshot('manifest',tampered),/exact turning pilot snapshot|exact scene fix snapshot/);
 });

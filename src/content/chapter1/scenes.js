@@ -239,7 +239,7 @@ const rawScenes = [
         rect: { x: 0, y: 120, w: 235, h: 345 },
         depthY: 590,
         targetSceneId: "scene.chapter1.mehana",
-        targetPosition: { x: 120, y: 530 }
+        targetPosition: { x: 150, y: 585 }
       },
       {
         id: "exit.square.to_municipality",
@@ -330,6 +330,7 @@ const rawScenes = [
       },
       {
         id: "hotspot.square.old_men_bench",
+        enabled: false,
         kind: "hotspot",
         characterInteraction: true,
         nameKey: "hotspot.old_men_bench.name",
@@ -391,7 +392,7 @@ const rawScenes = [
     palette: { sky: "#4a3327", wall: "#7a5538", floor: "#32251d" },
     movementSpeed: 75,
     playerMode: "seated",
-    playerStart: { x: 120, y: 530 },
+    playerStart: { x: 150, y: 585 },
     seatedPresentation: {
       tableRect: { x: 230, y: 435, w: 395, h: 230 }
     },
@@ -413,7 +414,7 @@ const rawScenes = [
       zDepth: 0.85
     }],
     anchors: {
-      baiMitkoSeat: { x: 120, y: 530 },
+      baiMitkoSeat: { x: 150, y: 585 },
       tonyTable: { x: 845, y: 570 },
       bar: { x: 620, y: 500 },
       waiter: { x: 705, y: 465 },
@@ -684,7 +685,7 @@ const rawScenes = [
         nameKey: "exit.to_village_square",
         rect: { x: 30, y: 300, w: 170, h: 245 },
         targetSceneId: "scene.chapter1.village_square",
-        targetPosition: { x: 850, y: 505 }
+        targetPosition: { x: 965, y: 450 }
       },
       {
         id: "exit.municipality.to_mayor_office",
@@ -841,7 +842,7 @@ function applySceneObjectGeometry(scenes, geometryBySceneId) {
 
 function applyObjectGeometry(objects = [], geometryByObjectId) {
   return objects
-    .filter((object) => geometryByObjectId[object.id])
+    .filter((object) => object.enabled !== false && geometryByObjectId[object.id])
     .map((object) => {
       const geometry = geometryByObjectId[object.id];
       return geometry?.polygon ? { ...object, polygon: geometry.polygon } : object;

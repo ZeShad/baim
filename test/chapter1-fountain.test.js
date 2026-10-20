@@ -142,15 +142,17 @@ test("finished loss saves do not reactivate expired Baba business or allow refil
   assert.equal(requirementsMet(oilRefillRule.requirements, ctx), false);
 });
 
-test("the chorus Talk action uses the same authored clue as Look and Use", () => {
+test("removed chorus has no invisible Talk target; the valve still provides its oil clue", () => {
   const ctx = context();
-  const bench = square.interactables.find(target => target.id === "hotspot.square.old_men_bench");
+  assert.equal(square.interactables.find(target => target.id === "hotspot.square.old_men_bench"), undefined);
+  const basin = square.interactables.find(target => target.id === "hotspot.square.fountain");
   const game = Object.create(Game.prototype);
-  Object.assign(game, ctx, { selectedVerb: VERBS.TALK, player: {},
+  Object.assign(game, ctx, { selectedVerb: VERBS.USE, player: {},
     applyContentEffect(rule) { apply(rule, ctx); this.message = rule.messageKey; } });
-  game.performTargetAction(bench);
+  game.performTargetAction(basin);
+  game.performTargetAction(basin);
   assert.equal(ctx.state.flags.fountainOilClue, true);
-  assert.equal(game.message, "fountain.chorus.clue");
+  assert.equal(game.message, "fountain.use.hint");
 });
 
 test("repaired fountain reveals shallow pool and statue stream, never retired tap", () => {

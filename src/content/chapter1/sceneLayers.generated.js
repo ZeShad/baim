@@ -308,14 +308,6 @@ export const sceneLayerGeometry = {
         }
       },
       {
-        "id": "layer.square.old_men_chorus",
-        "asset": "oldMenChorusSeated",
-        "zIndex": 91,
-        "top": 322,
-        "left": 580,
-        "height": 99
-      },
-      {
         "id": "layer.square.journalist",
         "asset": "journalistStanding",
         "zIndex": 46,
@@ -500,8 +492,8 @@ export const sceneLayerGeometry = {
         },
         "idleVariation": {
           "npcId": "npc.mehana_waiter",
-          "intervalMinMs": 25000,
-          "intervalMaxMs": 50000,
+          "intervalMinMs": 12000,
+          "intervalMaxMs": 24000,
           "animation": {
             "transitionDurationMs": 148,
             "registrationBounds": {

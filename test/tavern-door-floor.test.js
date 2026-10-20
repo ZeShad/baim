@@ -19,7 +19,7 @@ test('door-side wall cells are blocked without changing any other floor or groun
  }
  assert.equal(removed,117);
  for(let y=0;y<530;y++)for(let x=60;x<190;x++)assert.equal(isWalkable(scene,{x,y}),false);
- assert.deepEqual(scene.playerStart,{x:120,y:530});assert.equal(isWalkable(scene,scene.playerStart),true);
+ assert.deepEqual(scene.playerStart,{x:150,y:585});assert.equal(isWalkable(scene,scene.playerStart),true);
  const entry=chapter1.scenes.find(s=>s.id==='scene.chapter1.village_square').exits.find(e=>e.id==='exit.square.to_mehana');
  assert.deepEqual(entry.targetPosition,scene.playerStart);
  assert.equal(findTargetAt(scene,{x:100,y:300},()=>true)?.id,'exit.mehana.to_square','ordinary door click still exits');
