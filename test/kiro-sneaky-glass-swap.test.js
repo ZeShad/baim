@@ -22,7 +22,7 @@ function fixture(random = () => 0) {
 }
 
 test('Kiro samples bounded quiet intervals with controllable RNG, without render-time random calls', () => {
-  for (const [rng, expected] of [[0,25000],[0.5,37500],[1,50000]]) {
+  for (const [rng, expected] of [[0,12000],[0.5,18000],[1,24000]]) {
     let calls = 0;
     const {controller, update} = fixture(() => { calls++; return rng; });
     assert.equal(view(controller).remainingMs, expected);
@@ -36,56 +36,56 @@ test('Kiro samples bounded quiet intervals with controllable RNG, without render
 
 test('Kiro plays once, returns to polishing frame zero, and restarts a full fresh interval', () => {
   let calls=0;const {controller,update}=fixture(()=>{calls++;return calls===1?0:0.5;});
-  update(25000);
+  update(12000);
   for(let i=0;i<36;i++) {
     assert.equal(sceneLayerAnimationFrame(view(controller).animation,view(controller).elapsed),i);
     update(125);
   }
   assert.equal(view(controller).phase,'idle');assert.equal(view(controller).idleTime,0);
-  assert.equal(view(controller).remainingMs,37500);assert.equal(calls,2);
-  update(37499);assert.equal(view(controller).phase,'idle');
+  assert.equal(view(controller).remainingMs,18000);assert.equal(calls,2);
+  update(17999);assert.equal(view(controller).phase,'idle');
   update(1);assert.equal(view(controller).phase,'playing');
 });
 
 test('Menu/pause time counts neither toward the quiet interval nor toward an active variation', () => {
-  const {controller,update}=fixture();update(15000);
+  const {controller,update}=fixture();update(6000);
   const before=view(controller);update(100000,{paused:true});assert.deepEqual(view(controller),before);
-  update(10000);update(125);const active=view(controller);
+  update(6000);update(125);const active=view(controller);
   update(100000,{paused:true});assert.deepEqual(view(controller),active);
   update(125);assert.equal(view(controller).elapsed,250);
 });
 
 test('Conversation takes priority on a due tick, cancels a playing occurrence, and never resumes it', () => {
-  const {controller,update}=fixture();update(24999);update(1,{blocked:true});
+  const {controller,update}=fixture();update(11999);update(1,{blocked:true});
   assert.equal(view(controller),null);update(100000,{blocked:true});assert.equal(view(controller),null);
-  update(0);assert.equal(view(controller).remainingMs,25000);update(25000);update(500);
+  update(0);assert.equal(view(controller).remainingMs,12000);update(12000);update(500);
   update(0,{blocked:true,paused:true});assert.equal(view(controller),null);
   update(0);assert.equal(view(controller).phase,'idle');assert.equal(view(controller).idleTime,0);
-  update(24999);assert.equal(view(controller).phase,'idle');
+  update(11999);assert.equal(view(controller).phase,'idle');
 });
 
 test('Scene departure and hidden/removed NPCs discard active and pending playback', () => {
-  const {controller,update}=fixture();update(25000);
-  controller.update({id:'other.scene',foregroundLayers:[],npcs:[]},50000);
-  assert.equal(view(controller),null);update(0);assert.equal(view(controller).remainingMs,25000);
-  update(25000);update(0,{visible:()=>false});assert.equal(view(controller),null);
-  update(0);assert.equal(view(controller).remainingMs,25000);
-  controller.update({...scene,npcs:[]},25000);assert.equal(view(controller),null);
+  const {controller,update}=fixture();update(12000);
+  controller.update({id:'other.scene',foregroundLayers:[],npcs:[]},24000);
+  assert.equal(view(controller),null);update(0);assert.equal(view(controller).remainingMs,12000);
+  update(12000);update(0,{visible:()=>false});assert.equal(view(controller),null);
+  update(0);assert.equal(view(controller).remainingMs,12000);
+  controller.update({...scene,npcs:[]},12000);assert.equal(view(controller),null);
 });
 
 test('Missing art consumes the due occurrence; late loading cannot replay it or a canceled occurrence', () => {
   const {controller,update}=fixture();
-  update(25000,{available:a=>a!==config.animation});assert.equal(view(controller).phase,'idle');
-  assert.equal(view(controller).remainingMs,25000);update(1);assert.equal(view(controller).phase,'idle');
-  update(24999);assert.equal(view(controller).phase,'playing');
+  update(12000,{available:a=>a!==config.animation});assert.equal(view(controller).phase,'idle');
+  assert.equal(view(controller).remainingMs,12000);update(1);assert.equal(view(controller).phase,'idle');
+  update(11999);assert.equal(view(controller).phase,'playing');
   update(1,{available:a=>a!==config.animation});assert.equal(view(controller).phase,'idle');
-  update(1);assert.equal(view(controller).phase,'idle');assert.equal(view(controller).remainingMs,24999);
-  update(0,{blocked:true});update(0);assert.equal(view(controller).remainingMs,25000);
+  update(1);assert.equal(view(controller).phase,'idle');assert.equal(view(controller).remainingMs,11999);
+  update(0,{blocked:true});update(0);assert.equal(view(controller).remainingMs,12000);
 });
 
 test('No quiet accrual until the approved polishing asset is loaded; negative time never advances playback', () => {
   const {controller,update}=fixture();const before=view(controller);
-  update(50000,{available:a=>a!==layer.animation});assert.deepEqual(view(controller),before);
+  update(24000,{available:a=>a!==layer.animation});assert.deepEqual(view(controller),before);
   update(-50);assert.deepEqual(view(controller),before);
 });
 
@@ -134,7 +134,7 @@ test('Candidate geometry, original timing, source hashes and every fixed approve
   assert.equal(sha(readFileSync(candidate.import.runtime.asset)),candidate.import.derivedOutputHashes[candidate.import.runtime.asset]);
   assert.equal(assetManifest.scenes[scene.id].mehanaWaiterSneakyGlassSwap,'assets/chapter1/characters/mehana_waiter/kiro-spitting-fixed-owner-export-c01.webp');
   assert.deepEqual([layer.left,layer.top,layer.height,layer.zIndex],[727,222,265,50]);
-  assert.deepEqual([config.intervalMinMs,config.intervalMaxMs],[25000,50000]);
+  assert.deepEqual([config.intervalMinMs,config.intervalMaxMs],[12000,24000]);
   assert.equal(config.animation.loop,false);assert.equal(config.animation.frameCount*config.animation.frameDurationMs,4500);
   assert.deepEqual(config.animation.contentBounds,{x:0,y:0,w:262,h:614});
   for(const s of chapter1.scenes.filter(s=>s.id!==scene.id))assert.ok(s.foregroundLayers.every(l=>!l.idleVariation));

@@ -53,6 +53,6 @@ test('priority/missing-art cancellation cannot queue a late generated rest or tu
 });
 
 test('c05 inverse restores exact PR68 bytes including protected helper and rejects tampering',()=>{
- const f=JSON.parse(readFileSync('test/fixtures/turn-pocket-deltas.json'));for(const[p,r]of Object.entries(f.records)){const b=readFileSync(p);assert.equal(stripTurnPocket(p,b),r.before);assert.throws(()=>stripTurnPocket(p,Buffer.concat([b,Buffer.from('tamper')])),/c05 inverse/);}
- assert.deepEqual(restoreTurnPocketSnapshot('manifest',assetManifest),f.snapshots.manifest.before);const bad=structuredClone(assetManifest);bad.characters['npc.bai_mitko'].turn_front_west_pocket_c05+='tamper';assert.throws(()=>restoreTurnPocketSnapshot('manifest',bad),/c05 inverse/);
+ const f=JSON.parse(readFileSync('test/fixtures/turn-pocket-deltas.json'));for(const[p,r]of Object.entries(f.records)){const b=readFileSync(p);assert.equal(stripTurnPocket(p,b),r.before);assert.throws(()=>stripTurnPocket(p,Buffer.concat([b,Buffer.from('tamper')])),/c05 inverse|exact scene fix/);}
+ assert.deepEqual(restoreTurnPocketSnapshot('manifest',assetManifest),f.snapshots.manifest.before);const bad=structuredClone(assetManifest);bad.characters['npc.bai_mitko'].turn_front_west_pocket_c05+='tamper';assert.throws(()=>restoreTurnPocketSnapshot('manifest',bad),/c05 inverse|exact scene fix/);
 });

@@ -46,9 +46,13 @@ test('tavern floor, Kiro recovery and fixed spit render in BG/EN through normal 
     if(!result.moving){settled=true;break;}
    }assert.equal(settled,true);await shot('central-aisle-clear-chairs',1000);
    const feet=await page.evaluate(()=>({...window.__comradeCandidateTest.game.player.position}));assert.ok(feet.x>=580&&feet.x<=620&&feet.y>=510);
-   await page.evaluate(()=>{const g=window.__comradeCandidateTest.game;g.sceneIdleVariations.random=()=>0;g.sceneIdleVariations.reset();g.player.idleVariantTimer=1e9;});await advance(0);await advance(25000);
-   for(let i=0;i<36;i++){if(i)await advance(125);await shot('spit-'+String(i).padStart(2,'0'));}
-   await advance(125);await shot('return-polishing',700);
+   const quietInterval=await page.evaluate(()=>{const g=window.__comradeCandidateTest.game;g.sceneIdleVariations.random=()=>0;g.sceneIdleVariations.reset();g.player.idleVariantTimer=1e9;return g.currentScene.foregroundLayers.find(l=>l.id==='layer.mehana.waiter_idle').idleVariation.intervalMinMs;});await advance(0);await advance(quietInterval+0.001);
+   for(let i=0;i<36;i++){
+    if(i)await advance(125);
+    const sample=await page.evaluate(()=>{const g=window.__comradeCandidateTest.game,l=g.currentScene.foregroundLayers.find(l=>l.id==='layer.mehana.waiter_idle'),s=g.sceneIdleVariationPresentation(g.currentScene,l);return {phase:s.phase,frame:Math.floor(s.elapsed/125)};});
+    assert.equal(sample.phase,'playing');assert.equal(sample.frame,i,'all36 native frames remain in order');await shot('spit-'+String(i).padStart(2,'0'));
+   }
+   await advance(125.001);await shot('return-polishing',700);
    const phase=await page.evaluate(()=>{const g=window.__comradeCandidateTest.game,l=g.currentScene.foregroundLayers.find(l=>l.id==='layer.mehana.waiter_idle');return g.sceneIdleVariationPresentation(g.currentScene,l).phase;});assert.equal(phase,'idle');
    // Existing actual bottle journey separately verifies acquisition, self-use refusal and Tony swap.
    const talkLabel=await page.evaluate(()=>window.__comradeCandidateTest.game.t('verb.talk'));

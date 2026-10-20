@@ -28,14 +28,14 @@ test('approved c05 source and original scene/NPC assets remain unchanged',async(
  assert.ok(preserved>900000);assert.ok(edited>1500&&edited<4000);
 });
 test('basin blocks feet, all approach anchors have connected paths and targets remain exposed',()=>{
- for(const p of [{x:650,y:470},{x:650,y:530},{x:480,y:510},{x:880,y:490}])assert.equal(isWalkable(square,p),false,JSON.stringify(p));
+ for(const p of [{x:650,y:490},{x:650,y:530},{x:480,y:510},{x:880,y:520}])assert.equal(isWalkable(square,p),false,JSON.stringify(p));
  for(const p of [{x:650,y:610},{x:990,y:550},{x:976,y:625},{x:300,y:540},{x:245,y:555}]){
   assert.equal(isWalkable(square,p),true,JSON.stringify(p));assert.ok(findWalkPath(square,{x:300,y:540},p).length);
  }
  for(const [id,p]of Object.entries({
   'hotspot.square.fountain':{x:700,y:520},'hotspot.square.statue':{x:508,y:350},
   'hotspot.square.kiosk':{x:1180,y:390},'hotspot.square.poster_board':{x:1070,y:300},
-  'hotspot.square.old_men_bench':{x:620,y:360},'npc.baba_stoyanka':{x:360,y:390},
+  'npc.baba_stoyanka':{x:360,y:390},
   'npc.journalist':{x:970,y:380},'exit.square.to_mehana':{x:90,y:350},
   'exit.square.to_municipality':{x:890,y:300},'exit.square.to_apartment':{x:420,y:200}
  }))assert.equal(findTargetAt(square,p)?.id,id);

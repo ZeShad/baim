@@ -451,10 +451,10 @@ test("apartment uses a raster walk mask for walkable floor", () => {
 
 test("village square uses the shared raster, object, and layer scene pipeline", () => {
   const scene = chapter1.scenes.find((candidate) => candidate.id === "scene.chapter1.village_square");
-  assert.equal(scene.walkMask.width, 64);
-  assert.equal(scene.walkMask.height, 36);
-  assert.equal(scene.walkMask.rows.length, 36);
-  assert.equal(scene.walkMask.rows.every((row) => row.length === 64), true);
+  assert.equal(scene.walkMask.width, 256);
+  assert.equal(scene.walkMask.height, 144);
+  assert.equal(scene.walkMask.rows.length, 144);
+  assert.equal(scene.walkMask.rows.every((row) => row.length === 256), true);
   assert.equal(scene.walkMask.rows.join("").includes("c"), true);
   assert.ok(scene.foregroundLayers.some((layer) => layer.id === "layer.square.baba_stoyanka_seated"
     && layer.asset === "babaStoyankaSeated"
@@ -863,8 +863,10 @@ test("Mehana sideboard props, larger furniture, and moved cellar align with the 
   assert.equal(scene.interactables.find(t=>t.id==="hotspot.mehana.newspaper").requirements.disabled,true);
   assert.equal(scene.interactables.find((target) => target.id === "hotspot.mehana.newspaper").lookKey, "look.mehana.newspaper");
   assert.equal(scene.interactables.find((target) => target.id === "hotspot.mehana.radio").lookKey, "look.mehana.radio");
-  assert.ok(sceneScale(scene, scene.playerStart) > 1.3);
-  assert.ok(sceneScale(scene, scene.playerStart) < 1.4);
+  assert.ok(sceneScale(scene, {x:120,y:530}) > 1.3);
+  assert.ok(sceneScale(scene, {x:120,y:530}) < 1.4);
+  assert.ok(sceneScale(scene, scene.playerStart) > 1.49);
+  assert.ok(sceneScale(scene, scene.playerStart) < 1.51);
 });
 
 test("animated scene layers use exported timing, atlas coordinates, and a static fallback", () => {
@@ -907,9 +909,10 @@ test("Bai Mitko keeps his calibrated entrance height in the apartment and Mehana
   const apartment = chapter1.scenes.find((scene) => scene.id === "scene.chapter1.apartment");
   const mehana = chapter1.scenes.find((scene) => scene.id === "scene.chapter1.mehana");
   const apartmentHeight = characterHeight(definition, apartment, apartment.playerStart);
-  const mehanaHeight = characterHeight(definition, mehana, mehana.playerStart);
+  const mehanaHeight = characterHeight(definition, mehana, {x:120,y:530});
 
   assert.ok(Math.abs(apartmentHeight - mehanaHeight) < 0.1);
+  assert.ok(Math.abs(characterHeight(definition, mehana, mehana.playerStart) - 342.5028571428571) < 0.1);
 });
 
 test("municipality starts Bai Mitko five percent below foreground size and shrinks him at the counter", () => {
@@ -3374,22 +3377,26 @@ class MemoryStorage {
   }
 }
 
-test("the old men's bench blocks walking behind its seated figures but remains approachable", () => {
+test("removed old men leave rear fountain passage, with the upper background still blocked", () => {
   const scene = chapter1.scenes.find(scene => scene.id === "scene.chapter1.village_square");
   for (let x = 490; x <= 610; x += 20) {
-    for (let y = 330; y <= 430; y += 20) assert.equal(isWalkable(scene, { x, y }), false);
+    for (let y = 330; y <= 410; y += 20) assert.equal(isWalkable(scene, { x, y }), false);
+    assert.equal(isWalkable(scene, {x,y:450}), false);
+    const arcY=470+85*(1-Math.sqrt(1-((x-665)/420)**2));
+    assert.equal(isWalkable(scene, {x,y:arcY}), true);
   }
   const from = { x: 300, y: 540 };
-  const approach = nearestReachableWalkablePoint(scene, from, { x: 530, y: 400 });
+  const approach = nearestReachableWalkablePoint(scene, from, { x: 650, y: 420 });
   assert.ok(approach);
-  assert.ok(distance(approach, { x: 530, y: 400 }) < 110);
+  assert.ok(approach.y >= 465 && approach.y < 478, 'clicks above the wall project onto the approved farther-back arc middle');
   const path = findWalkPath(scene, from, approach);
   assert.ok(path.length);
   for (let i = 1; i < path.length; i++) {
     for (let t = 0; t <= 1; t += 0.05) {
       const p = { x: path[i - 1].x + (path[i].x - path[i - 1].x) * t,
         y: path[i - 1].y + (path[i].y - path[i - 1].y) * t };
-      assert.equal(p.x >= 480 && p.x < 620 && p.y < 440, false);
+      assert.ok(isWalkable(scene,p),'rear approach stays on connected curved ground');
+      assert.equal(p.x >= 480 && p.x < 620 && p.y < 465, false);
     }
   }
 });

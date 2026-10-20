@@ -25,7 +25,7 @@ export const assetManifest = {
     },
     "scene.chapter1.village_square": {
       campaignPoster: "assets/chapter1/scenes/village_square/campaign-poster-c05.png",
-      fountainForeground: "assets/chapter1/scenes/village_square/fountain-foreground-c05.png",
+      fountainForeground: "assets/chapter1/scenes/village_square/fountain-stone-foreground-affinity-r01.png",
       fountainShallowWater: "assets/chapter1/scenes/village_square/fountain-shallow-water-c05.png",
       squareFlagWind: "assets/chapter1/scenes/village_square/flag-wind-c01.png",
       squarePepaIdle: "assets/chapter1/scenes/village_square/pepa-idle-hydra-c14-r03.png",

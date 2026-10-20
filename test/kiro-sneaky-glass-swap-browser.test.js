@@ -68,7 +68,7 @@ test('Kiro fixed export quiet variation renders behind the counter, cancels safe
       loaded.images=decoded.images;assert.equal(loaded.version,loaded.loadedVersion);assert.equal(loaded.version,decoded.version);assert.ok(loaded.images.length>=90);
       const baseCounter=await page.evaluate(()=>window.__kiroCounterPixels());
       await page.screenshot({path:evidence+'/'+language+'-idle.png'});
-      assert.equal((await page.evaluate(()=>window.__kiroAdvance(24999))).phase,'idle');
+      assert.equal((await page.evaluate(()=>window.__kiroAdvance(11999))).phase,'idle');
       assert.equal((await page.evaluate(()=>window.__kiroAdvance(1))).phase,'playing');
       const frames=[];let previous=0;
       for(let i=0;i<36;i++) {
@@ -77,10 +77,12 @@ test('Kiro fixed export quiet variation renders behind the counter, cancels safe
         assert.deepEqual(await page.evaluate(()=>window.__kiroCounterPixels()),baseCounter,'opaque counter must hide all moving lower body/glass pixels');
         if([0,7,13,19,25,35].includes(i))await page.screenshot({path:evidence+'/'+language+'-frame-'+i+'.png'});
       }
-      const returned=await page.evaluate(ms=>window.__kiroAdvance(ms),4500-previous);
-      assert.equal(returned.phase,'idle');assert.equal(returned.idleTime,0);assert.equal(returned.remainingMs,25000);
+      // Cross the exact boundary by one microsecond: accumulated binary tick
+      // fractions can otherwise leave elapsed at 4499.99999999999ms.
+      const returned=await page.evaluate(ms=>window.__kiroAdvance(ms),4500.001-previous);
+      assert.equal(returned.phase,'idle');assert.equal(returned.idleTime,0);assert.equal(returned.remainingMs,12000);
       await page.screenshot({path:evidence+'/'+language+'-handoff.png'});
-      await page.evaluate(()=>window.__kiroAdvance(25000));await page.evaluate(()=>window.__kiroAdvance(500));
+      await page.evaluate(()=>window.__kiroAdvance(12000));await page.evaluate(()=>window.__kiroAdvance(500));
       const frozen=await page.evaluate(()=>{const {game}=window.__comradeCandidateTest;game.paused=true;return window.__kiroAdvance(0);});
       assert.deepEqual(await page.evaluate(()=>window.__kiroAdvance(30000)),frozen);
       await page.evaluate(()=>{window.__comradeCandidateTest.game.paused=false;});
@@ -89,16 +91,16 @@ test('Kiro fixed export quiet variation renders behind the counter, cancels safe
       assert.equal(canceled,null);await page.screenshot({path:evidence+'/'+language+'-dialogue.png'});
       assert.equal(await page.evaluate(()=>window.__kiroAdvance(30000)),null);
       await page.evaluate(()=>{const {game}=window.__comradeCandidateTest;game.dialogue.close();game.renderUi();});
-      assert.equal((await page.evaluate(()=>window.__kiroAdvance(0))).remainingMs,25000);
-      await page.evaluate(()=>window.__kiroAdvance(25000));
+      assert.equal((await page.evaluate(()=>window.__kiroAdvance(0))).remainingMs,12000);
+      await page.evaluate(()=>window.__kiroAdvance(12000));
       await page.evaluate(async()=>{const {game}=window.__comradeCandidateTest;await game.changeScene('scene.chapter1.village_square');await game.changeScene('scene.chapter1.mehana');});
-      assert.equal((await page.evaluate(()=>window.__kiroAdvance(0))).remainingMs,25000);
+      assert.equal((await page.evaluate(()=>window.__kiroAdvance(0))).remainingMs,12000);
       const lateLoad=await page.evaluate(()=>{
         const {game}=window.__comradeCandidateTest;const path=game.assets.getSceneAssetPath(game.currentScene.id,'mehanaWaiterSneakyGlassSwap');
-        const image=game.assets.images.get(path);image.dataset.loaded='false';const skipped=window.__kiroAdvance(25000);
+        const image=game.assets.images.get(path);image.dataset.loaded='false';const skipped=window.__kiroAdvance(12000);
         image.dataset.loaded='true';const afterLoad=window.__kiroAdvance(50);return {skipped,afterLoad};
       });
-      assert.equal(lateLoad.skipped.phase,'idle');assert.equal(lateLoad.skipped.remainingMs,25000);assert.equal(lateLoad.afterLoad.phase,'idle');
+      assert.equal(lateLoad.skipped.phase,'idle');assert.equal(lateLoad.skipped.remainingMs,12000);assert.equal(lateLoad.afterLoad.phase,'idle');
       const fallback=await page.evaluate(()=>{
         const {game}=window.__comradeCandidateTest;const layer=game.currentScene.foregroundLayers.find(l=>l.id==='layer.mehana.waiter_idle');
         const path=game.assets.getSceneAssetPath(game.currentScene.id,layer.animation.asset),image=game.assets.images.get(path);image.dataset.loaded='false';

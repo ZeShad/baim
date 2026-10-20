@@ -145,6 +145,7 @@ export class Game {
       speaking: false,
       animator: new AnimationPlayer(this.characterDefinitions["npc.bai_mitko"])
     };
+    if (!this.state.endingId) this.setSceneEntryRest();
     this.simpleAnim = this.createSimpleAnimState();
     if (this.usesExternalCharacterAnimation()) console.info("[characterVariant] using external_animation_v1 east/west only");
     this.inventory = new InventorySystem(this.content.items, this.state);
@@ -467,6 +468,20 @@ export class Game {
     const frame = this.currentAnimationFrame();
     if (!frame?.slot) return null;
     return { frame, frameIndex: Math.max(0, (frame.frameCount || 1) - 1) };
+  }
+
+  setSceneEntryRest() {
+    const centreX = (Number(this.currentScene.walkMask?.worldWidth) || 1280) / 2;
+    const delta = this.player.position.x - centreX;
+    const facing = Math.abs(delta) <= 1e-6
+      ? eastWestFallbackFacing(this.player.lastHorizontalFacing) || "east"
+      : delta < 0 ? "east" : "west";
+    this.player.facing = facing;
+    this.player.lastHorizontalFacing = facing;
+    this.player.idleVariant = null;
+    this.player.idleVariantQueue = [];
+    this.player.idleHoldFrame = null;
+    this.setIdleHoldFrame(this.player.walkPartsByFacing?.[facing]?.stop);
   }
 
   randomIdleVariantDelay() {
@@ -1945,6 +1960,7 @@ export class Game {
       this.player.pendingStop = false;
       this.player.movementStopping = false;
       if (this.player.idleHoldFrame?.frame?.settleOnStop) this.player.idleHoldFrame = null;
+      this.setSceneEntryRest();
       this.protectCurrentAssetWorkingSet();
       this.save();
       this.scheduleAdjacentScenePrefetch(this.currentScene);
@@ -2008,6 +2024,7 @@ export class Game {
     this.player.pendingStop = false;
     this.player.movementStopping = false;
     this.hoveredTarget = null;
+    this.setSceneEntryRest();
     this.player.walkTravelElapsed = 0;
     this.player.walkCadenceRatio = 1;
     this.message = this.t("ui.hint");
