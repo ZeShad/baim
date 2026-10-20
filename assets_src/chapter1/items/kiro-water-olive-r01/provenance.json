@@ -1,0 +1,39 @@
+{
+  "status": "owner_visually_approved",
+  "base": "bef64202b11bc703f606786f5b4012306a24cdda",
+  "approval": "Owner visually accepted the three-fix gameplay review on 20 October 2026: \"yes looks good\". This records visual acceptance only; publication is governed by a separate exact owner decision and release receipts.",
+  "source": "C07 original selected model and packed native source preserved unchanged.",
+  "liquidOnly": {
+    "heightBefore": 0.1667681634426117,
+    "heightAfter": 0.153,
+    "textureColourSRGB": [
+      91,
+      76,
+      29
+    ],
+    "glassCapLabelUnchanged": true
+  },
+  "icon": "r02 native render matches shared viewer opaque liquid/roughness presentation; different studio optics are disclosed. Native r01 dark render retained as superseded evidence.",
+  "records": [
+    {
+      "file": "assets/chapter1/items/kiro-bottle/fountain-water-olive-r01.glb",
+      "bytes": 9602120,
+      "sha256": "47bd0fa625954b97de865a287a3926116d0e5ad5bc7452f8ee72605a5ae11e05"
+    },
+    {
+      "file": "assets/chapter1/items/kiro-bottle/fountain-water-olive-r02.png",
+      "bytes": 1063032,
+      "sha256": "0f76fe326548f9fcccb4beba89cb2e2babc2c637338028f51fa07aed607083df"
+    },
+    {
+      "file": "assets_src/chapter1/items/kiro-water-c07/water-c07.blend",
+      "bytes": 5886593,
+      "sha256": "365a2066797fcc4fd601e61cdbd418829ec2574f7b79fd2e8b4d93824c4d4f93"
+    },
+    {
+      "file": "assets_src/chapter1/items/kiro-water-olive-r01/water-olive-r02.blend",
+      "bytes": 6206504,
+      "sha256": "2579b12cc182bffb6624bb0669736a5f385484b5cb37f8b0a49c43aa90386f2f"
+    }
+  ]
+}

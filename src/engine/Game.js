@@ -347,6 +347,17 @@ export class Game {
       this.releaseDialogueChoicePointerLock(event.pointerId);
     });
     window.addEventListener("keydown", (event) => {
+      if (this.inspectedItemId) {
+        if (event.key === "Escape") { event.preventDefault(); this.closeItemInspection(); }
+        if (event.key === "Tab") {
+          const panel = this.uiRoot.querySelector('.received-item-screen');
+          const controls = [...panel.querySelectorAll('canvas,button')];
+          const index = controls.indexOf(document.activeElement);
+          controls[(index + (event.shiftKey ? -1 : 1) + controls.length) % controls.length]?.focus();
+          event.preventDefault();
+        }
+        return;
+      }
       if (event.key === "Escape") {
         if (this.sceneAction?.state?.phase === 'received') { this.closeReceivedItem(); return; }
         if (this.selectedInventoryItemId || this.inventoryUseItemId) {
@@ -1841,10 +1852,20 @@ export class Game {
     this.renderUi();
   }
 
+  closeItemInspection() {
+    const item = this.content.items[this.inspectedItemId];
+    this.inspectedItemId = null;
+    this.renderUi();
+    const name = item && this.t(item.nameKey);
+    [...this.uiRoot.querySelectorAll('.inventory-item')].find(button => button.getAttribute('aria-label') === name)?.focus();
+  }
+
   createItemInspection() {
     const item = this.content.items[this.inspectedItemId];
     const asset = this.assets.manifest.items[item.id];
     const panel = element('section', 'received-item-screen');
+    panel.tabIndex = -1;
+    queueMicrotask(() => { if (panel.isConnected) panel.focus(); });
     panel.setAttribute('role', 'dialog'); panel.setAttribute('aria-modal', 'true');
     panel.setAttribute('aria-label', this.t(item.nameKey));
     const title = document.createElement('h2'); title.textContent = this.t(item.nameKey);
@@ -1854,7 +1875,7 @@ export class Game {
     this.receivedItemViewer = mountItemModelViewer(viewer, { modelUrl: asset.model, fallbackUrl: asset.icon, text, liquidColor: asset.liquidColor });
     const description = document.createElement('p'); description.textContent = this.t(item.descriptionKey);
     panel.append(title, viewer, description, button(this.t('ui.received_oil.close'), () => {
-      this.inspectedItemId = null; this.renderUi();
+      this.closeItemInspection();
     }));
     return panel;
   }
@@ -2243,6 +2264,7 @@ export class Game {
           if (this.assets.manifest.items[selectedItem.id]?.model) {
             this.inspectedItemId = selectedItem.id;
             this.player.target = null; this.player.walkPath = [];
+            this.player.pendingInteraction = null; this.player.pendingFacingPoint = null;
             this.renderUi();
           } else this.setStatusMessage(this.t(selectedItem.descriptionKey));
         }),

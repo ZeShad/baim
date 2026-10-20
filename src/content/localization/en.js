@@ -9,7 +9,7 @@ export const en = {
   "bottle.keep_oil": "The oil is for the valve. My insides are not due for maintenance.",
   "bottle.no_flow": "Empty bottle, dry fountain. First oil the valve with cooking oil from Kiro, then turn it.",
   "bottle.filled": "Filled it at the fountain. Blue-green, with a hint of yellow. A municipal cocktail. No substitutions.",
-  "bottle.water.desc": "Slightly murky blue-green water with a hint of yellow, filled to the shoulder. In a rakia bottle — just right for my glass against Tony.",
+  "bottle.water.desc": "Murky olive-brown fountain water, filled below the upper shoulder. In a rakia bottle — just right for my glass against Tony.",
   "bottle.water.name": "Bottle of Fountain Water",
   "bottle.empty.desc": "The oil is gone; the bottle stays. Fill it at the running fountain.",
   "bottle.empty.name": "Empty Rakia Bottle",

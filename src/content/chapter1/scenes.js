@@ -38,7 +38,7 @@ const rawScenes = [
         nameKey: "exit.to_village_square",
         rect: { x: 1085, y: 135, w: 150, h: 380 },
         targetSceneId: "scene.chapter1.village_square",
-        targetPosition: { x: 220, y: 505 }
+        targetPosition: { x: 300, y: 520 }
       }
     ],
     interactables: [
