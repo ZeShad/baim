@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';
+import {restoreBottleArrivalWaterSnapshot} from './bottle-arrival-water-preservation.js';
 import {stripFountainArc} from './fountain-arc-preservation.js';
 import {readFileSync} from 'node:fs';
 import {createHash} from 'node:crypto';
@@ -12,6 +13,7 @@ export function stripAffinityForeground(path,source){
  return r.before;
 }
 export function restoreAffinityForegroundSnapshot(kind,value){
+ value=restoreBottleArrivalWaterSnapshot(kind,value);
  const r=fixture.snapshots[kind];if(!r)return value;
  assert.equal(sha(JSON.stringify(value)),r.afterSHA256,'exact scene fix snapshot (affinity inverse): '+kind);
  assert.equal(sha(JSON.stringify(r.before)),r.beforeSHA256,'immutable R03 snapshot: '+kind);

@@ -1,0 +1,35 @@
+{
+  "source": "assets/chapter1/items/kiro-bottle/fountain-water-c07.glb",
+  "sourceSHA256": "9fd292fd471439c183ff39f52eb114efd5d3a0d242d4bc7161accc2b0c3f60ae",
+  "output": "assets/chapter1/items/kiro-bottle/fountain-water-olive-r01.glb",
+  "outputSHA256": "47bd0fa625954b97de865a287a3926116d0e5ad5bc7452f8ee72605a5ae11e05",
+  "originalBinaryBytes": 6881368,
+  "originalBinaryPreserved": true,
+  "oldPrimitive": {
+    "attributes": {
+      "POSITION": 226,
+      "NORMAL": 227,
+      "TEXCOORD_0": 229
+    },
+    "indices": 228,
+    "material": 3
+  },
+  "newPrimitive": {
+    "attributes": {
+      "POSITION": 230,
+      "NORMAL": 231,
+      "TEXCOORD_0": 232
+    },
+    "material": 3
+  },
+  "fillYBefore": 0.1667681634426117,
+  "fillYAfter": 0.153,
+  "colourSRGB": [
+    91,
+    76,
+    29
+  ],
+  "rimVertices": 384,
+  "triangles": 25342,
+  "note": "Only liquid primitive/material references replaced. All original bytes, nonliquid meshes/materials/nodes and embedded label retained. Clip intersects the existing cross section; new upward cap closes at Y=.153m. Reference normalized red line 237 versus bottle103..529 maps to .153m; visual review required."
+}

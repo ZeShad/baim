@@ -134,15 +134,16 @@ export const assetManifest = {
       icon: "assets/chapter1/items/empty_envelope.png"
     },
     "item.sunflower_oil": {
-      icon: "assets/chapter1/items/kiro-bottle/oil-200ml-r07.png"
+      icon: "assets/chapter1/items/kiro-bottle/oil-200ml-r07.png",
+      model: "assets/chapter1/items/kiro-bottle/oil-200ml-r08.glb"
     },
     "item.empty_rakia_bottle": {
       icon: "assets/chapter1/items/kiro-bottle/empty-r07.png",
       model: "assets/chapter1/items/kiro-bottle/empty-r08.glb"
     },
     "item.fountain_water_bottle": {
-      icon: "assets/chapter1/items/kiro-bottle/fountain-water-c07.png",
-      model: "assets/chapter1/items/kiro-bottle/fountain-water-c07.glb",
+      icon: "assets/chapter1/items/kiro-bottle/fountain-water-olive-r02.png",
+      model: "assets/chapter1/items/kiro-bottle/fountain-water-olive-r01.glb",
       liquidColor: null
     },
     "item.glass_of_water": {
