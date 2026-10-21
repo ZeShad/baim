@@ -207,6 +207,19 @@ export function externalFrameVisualBounds(frame, frameIndex, stableBounds = null
   return bounds;
 }
 
+export function standingIdleRegistration(frame, definition) {
+  if (!frame?.idleKey || !/^external_idle_/.test(frame.slot || "")) return null;
+  const reference = definition?.animations?.walk?.parts?.east?.stop;
+  if (!reference || frame.frameWidth !== reference.frameWidth || frame.frameHeight !== reference.frameHeight) return null;
+  const rest = externalFrameVisualBounds(reference, reference.frameCount - 1);
+  const ground = stableExternalVisualBounds(definition, true);
+  if (!rest?.h || !ground?.baselineY) return null;
+  // Same original canvas/family: retain its pose motion at ONE standing scale.
+  // The legacy idle baseline subtracted 40px; per-pose height fitting also
+  // resized head bobs. Neither belongs at the pocket-rest/idle boundary.
+  return { visualHeight: rest.h, baselineY: ground.baselineY };
+}
+
 export function sceneZIndexForPoint(scene, point) {
   return 100 - sceneZDepthT(scene, point) * 100;
 }
@@ -1204,8 +1217,10 @@ export class Renderer {
     const sourceWidth = preserveFrameLayout && spriteInfo.frame ? spriteInfo.frame.frameWidth : boundsForSize?.w || spriteInfo.frame?.frameWidth || sprite.width;
     const sourceHeight = preserveFrameLayout && spriteInfo.frame ? spriteInfo.frame.frameHeight : boundsForSize?.h || spriteInfo.frame?.frameHeight || sprite.height;
     const directionalBounds = spriteInfo.frame?.settleOnStop ? spriteInfo.frame.contentBounds : null;
-    const stableBounds = spriteInfo.frame?.registration
-      ? { ...spriteInfo.frame.contentBounds, h: spriteInfo.frame.registration.visualHeight, baselineY: spriteInfo.frame.registration.baselineY }
+    const registration = spriteInfo.frame?.registration
+      || (usesExternalWalkPose(p, definition) ? standingIdleRegistration(spriteInfo.frame, definition) : null);
+    const stableBounds = registration
+      ? { ...spriteInfo.frame.contentBounds, h: registration.visualHeight, baselineY: registration.baselineY }
       : directionalBounds
       ? { ...directionalBounds, baselineY: directionalBounds.y + directionalBounds.h }
       : preserveFrameLayout && usesExternalWalkPose(p, definition)
@@ -1214,7 +1229,7 @@ export class Renderer {
       ? Number.isInteger(spriteInfo.staticFrameIndex) ? spriteInfo.staticFrameIndex : this.game.player.animator.frameIndex % spriteInfo.frame.frameCount
       : 0;
     const frameIndex = animationRenderFrameIndex(spriteInfo.frame, logicalFrameIndex);
-    const currentVisualBounds = spriteInfo.frame?.registration ? stableBounds
+    const currentVisualBounds = registration ? stableBounds
       : stableBounds ? externalFrameVisualBounds(spriteInfo.frame, frameIndex, stableBounds) : null;
     const visualHeight = currentVisualBounds?.h || (preserveFrameLayout ? sourceHeight : boundsForSize?.h || sourceHeight);
     const animationScale = animationRenderScale(spriteInfo.frame);
