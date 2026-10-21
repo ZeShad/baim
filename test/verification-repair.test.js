@@ -36,6 +36,10 @@ test('finished harness page is closed before normal game boot, without changing 
  assert.equal(sha(old),contract.diagnosticHarness.afterSHA256);
  const close=current.indexOf('await page.close();assert.equal(page.isClosed(),true);'),open=current.indexOf('const normal=await context.newPage();');
  assert.ok(close>0&&open>close);assert.ok(current.includes("await page.waitForLoadState('networkidle');await page.close()"));
+ const navigation=current.indexOf("await normal.goto(origin+'/?play=1')"),paint=current.indexOf('await normal.waitForFunction('),independent=current.indexOf('let normalBinding;');
+ assert.ok(navigation<paint&&paint<independent,'actual game paint precedes independent decode');
+ assert.ok(current.includes("c.getContext('2d').getImageData(600,350,1,1).data[3]>0"));
+ assert.throws(()=>stripTavernPageLifetime(current.replace('data[3]>0','data[3]>=0')),/exact tavern page-lifetime/);
  assert.throws(()=>stripTavernPageLifetime(current+'\n'),/exact tavern page-lifetime/);
  assert.throws(()=>stripTavernPageLifetime(current.replace('await page.close()','await normal.close()')),/exact tavern page-lifetime/);
 });

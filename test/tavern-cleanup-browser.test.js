@@ -90,6 +90,9 @@ test('tavern floor, Kiro recovery and fixed spit render in BG/EN through normal 
    await diagnostic.installLifecycle();
    const diagnosticRecord={language,network:null,browser:null};report.decodeDiagnostics.push(diagnosticRecord);diagnostic.mark('normal-navigation');
    await normal.goto(origin+'/?play=1');await normal.waitForLoadState('networkidle');
+   // Network quiet does not mean asynchronous startup decodes/first rendering finished.
+   // Observe actual normal-game paint, without a harness, forced draw, sleep or decode retry.
+   await normal.waitForFunction(()=>{const c=document.querySelector('#game');return c?.width>600&&c.height>350&&c.getContext('2d').getImageData(600,350,1,1).data[3]>0;});
    diagnostic.mark('networkidle-before-independent-decode');
    let normalBinding;
    try{normalBinding=await normal.evaluate(async()=>{
