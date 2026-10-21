@@ -196,7 +196,8 @@ export class Game {
 
   protectCurrentAssetWorkingSet(sceneIds = [this.currentScene.id]) {
     this.assets.protectWorkingSet?.({
-      sceneIds,
+      // Idle refreshes must not unpin art owned by an in-flight scene load.
+      sceneIds: [...new Set([...sceneIds, this.pendingSceneAssetId].filter(Boolean))],
       characterId: this.player.id,
       characterSlots: [...this.bootstrapCharacterSlots(), this.player.idleVariant?.slot,
         this.player.idleHoldFrame?.slot, ...(this.player.idleVariantQueue || []).map(frame => frame.slot)].filter(Boolean),
@@ -1952,6 +1953,7 @@ export class Game {
     this.inspectedItemId = null;
     const sceneLoadToken = Symbol(sceneId);
     this.sceneLoadToken = sceneLoadToken;
+    this.pendingSceneAssetId = sceneId;
     this.sceneAction?.reset(); this.sceneActionEffect = null;
     this.sceneTransitionPending = true;
     this.sceneIdleVariations?.reset();
@@ -1999,7 +2001,11 @@ export class Game {
       // A superseded load no longer belongs to this game/transition.
       if (this.sceneLoadToken === sceneLoadToken) throw error;
     } finally {
-      if (this.sceneLoadToken === sceneLoadToken) this.sceneTransitionPending = false;
+      if (this.sceneLoadToken === sceneLoadToken) {
+        this.pendingSceneAssetId = null;
+        this.sceneTransitionPending = false;
+        this.protectCurrentAssetWorkingSet();
+      }
     }
   }
 
@@ -2020,6 +2026,7 @@ export class Game {
   reset() {
     // Invalidate old continuations before replacing state or clearing storage.
     this.sceneLoadToken = null;
+    this.pendingSceneAssetId = null;
     this.sceneTransitionPending = false;
     this.dialogue.close();
     this.dialogueChoicePointerLock = null;

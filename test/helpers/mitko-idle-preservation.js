@@ -1,9 +1,11 @@
 import assert from 'node:assert/strict';
 import {createHash} from 'node:crypto';
 import {readFileSync} from 'node:fs';
+import {stripSceneLoadingProtection} from './scene-loading-preservation.js';
 const fixture=JSON.parse(readFileSync(new URL('../fixtures/mitko-idle-restoration.json',import.meta.url)));
 const sha=value=>createHash('sha256').update(value).digest('hex');
 export function stripMitkoIdleRestoration(path,source){
+ source=stripSceneLoadingProtection(path,source);
  const record=fixture.records[path];if(!record)return source;
  source=String(source).replaceAll('\r\n','\n');
  if(sha(source)===record.beforeSHA256)return source;
