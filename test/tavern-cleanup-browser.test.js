@@ -82,6 +82,9 @@ test('tavern floor, Kiro recovery and fixed spit render in BG/EN through normal 
    assert.equal(await page.evaluate(()=>window.__comradeCandidateTest.game.inventory.has('item.glass_of_water')),true);
    await page.evaluate(async()=>{const g=window.__comradeCandidateTest.game;await g.changeScene('scene.chapter1.village_square');await g.changeScene('scene.chapter1.mehana');});await advance(0);await shot('scene-reentry',1000);
    // Fresh normal owner URL, same earned save, no testHarness and no forced source assets.
+   // The harness has finished. Release its decoded atlases before booting another game;
+   // keep the context so the normal page still uses the exact earned save.
+   await page.waitForLoadState('networkidle');await page.close();assert.equal(page.isClosed(),true);
    const normal=await context.newPage();const normalFailures=[];normal.on('pageerror',e=>normalFailures.push(String(e)));normal.on('requestfailed',r=>normalFailures.push(r.url()));normal.on('response',r=>{if(r.status()>=400)normalFailures.push(r.url());});
    const diagnostic=observeImageDecode(normal,{origin,language,browserVersion:browser.version()});observers.push(diagnostic);
    const diagnosticRecord={language,network:null,browser:null};report.decodeDiagnostics.push(diagnosticRecord);diagnostic.mark('normal-navigation');

@@ -6,6 +6,7 @@ import {EventEmitter} from 'node:events';
 import {stripNortheastKiosk} from './helpers/northeast-kiosk-preservation.js';
 import {stripCentreFacing} from './helpers/centre-facing-preservation.js';
 import {observeImageDecode} from './helpers/image-decode-diagnostics.js';
+import {stripTavernPageLifetime} from './helpers/tavern-page-lifetime-preservation.js';
 const sha=value=>createHash('sha256').update(value).digest('hex');
 const contract=JSON.parse(readFileSync('test/fixtures/verification-repair-contract.json'));
 
@@ -24,10 +25,19 @@ test('stop-test inverse rejects extra bytes, different stop values and already-o
 });
 
 test('diagnostic harness retains every original assertion, readiness block and one independent decode',()=>{
- const r=contract.diagnosticHarness,source=readFileSync(r.file,'utf8');assert.equal(sha(source),r.afterSHA256,'Instrumentation has its own explicit current binding');
+ const r=contract.diagnosticHarness,source=stripTavernPageLifetime(readFileSync(r.file,'utf8'));assert.equal(sha(source),r.afterSHA256,'Instrumentation has its own explicit current binding');
  assert.deepEqual(source.match(/assert\.[\s\S]*?;/g)||[],r.originalAssertions);assert.ok(source.includes(r.readinessBlock));
  assert.equal((source.match(/await im\.decode\(\)/g)||[]).length,r.decodeCallsPerLanguage);assert.ok(source.includes('{timeout:'+r.timeoutMs+'}'));
  assert.ok(source.includes("normal.goto(origin+'/?play=1')"));assert.ok(source.includes('throw error;'));
+});
+
+test('finished harness page is closed before normal game boot, without changing the historical diagnostic',()=>{
+ const current=readFileSync(contract.diagnosticHarness.file,'utf8'),old=stripTavernPageLifetime(current);
+ assert.equal(sha(old),contract.diagnosticHarness.afterSHA256);
+ const close=current.indexOf('await page.close();assert.equal(page.isClosed(),true);'),open=current.indexOf('const normal=await context.newPage();');
+ assert.ok(close>0&&open>close);assert.ok(current.includes("await page.waitForLoadState('networkidle');await page.close()"));
+ assert.throws(()=>stripTavernPageLifetime(current+'\n'),/exact tavern page-lifetime/);
+ assert.throws(()=>stripTavernPageLifetime(current.replace('await page.close()','await normal.close()')),/exact tavern page-lifetime/);
 });
 
 const fakePage=()=>{const page=new EventEmitter();page.viewportSize=()=>({width:1280,height:720});Object.defineProperty(page,'request',{get(){throw Error('Observer must not initiate network requests');}});return page;};
