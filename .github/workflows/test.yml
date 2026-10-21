@@ -23,6 +23,19 @@ jobs:
       - name: Install required Chromium and system dependencies
         run: npx playwright install --with-deps chromium
       - run: npm test
+      - name: Print saved image-decode diagnostics
+        if: always()
+        run: |
+          node <<'NODE'
+          const fs = require('node:fs');
+          const file = 'target/tavern-cleanup-review/decode-diagnostics.json';
+          if (fs.existsSync(file)) {
+            console.log('Saved image-decode diagnostics:');
+            console.log(JSON.stringify(JSON.parse(fs.readFileSync(file, 'utf8')), null, 2));
+          } else {
+            console.log('Image-decode diagnostics were not produced; inspect the original test failure.');
+          }
+          NODE
       - name: Verify generated animation metadata is current
         run: git diff --exit-code -- src/content/art/externalAnimationV1.generated.js
       - name: Verify animation catalog is current

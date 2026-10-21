@@ -67,10 +67,10 @@ test('removed pair leaves no invisible target, while Baba and fountain interacti
  assert.ok(square.npcs.some(n=>n.id==='npc.baba_stoyanka'));assert.ok(square.interactables.find(n=>n.id==='hotspot.square.statue').itemUseRules.length);
  assert.ok(square.interactables.find(n=>n.id==='hotspot.square.fountain').itemUseRules.length);
 });
-test('Baba retains her original conversation stop beside the rear corridor',()=>{
+test('Baba uses connected pavement beside the preserved rear corridor',()=>{
  const target=square.npcs.find(n=>n.id==='npc.baba_stoyanka');
  const approach=planCharacterApproach(square,target,{x:300,y:540});
- assert.ok(approach);assert.deepEqual(approach.point,{x:430,y:430});
+ assert.ok(approach);assert.deepEqual(approach.point,{x:442.5,y:477.5});
  assert.ok(approach.path.length);assert.ok(isWalkable(square,approach.point));
 });
 test('Kiro repeats only after a new bounded quiet interval and cancels an interrupted routine',()=>{

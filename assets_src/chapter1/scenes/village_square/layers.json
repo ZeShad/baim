@@ -207,7 +207,7 @@
       "output": "assets/chapter1/scenes/village_square/kiosk-counter-c05.png",
       "left": 0,
       "top": 0,
-      "zIndex": 30
+      "zIndex": 1
     },
     {
       "id": "layer.square.pepa_idle",

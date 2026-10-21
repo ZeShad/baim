@@ -345,7 +345,7 @@ export const sceneLayerGeometry = {
       {
         "id": "layer.square.kiosk_counter",
         "asset": "kioskCounterC05",
-        "zIndex": 30,
+        "zIndex": 1,
         "top": 0,
         "left": 0
       },

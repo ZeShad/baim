@@ -220,7 +220,7 @@ const rawScenes = [
       oldMenChorus: { x: 620, y: 420 },
       fountain: { x: 735, y: 600 },
       mehanaDoor: { x: 120, y: 465 },
-      municipalityDoor: { x: 965, y: 450 }
+      municipalityDoor: { x: 965, y: 475 }
     },
     foregroundLayers: sceneLayerGeometry["scene.chapter1.village_square"]?.foregroundLayers || [],
     exits: [
@@ -685,7 +685,7 @@ const rawScenes = [
         nameKey: "exit.to_village_square",
         rect: { x: 30, y: 300, w: 170, h: 245 },
         targetSceneId: "scene.chapter1.village_square",
-        targetPosition: { x: 965, y: 450 }
+        targetPosition: { x: 965, y: 475 }
       },
       {
         id: "exit.municipality.to_mayor_office",

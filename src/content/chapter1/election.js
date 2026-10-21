@@ -80,7 +80,7 @@ export const electionScene = {
   foregroundLayers: sceneLayerGeometry["scene.chapter1.election_booth"]?.foregroundLayers || [],
   exits: [{ id: "exit.election_booth.to_square", kind: "exit", nameKey: "exit.to_village_square",
     rect: { x: 20, y: 120, w: 155, h: 380 }, requirements: { state: unfinished },
-    targetSceneId: "scene.chapter1.village_square", targetPosition: { x: 650, y: 535 } }],
+    targetSceneId: "scene.chapter1.village_square", targetPosition: { x: 300, y: 540 } }],
   interactables: [{
     id: "hotspot.election_booth.commission_table", kind: "hotspot", nameKey: "hotspot.election_booth.commission_table.name",
     rect: { x: 685, y: 330, w: 385, h: 160 }, lookKey: "election.table_look",

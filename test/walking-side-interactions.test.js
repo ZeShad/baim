@@ -101,12 +101,12 @@ test("Baba interaction uses visible actor placement and accepts its body click",
   const body=g.characterApproachBounds(baba);assert.equal(body.x,325);assert.equal(body.y,330);
   assert.equal(g.sceneTargetAt({x:360,y:400}),baba);
   const plan=planCharacterApproach(g.currentScene,baba,g.currentScene.playerStart,280);
-  assert.deepEqual(plan.point,{x:430,y:430});assert.equal(plan.facing,"west");assert.ok(plan.point.x>body.x+body.w);
+  assert.deepEqual(plan.point,{x:442.5,y:477.5});assert.equal(plan.facing,"west");assert.ok(plan.point.x>body.x+body.w);
 });
 test("crowded destinations avoid other actors and retain clear authored stops when they leave",()=>{
   for(const [sceneId,targetId,expected] of [
     ["mayor_office","npc.mayor",{x:408,y:564}],
-    ["village_square","hotspot.square.kiosk",{x:1090,y:630}],
+    ["village_square","hotspot.square.kiosk",{x:1077.5,y:655}],
     ["election_booth","npc.journalist",{x:228,y:564}],
     ["election_booth","npc.tony_fridge",{x:228,y:564}],
     ["election_booth","npc.baba_stoyanka",{x:740,y:564}]
