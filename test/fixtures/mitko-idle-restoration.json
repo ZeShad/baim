@@ -1,0 +1,75 @@
+{
+  "records": {
+    "src/engine/Game.js": {
+      "beforeSHA256": "fd85c588bc98b2595fd2459b9f8c4de1ed3a3554a48e971bd8ec5df14832e1f6",
+      "afterSHA256": "3ca77774eb0210ad7e23743eedb8dfd3224e23e9468276b3b2d2b5908a0d6881",
+      "inverse": [
+        {
+          "start": 200,
+          "remove": 2,
+          "lines": [
+            "      characterSlots: this.bootstrapCharacterSlots(),"
+          ]
+        },
+        {
+          "start": 505,
+          "remove": 1,
+          "lines": []
+        },
+        {
+          "start": 509,
+          "remove": 1,
+          "lines": []
+        },
+        {
+          "start": 518,
+          "remove": 1,
+          "lines": []
+        },
+        {
+          "start": 530,
+          "remove": 0,
+          "lines": [
+            "    this.assets?.preloadCharacterSlots?.(this.player.id, sequence.map((variant) => variant.slot));"
+          ]
+        },
+        {
+          "start": 532,
+          "remove": 4,
+          "lines": []
+        },
+        {
+          "start": 603,
+          "remove": 3,
+          "lines": []
+        }
+      ]
+    },
+    "src/engine/Renderer.js": {
+      "beforeSHA256": "eb37dc78aa728ccb221af8e29fce783b78209747e4ce36a123e83803cdfa659f",
+      "afterSHA256": "a60318ae7e20b432469231b3bd9388e44f197282e6c384a81f80722221e6a927",
+      "inverse": [
+        {
+          "start": 209,
+          "remove": 13,
+          "lines": []
+        },
+        {
+          "start": 1219,
+          "remove": 4,
+          "lines": [
+            "    const stableBounds = spriteInfo.frame?.registration",
+            "      ? { ...spriteInfo.frame.contentBounds, h: spriteInfo.frame.registration.visualHeight, baselineY: spriteInfo.frame.registration.baselineY }"
+          ]
+        },
+        {
+          "start": 1231,
+          "remove": 1,
+          "lines": [
+            "    const currentVisualBounds = spriteInfo.frame?.registration ? stableBounds"
+          ]
+        }
+      ]
+    }
+  }
+}

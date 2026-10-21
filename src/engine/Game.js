@@ -198,7 +198,8 @@ export class Game {
     this.assets.protectWorkingSet?.({
       sceneIds,
       characterId: this.player.id,
-      characterSlots: this.bootstrapCharacterSlots(),
+      characterSlots: [...this.bootstrapCharacterSlots(), this.player.idleVariant?.slot,
+        this.player.idleHoldFrame?.slot, ...(this.player.idleVariantQueue || []).map(frame => frame.slot)].filter(Boolean),
       itemIds: this.state.inventory || []
     });
   }
@@ -502,9 +503,11 @@ export class Game {
   updateIdleVariants(dt) {
     if (!this.usesExternalCharacterAnimation()) return;
     if (this.player.animation !== "idle" || this.player.target || this.player.speaking) {
+      const hadIdleVariant = Boolean(this.player.idleVariant || this.player.idleVariantQueue?.length);
       this.player.idleVariant = null;
       this.player.idleVariantQueue = [];
       this.player.idleVariantTimer = this.randomIdleVariantDelay();
+      if (hadIdleVariant && this.assets?.protectWorkingSet && this.currentScene) this.protectCurrentAssetWorkingSet();
       return;
     }
     if (this.player.idleVariant) {
@@ -513,6 +516,7 @@ export class Game {
         const nextVariant = this.player.idleVariantQueue?.shift() || null;
         this.player.idleVariant = nextVariant;
         if (!nextVariant) this.player.idleVariantTimer = this.randomIdleVariantDelay();
+        if (this.assets?.protectWorkingSet && this.currentScene) this.protectCurrentAssetWorkingSet();
       }
       return;
     }
@@ -524,9 +528,12 @@ export class Game {
       return;
     }
     const sequence = this.randomIdleVariantSequence(variants);
-    this.assets?.preloadCharacterSlots?.(this.player.id, sequence.map((variant) => variant.slot));
     this.player.idleVariant = sequence.shift() || null;
     this.player.idleVariantQueue = sequence;
+    // Pin only the active/queued/held idles before loading, not all six atlases.
+    // Otherwise a scene that fills the decoded budget immediately evicts them.
+    if (this.assets?.protectWorkingSet && this.currentScene) this.protectCurrentAssetWorkingSet();
+    this.assets?.preloadCharacterSlots?.(this.player.id, [this.player.idleVariant, ...sequence].filter(Boolean).map(frame => frame.slot));
   }
 
   randomIdleVariant(variants, excludedSlot = null) {
@@ -594,6 +601,9 @@ export class Game {
     this.player.arrivalTurnArtReady = this.assets.isLoaded(this.assets.getCharacterImage(this.player.id, mitkoTurnPilot.frame.slot));
     this.player.arrivalTurnReadySlots = Object.fromEntries((this.player.arrivalTurnPilots || []).map(pilot =>
       [pilot.frame.slot, this.assets.isLoaded(this.assets.getCharacterImage(this.player.id, pilot.frame.slot))]));
+    if (this.player.animation === "idle" && this.player.idleVariant?.slot) {
+      return this.assets.isLoaded(this.assets.getCharacterImage(this.player.id, this.player.idleVariant.slot));
+    }
     if (this.player.animation !== "walk") return true;
     const parts = this.player.walkPartsByFacing?.[walkFacing(this.player)];
     if (!Number.isInteger(parts?.start?.pocketExitFrame)) return true;
