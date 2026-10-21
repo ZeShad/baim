@@ -82,10 +82,17 @@ test('tavern floor, Kiro recovery and fixed spit render in BG/EN through normal 
    assert.equal(await page.evaluate(()=>window.__comradeCandidateTest.game.inventory.has('item.glass_of_water')),true);
    await page.evaluate(async()=>{const g=window.__comradeCandidateTest.game;await g.changeScene('scene.chapter1.village_square');await g.changeScene('scene.chapter1.mehana');});await advance(0);await shot('scene-reentry',1000);
    // Fresh normal owner URL, same earned save, no testHarness and no forced source assets.
+   // The harness has finished. Release its decoded atlases before booting another game;
+   // keep the context so the normal page still uses the exact earned save.
+   await page.waitForLoadState('networkidle');await page.close();assert.equal(page.isClosed(),true);
    const normal=await context.newPage();const normalFailures=[];normal.on('pageerror',e=>normalFailures.push(String(e)));normal.on('requestfailed',r=>normalFailures.push(r.url()));normal.on('response',r=>{if(r.status()>=400)normalFailures.push(r.url());});
    const diagnostic=observeImageDecode(normal,{origin,language,browserVersion:browser.version()});observers.push(diagnostic);
+   await diagnostic.installLifecycle();
    const diagnosticRecord={language,network:null,browser:null};report.decodeDiagnostics.push(diagnosticRecord);diagnostic.mark('normal-navigation');
    await normal.goto(origin+'/?play=1');await normal.waitForLoadState('networkidle');
+   // Network quiet does not mean asynchronous startup decodes/first rendering finished.
+   // Observe actual normal-game paint, without a harness, forced draw, sleep or decode retry.
+   await normal.waitForFunction(()=>{const c=document.querySelector('#game');return c?.width>600&&c.height>350&&c.getContext('2d').getImageData(600,350,1,1).data[3]>0;});
    diagnostic.mark('networkidle-before-independent-decode');
    let normalBinding;
    try{normalBinding=await normal.evaluate(async()=>{
@@ -95,7 +102,7 @@ test('tavern floor, Kiro recovery and fixed spit render in BG/EN through normal 
      evidence.manifestVersion=m.version;evidence.manifestPath=url;evidence.stage='independent-image-decode';
      im=new Image();im.src='/'+url;evidence.resolvedURL=im.src;await im.decode();const c=document.createElement('canvas');c.width=2;c.height=2;c.getContext('2d').drawImage(im,0,0,2,2);evidence.stage='independent-image-decoded-and-drawn';
      return {version:m.version,url,width:im.naturalWidth,height:im.naturalHeight,pixels:Array.from(c.getContext('2d').getImageData(0,0,2,2).data),harnessAbsent:!window.__comradeCandidateTest,requested:performance.getEntriesByType('resource').filter(r=>r.name.includes('kiro-spitting-fixed-owner-export-c01')).map(r=>r.name)};
-    }catch(error){evidence.error={name:error.name,message:error.message};throw error;}
+    }catch(error){evidence.error={name:error.name,message:error.message};if(im){try{const c=document.createElement('canvas');c.width=2;c.height=2;c.getContext('2d').drawImage(im,0,0,2,2);evidence.afterFailureDraw={pixels:Array.from(c.getContext('2d').getImageData(0,0,2,2).data)};}catch(drawError){evidence.afterFailureDraw={error:{name:drawError.name,message:drawError.message}};}}throw error;}
     finally{evidence.image=im?{src:im.src,currentSrc:im.currentSrc,complete:im.complete,width:im.naturalWidth,height:im.naturalHeight}:null;evidence.resources=performance.getEntriesByType('resource').filter(r=>r.name.includes('kiro-spitting-fixed-owner-export-c01')||r.name.endsWith('/target/runtime-assets/manifest.json')).map(r=>({url:r.name,initiatorType:r.initiatorType,startTime:r.startTime,responseEnd:r.responseEnd,duration:r.duration,transferSize:r.transferSize,encodedBodySize:r.encodedBodySize,decodedBodySize:r.decodedBodySize,responseStatus:r.responseStatus}));evidence.heap=performance.memory?{usedJSHeapSize:performance.memory.usedJSHeapSize,totalJSHeapSize:performance.memory.totalJSHeapSize,jsHeapSizeLimit:performance.memory.jsHeapSizeLimit}:null;}
    });}finally{try{diagnosticRecord.browser=await normal.evaluate(()=>window.__baimIndependentDecodeDiagnostic||null);}catch(error){diagnosticRecord.snapshotError=String(error.message);}diagnosticRecord.network=diagnostic.snapshot();writeFileSync(root+'/decode-diagnostics.json',JSON.stringify(report.decodeDiagnostics,null,2)+'\n');}
    assert.equal(normalBinding.harnessAbsent,true);assert.equal(normalBinding.version,binding.version);assert.deepEqual([normalBinding.width,normalBinding.height],[1572,3684]);assert.ok(normalBinding.requested.length>0);assert.deepEqual(normalBinding.pixels,binding.pixels);
