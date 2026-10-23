@@ -1,0 +1,6 @@
+import assert from 'node:assert/strict';import {readFileSync} from 'node:fs';import {createHash} from 'node:crypto';
+import {stripToniDiplomaInspection,restoreToniDiplomaInspectionSnapshot} from './toni-diploma-inspection-preservation.js';
+const fixture=JSON.parse(readFileSync(new URL('../fixtures/toni-diploma-reference-deltas.json',import.meta.url))),sha=b=>createHash('sha256').update(b).digest('hex');
+export function stripToniDiplomaReference(path,source,allowOtherHistory=false){source=stripToniDiplomaInspection(path,source,allowOtherHistory);const r=fixture.records[path];if(!r||sha(source)===r.beforeSHA256)return source;if(allowOtherHistory&&sha(source)!==r.afterSHA256)return source;assert.equal(sha(source),r.afterSHA256,'exact scene fix diploma inverse: '+path);assert.equal(sha(r.before),r.beforeSHA256);return r.before;}
+export function restoreToniDiplomaReferenceSnapshot(kind,value){value=restoreToniDiplomaInspectionSnapshot(kind,value);const r=fixture.snapshots[kind];if(!r||sha(JSON.stringify(value))===r.beforeSHA256)return value;assert.equal(sha(JSON.stringify(value)),r.afterSHA256,'exact scene fix snapshot (diploma): '+kind);assert.equal(sha(JSON.stringify(r.before)),r.beforeSHA256);return structuredClone(r.before);}
+

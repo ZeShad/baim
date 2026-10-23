@@ -1,4 +1,5 @@
-// Additive campaign foundation. Later milestones connect posting to registration.
+import { pepaMusicRule, pepaPosterRule, pepaDiplomaRule } from './photoQuest.js';
+// Stable campaign IDs retained for existing saves.
 export const openingLookRules = [
   {
     requirements: { notFlags: ["chapter1OpeningHeard"], state: { chapter1Completed: false } },
@@ -9,22 +10,14 @@ export const openingLookRules = [
 ];
 
 export const kioskPaperRule = {
-  requirements: { items: ["item.unpaid_bills"], state: { hasFakeDiploma: false, chapter1Completed: false } },
-  effects: [
-    { type: "removeItem", itemId: "item.unpaid_bills" },
-    { type: "setState", key: "hasUnpaidBills", value: true },
-    { type: "addItem", itemId: "item.fake_diploma" },
-    { type: "setState", key: "hasFakeDiploma", value: true },
-    { type: "addItem", itemId: "item.campaign_pamphlets" },
-    { type: "setFlag", key: "kioskPamphletsIssued" },
-    { type: "adjustState", key: "suspicion", amount: 4 }
-  ],
-  messageKey: "campaign.kiosk.papers_ready"
+  requirements: { items: ['item.unpaid_bills'], state: { chapter1Completed: false } },
+  effects: [], reject: true, messageKey: 'photoquest.bills_not_diploma'
 };
 
 export const kioskPamphletRule = {
   requirements: {
     state: { hasFakeDiploma: true, chapter1Completed: false },
+    flags: ['legacyPhotoCredentials'],
     notFlags: ["kioskPamphletsIssued", "campaignPosted"]
   },
   effects: [
@@ -63,13 +56,19 @@ export const campaignDialogues = [{
   npcId: "hotspot.square.kiosk",
   nodes: {
     start: {
-      lineKey: "campaign.kiosk.start",
+      lineKey: "photoquest.pepa_start",
       choices: [
         { textKey: "campaign.kiosk.choice.requirements", next: "requirements" },
         {
-          textKey: "campaign.kiosk.choice.give_bills",
-          requirements: kioskPaperRule.requirements,
-          effect: kioskPaperRule
+          textKey: "photoquest.play",
+          requirements: pepaMusicRule.requirements,
+          effect: pepaMusicRule
+        },
+        {
+          textKey: 'photoquest.make_poster', requirements: pepaPosterRule.requirements, effect: pepaPosterRule
+        },
+        {
+          textKey: 'photoquest.make_diploma', requirements: pepaDiplomaRule.requirements, effect: pepaDiplomaRule
         },
         {
           textKey: "campaign.kiosk.choice.pamphlets",
@@ -89,7 +88,7 @@ export const campaignDialogues = [{
         { textKey: "campaign.kiosk.choice.leave" }
       ]
     },
-    requirements: { lineKey: "campaign.kiosk.requirements", choicesFrom: "start" },
+    requirements: { lineKey: "photoquest.pepa_requirements", choicesFrom: "start" },
     posters: { lineKey: "campaign.kiosk.posters", choicesFrom: "start" },
     posted: { lineKey: "campaign.kiosk.posted", choicesFrom: "start" }
   }

@@ -1,5 +1,7 @@
 // The scene remains 2D. Load the 3D dependencies only for an inspected item.
-export function mountItemModelViewer(host, { modelUrl, fallbackUrl, text, liquidColor = '#b77c00' }) {
+export function mountItemModelViewer(host, { modelUrl, fallbackUrl, text, liquidColor = '#b77c00', inspection = 'bottle' }) {
+  const documentView = inspection === 'document';
+  host.dataset.inspectionProfile = documentView ? 'document' : 'bottle';
   let disposed = false, cleanup = () => {}, resetView = () => {};
   const status = document.createElement('span');
   status.className = 'item-model-status'; status.textContent = text.loading;
@@ -29,6 +31,12 @@ export function mountItemModelViewer(host, { modelUrl, fallbackUrl, text, liquid
     host.prepend(canvas);
     const pivot = new T.Group(); pivot.position.y = .113; scene.add(pivot);
     const target = new T.Vector3(0,.113,0);
+    let documentSize = null;
+    const fitDocument = () => {
+      if (!documentView || !documentSize) return;
+      const distance = Math.max(documentSize.y, documentSize.x / camera.aspect) * .5 / Math.tan(T.MathUtils.degToRad(camera.fov / 2)) * 1.12;
+      camera.position.set(target.x, target.y, target.z + distance); camera.lookAt(target);
+    };
     const render = () => {
       if (disposed) return;
       renderer.render(scene, camera);
@@ -79,7 +87,7 @@ export function mountItemModelViewer(host, { modelUrl, fallbackUrl, text, liquid
     };
     const resize = () => { const {width,height} = host.getBoundingClientRect();
       if (!width || !height || disposed) return;
-      paintBackdrop(); camera.aspect = width / height; camera.updateProjectionMatrix(); renderer.setSize(width,height,false); render(); };
+      paintBackdrop(); camera.aspect = width / height; fitDocument(); camera.updateProjectionMatrix(); renderer.setSize(width,height,false); render(); };
     const observer = new ResizeObserver(resize); observer.observe(host);
     // Small front-facing inspection tilt. Repeated drags cannot accumulate past the limits.
     const limit = Math.PI / 12;
@@ -125,10 +133,21 @@ export function mountItemModelViewer(host, { modelUrl, fallbackUrl, text, liquid
     const gltf = await new GLTFLoader().loadAsync(modelUrl);
     if (disposed || host.dataset.modelState === 'fallback') { releaseModel(gltf.scene); return; }
     gltf.scene.updateMatrixWorld(true);
-    const flattened = new T.Group(), opaque = new Map();
+    const flattened = new T.Group(), opaque = new Map(), documentOriginalMaterials = new Set();
     gltf.scene.traverse(o => {
       if (!o.isMesh) return;
       let geometry = o.geometry.clone().applyMatrix4(o.matrixWorld); let m = o.material;
+      if (documentView) {
+        // Keep the document's UVs and baked print intact; bottle batching discards cap UVs.
+        const source = Array.isArray(m) ? m : [m];
+        const materials = source.map(original => {
+          documentOriginalMaterials.add(original);
+          return new T.MeshBasicMaterial({ name: original.name, map: original.map,
+            color: original.color, side: T.FrontSide, toneMapped: false });
+        });
+        flattened.add(new T.Mesh(geometry, Array.isArray(m) ? materials : materials[0]));
+        return;
+      }
       if (!Array.isArray(m) && !m.transparent) {
         // Untextured cap primitives have mixed UV/index layouts; retain position
         // and normals, then normalize indexing before batching their exact triangles.
@@ -172,7 +191,10 @@ export function mountItemModelViewer(host, { modelUrl, fallbackUrl, text, liquid
     }
     // Materials/textures are now owned by flattened; dispose only old geometries.
     gltf.scene.traverse(o=>{ if(o.isMesh) o.geometry.dispose(); });
-    model = flattened; const centre=new T.Box3().setFromObject(model).getCenter(new T.Vector3()); model.position.sub(centre); pivot.add(model); host.dataset.modelState='ready'; status.hidden=true; render();
+    documentOriginalMaterials.forEach(material => material.dispose());
+    model = flattened; const centre=new T.Box3().setFromObject(model).getCenter(new T.Vector3()); model.position.sub(centre); pivot.add(model);
+    if (documentView) { documentSize = new T.Box3().setFromObject(model).getSize(new T.Vector3()); fitDocument(); }
+    host.dataset.modelState='ready'; status.hidden=true; render();
   })().catch(fallback);
   return { dispose: () => { disposed=true; cleanup(); } };
 }

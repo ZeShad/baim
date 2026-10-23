@@ -11,6 +11,8 @@ import { sceneLayerGeometry } from "./sceneLayers.generated.js";
 import { openingLookRules, kioskPaperRule, campaignPostedRule, campaignPosterRules } from "./campaign.js";
 import { mayorOfficeScene } from "./mayorOffice.js";
 import { mayorOfficeObjectGeometry } from "./sceneObjectGeometry.generated.js";
+import { pepaItemRules, diplomaTakeRule } from './photoQuest.js';
+import { stageToniTable } from './toniTable.js';
 
 const rawScenes = [
   archiveScene,
@@ -42,6 +44,13 @@ const rawScenes = [
       }
     ],
     interactables: [
+      {
+        id: 'hotspot.apartment.photo_cupboard', kind: 'hotspot',
+        nameKey: 'photoquest.cupboard', lookKey: 'photoquest.cupboard_look',
+        rect: { x: 825, y: 130, w: 165, h: 355 },
+        interactionApproach: { x: 930, y: 550 }, interactionApproachExact: true,
+        puzzleId: 'photo_cupboard'
+      },
       {
         id: "window",
         kind: "hotspot",
@@ -314,7 +323,7 @@ const rawScenes = [
         lookKey: "campaign.kiosk.look",
         dialogueId: "dialogue.penka_kiosk",
         useDialogueId: "dialogue.penka_kiosk",
-        itemUseRules: [{ itemId: "item.unpaid_bills", ...kioskPaperRule }]
+        itemUseRules: pepaItemRules
       },
       {
         id: "hotspot.square.statue",
@@ -420,7 +429,8 @@ const rawScenes = [
       waiter: { x: 705, y: 465 },
       exit: { x: 170, y: 505 }
     },
-    foregroundLayers: [...(sceneLayerGeometry["scene.chapter1.mehana"]?.foregroundLayers || []), { id: "layer.mehana.oil_scale", asset: "kiroOilScale", left: 0, top: 0, width: 1280, height: 720, zIndex: 44 }],
+    foregroundLayers: [...(sceneLayerGeometry["scene.chapter1.mehana"]?.foregroundLayers || []), { id: "layer.mehana.oil_scale", asset: "kiroOilScale", left: 0, top: 0, width: 1280, height: 720, zIndex: 44 },
+      { id: 'layer.mehana.tony_diploma', asset: 'tonyDiploma', left: 938, top: 459, width: 78, height: 37, zIndex: 9, hiddenWhenFlag: 'tonyDiplomaTaken' }],
     exits: [
       {
         id: "exit.mehana.to_square",
@@ -563,6 +573,14 @@ const rawScenes = [
         rect: { x: 850, y: 510, w: 160, h: 110 },
         lookKey: "look.mehana.ballot_box",
         requirements: { disabled: true }
+      },
+      {
+        id: 'hotspot.mehana.tony_diploma', kind: 'hotspot', hitPriority: 10,
+        nameKey: 'photoquest.diploma_name', lookKey: 'photoquest.tony_proud',
+        rect: { x: 932, y: 453, w: 90, h: 48 },
+        interactionApproach: { x: 740, y: 580 }, interactionApproachExact: true,
+        requirements: { notFlags: ['tonyDiplomaTaken'] }, takeItemId: 'item.tony_diploma',
+        takeRules: [diplomaTakeRule, { effects: [], reject: true, messageKey: 'photoquest.diploma_guarded' }]
       }
     ],
     npcs: [
@@ -598,7 +616,8 @@ const rawScenes = [
         interactionApproachExact: true,
         interactionFacingPoint: { x: 973, y: 350 },
         dialogueId: "dialogue.tony_fridge",
-        lookKey: "look.npc.tony_fridge",
+        lookKey: 'photoquest.tony_proud',
+        talkRules: [{ requirements: { flags: ['tonyPassedOut'] }, effects: [], messageKey: 'photoquest.tony_sleeping' }],
         itemUseRules: [
           ...["item.rakia", "item.shopska_salad", "item.tripe_soup", "item.village_wine"].map(
             (itemId) => ({
@@ -817,7 +836,7 @@ const rawScenes = [
   electionScene
 ];
 
-export const scenes = applySceneObjectGeometry(wireRegistrationScenes(rawScenes.map(scene => ({ ...scene, footsteps: footstepSurfaces[scene.id] }))), {
+const geometryScenes = applySceneObjectGeometry(wireRegistrationScenes(rawScenes.map(scene => ({ ...scene, footsteps: footstepSurfaces[scene.id] }))), {
   [electionObjectGeometry.sceneId]: electionObjectGeometry,
   [mayorOfficeObjectGeometry.sceneId]: mayorOfficeObjectGeometry,
   [archiveObjectGeometry.sceneId]: archiveObjectGeometry,
@@ -848,3 +867,5 @@ function applyObjectGeometry(objects = [], geometryByObjectId) {
       return geometry?.polygon ? { ...object, polygon: geometry.polygon } : object;
     });
 }
+
+export const scenes = stageToniTable(geometryScenes);

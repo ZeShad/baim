@@ -1,0 +1,235 @@
+{
+  "predecessor": "props-r06 binding unchanged",
+  "records": {
+    "src/content/art/assetManifest.js": {
+      "before": "import { kiroOilAssets } from \"./kiroOilHandover.generated.js\";\nimport { externalAnimationV1 } from \"./externalAnimationRuntime.generated.js\";\nimport { mitkoTurnPocketAssets } from \"./mitkoTurnPocket.generated.js\";\nimport { mitkoTurnAssets } from \"./mitkoTurnPilot.generated.js\";\nimport { mitkoSizeMatchedAssets } from \"./mitkoSizeMatchedTurns.generated.js\";\n\nexport const assetManifest = {\n  baseResolution: { width: 1280, height: 720 },\n  runtimeSceneResolution: { width: 1280, height: 720 },\n  scenes: {\n    \"scene.chapter1.archive\": {\n      background: \"assets/chapter1/scenes/archive/open-v1.png\",\n      closed: \"assets/chapter1/scenes/archive/closed-v1.png\",\n      jar: \"assets/chapter1/scenes/archive/jar-v1.png\",\n      box: \"assets/chapter1/scenes/archive/box-v1.png\"\n    },\n    \"scene.chapter1.apartment\": {\n      background: \"assets/chapter1/scenes/apartment/background.png\",\n      droppedBelongingsPile: \"assets/chapter1/items/dropped-belongings-pile-v1.png\",\n      foregroundTable: \"assets/chapter1/scenes/apartment/foreground-table.png\",\n      billsOnTable: \"assets/chapter1/scenes/apartment/bills-on-table.png\",\n      accordionOnChair: \"assets/chapter1/scenes/apartment/accordion-on-chair.png\",\n      windowOpen: \"assets/chapter1/scenes/apartment/window-open.png\",\n      windowOpenBack: \"assets/chapter1/scenes/apartment/window-open-0.png\"\n    },\n    \"scene.chapter1.village_square\": {\n      campaignPoster: \"assets/chapter1/scenes/village_square/campaign-poster-c05.png\",\n      fountainForeground: \"assets/chapter1/scenes/village_square/fountain-stone-foreground-affinity-r01.png\",\n      fountainShallowWater: \"assets/chapter1/scenes/village_square/fountain-shallow-water-c05.png\",\n      squareFlagWind: \"assets/chapter1/scenes/village_square/flag-wind-c01.png\",\n      squarePepaIdle: \"assets/chapter1/scenes/village_square/pepa-idle-hydra-c14-r03.png\",\n      squarePepaStill: \"assets/chapter1/scenes/village_square/pepa-idle-hydra-c14-r03-static.png\",\n      kioskCounterC05: \"assets/chapter1/scenes/village_square/kiosk-counter-c05.png\",\n      electionSign: \"assets/chapter1/scenes/village_square/election-sign-v1.png\",\n      journalistStanding: \"assets/chapter1/characters/journalist/standing-v2.png\",\n      background: \"assets/chapter1/scenes/village_square/background-redesign-c05.png\",\n      oldMenChorusSeated: \"assets/chapter1/characters/old_men_chorus/seated-pair-v1.png\",\n      posterBefore: \"assets/chapter1/scenes/village_square/poster-before-v1.png\",\n      babaStoyankaSeated: \"assets/chapter1/characters/baba_stoyanka/seated-v2.png\",\n      babaStoyankaIdleSeated: \"assets/chapter1/characters/baba_stoyanka/idle-seated-v1.webp\",\n      babaStoyankaTalkSeated: \"assets/chapter1/characters/baba_stoyanka/talk-seated-v1.webp\",\n      babaStoyankaDelightedSeated: \"assets/chapter1/characters/baba_stoyanka/delighted-seated-v1.webp\",\n      babaStoyankaSkepticalSeated: \"assets/chapter1/characters/baba_stoyanka/skeptical-seated-v1.webp\",\n      kioskPapersPile: \"assets/chapter1/scenes/village_square/kiosk-papers-pile-v1.png\",\n      droppedBelongingsPile: \"assets/chapter1/items/dropped-belongings-pile-v1.png\"\n    },\n    \"scene.chapter1.mehana\": {\n      tonyDiploma: 'assets/chapter1/items/tony-diploma.png',\n      tonySleepingIdle: 'assets/chapter1/characters/tony_fridge/sleep-reclined-c01.webp',\n      tonyRakiaHalf: 'assets/chapter1/scenes/mehana/toni-contest/rakia-half.png',\n      tonyRakiaEmptySide: 'assets/chapter1/scenes/mehana/toni-contest/rakia-empty-side.png',\n      contestGlassEmpty: 'assets/chapter1/scenes/mehana/toni-contest/glass-empty.png',\n      contestGlassHalf: 'assets/chapter1/scenes/mehana/toni-contest/glass-half.png',\n      contestGlassWater: 'assets/chapter1/scenes/mehana/toni-contest/glass-water.png',\n      contestWaterBottle: 'assets/chapter1/scenes/mehana/toni-contest/water-bottle.png',\n      contestEmptyBottle: 'assets/chapter1/scenes/mehana/toni-contest/empty-bottle.png',\n      background: \"assets/chapter1/scenes/mehana/background-clean-occlusion-v1.png\",\n      tonyTableOccluder: \"assets/chapter1/scenes/mehana/tony-table-occluder-v1.png\",\n      leftTablePlayerOccluder: \"assets/chapter1/scenes/mehana/left-table-player-occluder-v1.png\",\n      rightTablePlayerOccluder: \"assets/chapter1/scenes/mehana/right-table-player-occluder-v1.png\",\n      ...kiroOilAssets,\n      mehanaCounterFront: \"assets/chapter1/scenes/mehana/kiro-counter-occluder-v1.png\",\n      mehanaCellarHatch: \"assets/chapter1/scenes/mehana/cellar-hatch-preserved-v1.png\",\n      mehanaWaiterIdle: \"assets/chapter1/characters/mehana_waiter/idle-bartender-v2.png\",\n      mehanaWaiterPolishingIdle: \"assets/chapter1/characters/mehana_waiter/kiro-polishing-idle-web-c01.png\",\n      mehanaWaiterListeningC07: \"assets/chapter1/characters/mehana_waiter/kiro-listening-c07-frame00-d01.png\",\n      mehanaWaiterListeningFinal: \"assets/chapter1/characters/mehana_waiter/kiro-listening-final-frame08-d01.png\",\n      mehanaWaiterTalkingPolishing: \"assets/chapter1/characters/mehana_waiter/kiro-talking-polishing-web-final-12d548cd.webp\",\n      mehanaWaiterTonyGlanceC05: \"assets/chapter1/characters/mehana_waiter/kiro-tony-glance-keyframe-c05.webp\",\n      mehanaWaiterSneakyGlassSwap: \"assets/chapter1/characters/mehana_waiter/kiro-spitting-fixed-owner-export-c01.webp\",\n      tonyFridgeSeated: \"assets/chapter1/characters/tony_fridge/seated-v1.png\",\n      tonyFridgeIdleSeated: \"assets/chapter1/characters/tony_fridge/idle-seated-v1.webp\",\n      tonyFridgeTalkSeated: \"assets/chapter1/characters/tony_fridge/talk-seated-v1.webp\",\n      tonyFridgeChuckleSeated: \"assets/chapter1/characters/tony_fridge/chuckle-seated-v1.webp\",\n      tonyFridgeSkepticalSeated: \"assets/chapter1/characters/tony_fridge/skeptical-seated-v1.webp\",\n      tonyFridgeApprovingNodSeated: \"assets/chapter1/characters/tony_fridge/approving-nod-seated-v1.webp\",\n      tonyFridgeAngerSeated: \"assets/chapter1/characters/tony_fridge/anger-seated-v1.webp\",\n      mitkoCompetitionGlass: \"assets/chapter1/scenes/mehana/competition-glass-v1.png\",\n      droppedBelongingsPile: \"assets/chapter1/items/dropped-belongings-pile-v1.png\"\n    },\n    \"scene.chapter1.municipality\": {\n      background: \"assets/chapter1/scenes/municipality/background-mayor-door-v1.png\",\n      archiveCabinet: \"assets/chapter1/scenes/municipality/archive-cabinet-v6.png\",\n      stampTable: \"assets/chapter1/scenes/municipality/stamp-table-v9.png\",\n      municipalitySeal: \"assets/chapter1/scenes/municipality/municipality-seal-v1.png\",\n      candidateRegister: \"assets/chapter1/scenes/municipality/candidate-register-v4.png\",\n      penkaChair: \"assets/chapter1/scenes/municipality/penka-chair-v1.png\",\n      penkaSeated: \"assets/chapter1/scenes/municipality/penka-seated-bordeaux-polka-v2.png\",\n      penkaDesk: \"assets/chapter1/scenes/municipality/penka-desk-v10.png\",\n      securityOfficer: \"assets/chapter1/scenes/municipality/policeman-security-guard-v2.png\",\n      securityTable: \"assets/chapter1/scenes/municipality/security-table-v6.png\",\n      droppedBelongingsPile: \"assets/chapter1/items/dropped-belongings-pile-v1.png\"\n    },\n    \"scene.chapter1.mayor_office\": {\n      journalistStanding: \"assets/chapter1/characters/journalist/standing-v2.png\",\n      background: \"assets/chapter1/scenes/mayor_office/background-v1.png\",\n      mayorStanding: \"assets/chapter1/characters/mayor/standing-v1.png\",\n      droppedBelongingsPile: \"assets/chapter1/items/dropped-belongings-pile-v1.png\"\n    },\n    \"scene.chapter1.election_booth\": {\n      penkaSeated: \"assets/chapter1/scenes/election_booth/penka-seated-v1.png\",\n      tableOccluder: \"assets/chapter1/scenes/election_booth/table-occluder-v1.png\",\n      background: \"assets/chapter1/scenes/election_booth/background-v1.png\",\n      mayorStanding: \"assets/chapter1/characters/mayor/standing-v1.png\",\n      journalistStanding: \"assets/chapter1/characters/journalist/standing-v2.png\",\n      babaSeated: \"assets/chapter1/characters/baba_stoyanka/seated-v2.png\",\n      tonySeated: \"assets/chapter1/characters/tony_fridge/seated-v1.png\",\n      ballotBox: \"assets/chapter1/scenes/archive/box-v1.png\",\n      creditors: \"assets/chapter1/characters/creditors/pair-v1.png\",\n      droppedBelongingsPile: \"assets/chapter1/items/dropped-belongings-pile-v1.png\"\n    }\n  },\n  characters: {\n    \"npc.bai_mitko\": {\n      type: \"externalAnimation\",\n      ...externalAnimationV1.characterAssets,\n      ...mitkoTurnAssets,\n      ...mitkoTurnPocketAssets,\n      ...mitkoSizeMatchedAssets\n    }\n  },\n  items: {\n    'item.mitko_photo': { icon: 'assets/chapter1/items/mitko-photo.png' },\n    'item.tony_diploma': { icon: 'assets/chapter1/items/tony-diploma.png' },\n    \"item.fake_diploma\": { icon: \"assets/chapter1/items/fake-diploma-v1.png\", pepaIcon: 'assets/chapter1/items/pepa-mitko-diploma.png', stampedIcon: \"assets/chapter1/items/stamped-diploma-v1.png\" },\n    \"item.campaign_pamphlets\": { icon: \"assets/chapter1/items/campaign-pamphlets-v1.png\" },\n    \"item.suspicious_receipt\": { icon: \"assets/chapter1/items/suspicious-receipt-v1.png\" },\n    \"item.rakia\": { icon: \"assets/chapter1/items/rakia-v1.png\" },\n    \"item.shopska_salad\": { icon: \"assets/chapter1/items/shopska-salad-v1.png\" },\n    \"item.tripe_soup\": { icon: \"assets/chapter1/items/tripe-soup-v1.png\" },\n    \"item.village_wine\": { icon: \"assets/chapter1/items/village-wine-v1.png\" },\n\n    \"item.pickle_jar\": { icon: \"assets/chapter1/scenes/archive/jar-v1.png\" },\n    \"item.ballot_box\": { icon: \"assets/chapter1/scenes/archive/box-v1.png\" },\n    \"item.municipality_stamp\": {\n      icon: \"assets/chapter1/scenes/municipality/municipality-seal-v1.png\"\n    },\n    \"item.accordion\": {\n      icon: \"assets/chapter1/items/accordion.png\"\n    },\n    \"item.unpaid_bills\": {\n      icon: \"assets/chapter1/items/unpaid_bills.png\"\n    },\n    \"item.empty_envelope\": {\n      icon: \"assets/chapter1/items/empty_envelope.png\"\n    },\n    \"item.sunflower_oil\": {\n      icon: \"assets/chapter1/items/kiro-bottle/oil-200ml-r07.png\",\n      model: \"assets/chapter1/items/kiro-bottle/oil-200ml-r08.glb\"\n    },\n    \"item.empty_rakia_bottle\": {\n      icon: \"assets/chapter1/items/kiro-bottle/empty-r07.png\",\n      model: \"assets/chapter1/items/kiro-bottle/empty-r08.glb\"\n    },\n    \"item.fountain_water_bottle\": {\n      icon: \"assets/chapter1/items/kiro-bottle/fountain-water-olive-r02.png\",\n      model: \"assets/chapter1/items/kiro-bottle/fountain-water-olive-r01.glb\",\n      liquidColor: null\n    },\n    \"item.glass_of_water\": {\n      icon: \"assets/chapter1/items/glass-of-water-v1.png\"\n    }\n  }\n};\n",
+      "beforeSHA256": "7bd1a384e55c07a6b80234c6f52b4746c70f76a402ac8c4adbb4b1cd236e994b",
+      "afterSHA256": "67d924a0de59a30690af1b8cb256ae271f7e7e219771b60adbad11abe4d7e345"
+    },
+    "test/helpers/toni-props-r06-preservation.js": {
+      "before": "import assert from 'node:assert/strict';import {readFileSync} from 'node:fs';import {createHash} from 'node:crypto';\nconst fixture=JSON.parse(readFileSync(new URL('../fixtures/toni-props-r06-deltas.json',import.meta.url))),sha=b=>createHash('sha256').update(b).digest('hex');\nexport function stripToniPropsR06(path,source,allowOtherHistory=false){const r=fixture.records[path];if(!r||sha(source)===r.beforeSHA256)return source;if(allowOtherHistory&&sha(source)!==r.afterSHA256)return source;assert.equal(sha(source),r.afterSHA256,'exact scene fix r06 props inverse: '+path);assert.equal(sha(r.before),r.beforeSHA256);return r.before;}\nexport function restoreToniPropsR06Snapshot(kind,value){const r=fixture.snapshots[kind];if(!r||sha(JSON.stringify(value))===r.beforeSHA256)return value;assert.equal(sha(JSON.stringify(value)),r.afterSHA256,'exact scene fix r06 props snapshot: '+kind);assert.equal(sha(JSON.stringify(r.before)),r.beforeSHA256);return structuredClone(r.before);}\n",
+      "beforeSHA256": "d1df5a4282d2deee5fce56b2acbb782bab26165ffff7a5b13171786f00d2c795",
+      "afterSHA256": "38c396680a4620825d1413b274a2882e29ec603c1bb586f80fccc59960f33217"
+    },
+    "docs/chapter1-script-2026-10-22.md": {
+      "before": "# BAIM - Chapter 1 script, 22 October 2026\r\n\r\nCurrent owner-approved story revision. This replaces the old bills/envelope diploma recipe and the kiosk's former motivation. It retains the fountain-water contest, municipal registration, archive and three election endings. Stable internal IDs retain their historical names; the kiosk lady is Lelya Pepa, not Penka. Turning work remains postponed.\r\n\r\n## 1. Election morning at home\r\n\r\nThe television announces registration today and voting tonight. A creditor knocks. Mitko wants the mayor's salary, warm office and official telephone. There is no real-time deadline.\r\n\r\nMitko takes his accordion. His photograph is locked inside the tall wooden cupboard beside the apartment door. Unpaid bills remain optional comic belongings, not a qualification or diploma ingredient.\r\n\r\n## 2. First puzzle: the photograph cupboard\r\n\r\nUse or Take on the cupboard opens a genuine 3D sliding-block lock built in Blender, based on the owner's wooden puzzle photograph. The 4 by 5 tray contains one large blue block, five yellow rectangles and four small red blocks. Two grid spaces are empty.\r\n\r\nGoal: move the blue block down to the central bottom opening. Pieces slide one square orthogonally into free space; they cannot overlap, rotate or leave the tray. This beginner layout takes six moves: upper-left yellow up, lower-left yellow up, lower-right yellow up, bottom-left red left, bottom-right red right, blue down.\r\n\r\nClick a block then a direction, or use arrow keys. A hint names the next block and direction without solving it automatically. Reset returns to the easy initial arrangement. Closing and reloading preserve moves. Solving grants one photograph and opens the cupboard permanently. The original photograph remains reusable and recoverable if dropped.\r\n\r\nMitko: \"There I am! A face fit for a poster. And, with a little assistance, higher education.\"\r\n\r\n## 3. Lelya Pepa's favor and the campaign poster\r\n\r\nPepa likes Mitko very much and flirts openly. Her help is personal, not a paid paper exchange. She wants him to play a little accordion music for her.\r\n\r\nPepa: \"Well, hello, handsome! A campaign poster? Play me a little accordion first. Then bring your photograph and I'll make you look positively presidential.\"\r\n\r\nOnce Mitko plays for her, the favor stays fulfilled. She scans his photograph and prints a campaign poster, returning the original photo. No Tony diploma is required for the poster. Mitko can post it on the existing noticeboard, revealing the journalist and opening the established public-campaign route into the municipality.\r\n\r\nThe poster and altered diploma are separate items. The same photograph serves both; no second photo, second puzzle or repeated mandatory performance is required. Music and fountain work may be done in either order.\r\n\r\n## 4. Fountain repair and Baba's support\r\n\r\nBaba asks Mitko to fix something, not promise five years. The valve is stuck. Kiro supplies 200 ml sunflower oil in a rakia bottle. Mitko uses the oil on the valve and operates the fountain. The retained approved repair sequence and visible water stream remain unchanged.\r\n\r\nBaba supports him after the repair. The oil bottle becomes an empty rakia bottle, which Mitko fills at the running fountain with its murky olive-brown water. Existing bottle inspection, liquid level and close-up controls remain unchanged. The water stays in this bottle for the contest, not a recognizably sober water glass.\r\n\r\n## 5. Tony's pride, drinking contest and diploma\r\n\r\nToni, full name Тончо Карабанов (Toncho Karabanov), is the only person in the village with a diploma. His full name is printed on it; dialogue keeps his nickname. Before the contest it lies on the marked right-hand table position, with his half-full Kiro rakia bottle on top and a half-full glass beside it. He guards it while awake. Looking identifies it; taking it before the contest is refused without consuming anything.\r\n\r\nOn contest start, Mitko’s fountain-water bottle and an EMPTY glass appear at the other marked positions on the same table. Mitko accepts the existing drinking challenge. He distracts Tony with his accordion and substitutes fountain water into his own competition glass. Tony drinks his own Kiro rakia. Using Tony's glass or attempting an early swap retains the existing refusal and recovery behavior.\r\n\r\nAfter Mitko wins, Tony grants his existing vote/favor reward and is revealed after a fade to black, already reclined against his chair, head back, smiling with red cheeks. The cut begins once actual drinking starts, after the existing own-water setup. Required new visual: an ALREADY-RECLINED idle loop with rhythmic chest/belly breathing and silent snoring mouth movement ONLY. No visible lean-back animation is needed. No snoring audio. Kiro has removed every contest bottle and glass from the table. The diploma lies fully inside the tabletop edges, ready to take. The sleeping state must persist across leaving and reloading; he must not resume lively dialogue while asleep.\r\n\r\nKiro: \"I took the glasses to wash and the bottles to refill. Toni wakes up thirsty in a couple of hours. His thirst is a natural disaster with a timetable.\"\r\n\r\nMitko can now take Tony's original diploma once. It disappears from the table and becomes a recoverable inventory item. This is a story pause for Tony, not an injury or death.\r\n\r\n## 6. Pepa's Photoshop education\r\n\r\nBring Tony's diploma and Mitko's photograph to Pepa. Her accordion favor must already be fulfilled. She substitutes Mitko's photograph on Tony's diploma in her Photoshop and returns a diploma bearing Mitko's face. The original Tony diploma is consumed in this transformation; Mitko keeps his photograph.\r\n\r\nPepa: \"Tony's diploma, your photograph... a little Photoshop, and look! An education with your face on it. I've returned your photograph too.\"\r\n\r\nThis is fictional cartoon satire, not an additional real-world document-editing tutorial. The altered diploma occupies the existing stable credential item slot so later quests remain connected. Its municipal stamp is still a separate later requirement. No bills/envelope shortcut remains in a new game.\r\n\r\n## 7. Municipal, archive and election continuation\r\n\r\nPosting the campaign poster brings the journalist. Obtain the existing suspicious municipal receipt through the retained Tony/Kiro route and give it to her. She goes to the municipality for the mayor's explanation.\r\n\r\nThe clerk rejects an unstamped diploma. The journalist confronts the mayor; his own bureaucracy supplies the opportunity to stamp Mitko's paperwork. The clerk registers him only with the properly stamped altered diploma.\r\n\r\nRegistration opens the archive objective. Retain the accordion-strap cabinet solution and the transparent-container classification joke: exchange the pickle jar for the missing ballot box. Deliver the box and continue the existing interview and election resolution. Preserve the established ending rules, saved ending state and final confirmation. This revision does not invent Chapter 2 or a presidential office in Chapter 1.\r\n\r\nStory consequence requiring a future owner decision: the new diploma route makes Tony's contest and vote mandatory. Fresh games therefore no longer have the former no-supporter loss route. Tony alone leads to a narrow victory under normal retained meters; reporting the repaired fountain to Baba can add her support for a convincing win. Legacy loss saves and the loss ending remain supported. Do not claim fresh-game three-ending coverage or silently change voting thresholds to compensate.\r\n\r\n## 8. Recovery and implementation status\r\n\r\nOld saves retain earned diplomas, posted campaign material, registration and endings. They are not forced to replay the new puzzle or pretend an accordion favor happened. An old earned credential may obtain its outstanding campaign poster through a grandfathered recovery option. New saves use the new chain only.\r\n\r\nLocal implementation includes quest rules, BG/EN writing, puzzle controls, editable Blender source and GLB, photograph and paper props, guard/pickup logic and save migration. All new visuals are local review candidates, not automatically approved production art. Existing movement and original animation assets are preserved.\r\n\r\nToni's requested already-reclined sleeping idle is NOT delivered by the old seated idle or approving nod. No compatible existing source was found. Until that new source is supplied and reviewed, the quest state can be tested, but Tony's old seated presentation remains a disclosed visual gap. Publication, exact-head CI/postmerge verification and remote branch cleanup are separate release gates, not completed by this script update.\r\n\r\nOwner accepted Toni's c01 sleeping motion and in-scene placement on23October. Locally integrated: seated idle -> contest choice -> fade to black -> already-reclined silent sleeping loop -> Kiro cleanup line -> diploma pickup -> leave/re-enter/reload. Revised tabletop placement, prop clearance and joke await owner visual review; publication remains separate.\r\n",
+      "beforeSHA256": "79ffb771b335a6afd398941d8a8d322e089057d698119bbd8705b80cbb49071c",
+      "afterSHA256": "e198fc281833e20d016024ef8a012e4f1bc508fc9c1c3585ed76b631d8474466"
+    }
+  },
+  "snapshots": {
+    "manifest": {
+      "before": {
+        "baseResolution": {
+          "width": 1280,
+          "height": 720
+        },
+        "runtimeSceneResolution": {
+          "width": 1280,
+          "height": 720
+        },
+        "scenes": {
+          "scene.chapter1.archive": {
+            "background": "assets/chapter1/scenes/archive/open-v1.png",
+            "closed": "assets/chapter1/scenes/archive/closed-v1.png",
+            "jar": "assets/chapter1/scenes/archive/jar-v1.png",
+            "box": "assets/chapter1/scenes/archive/box-v1.png"
+          },
+          "scene.chapter1.apartment": {
+            "background": "assets/chapter1/scenes/apartment/background.png",
+            "droppedBelongingsPile": "assets/chapter1/items/dropped-belongings-pile-v1.png",
+            "foregroundTable": "assets/chapter1/scenes/apartment/foreground-table.png",
+            "billsOnTable": "assets/chapter1/scenes/apartment/bills-on-table.png",
+            "accordionOnChair": "assets/chapter1/scenes/apartment/accordion-on-chair.png",
+            "windowOpen": "assets/chapter1/scenes/apartment/window-open.png",
+            "windowOpenBack": "assets/chapter1/scenes/apartment/window-open-0.png"
+          },
+          "scene.chapter1.village_square": {
+            "campaignPoster": "assets/chapter1/scenes/village_square/campaign-poster-c05.png",
+            "fountainForeground": "assets/chapter1/scenes/village_square/fountain-stone-foreground-affinity-r01.png",
+            "fountainShallowWater": "assets/chapter1/scenes/village_square/fountain-shallow-water-c05.png",
+            "squareFlagWind": "assets/chapter1/scenes/village_square/flag-wind-c01.png",
+            "squarePepaIdle": "assets/chapter1/scenes/village_square/pepa-idle-hydra-c14-r03.png",
+            "squarePepaStill": "assets/chapter1/scenes/village_square/pepa-idle-hydra-c14-r03-static.png",
+            "kioskCounterC05": "assets/chapter1/scenes/village_square/kiosk-counter-c05.png",
+            "electionSign": "assets/chapter1/scenes/village_square/election-sign-v1.png",
+            "journalistStanding": "assets/chapter1/characters/journalist/standing-v2.png",
+            "background": "assets/chapter1/scenes/village_square/background-redesign-c05.png",
+            "oldMenChorusSeated": "assets/chapter1/characters/old_men_chorus/seated-pair-v1.png",
+            "posterBefore": "assets/chapter1/scenes/village_square/poster-before-v1.png",
+            "babaStoyankaSeated": "assets/chapter1/characters/baba_stoyanka/seated-v2.png",
+            "babaStoyankaIdleSeated": "assets/chapter1/characters/baba_stoyanka/idle-seated-v1.webp",
+            "babaStoyankaTalkSeated": "assets/chapter1/characters/baba_stoyanka/talk-seated-v1.webp",
+            "babaStoyankaDelightedSeated": "assets/chapter1/characters/baba_stoyanka/delighted-seated-v1.webp",
+            "babaStoyankaSkepticalSeated": "assets/chapter1/characters/baba_stoyanka/skeptical-seated-v1.webp",
+            "kioskPapersPile": "assets/chapter1/scenes/village_square/kiosk-papers-pile-v1.png",
+            "droppedBelongingsPile": "assets/chapter1/items/dropped-belongings-pile-v1.png"
+          },
+          "scene.chapter1.mehana": {
+            "tonyDiploma": "assets/chapter1/items/tony-diploma.png",
+            "tonySleepingIdle": "assets/chapter1/characters/tony_fridge/sleep-reclined-c01.webp",
+            "tonyRakiaHalf": "assets/chapter1/scenes/mehana/toni-contest/rakia-half.png",
+            "tonyRakiaEmptySide": "assets/chapter1/scenes/mehana/toni-contest/rakia-empty-side.png",
+            "contestGlassEmpty": "assets/chapter1/scenes/mehana/toni-contest/glass-empty.png",
+            "contestGlassHalf": "assets/chapter1/scenes/mehana/toni-contest/glass-half.png",
+            "contestGlassWater": "assets/chapter1/scenes/mehana/toni-contest/glass-water.png",
+            "contestWaterBottle": "assets/chapter1/scenes/mehana/toni-contest/water-bottle.png",
+            "contestEmptyBottle": "assets/chapter1/scenes/mehana/toni-contest/empty-bottle.png",
+            "background": "assets/chapter1/scenes/mehana/background-clean-occlusion-v1.png",
+            "tonyTableOccluder": "assets/chapter1/scenes/mehana/tony-table-occluder-v1.png",
+            "leftTablePlayerOccluder": "assets/chapter1/scenes/mehana/left-table-player-occluder-v1.png",
+            "rightTablePlayerOccluder": "assets/chapter1/scenes/mehana/right-table-player-occluder-v1.png",
+            "kiroOilCounterOcclusion": "assets/chapter1/scenes/mehana/counter-front-redesign-v1.png",
+            "kiroOilScale": "assets/chapter1/characters/mehana_waiter/oil-handover-web-c01/scale.png",
+            "kiroOilHandover": "assets/chapter1/characters/mehana_waiter/oil-handover-web-c01/atlas.webp",
+            "mehanaCounterFront": "assets/chapter1/scenes/mehana/kiro-counter-occluder-v1.png",
+            "mehanaCellarHatch": "assets/chapter1/scenes/mehana/cellar-hatch-preserved-v1.png",
+            "mehanaWaiterIdle": "assets/chapter1/characters/mehana_waiter/idle-bartender-v2.png",
+            "mehanaWaiterPolishingIdle": "assets/chapter1/characters/mehana_waiter/kiro-polishing-idle-web-c01.png",
+            "mehanaWaiterListeningC07": "assets/chapter1/characters/mehana_waiter/kiro-listening-c07-frame00-d01.png",
+            "mehanaWaiterListeningFinal": "assets/chapter1/characters/mehana_waiter/kiro-listening-final-frame08-d01.png",
+            "mehanaWaiterTalkingPolishing": "assets/chapter1/characters/mehana_waiter/kiro-talking-polishing-web-final-12d548cd.webp",
+            "mehanaWaiterTonyGlanceC05": "assets/chapter1/characters/mehana_waiter/kiro-tony-glance-keyframe-c05.webp",
+            "mehanaWaiterSneakyGlassSwap": "assets/chapter1/characters/mehana_waiter/kiro-spitting-fixed-owner-export-c01.webp",
+            "tonyFridgeSeated": "assets/chapter1/characters/tony_fridge/seated-v1.png",
+            "tonyFridgeIdleSeated": "assets/chapter1/characters/tony_fridge/idle-seated-v1.webp",
+            "tonyFridgeTalkSeated": "assets/chapter1/characters/tony_fridge/talk-seated-v1.webp",
+            "tonyFridgeChuckleSeated": "assets/chapter1/characters/tony_fridge/chuckle-seated-v1.webp",
+            "tonyFridgeSkepticalSeated": "assets/chapter1/characters/tony_fridge/skeptical-seated-v1.webp",
+            "tonyFridgeApprovingNodSeated": "assets/chapter1/characters/tony_fridge/approving-nod-seated-v1.webp",
+            "tonyFridgeAngerSeated": "assets/chapter1/characters/tony_fridge/anger-seated-v1.webp",
+            "mitkoCompetitionGlass": "assets/chapter1/scenes/mehana/competition-glass-v1.png",
+            "droppedBelongingsPile": "assets/chapter1/items/dropped-belongings-pile-v1.png"
+          },
+          "scene.chapter1.municipality": {
+            "background": "assets/chapter1/scenes/municipality/background-mayor-door-v1.png",
+            "archiveCabinet": "assets/chapter1/scenes/municipality/archive-cabinet-v6.png",
+            "stampTable": "assets/chapter1/scenes/municipality/stamp-table-v9.png",
+            "municipalitySeal": "assets/chapter1/scenes/municipality/municipality-seal-v1.png",
+            "candidateRegister": "assets/chapter1/scenes/municipality/candidate-register-v4.png",
+            "penkaChair": "assets/chapter1/scenes/municipality/penka-chair-v1.png",
+            "penkaSeated": "assets/chapter1/scenes/municipality/penka-seated-bordeaux-polka-v2.png",
+            "penkaDesk": "assets/chapter1/scenes/municipality/penka-desk-v10.png",
+            "securityOfficer": "assets/chapter1/scenes/municipality/policeman-security-guard-v2.png",
+            "securityTable": "assets/chapter1/scenes/municipality/security-table-v6.png",
+            "droppedBelongingsPile": "assets/chapter1/items/dropped-belongings-pile-v1.png"
+          },
+          "scene.chapter1.mayor_office": {
+            "journalistStanding": "assets/chapter1/characters/journalist/standing-v2.png",
+            "background": "assets/chapter1/scenes/mayor_office/background-v1.png",
+            "mayorStanding": "assets/chapter1/characters/mayor/standing-v1.png",
+            "droppedBelongingsPile": "assets/chapter1/items/dropped-belongings-pile-v1.png"
+          },
+          "scene.chapter1.election_booth": {
+            "penkaSeated": "assets/chapter1/scenes/election_booth/penka-seated-v1.png",
+            "tableOccluder": "assets/chapter1/scenes/election_booth/table-occluder-v1.png",
+            "background": "assets/chapter1/scenes/election_booth/background-v1.png",
+            "mayorStanding": "assets/chapter1/characters/mayor/standing-v1.png",
+            "journalistStanding": "assets/chapter1/characters/journalist/standing-v2.png",
+            "babaSeated": "assets/chapter1/characters/baba_stoyanka/seated-v2.png",
+            "tonySeated": "assets/chapter1/characters/tony_fridge/seated-v1.png",
+            "ballotBox": "assets/chapter1/scenes/archive/box-v1.png",
+            "creditors": "assets/chapter1/characters/creditors/pair-v1.png",
+            "droppedBelongingsPile": "assets/chapter1/items/dropped-belongings-pile-v1.png"
+          }
+        },
+        "characters": {
+          "npc.bai_mitko": {
+            "type": "externalAnimation",
+            "external_walk_east_start": "target/external_animation_v1/runtime/walk_east_start.webp",
+            "external_walk_east_loop": "target/external_animation_v1/runtime/walk_east_loop.webp",
+            "external_walk_east_short": "target/external_animation_v1/runtime/walk_east_short.webp",
+            "external_walk_east_stop": "target/external_animation_v1/runtime/walk_east_stop.webp",
+            "external_idle_east_1": "target/external_animation_v1/runtime/idle_east_1.webp",
+            "external_idle_east_2": "target/external_animation_v1/runtime/idle_east_2.webp",
+            "external_idle_east_3": "target/external_animation_v1/runtime/idle_east_3.webp",
+            "external_idle_east_4": "target/external_animation_v1/runtime/idle_east_4.webp",
+            "external_idle_east_5": "target/external_animation_v1/runtime/idle_east_5.webp",
+            "external_idle_east_6": "target/external_animation_v1/runtime/idle_east_6.webp",
+            "external_talk_east_long_1": "target/external_animation_v1/runtime/talk_east_long_1.webp",
+            "external_talk_east_long_2": "target/external_animation_v1/runtime/talk_east_long_2.webp",
+            "external_talk_east_short_1": "target/external_animation_v1/runtime/talk_east_short_1.webp",
+            "external_reject_east_1": "target/external_animation_v1/runtime/reject_east_1.webp",
+            "external_look_into_distance_east_1": "target/external_animation_v1/runtime/look_into_distance_east_1.webp",
+            "external_take_east_forward_default": "target/external_animation_v1/runtime/take_east_forward_default.webp",
+            "external_opens_window": "target/external_animation_v1/runtime/opens_window.webp",
+            "external_walk_north_loop": "target/external_animation_v1/runtime/walk_north_loop.webp",
+            "external_walk_north_loop_rest": "assets/chapter1/characters/bai_mitko/walk_north_loop-rest.png",
+            "external_walk_south_loop": "target/external_animation_v1/runtime/walk_south_loop.webp",
+            "external_walk_south_loop_rest": "assets/chapter1/characters/bai_mitko/walk_south_loop-rest.png",
+            "turn_front_east_c01": "assets/chapter1/characters/bai_mitko/turn-front-east-c01.webp",
+            "turn_front_west_pocket_c05": "assets/chapter1/characters/bai_mitko/turn-front-west-size-matched-c05.webp",
+            "turn_rear_west_c12": "assets/chapter1/characters/bai_mitko/turn-rear-west-size-matched-c12.webp"
+          }
+        },
+        "items": {
+          "item.mitko_photo": {
+            "icon": "assets/chapter1/items/mitko-photo.png"
+          },
+          "item.tony_diploma": {
+            "icon": "assets/chapter1/items/tony-diploma.png"
+          },
+          "item.fake_diploma": {
+            "icon": "assets/chapter1/items/fake-diploma-v1.png",
+            "pepaIcon": "assets/chapter1/items/pepa-mitko-diploma.png",
+            "stampedIcon": "assets/chapter1/items/stamped-diploma-v1.png"
+          },
+          "item.campaign_pamphlets": {
+            "icon": "assets/chapter1/items/campaign-pamphlets-v1.png"
+          },
+          "item.suspicious_receipt": {
+            "icon": "assets/chapter1/items/suspicious-receipt-v1.png"
+          },
+          "item.rakia": {
+            "icon": "assets/chapter1/items/rakia-v1.png"
+          },
+          "item.shopska_salad": {
+            "icon": "assets/chapter1/items/shopska-salad-v1.png"
+          },
+          "item.tripe_soup": {
+            "icon": "assets/chapter1/items/tripe-soup-v1.png"
+          },
+          "item.village_wine": {
+            "icon": "assets/chapter1/items/village-wine-v1.png"
+          },
+          "item.pickle_jar": {
+            "icon": "assets/chapter1/scenes/archive/jar-v1.png"
+          },
+          "item.ballot_box": {
+            "icon": "assets/chapter1/scenes/archive/box-v1.png"
+          },
+          "item.municipality_stamp": {
+            "icon": "assets/chapter1/scenes/municipality/municipality-seal-v1.png"
+          },
+          "item.accordion": {
+            "icon": "assets/chapter1/items/accordion.png"
+          },
+          "item.unpaid_bills": {
+            "icon": "assets/chapter1/items/unpaid_bills.png"
+          },
+          "item.empty_envelope": {
+            "icon": "assets/chapter1/items/empty_envelope.png"
+          },
+          "item.sunflower_oil": {
+            "icon": "assets/chapter1/items/kiro-bottle/oil-200ml-r07.png",
+            "model": "assets/chapter1/items/kiro-bottle/oil-200ml-r08.glb"
+          },
+          "item.empty_rakia_bottle": {
+            "icon": "assets/chapter1/items/kiro-bottle/empty-r07.png",
+            "model": "assets/chapter1/items/kiro-bottle/empty-r08.glb"
+          },
+          "item.fountain_water_bottle": {
+            "icon": "assets/chapter1/items/kiro-bottle/fountain-water-olive-r02.png",
+            "model": "assets/chapter1/items/kiro-bottle/fountain-water-olive-r01.glb",
+            "liquidColor": null
+          },
+          "item.glass_of_water": {
+            "icon": "assets/chapter1/items/glass-of-water-v1.png"
+          }
+        }
+      },
+      "beforeSHA256": "38ed348eb2812ddb2db52bf026e988af979261fe3f5ac4e98d8a239a80606f30",
+      "afterSHA256": "0586141595cb519b8d06a5d7f8b20155e6214f5d2181ee6a16152fd175b39f59"
+    }
+  }
+}

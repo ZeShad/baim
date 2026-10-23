@@ -1,0 +1,50 @@
+{
+  "source": "C:\\Users\\SveBiS\\Desktop\\myStuff\\2026_GitPro\\extraFixes\\blender-workshop\\rakia-oil-200ml\\blender-r07\\kiro-bottle-shared-1L-r07.blend",
+  "sourceSHA256": "255b0ca0b57a8de6c0f0b6a69bcd395d687d14e8188a8b311b95881cf92f2750",
+  "sourceUnchanged": true,
+  "glass": "Owner photograph: tapered, thick base, seven wavy horizontal pressed ribs; closed hollow manifold mesh",
+  "glassHeightM": 0.0703,
+  "glassTopDiameterM": 0.058,
+  "glassBaseThicknessM": 0.012,
+  "glassNonmanifoldEdges": 0,
+  "halfBottleVolumeRatio": 0.49999999999999994,
+  "bottleZAnglesDegrees": {
+    "toniRakia": 19,
+    "mitkoWaterAndEmpty": -26
+  },
+  "states": {
+    "1": "rakia-half",
+    "2": "water-bottle",
+    "3": "empty-bottle",
+    "4": "glass-empty",
+    "5": "glass-half",
+    "6": "glass-water"
+  },
+  "render": "Cycles transparent RGBA; inherited r07 camera/light rig for bottles, same lights with closer glass camera; no inventory/animation asset edits",
+  "renders": {
+    "empty-bottle.png": {
+      "sha256": "61754fd2340bb5938de9bf9460616013aa2a84c582fe24de5deb94dbd861d4e4",
+      "bytes": 520567
+    },
+    "glass-empty.png": {
+      "sha256": "719b83fe7267dc1d46f435ebddafa2140014f871fb8fc1eda64d29b5d4594967",
+      "bytes": 836899
+    },
+    "glass-half.png": {
+      "sha256": "6e13d6bc38b14d8c0e6f2624c6552f56f75bf560cca5fc10f1ce4f282786c88f",
+      "bytes": 815911
+    },
+    "glass-water.png": {
+      "sha256": "022d322d4909725f88a6865c14d6f0dde9153ed22749d72520ae7791fb4b132d",
+      "bytes": 822610
+    },
+    "rakia-half.png": {
+      "sha256": "ec9a9f7ea962f917136d31baab0af662968e4bfc2ce2bd3ac74d40750c995dbe",
+      "bytes": 506697
+    },
+    "water-bottle.png": {
+      "sha256": "5d1e8569122b75120446ca8a7e08fa68bfafa6ce08fddf88dfb57a1ed5763261",
+      "bytes": 492599
+    }
+  }
+}

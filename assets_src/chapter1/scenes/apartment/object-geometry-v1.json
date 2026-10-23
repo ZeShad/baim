@@ -11,6 +11,7 @@
     "height": 720
   },
   "objects": [
+    { "id": "hotspot.apartment.photo_cupboard", "rect": { "x": 825, "y": 130, "w": 165, "h": 355 } },
     {
       "id": "exit.apartment.to_square",
       "polygon": [

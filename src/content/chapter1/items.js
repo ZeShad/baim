@@ -1,5 +1,8 @@
 import { accordionCue } from "./audio.js";
+import { pepaMusicRule } from './photoQuest.js';
 export const items = [
+  { id: 'item.mitko_photo', nameKey: 'photoquest.photo_name', descriptionKey: 'photoquest.photo_desc' },
+  { id: 'item.tony_diploma', nameKey: 'photoquest.diploma_name', descriptionKey: 'photoquest.diploma_desc' },
   { id: "item.empty_rakia_bottle", nameKey: "bottle.empty.name", descriptionKey: "bottle.empty.desc" },
   { id: "item.fountain_water_bottle", nameKey: "bottle.water.name", descriptionKey: "bottle.water.desc" },
   {
@@ -8,6 +11,7 @@ export const items = [
     descriptionKey: "item.accordion.desc",
     selfUseRules: [{ soundCue: accordionCue, effects: [], messageKey: "msg.self.accordion" }],
     targetUseRules: [
+      pepaMusicRule,
       {
         targetIds: ["npc.baba_stoyanka"],
         requirements: { state: { babaStoyankaVote: false } },
@@ -44,24 +48,15 @@ export const items = [
     itemUseRules: [
       {
         itemId: "item.empty_envelope",
-        requirements: {
-          items: ["item.unpaid_bills", "item.empty_envelope"],
-          state: { hasFakeDiploma: false }
-        },
-        effects: [
-          { type: "removeItem", itemId: "item.unpaid_bills" },
-          { type: "removeItem", itemId: "item.empty_envelope" },
-          { type: "addItem", itemId: "item.fake_diploma" },
-          { type: "setState", key: "hasFakeDiploma", value: true },
-          { type: "adjustState", key: "suspicion", amount: 4 }
-        ],
-        messageKey: "msg.fake_diploma.assembled"
+        effects: [], reject: true,
+        messageKey: 'photoquest.bills_not_diploma'
       }
     ]
   },
   { id: "item.empty_envelope", nameKey: "item.empty_envelope.name", descriptionKey: "item.empty_envelope.desc" },
   { id: "item.fake_diploma", nameKey: "item.fake_diploma.name", descriptionKey: "item.fake_diploma.desc",
-    iconRules: [{ requirements: { flags: ["mayorDiplomaStamped"] }, slot: "stampedIcon" }] },
+    iconRules: [{ requirements: { flags: ["mayorDiplomaStamped"] }, slot: "stampedIcon" },
+      { requirements: { flags: ['pepaDiplomaAltered'] }, slot: 'pepaIcon' }] },
   {
     id: "item.rakia",
     nameKey: "item.rakia.name",

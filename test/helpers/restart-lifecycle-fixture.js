@@ -40,6 +40,8 @@ async function leave(g,suffix){g.dialogue.close();const exit=target(g,suffix);as
 async function go(g,name){await g.changeScene(sid(name));}
 function use(g,id,item){const t=target(g,id);if(item) assert.notEqual(g.useInventoryItemOnTarget(item,t),false);else g.useTarget(t);}
 async function papers(g,route='kiosk'){
+  // Historical earned-credential fixture for restart/old-ending preservation.
+  // New-game acquisition is independently exercised by photo-quest and native BG/EN tests.
   assert.equal(g.takeTarget(target(g,'hotspot.apartment.accordion')),true);
   // Exercise the actual animated pickup's contact-frame commit without rendering the animation.
   const bills=target(g,'hotspot.apartment.unpaid_bills');
@@ -49,8 +51,10 @@ async function papers(g,route='kiosk'){
   if(route==='combine'){
     g.takeTarget(target(g,'hotspot.square.empty_envelope'));
     assert.equal(g.useInventoryItemOnItem('item.unpaid_bills','item.empty_envelope'),true);
-    talk(g,'hotspot.square.kiosk');choose(g,'campaign.kiosk.choice.pamphlets');
-  }else use(g,'hotspot.square.kiosk','item.unpaid_bills');
+    assert.equal(g.inventory.has('item.fake_diploma'),false,'obsolete recipe grants nothing');
+  }else {g.useInventoryItemOnTarget('item.unpaid_bills',target(g,'hotspot.square.kiosk'));assert.equal(g.inventory.has('item.fake_diploma'),false,'kiosk bills grant nothing');}
+  g.state.hasFakeDiploma=true;g.state.flags.legacyPhotoCredentials=true;g.inventory.add('item.fake_diploma');
+  talk(g,'hotspot.square.kiosk');choose(g,'campaign.kiosk.choice.pamphlets');
   use(g,'hotspot.square.poster_board','item.campaign_pamphlets');
 }
 async function support(g,{baba,tony,watched=false}){
@@ -71,7 +75,10 @@ async function support(g,{baba,tony,watched=false}){
     if(watched)use(g,'hotspot.mehana.bai_mitko_rakia_glass','item.fountain_water_bottle');
     use(g,'npc.tony_fridge','item.accordion');
     use(g,'hotspot.mehana.bai_mitko_rakia_glass','item.fountain_water_bottle');reload(g);
-    talk(g,'npc.tony_fridge');choose(g,'dialogue.tony.choice.finish_challenge');choose(g,'dialogue.tony.choice.leave');
+    talk(g,'npc.tony_fridge');choose(g,'dialogue.tony.choice.finish_challenge');
+    assert.equal(g.dialogue.current,null,'contest dialogue closes for blackout');
+    g.updateSceneAction(.45);assert.equal(g.state.flags.tonyPassedOut,true);assert.equal(g.state.tonyVote,true);
+    g.updateSceneAction(1.15);assert.equal(g.sceneAction.active,false);
     await leave(g,'exit.mehana.to_square');
   }
 }

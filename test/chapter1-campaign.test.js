@@ -3,6 +3,7 @@ import assert from "node:assert/strict";
 import { chapter1 } from "../src/content/chapter1/index.js";
 import { campaignDialogues, kioskPaperRule, kioskPamphletRule, campaignPosterRules } from "../src/content/chapter1/campaign.js";
 import { campaignBg, campaignEn } from "../src/content/localization/chapter1Campaign.js";
+import { pepaMusicRule, pepaPosterRule, pepaDiplomaRule } from '../src/content/chapter1/photoQuest.js';
 import { Game } from "../src/engine/Game.js";
 import { InventorySystem } from "../src/engine/InventorySystem.js";
 import { QuestSystem } from "../src/engine/QuestSystem.js";
@@ -48,16 +49,15 @@ test("TV and poster share a one-time opening and persistent recap without changi
   assert.equal(firstMatchingRule(tv.lookRules, context({ chapter1Completed: true })).messageKey, "campaign.opening_recap");
 });
 
-test("kiosk handover consumes bills once, gives diploma and pamphlets, and posting survives reload", () => {
-  const ctx = context({ inventory: ["item.unpaid_bills"], hasUnpaidBills: true });
+test("photo and music issue a poster once, preserve the photo, and posting survives reload", () => {
+  const ctx = context({ inventory: ['item.mitko_photo', 'item.accordion'], hasUnpaidBills: true });
   const kiosk = target("hotspot.square.kiosk");
-  const rule = firstMatchingRule(kiosk.itemUseRules, ctx);
-  use(rule, ctx);
-  assert.deepEqual(ctx.state.inventory.sort(), ["item.campaign_pamphlets", "item.fake_diploma"]);
-  assert.equal(ctx.state.hasFakeDiploma, true);
+  use(pepaMusicRule, ctx); use(pepaPosterRule, ctx);
+  assert.deepEqual(ctx.state.inventory.sort(), ['item.accordion', 'item.campaign_pamphlets', 'item.mitko_photo']);
+  assert.equal(ctx.state.hasFakeDiploma, false);
   assert.equal(ctx.state.completedQuests.includes("quest.chapter1.fake_diploma"), false);
-  assert.equal(ctx.state.suspicion, 4);
-  assert.equal(firstMatchingRule(kiosk.itemUseRules, ctx), null);
+  assert.equal(ctx.state.suspicion, 0);
+  assert.equal(requirementsMet(pepaPosterRule.requirements, ctx), false);
   assert.equal(requirementsMet(target("hotspot.apartment.unpaid_bills").requirements, ctx), false);
   assert.equal(requirementsMet(kioskPamphletRule.requirements, ctx), false);
 
@@ -71,9 +71,9 @@ test("kiosk handover consumes bills once, gives diploma and pamphlets, and posti
   use(firstMatchingRule(campaignPosterRules, ctx), ctx);
   assert.equal(ctx.state.flags.campaignPosted, true);
   assert.equal(ctx.inventory.has("item.campaign_pamphlets"), false);
-  assert.equal(ctx.inventory.has("item.fake_diploma"), true);
+  assert.equal(ctx.inventory.has('item.mitko_photo'), true);
   use(firstMatchingRule(campaignPosterRules, ctx), ctx);
-  assert.equal(ctx.state.suspicion, 4);
+  assert.equal(ctx.state.suspicion, 0);
   assert.equal(firstMatchingRule(target("hotspot.square.poster_board").lookRules, ctx).messageKey, "campaign.poster.posted");
 
   let saved;
@@ -85,7 +85,7 @@ test("kiosk handover consumes bills once, gives diploma and pamphlets, and posti
 });
 
 test("legacy credentials can collect pamphlets once without bills or additional suspicion", () => {
-  const ctx = context({ hasFakeDiploma: true, inventory: ["item.fake_diploma"] });
+  const ctx = context({ hasFakeDiploma: true, inventory: ["item.fake_diploma"], flags: { legacyPhotoCredentials: true } });
   use(kioskPamphletRule, ctx);
   assert.equal(ctx.inventory.has("item.campaign_pamphlets"), true);
   assert.equal(ctx.state.suspicion, 0);
@@ -96,10 +96,10 @@ test("legacy credentials can collect pamphlets once without bills or additional 
 });
 
 test("kiosk dialogue and direct item handover share transaction requirements", () => {
-  const choice = campaignDialogues[0].nodes.start.choices.find(entry => entry.effect === kioskPaperRule);
+  const choice = campaignDialogues[0].nodes.start.choices.find(entry => entry.effect === pepaDiplomaRule);
   assert.ok(choice);
   assert.equal(requirementsMet(choice.requirements, context()), false);
-  assert.equal(requirementsMet(choice.requirements, context({ inventory: ["item.unpaid_bills"] })), true);
+  assert.equal(requirementsMet(choice.requirements, context({ inventory: ['item.mitko_photo','item.tony_diploma'], flags: { pepaMusicPlayed: true } })), true);
 });
 
 test("main quest guides opening, papers and posting, including legacy and dropped-paper states", () => {
@@ -110,6 +110,7 @@ test("main quest guides opening, papers and posting, including legacy and droppe
   ctx.state.flags.chapter1OpeningHeard = true;
   assert.equal(stage(), "stage.main.prepare_campaign");
   ctx.state.hasFakeDiploma = true;
+  ctx.state.flags.legacyPhotoCredentials = true;
   assert.equal(stage(), "stage.main.collect_pamphlets");
   use(kioskPamphletRule, ctx);
   assert.equal(stage(), "stage.main.post_campaign");

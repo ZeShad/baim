@@ -1,0 +1,8 @@
+{
+  "source": "C:\\Users\\SveBiS\\Desktop\\myStuff\\2026_GitPro\\extraFixes\\blender-workshop\\rakia-oil-200ml\\blender-r07\\kiro-bottle-shared-1L-r07.blend",
+  "halfVolumeRatio": 0.5,
+  "basis": "half of accepted shoulder-fill liquid mesh volume; not a nominal-millilitre claim",
+  "sourceUnchanged": true,
+  "glass": "new deterministic lathed glass; source-review candidate",
+  "renders": "new Cycles stills, not animation"
+}

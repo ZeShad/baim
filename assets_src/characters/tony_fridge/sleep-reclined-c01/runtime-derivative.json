@@ -1,0 +1,31 @@
+{
+  "inputSheetSHA256": "f9888bf5c090ed702b216ff1cc458c5d0344fd2ee50b4a03376a2c1aaf2e6228",
+  "sourceCrop": {
+    "left": 57,
+    "top": 58,
+    "width": 556,
+    "height": 748
+  },
+  "scale": 0.5,
+  "out": "assets/chapter1/characters/tony_fridge/sleep-reclined-c01.webp",
+  "sha256": "84e350bcc02a5561fb524c9b8c9a39c813bc1d850782bd9a0b161e1878494caa",
+  "bytes": 1833910,
+  "timingMs": 4800,
+  "definition": {
+    "asset": "tonySleepingIdle",
+    "frameWidth": 278,
+    "frameHeight": 374,
+    "frameCount": 64,
+    "columns": 8,
+    "frameDurationMs": 75,
+    "loop": true,
+    "freezeWhenPaused": true,
+    "contentBounds": {
+      "x": 0,
+      "y": 0,
+      "w": 278,
+      "h": 374
+    }
+  },
+  "preservation": "Same fixed union crop every frame; no per-frame fitting, cycle crop, interpolation or retiming. Original source retained; WebP is a runtime derivative."
+}

@@ -11,6 +11,7 @@
     "height": 720
   },
   "objects": [
+    { "id": "hotspot.mehana.tony_diploma", "rect": { "x": 932, "y": 453, "w": 90, "h": 48 } },
     {
       "id": "exit.mehana.to_square",
       "polygon": [

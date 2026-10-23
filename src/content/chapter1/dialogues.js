@@ -2,6 +2,7 @@ import { electionDialogue } from "./election.js";
 import { wireRegistrationDialogues } from "./registration.js";
 import { babaFountainDialogue, oilRefillRule } from "./fountain.js";
 import { campaignDialogues } from "./campaign.js";
+import { wireToniAftermathDialogues } from './toniAftermath.js';
 
 const baseDialogues = [
   electionDialogue,
@@ -116,6 +117,7 @@ const baseDialogues = [
             effect: {
               effects: [
                 { type: "setFlag", key: "tonyChallengeResolved" },
+                { type: 'setFlag', key: 'tonyPassedOut' },
                 { type: "setState", key: "tonyVote", value: true },
                 { type: "setState", key: "tonyFavorOwed", value: true },
                 { type: "adjustState", key: "influence", amount: 25 },
@@ -176,8 +178,8 @@ const baseDialogues = [
         choicesFrom: "start"
       },
       contest_result: {
-        lineKey: "dialogue.tony.contest_result",
-        reactionId: "approving_nod",
+        lineKey: 'photoquest.contest_result',
+        reactionId: 'approving_nod', // Existing approved source stays until the new collapse is reviewed.
         choices: [{ textKey: "dialogue.tony.choice.leave" }]
       },
       support_confirmed: {
@@ -528,4 +530,4 @@ const baseDialogues = [
   }
 ];
 
-export const dialogues = wireRegistrationDialogues(baseDialogues);
+export const dialogues = wireToniAftermathDialogues(wireRegistrationDialogues(baseDialogues));

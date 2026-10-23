@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';
+import {restorePhotoQuestSnapshot} from './photo-quest-preservation.js';
 import {readFileSync} from 'node:fs';
 import {createHash} from 'node:crypto';
 import {stripMitkoIdleRestoration} from './mitko-idle-preservation.js';
@@ -12,6 +13,7 @@ export function stripNortheastKiosk(path,source){
  return record.before;
 }
 export function restoreNortheastKioskSnapshot(kind,value){
+ value=restorePhotoQuestSnapshot(kind,value);
  const record=fixture.snapshots[kind];if(!record)return value;
  assert.equal(sha(JSON.stringify(value)),record.afterSHA256,'exact scene fix snapshot (northeast kiosk): '+kind);
  assert.equal(sha(JSON.stringify(record.before)),record.beforeSHA256,'immutable PR72 snapshot: '+kind);

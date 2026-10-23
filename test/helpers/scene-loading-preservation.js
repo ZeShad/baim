@@ -1,9 +1,11 @@
 import assert from 'node:assert/strict';
+import {stripPhotoQuest} from './photo-quest-preservation.js';
 import {createHash} from 'node:crypto';
 const sha=s=>createHash('sha256').update(s).digest('hex');
 const before='3ca77774eb0210ad7e23743eedb8dfd3224e23e9468276b3b2d2b5908a0d6881';
 const after='f3969c6989a3104b9a3b23cb41842c9c7eb47640ceba8a55389f2d3069a20327';
 export function stripSceneLoadingProtection(path,source){
+ source=stripPhotoQuest(path,source,true);
  if(path!=='src/engine/Game.js')return source;
  source=String(source).replaceAll('\r\n','\n');
  if(sha(source)!==after)return source; // Older inverses still reject every unknown edit.

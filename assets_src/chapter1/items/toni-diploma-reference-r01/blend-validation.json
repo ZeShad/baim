@@ -1,0 +1,29 @@
+{
+  "passed": true,
+  "report": [
+    {
+      "file": "toni-diploma.blend",
+      "holder": "ТОНЧО КАРАБАНОВ",
+      "editableAssessmentEntries": 18,
+      "grade": "Среден 3.00",
+      "overall": "Среден / 3.00 /",
+      "foldedPaperVertices": 2501,
+      "packedImages": [
+        "aged-paper-pattern.png",
+        "toni-portrait.png"
+      ]
+    },
+    {
+      "file": "pepa-mitko-diploma.blend",
+      "holder": "БАЙ МИТКО",
+      "editableAssessmentEntries": 18,
+      "grade": "Среден 3.00",
+      "overall": "Среден / 3.00 /",
+      "foldedPaperVertices": 2501,
+      "packedImages": [
+        "aged-paper-pattern.png",
+        "mitko-portrait.png"
+      ]
+    }
+  ]
+}
