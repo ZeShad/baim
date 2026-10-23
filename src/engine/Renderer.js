@@ -288,28 +288,7 @@ export class Renderer {
   }
 
   drawHoveredTarget(target = this.game.hoveredTarget) {
-    if (!target) return;
-    const { ctx } = this;
-    ctx.save();
-    ctx.strokeStyle = "rgba(225, 194, 100, 0.26)";
-    ctx.lineWidth = 2;
-    ctx.shadowColor = "rgba(225, 194, 100, 0.68)";
-    ctx.shadowBlur = 16;
-    ctx.beginPath();
-    if (target.polygon?.length) {
-      target.polygon.forEach((point, index) => {
-        if (index === 0) ctx.moveTo(point.x, point.y);
-        else ctx.lineTo(point.x, point.y);
-      });
-      ctx.closePath();
-    } else if (target.rect) {
-      ctx.rect(target.rect.x, target.rect.y, target.rect.w, target.rect.h);
-    } else {
-      ctx.restore();
-      return;
-    }
-    ctx.stroke();
-    ctx.restore();
+    // Hover still selects the target and updates the cursor, without painting an outline.
   }
 
   drawSeatedTableFallback(scene) {

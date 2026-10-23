@@ -2685,23 +2685,20 @@ test("hovering actionable geometry selects it and enables the pointer cursor", (
   assert.equal(game.canvas.style.cursor, "default");
 });
 
-test("hovered actionable geometry uses a transparent yellow outer glow", () => {
-  const calls = [];
-  const ctx = {
-    save() {},
-    restore() {},
-    beginPath() {},
-    rect(...args) { calls.push(["rect", ...args]); },
-    stroke() { calls.push(["stroke", this.strokeStyle, this.lineWidth, this.shadowColor, this.shadowBlur]); }
-  };
+test("hovered objects, NPCs and exits never paint an outline or glow", () => {
   const renderer = Object.create(Renderer.prototype);
-  renderer.ctx = ctx;
-  renderer.game = { hoveredTarget: { rect: { x: 10, y: 20, w: 30, h: 40 } } };
-
-  renderer.drawHoveredTarget();
-
-  assert.deepEqual(calls[0], ["rect", 10, 20, 30, 40]);
-  assert.deepEqual(calls[1], ["stroke", "rgba(225, 194, 100, 0.26)", 2, "rgba(225, 194, 100, 0.68)", 16]);
+  renderer.ctx = new Proxy({}, {
+    get() { assert.fail("Hover must not draw on the canvas"); },
+    set() { assert.fail("Hover must not alter canvas paint styles"); }
+  });
+  for (const target of [null, { kind: "object", rect: { x: 10, y: 20, w: 30, h: 40 } },
+    { kind: "npc", polygon: [{ x: 1, y: 2 }, { x: 3, y: 4 }, { x: 5, y: 6 }] },
+    { kind: "exit", rect: { x: 10, y: 20, w: 30, h: 40 } }]) {
+    renderer.game = { hoveredTarget: target };
+    renderer.drawHoveredTarget();
+    renderer.drawHoveredTarget(target);
+    assert.equal(renderer.game.hoveredTarget, target);
+  }
 });
 
 test("hover outline uses scene depth so Bai covers objects behind him", () => {
