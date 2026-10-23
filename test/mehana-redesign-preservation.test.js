@@ -4,6 +4,7 @@ import {readFileSync} from 'node:fs';
 import sharp from 'sharp';
 import {assetManifest} from '../src/content/art/assetManifest.js';
 import {chapter1} from '../src/content/chapter1/index.js';
+import {requirementsMet} from '../src/engine/EffectSystem.js';
 const baseline=JSON.parse(readFileSync('test/fixtures/mehana-redesign-tony-baseline.json'));
 test('mehana redesign preserves the approved Tony animation layer with owner-requested registration including every animation hook',()=>{
  assert.equal(baseline.approvedBaseline,'c4eb300673b5eb9aee77b3d9c247ceafbb22b7e4');
@@ -14,11 +15,18 @@ test('mehana full-canvas foregrounds preserve real transparency and room resolut
  const keys=['background','tonyTableOccluder','mehanaCounterFront','mehanaCellarHatch'];
  for(const key of keys){const path=assetManifest.scenes['scene.chapter1.mehana'][key],im=sharp(path),meta=await im.metadata();assert.deepEqual([meta.width,meta.height],[1280,720]);if(key!=='background'){const {data,info}=await im.ensureAlpha().raw().toBuffer({resolveWithObject:true});assert.equal(data[3],0);assert.ok(Array.from(data.filter((_,i)=>i%info.channels===3)).some(a=>a>0),key);}}
 });
-test('new furniture depth retains conditional oil, water, newspaper, both contest glasses and cellar semantics',()=>{
+test('new furniture depth retains oil, water, newspaper, staged contest props and cellar semantics',()=>{
  const scene=chapter1.scenes.find(s=>s.id==='scene.chapter1.mehana');const layer=id=>scene.foregroundLayers.find(l=>l.id==='layer.mehana.'+id);
  for(const id of ['kaliakra_oil','water_jug','newspaper_left_table','rear_chairs','table_group_left','table_group_right'])assert.equal(layer(id),undefined);
  for(const id of ['oil','water_jug','newspaper'])assert.equal(scene.interactables.find(t=>t.id==='hotspot.mehana.'+id).requirements.disabled,true);
- for(const id of ['mitko_competition_glass','tony_competition_glass']){assert.equal(layer(id).visibleWhenFlag,'tonyChallengeStarted');assert.equal(layer(id).hiddenWhenState,'tonyVote');}
+ for(const id of ['mitko_competition_glass','tony_competition_glass'])assert.equal(layer(id),undefined,'superseded contest layers stay retired');
+ const ids=['tony_rakia_half','tony_glass_half','mitko_water_bottle','mitko_empty_bottle','mitko_glass_empty','mitko_glass_water'];
+ for(const id of ids)assert.equal(layer(id).hiddenWhenFlag,'tonyPassedOut','every contest prop clears after blackout');
+ const visible=(flags,swappedOwnRakiaWithWater=false)=>ids.filter(id=>{const l=layer(id),state={flags,swappedOwnRakiaWithWater};return !state.flags[l.hiddenWhenFlag]&&requirementsMet(l.requirements,{state});});
+ assert.deepEqual(visible({}),['tony_rakia_half','tony_glass_half']);
+ assert.deepEqual(visible({tonyChallengeStarted:true}),['tony_rakia_half','tony_glass_half','mitko_water_bottle','mitko_glass_empty']);
+ assert.deepEqual(visible({tonyChallengeStarted:true},true),['tony_rakia_half','tony_glass_half','mitko_empty_bottle','mitko_glass_water']);
+ assert.deepEqual(visible({tonyChallengeStarted:true,tonyPassedOut:true},true),[]);
  assert.equal(scene.interactables.find(i=>i.id==='hotspot.mehana.cellar_hatch').useRules[0].reject,true);
  assert.equal(scene.interactables.find(i=>i.id==='hotspot.mehana.cellar_hatch').requirements.disabled,true);
  assert.equal(JSON.parse(readFileSync('assets_src/chapter1/scenes/mehana/layers.json')).layers.find(l=>l.id==='layer.mehana.cellar_hatch_preserved').enabled,false);

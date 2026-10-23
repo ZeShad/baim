@@ -133,7 +133,7 @@ test("Tony vote vertical slice is reachable from authored Chapter 1 data", () =>
   assert.deepEqual(completed, ["quest.chapter1.tony_vote"]);
 });
 
-test("fake diploma vertical slice combines recoverable authored inventory components", () => {
+test("obsolete bills and envelope recipe cannot bypass the new diploma quest", () => {
   const bills = chapter1.items.find((item) => item.id === "item.unpaid_bills");
   const inventory = inventoryWith("item.unpaid_bills", "item.empty_envelope");
   const state = {
@@ -156,11 +156,12 @@ test("fake diploma vertical slice combines recoverable authored inventory compon
 
   assert.ok(assembly);
   applyEffects(assembly.effects, context);
-  assert.equal(inventory.has("item.unpaid_bills"), false);
-  assert.equal(inventory.has("item.empty_envelope"), false);
-  assert.equal(inventory.has("item.fake_diploma"), true);
-  assert.equal(state.hasFakeDiploma, true);
-  assert.equal(state.suspicion, 4);
+  assert.equal(assembly.reject, true);
+  assert.equal(inventory.has("item.unpaid_bills"), true);
+  assert.equal(inventory.has("item.empty_envelope"), true);
+  assert.equal(inventory.has("item.fake_diploma"), false);
+  assert.equal(state.hasFakeDiploma, false);
+  assert.equal(state.suspicion, 0);
   assert.deepEqual(completed, []);
 });
 
@@ -172,12 +173,12 @@ test("fake diploma quest exposes its collection and assembly stages in order", (
   });
 
   assert.equal(objectiveFor({ hasUnpaidBills: false, hasEmptyEnvelope: false }).id,
-    "stage.fake_diploma.collect_official_paper");
-  assert.equal(objectiveFor({ hasUnpaidBills: true, hasEmptyEnvelope: false }, "item.unpaid_bills").id,
-    "stage.fake_diploma.collect_envelope");
+    'stage.photo.cupboard');
+  assert.equal(objectiveFor({ flags: { photoCupboardSolved: true } }, 'item.mitko_photo').id,
+    'stage.photo.music');
   assert.equal(objectiveFor(
-    { hasUnpaidBills: true, hasEmptyEnvelope: true }, "item.unpaid_bills", "item.empty_envelope"
-  ).id, "stage.fake_diploma.assemble");
+    { flags: { photoCupboardSolved: true, pepaMusicPlayed: true } }, 'item.mitko_photo'
+  ).id, 'stage.photo.tony');
 });
 
 test("the village-square envelope is a one-time recoverable diploma component", () => {

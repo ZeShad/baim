@@ -2,6 +2,7 @@ import { electionStages } from "./election.js";
 import { archiveStages } from "./archive.js";
 import { registrationStages } from "./registration.js";
 import { fountainQuestStages } from "./fountain.js";
+import { photoQuestStages } from './photoQuest.js';
 
 export const quests = [
   {
@@ -14,7 +15,7 @@ export const quests = [
       },
       {
         id: "stage.main.prepare_campaign",
-        titleKey: "campaign.quest.papers",
+        titleKey: "photoquest.stage.pepa",
         requirements: { state: { hasFakeDiploma: false } }
       },
       {
@@ -36,23 +37,7 @@ export const quests = [
     titleKey: "quest.chapter1.fake_diploma.title",
     stages: [
       ...registrationStages.map(stage => ({ ...stage, id: stage.id.replace("registration", "fake_diploma"), requirements: { ...stage.requirements, state: { hasFakeDiploma: true } } })),
-      {
-        id: "stage.fake_diploma.collect_official_paper",
-        titleKey: "quest.chapter1.fake_diploma.stage.collect_official_paper",
-        requirements: { state: { hasUnpaidBills: false, hasFakeDiploma: false } }
-      },
-      {
-        id: "stage.fake_diploma.collect_envelope",
-        titleKey: "quest.chapter1.fake_diploma.stage.collect_envelope",
-        requirements: { state: { hasEmptyEnvelope: false, hasFakeDiploma: false } }
-      },
-      {
-        id: "stage.fake_diploma.assemble",
-        titleKey: "quest.chapter1.fake_diploma.stage.assemble",
-        requirements: {
-          state: { hasUnpaidBills: true, hasEmptyEnvelope: true, hasFakeDiploma: false }
-        }
-      }
+      ...photoQuestStages
     ]
   },
   { id: "quest.chapter1.baba_vote", titleKey: "quest.chapter1.baba_vote.title", stages: fountainQuestStages },

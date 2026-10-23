@@ -45,6 +45,15 @@ export const assetManifest = {
       droppedBelongingsPile: "assets/chapter1/items/dropped-belongings-pile-v1.png"
     },
     "scene.chapter1.mehana": {
+      tonyDiploma: 'assets/chapter1/items/tony-diploma-table.png',
+      tonySleepingIdle: 'assets/chapter1/characters/tony_fridge/sleep-reclined-c01.webp',
+      tonyRakiaHalf: 'assets/chapter1/scenes/mehana/toni-contest/rakia-half.png',
+      tonyRakiaEmptySide: 'assets/chapter1/scenes/mehana/toni-contest/rakia-empty-side.png',
+      contestGlassEmpty: 'assets/chapter1/scenes/mehana/toni-contest/glass-empty.png',
+      contestGlassHalf: 'assets/chapter1/scenes/mehana/toni-contest/glass-half.png',
+      contestGlassWater: 'assets/chapter1/scenes/mehana/toni-contest/glass-water.png',
+      contestWaterBottle: 'assets/chapter1/scenes/mehana/toni-contest/water-bottle.png',
+      contestEmptyBottle: 'assets/chapter1/scenes/mehana/toni-contest/empty-bottle.png',
       background: "assets/chapter1/scenes/mehana/background-clean-occlusion-v1.png",
       tonyTableOccluder: "assets/chapter1/scenes/mehana/tony-table-occluder-v1.png",
       leftTablePlayerOccluder: "assets/chapter1/scenes/mehana/left-table-player-occluder-v1.png",
@@ -111,7 +120,9 @@ export const assetManifest = {
     }
   },
   items: {
-    "item.fake_diploma": { icon: "assets/chapter1/items/fake-diploma-v1.png", stampedIcon: "assets/chapter1/items/stamped-diploma-v1.png" },
+    'item.mitko_photo': { icon: 'assets/chapter1/items/mitko-photo.png' },
+    'item.tony_diploma': { icon: 'assets/chapter1/items/tony-diploma.png', model: 'assets/chapter1/items/tony-diploma-inspection.glb', inspection: 'document' },
+    "item.fake_diploma": { icon: "assets/chapter1/items/fake-diploma-v1.png", pepaIcon: 'assets/chapter1/items/pepa-mitko-diploma.png', stampedIcon: "assets/chapter1/items/stamped-diploma-v1.png" },
     "item.campaign_pamphlets": { icon: "assets/chapter1/items/campaign-pamphlets-v1.png" },
     "item.suspicious_receipt": { icon: "assets/chapter1/items/suspicious-receipt-v1.png" },
     "item.rakia": { icon: "assets/chapter1/items/rakia-v1.png" },

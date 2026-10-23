@@ -1286,6 +1286,46 @@
         "evidenceLocation": "C:/Users/SveBiS/Desktop/myStuff/2026_GitPro/extraFixes/09_TonyFridge/skeptical/",
         "promptDeviation": "Brief face/head rotation toward viewer instead of looking screen-left throughout; explicitly accepted in human runtime approval on 2026-10-01."
       }
+    },
+    "toni_sleep_reclined_c01": {
+      "slot": "Idle",
+      "status": "runtime_approved",
+      "use": true,
+      "loop": true,
+      "description": "Owner-accepted silent reclined sleeping aftermath after the contest blackout;64native75ms frames. Fixed union registration and tabletop occlusion; accepted wide-mouth acting and small seam reset retained. Not the ordinary awake seated idle.",
+      "generation": {
+        "unavailableEvidenceReason": "Owner-generated web export retained; cloud job identifier and charged credits not independently available. Runtime approval is separate from generation provenance and publication."
+      },
+      "source": {
+        "exportFilename": "Show-the-subject-from-this-image-in-a-new-pose-Kee-max-px-frames-64-rows-8-cols-8.zip",
+        "preservedZip": "assets_src/characters/tony_fridge/sleep-reclined-c01/original-export.zip",
+        "sourceZipSha256": "6dbb1f618e6a45cbb960434657d36c390edfad50b0d9f0af29719188416f9204",
+        "sheet": "assets_src/characters/tony_fridge/sleep-reclined-c01/sheet.png",
+        "sheetSHA256": "f9888bf5c090ed702b216ff1cc458c5d0344fd2ee50b4a03376a2c1aaf2e6228"
+      },
+      "review": {
+        "candidateStatus": "runtime_approved",
+        "decision": "approved_for_runtime",
+        "reviewer": "owner",
+        "approvedAt": "2026-10-23",
+        "publicationApproved": false,
+        "residuals": "Wide-mouth acting and small loop reset accepted; no further motion repair implied."
+      },
+      "import": {
+        "runtime": {
+          "asset": "assets/chapter1/characters/tony_fridge/sleep-reclined-c01.webp",
+          "frames": 64,
+          "frameDurationMs": 75,
+          "durationMs": 4800,
+          "sha256": "84e350bcc02a5561fb524c9b8c9a39c813bc1d850782bd9a0b161e1878494caa"
+        },
+        "derivationRecord": "assets_src/characters/tony_fridge/sleep-reclined-c01/runtime-derivative.json"
+      },
+      "trigger": {
+        "sceneId": "scene.chapter1.mehana",
+        "flag": "tonyPassedOut",
+        "committedDuring": "toni-contest-blackout"
+      }
     }
   }
 }

@@ -3,8 +3,10 @@ import { archiveEn } from "./chapter1Archive.js";
 import { registrationEn } from "./chapter1Registration.js";
 import { campaignEn } from "./chapter1Campaign.js";
 import { fountainEn } from "./chapter1Fountain.js";
+import { photoQuestEn } from './chapter1PhotoQuest.js';
 
 export const en = {
+  ...photoQuestEn,
   "bottle.glass_refused": "Tony knows Kiro's water glasses. I need murky fountain water in a rakia bottle.",
   "bottle.keep_oil": "The oil is for the valve. My insides are not due for maintenance.",
   "bottle.no_flow": "Empty bottle, dry fountain. First oil the valve with cooking oil from Kiro, then turn it.",
@@ -131,8 +133,8 @@ export const en = {
   "item.sunflower_oil.desc": "200 ml of Kiro's cooking oil in a rakia bottle. For the stuck fountain valve.",
   "item.glass_of_water.name": "Glass of Water",
   "item.glass_of_water.desc": "Colorless, nonpartisan, and suspiciously sober.",
-  "item.campaign_pamphlets.name": "Campaign Pamphlets",
-  "item.campaign_pamphlets.desc": "Promises on thin paper.",
+  "item.campaign_pamphlets.name": "Campaign Poster",
+  "item.campaign_pamphlets.desc": "Pepa’s campaign poster with Mitko’s photograph. Ready for the noticeboard.",
   "item.suspicious_receipt.name": "Suspicious Receipt",
   "item.suspicious_receipt.desc": "It says receipt. It smells like evidence.",
   "item.pickle_jar.name": "Pickle Jar",

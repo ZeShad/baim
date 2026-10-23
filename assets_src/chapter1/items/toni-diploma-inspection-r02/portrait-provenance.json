@@ -1,0 +1,16 @@
+{
+  "source": "owner-diploma-reference.jpg",
+  "sourceSHA256": "e907d607ab70e7a0bb9bd99f7c2432594733a45decca59e883069e1b9644be2d",
+  "cropNativePixels": [
+    64,
+    66,
+    414,
+    534
+  ],
+  "sourceDimensions": [
+    2560,
+    1756
+  ],
+  "portraitSHA256": "a9bdbefe24973e7469d824aab5a4b0214bc614ad8e47f621b9da941ee6473583",
+  "modification": "Exact young-man photograph crop from owner reference; no generated identity, retouch or age change."
+}

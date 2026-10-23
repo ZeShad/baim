@@ -11,9 +11,13 @@ import { QuestSystem } from "./QuestSystem.js";
 import { Renderer } from "./Renderer.js";
 import { SceneIdleVariations, sceneIdleVariationsBlocked } from "./SceneIdleVariations.js";
 import { mountItemModelViewer } from "./ItemModelViewer.js";
+import { createSlidingPuzzle } from './SlidingPuzzleView.js';
+import { photoReward } from '../content/chapter1/photoQuest.js';
+import { initialPuzzle } from './SlidingBlockPuzzle.js';
 import { SceneActionSequence } from "./SceneActionSequence.js";
 import { kiroOilSequence } from "../content/art/kiroOilHandover.generated.js";
 import { fountainRepairSequence } from "../content/chapter1/fountain.js";
+import { toniContestFade } from '../content/chapter1/toniAftermath.js';
 import { SceneNpcSpeech } from "./SceneNpcSpeech.js";
 import { SaveSystem } from "./SaveSystem.js";
 import { SceneEditor } from "./SceneEditor.js";
@@ -220,12 +224,12 @@ export class Game {
     const dt = Math.min(0.05, (time - this.lastTime) / 1000 || 0);
     this.lastTime = time;
     this.updateTimedIntoxication();
-    if (this.paused || this.menuOpen || this.dialogue.current || this.devHome || this.editMode || this.state.chapter1Completed) this.audio.resetFootsteps();
+    if (this.puzzleOpen || this.paused || this.menuOpen || this.dialogue.current || this.devHome || this.editMode || this.state.chapter1Completed) this.audio.resetFootsteps();
     if (this.simpleAnimTest) {
       this.updateSimpleAnim(dt);
     } else if (this.animLab) {
       this.player.animationTime += dt;
-    } else if (!this.paused && !this.menuOpen && !this.dialogue.current && !this.sceneAction?.active) {
+    } else if (!this.puzzleOpen && !this.paused && !this.menuOpen && !this.dialogue.current && !this.sceneAction?.active) {
       this.player.animator.beginTick();
       const finishingStopFrame = this.finishingStopFrame();
       const feetBefore = { ...this.player.position };
@@ -349,6 +353,7 @@ export class Game {
       this.releaseDialogueChoicePointerLock(event.pointerId);
     });
     window.addEventListener("keydown", (event) => {
+      if (this.puzzleOpen) return; // The modal owns Escape, arrows and focus trapping.
       if (this.inspectedItemId) {
         if (event.key === "Escape") { event.preventDefault(); this.closeItemInspection(); }
         if (event.key === "Tab") {
@@ -1252,7 +1257,7 @@ export class Game {
   }
 
   updateHoveredTarget(point) {
-    const blocked = this.inspectedItemId || this.sceneAction?.active || this.menuOpen || this.paused || this.dialogue.current
+    const blocked = this.puzzleOpen || this.inspectedItemId || this.sceneAction?.active || this.menuOpen || this.paused || this.dialogue.current
       || this.sceneTransitionPending || this.player?.actionSequence || this.player?.animation === "action";
     const previousTargetId = this.hoveredTarget?.id || null;
     this.hoveredTarget = !blocked && point
@@ -1283,7 +1288,7 @@ export class Game {
   }
 
   handleTarget(target, clickPoint = null) {
-    if (this.inspectedItemId || this.sceneAction?.active) return;
+    if (this.puzzleOpen || this.inspectedItemId || this.sceneAction?.active) return;
     if (this.shouldApproachTargetBeforeAction(target, clickPoint)) return;
     this.performTargetAction(target);
   }
@@ -1543,7 +1548,7 @@ export class Game {
   }
 
   walkToPoint(point, facingPoint = point, options = {}) {
-    if (this.inspectedItemId || this.sceneAction?.active) return;
+    if (this.puzzleOpen || this.inspectedItemId || this.sceneAction?.active) return;
     if (!isWalkable(this.currentScene, point)) return false;
     const path = options.path || findWalkPath(this.currentScene, this.player.position, point);
     if (!path.length) return false;
@@ -1563,7 +1568,7 @@ export class Game {
   }
 
   performTargetAction(target, forcedActionSequence = null) {
-    if (this.inspectedItemId || this.sceneAction?.active) return;
+    if (this.puzzleOpen || this.inspectedItemId || this.sceneAction?.active) return;
     if (this.inventoryUseItemId) {
       this.useInventoryItemOnTarget(this.inventoryUseItemId, target);
       return;
@@ -1606,6 +1611,7 @@ export class Game {
       }
       return;
     }
+    if ((this.selectedVerb === VERBS.USE || this.selectedVerb === VERBS.TAKE) && target.puzzleId) return this.useTarget(target);
     if (this.selectedVerb === VERBS.TAKE && target.takeItemId) {
       this.takeTarget(target);
       return;
@@ -1646,6 +1652,13 @@ export class Game {
   }
 
   useTarget(target) {
+    if (target.puzzleId === 'photo_cupboard') {
+      if (this.state.flags.photoCupboardSolved) return this.setStatusMessage(this.t('photoquest.cupboard_empty'));
+      this.puzzleOpen = true; this.puzzleSceneId = this.currentScene.id;
+      this.puzzleReturnFocus = document.activeElement;
+      this.player.pendingInteraction = null;
+      this.state.photoPuzzle ||= initialPuzzle(); this.renderUi(); return;
+    }
     if (target.endingTrigger) return this.requestEnding(target.endingTrigger);
     if (target.useDialogueId) {
       this.clearStatusMessage();
@@ -1792,7 +1805,7 @@ export class Game {
 
   startSceneAction(effect) {
     if (!requirementsMet(effect.requirements, this.effectContext())) return false;
-    const definition = [kiroOilSequence, fountainRepairSequence].find(candidate => candidate.id === effect.sceneSequence);
+    const definition = [kiroOilSequence, fountainRepairSequence, toniContestFade].find(candidate => candidate.id === effect.sceneSequence);
     if (definition?.type === 'fade' && !this.sceneActionAssetsAvailable(definition)) return false;
     if (!definition || !this.sceneAction.start(this.currentScene.id, definition, frame => this.sceneActionFrameAvailable(frame))) return false;
     this.sceneActionEffect = effect;
@@ -1839,7 +1852,15 @@ export class Game {
         this.protectCurrentAssetWorkingSet(); this.save();
         if (effect.messageKey) this.setStatusMessage(this.t(effect.messageKey));
       }
-      if (performance.phase === 'received') { this.sceneAction.reset(); this.renderUi(); }
+      if (performance.phase === 'received') {
+        const speech = performance.committed && performance.definition.completionSpeech;
+        this.sceneAction.reset();
+        if (speech) {
+          const speaker = this.currentScene.npcs?.find(npc => npc.id === speech.npcId);
+          if (speaker) this.setNpcSpeechMessage(speaker, this.t(speech.messageKey));
+        }
+        this.renderUi();
+      }
       return;
     }
     if (this.sceneAction.state.phase === 'received' && this.sceneActionEffect) {
@@ -1882,8 +1903,12 @@ export class Game {
     const title = document.createElement('h2'); title.textContent = this.t(item.nameKey);
     const viewer = element('div', 'item-model-viewer');
     const text = Object.fromEntries(['loading','unavailable','controls'].map(key => [key, this.t('ui.received_oil.' + key)]));
+    if (asset.inspection === 'document') {
+      viewer.classList.add('item-model-viewer-document');
+      for (const key of ['loading','unavailable','controls']) text[key] = this.t('photoquest.diploma_' + key);
+    }
     text.name = this.t(item.nameKey);
-    this.receivedItemViewer = mountItemModelViewer(viewer, { modelUrl: asset.model, fallbackUrl: asset.icon, text, liquidColor: asset.liquidColor });
+    this.receivedItemViewer = mountItemModelViewer(viewer, { modelUrl: asset.model, fallbackUrl: asset.icon, text, liquidColor: asset.liquidColor, inspection: asset.inspection });
     const description = document.createElement('p'); description.textContent = this.t(item.descriptionKey);
     panel.append(title, viewer, description, button(this.t('ui.received_oil.close'), () => {
       this.closeItemInspection();
@@ -1946,6 +1971,7 @@ export class Game {
   }
 
   async changeScene(sceneId, position) {
+    this.puzzleOpen = false; this.puzzleView?.dispose(); this.puzzleView = null;
     if (!this.content.scenes[sceneId]) {
       this.message = this.t("msg.scene_not_ready");
       return;
@@ -2024,6 +2050,7 @@ export class Game {
   }
 
   reset() {
+    this.puzzleOpen = false; this.puzzleView?.dispose(); this.puzzleView = null;
     // Invalidate old continuations before replacing state or clearing storage.
     this.sceneLoadToken = null;
     this.pendingSceneAssetId = null;
@@ -2101,6 +2128,7 @@ export class Game {
   }
 
   renderUi() {
+    this.puzzleView?.dispose(); this.puzzleView = null;
     this.receivedItemViewer?.dispose(); this.receivedItemViewer = null;
     if (this.simpleAnimTest) {
       this.renderSimpleAnimControls();
@@ -2141,6 +2169,19 @@ export class Game {
     this.uiRoot.appendChild(this.createTopBar());
     if (this.sceneAction?.state?.phase === 'received') this.uiRoot.appendChild(this.createReceivedItem());
     if (this.inspectedItemId && !this.menuOpen && !this.paused) this.uiRoot.appendChild(this.createItemInspection());
+    if (this.puzzleOpen && !this.menuOpen && !this.paused) {
+      const close = () => { this.puzzleOpen = false; this.renderUi(); this.puzzleReturnFocus?.focus?.(); };
+      this.puzzleView = createSlidingPuzzle({ state: this.state.photoPuzzle,
+        text: key => this.t(`photoquest.puzzle.${key}`),
+        onChange: state => { this.state.photoPuzzle = state; this.save(); },
+        onClose: close,
+        onSolved: () => {
+          if (!this.puzzleOpen || this.currentScene.id !== this.puzzleSceneId || this.state.flags.photoCupboardSolved) return;
+          this.puzzleOpen = false; this.applyContentEffect(photoReward);
+        }
+      });
+      this.uiRoot.append(this.puzzleView.element);
+    }
   }
 
   createHud() {

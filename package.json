@@ -31,7 +31,7 @@
     "check:animation-catalogs": "npm run check:animation-catalog",
     "fit:action": "node tools/register-external-action.mjs",
     "verify:action-render": "node tools/verify-action-render.mjs",
-    "test": "node --test test/*.test.js"
+    "test": "node --test --test-concurrency=2 test/*.test.js"
   },
   "dependencies": {
     "gifenc": "^1.0.3",

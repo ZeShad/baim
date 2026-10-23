@@ -55,6 +55,9 @@ test("inventory preload discovery includes every authored high-resolution item i
     assetManifest.items["item.campaign_pamphlets"].icon,
     assetManifest.items["item.fake_diploma"].icon,
     assetManifest.items["item.fake_diploma"].stampedIcon,
+    assetManifest.items['item.fake_diploma'].pepaIcon,
+    assetManifest.items['item.mitko_photo'].icon,
+    assetManifest.items['item.tony_diploma'].icon,
     assetManifest.items["item.suspicious_receipt"].icon,
     assetManifest.items["item.rakia"].icon,
     assetManifest.items["item.shopska_salad"].icon,
@@ -637,7 +640,7 @@ test("inventory self-use applies the item's authored rule and clears the expande
   assert.equal(game.selectedInventoryItemId, null);
 });
 
-test("inventory item combination finds the fake-diploma rule in either selection order", () => {
+test("inventory item combination finds the obsolete-recipe refusal in either selection order", () => {
   const game = Object.create(Game.prototype);
   const owned = new Set(["item.unpaid_bills", "item.empty_envelope"]);
   const applied = [];
@@ -651,7 +654,7 @@ test("inventory item combination finds the fake-diploma rule in either selection
   game.inventoryUseItemId = "item.empty_envelope";
 
   assert.equal(game.useInventoryItemOnItem("item.empty_envelope", "item.unpaid_bills"), true);
-  assert.deepEqual(applied, ["msg.fake_diploma.assembled"]);
+  assert.deepEqual(applied, ['photoquest.bills_not_diploma']);
   assert.equal(game.inventoryUseItemId, null);
 });
 

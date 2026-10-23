@@ -2,6 +2,8 @@
 
 # Chapter 1 Gameplay Flow Contract
 
+> **22 October current revision:** see [current script](chapter1-script-2026-10-22.md) for the owner-approved photograph puzzle, Pepa music favor, separate poster and Tony-diploma route. These replace the old bills/envelope recipe below. New local gameplay is under review; Tony's collapse artwork and release verification remain pending.
+
 ## Completion pass — 16 September 2026
 
 The [reconciled completion plan](chapter1-completion-plan-160926.md) defines the

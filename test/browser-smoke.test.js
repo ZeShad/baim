@@ -4,6 +4,8 @@ import { spawn } from "node:child_process";
 import { browserAvailable } from "./helpers/browser-availability.js";
 import { createServer } from "node:net";
 import { fileURLToPath } from "node:url";
+import { mkdirSync, writeFileSync } from "node:fs";
+import { join } from "node:path";
 import { chromium } from "playwright";
 import { observeImageRequests, waitForLoadedImage } from "./helpers/browser-image-readiness.js";
 
@@ -80,7 +82,7 @@ test("browser completes the required Chapter 1 path and restores the ending afte
       });
     });
 
-    await t.test("Docheva's inline dialogue keeps every choice reachable in both languages", async () => {
+    await t.test("Pepa's inline dialogue keeps every available choice reachable in both languages", async () => {
       for (const viewport of [{ width: 1280, height: 720 }, { width: 640, height: 360 }, { width: 390, height: 844 }]) {
         await page.setViewportSize(viewport);
         for (const language of ["bg", "en"]) {
@@ -88,7 +90,7 @@ test("browser completes the required Chapter 1 path and restores the ending afte
             const { game } = window.__comradeCandidateTest;
             await game.changeScene("scene.chapter1.village_square");
             game.setLanguage(language);
-            game.inventory.add("item.unpaid_bills");
+            game.inventory.add('item.accordion');
             game.dialogue.start("dialogue.penka_kiosk");
             game.renderUi();
           }, language);
@@ -106,7 +108,7 @@ test("browser completes the required Chapter 1 path and restores the ending afte
           const leave = await page.evaluate(() => window.__comradeCandidateTest.game.t("campaign.kiosk.choice.leave"));
           await page.getByRole("button", { name: leave, exact: true }).click();
           assert.equal(await page.locator(".dialogue-panel").count(), 0);
-          await page.evaluate(() => window.__comradeCandidateTest.game.inventory.remove("item.unpaid_bills"));
+          await page.evaluate(() => window.__comradeCandidateTest.game.inventory.remove('item.accordion'));
         }
       }
       await page.setViewportSize({ width: 1280, height: 720 });
@@ -121,6 +123,11 @@ test("browser completes the required Chapter 1 path and restores the ending afte
       await game.changeScene("scene.chapter1.village_square");
       game.takeTarget(find(game.currentScene.interactables, "hotspot.square.empty_envelope"));
       game.useInventoryItemOnItem("item.unpaid_bills", "item.empty_envelope");
+
+      // This journey verifies historical earned credentials and the retained loss ending.
+      // The new fresh-game photo/Tony path is exercised below, not by the obsolete recipe.
+      game.inventory.add('item.fake_diploma'); game.state.hasFakeDiploma=true;
+      game.state.flags.legacyPhotoCredentials=true;
 
       const choose = (dialogueId, key) => {
         const choice = game.content.dialogues[dialogueId].nodes.start.choices.find(c => c.textKey === key);
@@ -265,24 +272,40 @@ async function availablePort() {
   return port;
 }
 
-test("fresh Chapter 1 journeys reach all three endings through real clicks in Bulgarian and English", { timeout: 600_000 }, async (t) => {
+test("fresh photo and Tony diploma journeys reach narrow and convincing wins through real BG/EN clicks", { timeout: 600_000 }, async (t) => {
   if (!browserAvailable(t, chromium.executablePath())) return;
   const port = await availablePort();
   const server = spawn(process.execPath, ["tools/dev-server.mjs"], {
     cwd: projectRoot, env: { ...process.env, PORT: String(port) }, stdio: "ignore"
   });
   let browser;
+  const evidenceRoot = join(projectRoot, 'target/photo-quest-review', `native-${Date.now()}`);
+  mkdirSync(evidenceRoot, { recursive: true });
   try {
     await waitForServer(`http://127.0.0.1:${port}/`);
     browser = await chromium.launch({ headless: true });
     for (const language of ["bg", "en"]) {
-      const context = await browser.newContext({ viewport: { width: 1280, height: 720 }, serviceWorkers: "block" });
+      const context = await browser.newContext({ viewport: { width: 1280, height: 720 }, serviceWorkers: "block",
+        recordVideo: { dir: evidenceRoot, size: { width: 1280, height: 720 } } });
       const page = await context.newPage();
       const imageNetwork = observeImageRequests(page);
+      const videoPath = await page.video().path(), marks = [], startedAtMs = Date.now();
+      const mark = async name => {
+        const state = await page.evaluate(() => {
+          const g = window.__comradeCandidateTest.game;
+          return { scene: g.currentScene.id, flags: structuredClone(g.state.flags),
+            inventory: [...g.state.inventory], influence: g.state.influence, tonyVote: g.state.tonyVote,
+            sceneActionActive: g.sceneAction.active, npcSpeech: g.npcSpeechBubble?.text || null };
+        });
+        marks.push({ name, elapsedMs: Date.now()-startedAtMs, state });
+        writeFileSync(join(evidenceRoot, `${language}-journey.json`), JSON.stringify({ language, videoPath, startedAtMs, marks, scope: 'Fresh actual UI path; state read for assertions/evidence only' }, null, 2));
+        t.diagnostic(`${language}: ${name}`);
+      };
       await page.goto(`http://127.0.0.1:${port}/?play=1&testHarness=1`);
       await page.evaluate(() => window.__comradeCandidateTest.ready);
       // Language is setup; all progression below uses normal mouse input.
       await page.evaluate(language => window.__comradeCandidateTest.game.setLanguage(language), language);
+      await mark('fresh-start');
       const waitFor = (predicate) => page.waitForFunction(predicate, undefined, { timeout: 25_000 });
       const verb = name => selectVerb(page, name);
       const clickTarget = id => clickSceneTarget(page, id);
@@ -292,6 +315,15 @@ test("fresh Chapter 1 journeys reach all three endings through real clicks in Bu
       await clickTarget("hotspot.apartment.unpaid_bills");
       await waitFor(() => window.__comradeCandidateTest.game.inventory.has("item.unpaid_bills"));
       await waitFor(() => !window.__comradeCandidateTest.game.player.actionSequence);
+      await verb('use');
+      await clickTarget('hotspot.apartment.photo_cupboard');
+      await page.locator('.photo-puzzle-view[data-model-state=ready]').waitFor();
+      for(const [piece,dir] of [['yellow1','up'],['yellow3','up'],['yellow4','up'],['red3','left'],['red4','right'],['blue','down']]) {
+        await page.locator(`[data-piece=${piece}]`).click();await page.locator(`[data-direction=${dir}]`).click();
+      }
+      await waitFor(()=>window.__comradeCandidateTest.game.inventory.has('item.mitko_photo'));
+      await mark('photograph-earned-by-puzzle');
+      await verb('take');
       await clickTarget("hotspot.apartment.accordion");
       await waitFor(() => window.__comradeCandidateTest.game.inventory.has("item.accordion"));
       await waitFor(() => !window.__comradeCandidateTest.game.player.actionSequence);
@@ -300,10 +332,14 @@ test("fresh Chapter 1 journeys reach all three endings through real clicks in Bu
       await verb("talk");
       await clickTarget("hotspot.square.kiosk");
       await page.locator(".dialogue-panel").waitFor({ timeout: 25_000 });
-      const handover = await page.evaluate(() => window.__comradeCandidateTest.game.t("campaign.kiosk.choice.give_bills"));
+      const music = await page.evaluate(() => window.__comradeCandidateTest.game.t('photoquest.play'));
+      await page.getByRole('button',{name:music,exact:true}).click();
+      await clickTarget('hotspot.square.kiosk');
+      await page.locator('.dialogue-panel').waitFor();
+      const handover = await page.evaluate(() => window.__comradeCandidateTest.game.t('photoquest.make_poster'));
       await page.getByRole("button", { name: handover, exact: true }).click();
       await waitFor(() => window.__comradeCandidateTest.game.inventory.has("item.campaign_pamphlets"));
-      assert.equal(await page.evaluate(() => window.__comradeCandidateTest.game.inventory.has("item.unpaid_bills")), false);
+      assert.equal(await page.evaluate(() => window.__comradeCandidateTest.game.inventory.has('item.mitko_photo')), true);
       const pamphletIcon = page.locator('[data-item-id="item.campaign_pamphlets"] img');
       await waitForLoadedImage(page, '[data-item-id="item.campaign_pamphlets"] img', { network: imageNetwork });
       assert.equal(await pamphletIcon.isVisible(), true);
@@ -322,7 +358,8 @@ test("fresh Chapter 1 journeys reach all three endings through real clicks in Bu
       assert.notDeepEqual(await page.screenshot({ clip: { x: 1047, y: 255, width: 60, height: 153 } }), posterBefore);
 
       assert.equal(await page.evaluate(() => window.__comradeCandidateTest.game.inventory.has("item.campaign_pamphlets")), false);
-      assert.equal(await page.evaluate(() => window.__comradeCandidateTest.game.inventory.has("item.fake_diploma")), true);
+      assert.equal(await page.evaluate(() => window.__comradeCandidateTest.game.inventory.has('item.fake_diploma')), false);
+      await mark('poster-posted-and-reloaded');
       await verb("look");
       await clickTarget("hotspot.square.poster_board");
       await waitFor(() => {
@@ -339,14 +376,79 @@ test("fresh Chapter 1 journeys reach all three endings through real clicks in Bu
         await clickTarget(id);
         await page.waitForFunction(id => window.__comradeCandidateTest.game.currentScene.id === id, destination);
       };
+      const useItem = async id => {
+        await page.locator('[data-item-id="'+id+'"]').click();
+        await page.locator('.inventory-item-actions').getByRole('button',{name:use,exact:true}).click();
+      };
+      await verb('look');await clickTarget('hotspot.square.fountain');
+      await go('exit.square.to_mehana','scene.chapter1.mehana');
+      await talk('npc.mehana_waiter');await choice('fountain.kiro.choice.refill');
+      await waitFor(()=>window.__comradeCandidateTest.game.inventory.has('item.sunflower_oil'));
+      await page.locator('.received-item-screen > button:last-child').click();
+      await go('exit.mehana.to_square','scene.chapter1.village_square');
+      await useItem('item.sunflower_oil');await clickTarget('hotspot.square.statue');
+      await waitFor(()=>window.__comradeCandidateTest.game.state.flags.fountainRepaired&&!window.__comradeCandidateTest.game.sceneAction.active);
+      await useItem('item.empty_rakia_bottle');await clickTarget('hotspot.square.fountain');
+      await waitFor(()=>window.__comradeCandidateTest.game.inventory.has('item.fountain_water_bottle'));
+      await go('exit.square.to_mehana','scene.chapter1.mehana');
+      await talk('npc.tony_fridge');
+      for(const key of ['dialogue.tony.choice.challenge','dialogue.tony.choice.accept','dialogue.tony.choice.prepare'])await choice(key);
+      await useItem('item.accordion');await clickTarget('npc.tony_fridge');
+      await waitFor(()=>window.__comradeCandidateTest.game.state.flags.tonyDistracted);
+      await useItem('item.fountain_water_bottle');await clickTarget('hotspot.mehana.bai_mitko_rakia_glass');
+      await waitFor(()=>window.__comradeCandidateTest.game.state.swappedOwnRakiaWithWater);
+      await mark('toni-water-prepared-before-contest');
+      await talk('npc.tony_fridge');await choice('dialogue.tony.choice.finish_challenge');
+      assert.equal(await page.evaluate(()=>window.__comradeCandidateTest.game.dialogue.current),null,'contest closes dialogue for the blackout');
+      await waitFor(()=>{const g=window.__comradeCandidateTest.game;return g.state.flags.tonyPassedOut&&!g.sceneAction.active;});
+      const aftermath = await page.evaluate(async()=>{
+        const g=window.__comradeCandidateTest.game,{requirementsMet}=await import('/src/engine/EffectSystem.js');
+        const visible=g.currentScene.foregroundLayers.filter(l=>!l.requirements||requirementsMet(l.requirements,g.effectContext())).filter(l=>!l.hiddenWhenFlag||!g.state.flags[l.hiddenWhenFlag]);
+        const sleep=g.assets.getSceneImage(g.currentScene.id,'tonySleepingIdle');
+        return { vote:g.state.tonyVote, influence:g.state.influence, speech:g.npcSpeechBubble?.text,
+          expectedSpeech:g.t('photoquest.kiro_cleanup'), sleepLoaded:g.assets.isLoaded(sleep),
+          visibleContestProps:visible.filter(l=>/layer.mehana.(tony_rakia|tony_glass|mitko_.*(bottle|glass))/.test(l.id)).map(l=>l.id) };
+      });
+      assert.equal(aftermath.vote,true);assert.equal(aftermath.speech,aftermath.expectedSpeech);
+      assert.equal(aftermath.sleepLoaded,true);assert.deepEqual(aftermath.visibleContestProps,[]);
+      await mark('toni-blackout-revealed-cleanup-and-sleep');
+      await page.waitForTimeout(5000); // Observe one complete native4.8s sleeping loop in the recorded game.
+      await mark('toni-complete-native-sleep-loop');
+      await go('exit.mehana.to_square','scene.chapter1.village_square');
+      await go('exit.square.to_mehana','scene.chapter1.mehana');
+      await page.reload();await page.evaluate(()=>window.__comradeCandidateTest.ready);
+      assert.deepEqual(await page.evaluate(()=>{const g=window.__comradeCandidateTest.game;return {sleep:g.state.flags.tonyPassedOut,vote:g.state.tonyVote,influence:g.state.influence,active:g.sceneAction.active,speech:g.npcSpeechBubble?.text||null};}),
+        {sleep:true,vote:true,influence:aftermath.influence,active:false,speech:null});
+      await talk('npc.tony_fridge');
+      await waitFor(()=>{const g=window.__comradeCandidateTest.game;return g.npcSpeechBubble?.text===g.t('photoquest.tony_sleeping');});
+      assert.equal(await page.evaluate(()=>window.__comradeCandidateTest.game.dialogue.current),null,'sleeping Toni cannot resume lively dialogue');
+      await mark('toni-return-reload-still-asleep-no-repeat-reward');
+      await verb('take');const diplomaPoint=await clickTarget('hotspot.mehana.tony_diploma');
+      await waitFor(()=>window.__comradeCandidateTest.game.inventory.has('item.tony_diploma'));
+      await page.locator('#game').click({position:diplomaPoint});
+      assert.equal(await page.evaluate(()=>window.__comradeCandidateTest.game.state.inventory.filter(id=>id==='item.tony_diploma').length),1);
+      await page.reload();await page.evaluate(()=>window.__comradeCandidateTest.ready);
+      assert.equal(await page.evaluate(()=>window.__comradeCandidateTest.game.state.flags.tonyDiplomaTaken),true);
+      await page.locator('[data-item-id="item.tony_diploma"]').click();
+      const inspect=await page.evaluate(()=>window.__comradeCandidateTest.game.t('ui.inventory.inspect'));
+      await page.locator('.inventory-item-actions').getByRole('button',{name:inspect,exact:true}).click();
+      await page.locator('.item-model-viewer[data-model-state=ready]').waitFor();
+      assert.equal(await page.locator('.received-item-screen p').count(),1);
+      assert.equal(await page.locator('.received-item-screen p').innerText(),await page.evaluate(()=>window.__comradeCandidateTest.game.t('photoquest.diploma_desc')));
+      await mark('diploma-single-pickup-reload-real-inspection');
+      await page.keyboard.press('Escape');
+      await go('exit.mehana.to_square','scene.chapter1.village_square');
+      await talk('hotspot.square.kiosk');await choice('photoquest.make_diploma');
+      await waitFor(()=>window.__comradeCandidateTest.game.inventory.has('item.fake_diploma'));
+      assert.deepEqual(await page.evaluate(()=>{const g=window.__comradeCandidateTest.game;return {original:g.state.inventory.filter(id=>id==='item.tony_diploma').length,altered:g.state.inventory.filter(id=>id==='item.fake_diploma').length,photo:g.state.inventory.filter(id=>id==='item.mitko_photo').length};}),{original:0,altered:1,photo:1});
+      await page.reload();await page.evaluate(()=>window.__comradeCandidateTest.ready);
+      assert.equal(await page.evaluate(()=>window.__comradeCandidateTest.game.state.flags.pepaDiplomaAltered),true);
+      await mark('pepa-altered-copy-and-photo-persist');
       await talk("npc.journalist");
       await choice("registration.ask_evidence");
       await choice("registration.leave");
-      await go("exit.square.to_mehana", "scene.chapter1.mehana");
-      await talk("npc.mehana_waiter");
-      await choice("registration.kiro_receipt");
-      await waitFor(() => window.__comradeCandidateTest.game.inventory.has("item.suspicious_receipt"));
-      await go("exit.mehana.to_square", "scene.chapter1.village_square");
+      // Tony's completed contest already awarded the receipt; Kiro is only its fallback.
+      assert.equal(await page.evaluate(()=>window.__comradeCandidateTest.game.inventory.has('item.suspicious_receipt')),true);
       await talk("npc.journalist");
       await choice("registration.give_receipt");
       await waitFor(() => window.__comradeCandidateTest.game.state.flags.journalistInOffice);
@@ -385,10 +487,6 @@ test("fresh Chapter 1 journeys reach all three endings through real clicks in Bu
       await verb("look");
       await clickTarget("hotspot.archive.handle");
       await waitFor(() => window.__comradeCandidateTest.game.state.flags.archiveHandleInspected);
-      const useItem = async id => {
-        await page.locator('[data-item-id="' + id + '"]').click();
-        await page.locator(".inventory-item-actions").getByRole("button", { name: use, exact: true }).click();
-      };
       await useItem("item.accordion");
       await clickTarget("hotspot.archive.handle");
       await waitFor(() => window.__comradeCandidateTest.game.state.flags.archiveOpened);
@@ -456,63 +554,21 @@ test("fresh Chapter 1 journeys reach all three endings through real clicks in Bu
           await page.evaluate(() => window.__comradeCandidateTest.game.t("election.epilogue.creditors"))));
       };
       if (language === "bg") {
-        await finish("loss");
+        await finish('narrow_win');
       } else {
+        // A fresh diploma now requires Tony's support. Baba remains optional.
+        const tonyOnlySave = await page.evaluate(() => localStorage.getItem('comrade-candidate.save.v1'));
+        await finish('narrow_win');
+        await page.evaluate(raw=>localStorage.setItem('comrade-candidate.save.v1',raw),tonyOnlySave);
+        await page.reload();await page.evaluate(()=>window.__comradeCandidateTest.ready);
         await go("exit.election_booth.to_square", "scene.chapter1.village_square");
-        await talk("npc.baba_stoyanka");
-        await choice("dialogue.baba.choice.ask_vote");
-        await choice("dialogue.baba.choice.leave");
-        await verb("look");
-        await clickTarget("hotspot.square.fountain");
-        await waitFor(() => window.__comradeCandidateTest.game.state.flags.fountainDiagnosed);
-        await go("exit.square.to_mehana", "scene.chapter1.mehana");
-        await verb("talk");
-        await clickTarget("npc.mehana_waiter");
-        await choice("fountain.kiro.choice.refill");
-        await waitFor(() => window.__comradeCandidateTest.game.inventory.has("item.sunflower_oil"));
-    await page.locator(".received-item-screen > button:last-child").click();
-        await go("exit.mehana.to_square", "scene.chapter1.village_square");
-        await useItem("item.sunflower_oil");
-        await clickTarget("hotspot.square.statue");
-        await waitFor(() => window.__comradeCandidateTest.game.state.flags.fountainValveOiled && !window.__comradeCandidateTest.game.sceneAction.active);
-        await verb("use");
-        await clickTarget("hotspot.square.fountain");
-        await waitFor(() => window.__comradeCandidateTest.game.state.flags.fountainRepaired);
         await talk("npc.baba_stoyanka");
         await choice("fountain.baba.choice.report");
         await waitFor(() => window.__comradeCandidateTest.game.state.babaStoyankaVote);
         await go("exit.square.to_election_booth", "scene.chapter1.election_booth");
-        // Branch from an actually earned save; no quest/meter injection.
-        const oneSupporterSave = await page.evaluate(() => localStorage.getItem("comrade-candidate.save.v1"));
-        await finish("narrow_win");
-        await page.evaluate(raw => localStorage.setItem("comrade-candidate.save.v1", raw), oneSupporterSave);
-        await page.reload();
-        await page.evaluate(() => window.__comradeCandidateTest.ready);
-        await go("exit.election_booth.to_square", "scene.chapter1.village_square");
-        await go("exit.square.to_mehana", "scene.chapter1.mehana");
-        await talk("npc.tony_fridge");
-        for (const key of ["dialogue.tony.choice.challenge", "dialogue.tony.choice.accept", "dialogue.tony.choice.prepare"]) await choice(key);
-        await talk("npc.mehana_waiter");
-        await choice("dialogue.waiter.choice.water");
-        await waitFor(() => window.__comradeCandidateTest.game.inventory.has("item.glass_of_water"));
-        await useItem("item.accordion");
-        await clickTarget("npc.tony_fridge");
-        await waitFor(() => window.__comradeCandidateTest.game.state.flags.tonyDistracted);
-        await go("exit.mehana.to_square", "scene.chapter1.village_square");
-        await useItem("item.empty_rakia_bottle");
-        await clickTarget("hotspot.square.fountain");
-        await waitFor(() => window.__comradeCandidateTest.game.inventory.has("item.fountain_water_bottle"));
-        await go("exit.square.to_mehana", "scene.chapter1.mehana");
-        await useItem("item.fountain_water_bottle");
-        await clickTarget("hotspot.mehana.bai_mitko_rakia_glass");
-        await waitFor(() => window.__comradeCandidateTest.game.state.swappedOwnRakiaWithWater);
-        await talk("npc.tony_fridge");
-        await choice("dialogue.tony.choice.finish_challenge");
-        await choice("dialogue.tony.choice.leave");
-        await go("exit.mehana.to_square", "scene.chapter1.village_square");
-        await go("exit.square.to_election_booth", "scene.chapter1.election_booth");
         await finish("convincing_win");
       }
+      await mark('journey-complete');
       await context.close();
     }
   } finally {
@@ -655,6 +711,7 @@ async function clickSceneTarget(page, id) {
           return candidates[Math.floor(candidates.length / 2)];
         }, id);
         await page.locator("#game").click({ position: point });
+        return point;
 }
 
 async function choiceEndingContinue(page) {

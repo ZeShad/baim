@@ -3,8 +3,10 @@ import { archiveBg } from "./chapter1Archive.js";
 import { registrationBg } from "./chapter1Registration.js";
 import { campaignBg } from "./chapter1Campaign.js";
 import { fountainBg } from "./chapter1Fountain.js";
+import { photoQuestBg } from './chapter1PhotoQuest.js';
 
 export const bg = {
+  ...photoQuestBg,
   "bottle.glass_refused": "Тони познава чашите на Киро. Трябва ми мътната вода от фонтана в бутилка от ракия.",
   "bottle.keep_oil": "Олиото е за крана. Вътрешен ремонт не ми трябва.",
   "bottle.no_flow": "Празна бутилка под сух фонтан. Първо да смажа крана с олио от Киро, после да го завъртя.",
@@ -131,8 +133,8 @@ export const bg = {
   "item.sunflower_oil.desc": "200 мл олио от Киро в бутилка от ракия. За заялия кран на фонтана.",
   "item.glass_of_water.name": "Чаша вода",
   "item.glass_of_water.desc": "Безцветна, безпартийна и подозрително трезва.",
-  "item.campaign_pamphlets.name": "Предизборни листовки",
-  "item.campaign_pamphlets.desc": "Обещания на тънка хартия.",
+  "item.campaign_pamphlets.name": "Предизборен плакат",
+  "item.campaign_pamphlets.desc": "Плакатът на Пепа със снимката на Митко. Готов е за таблото.",
   "item.suspicious_receipt.name": "Подозрителна касова бележка",
   "item.suspicious_receipt.desc": "Пише касова, звучи съдебна.",
   "item.pickle_jar.name": "Буркан с кисели краставички",

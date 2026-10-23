@@ -1,0 +1,42 @@
+{
+  "reference": "owner-diploma-reference.jpg",
+  "holder": "Тончо Карабанов",
+  "derivedHolder": "БАЙ МИТКО (existing game copy label)",
+  "assessmentEntries": 18,
+  "gradeEveryEntry": "Среден 3.00",
+  "overall": "Среден / 3.00 /",
+  "sourcePortrait": "Original young-man photograph cropped without retouch from owner054-scaled.jpg; see portrait-provenance.json",
+  "school": "fictional СУ Светло бъдеще; no source-photo holder, personal IDs or official seals reused",
+  "construction": "folded thick paper mesh, editable Cyrillic font objects and curves for rulings/seals/signatures, packed paper/portrait textures; native Cycles renders",
+  "fonts": "installed Windows Georgia, external font references; no standalone font redistribution",
+  "renders": {
+    "aged-paper-pattern.png": {
+      "sha256": "08086d5c404dec38242b4d80c9ce586b8be3fa266202ceb79ca61dfe54d7e677",
+      "bytes": 3339904
+    },
+    "mitko-portrait.png": {
+      "sha256": "b013d2c686d59a296ff00a69922cb7e7dbfc67a281e0bc554f4cbc6116c9a1b2",
+      "bytes": 190908
+    },
+    "paper-back.png": {
+      "sha256": "c2710857de5dc4d7e1b50cc5d7dcd4d16a4540c65c602eb7395bb126976182a2",
+      "bytes": 4571237
+    },
+    "pepa-mitko-diploma-closeup.png": {
+      "sha256": "137c52257ec0e3353f7bad235986e9b739e89189601cbc06ff21f261f513717a",
+      "bytes": 4951771
+    },
+    "toni-diploma-closeup.png": {
+      "sha256": "72718637b69894e6911a559a60dd9d28029fe20a74decb77d7b680b9521860d7",
+      "bytes": 4972788
+    },
+    "toni-diploma-table.png": {
+      "sha256": "769983efa6ca5bf0cd0a59a9e6ee42389fad78427a290667ac05c32d062c8deb",
+      "bytes": 1276772
+    },
+    "toni-portrait.png": {
+      "sha256": "a9bdbefe24973e7469d824aab5a4b0214bc614ad8e47f621b9da941ee6473583",
+      "bytes": 211226
+    }
+  }
+}

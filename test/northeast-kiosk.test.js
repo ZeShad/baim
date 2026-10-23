@@ -1,4 +1,5 @@
 import test from 'node:test';
+import {restorePhotoQuestSnapshot} from './helpers/photo-quest-preservation.js';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {createHash} from 'node:crypto';
@@ -63,7 +64,7 @@ test('municipality and election returns use connected pavement; access gates and
  assert.deepEqual(currentDoor,original.exits.find(e=>e.id===currentDoor.id));
  const municipality=chapter1.scenes.find(s=>s.id==='scene.chapter1.municipality');assert.deepEqual(municipality.exits.find(e=>e.id==='exit.municipality.to_square').targetPosition,{x:965,y:475});
  const election=chapter1.scenes.find(s=>s.id==='scene.chapter1.election_booth');assert.deepEqual(election.exits.find(e=>e.id==='exit.election_booth.to_square').targetPosition,{x:300,y:540});
- const restored=structuredClone(chapter1.scenes);restored.find(s=>s.id===square.id).anchors.municipalityDoor={x:965,y:450};restored.find(s=>s.id===square.id).walkMask=original.walkMask;restored.find(s=>s.id===square.id).foregroundLayers=original.foregroundLayers;restored.find(s=>s.id===municipality.id).exits.find(e=>e.id==='exit.municipality.to_square').targetPosition={x:965,y:450};restored.find(s=>s.id===election.id).exits.find(e=>e.id==='exit.election_booth.to_square').targetPosition={x:650,y:535};assert.deepEqual(JSON.parse(JSON.stringify(restored)),before);
+ const restored=structuredClone(restorePhotoQuestSnapshot('scenes',chapter1.scenes));restored.find(s=>s.id===square.id).anchors.municipalityDoor={x:965,y:450};restored.find(s=>s.id===square.id).walkMask=original.walkMask;restored.find(s=>s.id===square.id).foregroundLayers=original.foregroundLayers;restored.find(s=>s.id===municipality.id).exits.find(e=>e.id==='exit.municipality.to_square').targetPosition={x:965,y:450};restored.find(s=>s.id===election.id).exits.find(e=>e.id==='exit.election_booth.to_square').targetPosition={x:650,y:535};assert.deepEqual(JSON.parse(JSON.stringify(restored)),before);
 });
 
 test('new exact inverse restores every PR72 source byte and runtime snapshot and rejects unknown mutations',()=>{

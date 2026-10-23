@@ -1,3 +1,4 @@
+import { initialPuzzle } from './SlidingBlockPuzzle.js';
 export const LANGUAGES = ["bg", "en"];
 
 export const VERBS = {
@@ -10,6 +11,8 @@ export const VERBS = {
 export const SAVE_KEY = "comrade-candidate.save.v1";
 
 export const DEFAULT_SAVE = {
+  photoQuestVersion: 2,
+  photoPuzzle: initialPuzzle(),
   currentChapter: 1,
   chapter1Completed: false,
   endingId: null,

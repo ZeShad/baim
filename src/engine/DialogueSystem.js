@@ -32,6 +32,7 @@ export class DialogueSystem {
   choose(choice) {
     if (!this.current || !choice) return false;
     if (choice.effect && this.onChoice?.(choice.effect) === false) return false;
+    if (choice.closeAfterEffect) { this.close(); return true; }
     if (choice.next) this.enterNode(choice.next);
     else this.close();
     return true;

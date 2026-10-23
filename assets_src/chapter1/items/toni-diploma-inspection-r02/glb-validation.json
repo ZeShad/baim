@@ -1,0 +1,10 @@
+{
+  "meshCount": 3,
+  "embeddedImages": 2,
+  "animations": false,
+  "cameras": false,
+  "bytes": 8691808,
+  "sha256": "a8a87f97fc33c606afa9cf4a59b0fa588cd057db2b9c900b62cec73340d65e1d",
+  "geometry": "40x28 folded front/back grids plus real0.36mm paper edge; UV print and separate patterned back; BlenderY-up export",
+  "portrait": "exact young owner-reference crop embedded in front render"
+}

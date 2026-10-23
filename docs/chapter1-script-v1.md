@@ -1,4 +1,6 @@
-# Comrade Candidate — Authoritative Chapter 1 Script v1.0
+# Comrade Candidate - historical Chapter 1 script v1.0
+
+> HISTORICAL BASELINE: the current owner-approved photograph, Pepa and Tony diploma revision is [22 October script](chapter1-script-2026-10-22.md). Its dependency changes supersede the bills/envelope recipe and kiosk motivation below. Preserve this edition as history, not a second current instruction.
 
 > Completion work resumed on 16 September 2026. See
 > [the reconciled completion plan](chapter1-completion-plan-160926.md) for current

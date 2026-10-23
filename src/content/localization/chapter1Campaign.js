@@ -3,9 +3,9 @@ export const campaignBg = {
     "Телевизорът: Днес се регистрират кандидатите за кмет. Довечера се гласува. Съкращаваме периода на демократична несигурност.",
     "От вратата: Митко! За сметките съм. Пак ли те няма по служебни причини?",
     "Кметът има заплата, кабинет и служебен телефон. Аз имам три сметки и акордеон. Почти сме равни.",
-    "Ще взема сметките и акордеона. Леля Пепа от будката ще знае какви документи трябват."
+    "Ще взема акордеона и снимката от шкафа. Леля Пепа от будката ще знае какви документи трябват."
   ],
-  "campaign.opening_recap": "Регистрацията е днес, изборите — довечера. Сметките и акордеонът са тук; за документите ще питам в будката на площада.",
+  "campaign.opening_recap": "Регистрацията е днес, изборите — довечера. Снимката е в шкафа, акордеонът е тук; за документите ще питам Пепа.",
   "campaign.kiosk.start": "Леля Пепа: Вестници, копия и кандидатски документи. Лошите новини са готови. За добрите трябва хартия.",
   "campaign.kiosk.choice.requirements": "Какво ми трябва, за да се кандидатирам?",
   "campaign.kiosk.choice.give_bills": "Давам сметките. Името ми поне е изписано вярно.",
@@ -36,9 +36,9 @@ export const campaignEn = {
     "Television: Mayoral candidates register today. Voting is tonight. We are shortening the period of democratic uncertainty.",
     "From the door: Mitko! About those bills. Are you officially out again?",
     "The Mayor has a salary, an office, and an official telephone. I have three bills and an accordion. We’re practically equals.",
-    "I'll take the bills and accordion. Aunt Pepa at the square's kiosk will know which papers I need."
+    "I'll take the accordion and my photograph from the cupboard. Aunt Pepa at the square's kiosk will know which papers I need."
   ],
-  "campaign.opening_recap": "Registration today, voting tonight. The bills and accordion are here; the kiosk in the square is my next stop for paperwork.",
+  "campaign.opening_recap": "Registration today, voting tonight. My photograph is in the cupboard; the accordion is here. Pepa is my next stop for paperwork.",
   "campaign.kiosk.start": "Aunt Pepa: Newspapers, copies, candidate paperwork. Bad news is ready. Good news needs paper.",
   "campaign.kiosk.choice.requirements": "What do I need to stand for Mayor?",
   "campaign.kiosk.choice.give_bills": "Here are my bills. At least they spell my name correctly.",

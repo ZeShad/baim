@@ -417,6 +417,27 @@ export const apartmentObjectGeometry = {
     "height": 720
   },
   "objects": {
+    "hotspot.apartment.photo_cupboard": {
+      "id": "hotspot.apartment.photo_cupboard",
+      "polygon": [
+        {
+          "x": 825,
+          "y": 130
+        },
+        {
+          "x": 990,
+          "y": 130
+        },
+        {
+          "x": 990,
+          "y": 485
+        },
+        {
+          "x": 825,
+          "y": 485
+        }
+      ]
+    },
     "exit.apartment.to_square": {
       "id": "exit.apartment.to_square",
       "polygon": [
@@ -1403,6 +1424,27 @@ export const mehanaObjectGeometry = {
     "height": 720
   },
   "objects": {
+    "hotspot.mehana.tony_diploma": {
+      "id": "hotspot.mehana.tony_diploma",
+      "polygon": [
+        {
+          "x": 932,
+          "y": 453
+        },
+        {
+          "x": 1022,
+          "y": 453
+        },
+        {
+          "x": 1022,
+          "y": 501
+        },
+        {
+          "x": 932,
+          "y": 501
+        }
+      ]
+    },
     "exit.mehana.to_square": {
       "id": "exit.mehana.to_square",
       "polygon": [

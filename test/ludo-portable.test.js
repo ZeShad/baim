@@ -8,7 +8,7 @@ import { syncBuiltinESMExports } from 'node:module';
 import { requireEnvironment, readHiddenKey } from '../tools/ludo-api.mjs';
 import { EventEmitter } from 'node:events';
 import { pricingFromSpec, sha256 } from '../tools/ludo-api-client.mjs';
-import { validateWindowsACL, windowsACL, assertPrivate, privateDirectory, gitDirectory, privateReferencePath, assertNoLinks, protectExistingState } from '../tools/ludo-private-state.mjs';
+import { PC_PRIMARY, validateWindowsACL, windowsACL, assertPrivate, privateDirectory, gitDirectory, privateReferencePath, assertNoLinks, protectExistingState } from '../tools/ludo-private-state.mjs';
 
 const spec = description => ({ info: { version: '0.9.10' }, components: { schemas: { AnimateSpritePayload: { properties: { model: { description } } } } } });
 const current = '- "hydra" (Hydra): 3 credits/s, shortest duration 3s, so 9 credits minimum';
@@ -21,9 +21,17 @@ test('Current explicit minimum and historical pricing retain original-descriptio
 });
 test('PC environment requires exact canonical primary and linked worktree ownership; VPS host is not spoofed', () => {
   if (process.platform === 'win32') {
-    const root = process.cwd();
-    const run = (command, args, options) => execFileSync(command, ['-c', `safe.directory=${root.replaceAll('\\', '/')}`, ...args], options);
+    // Inspect the configured supported primary, rather than assuming the test
+    // runner itself lives in a linked worktree of that primary. No Git writes.
+    const root = PC_PRIMARY;
+    const run = (command, args, options) => execFileSync(command, ['-c', `safe.directory=${options.cwd.replaceAll('\\', '/')}`, ...args], options);
     assert.match(requireEnvironment(root, run, 'actual-PC', 'win32').branch, /^feat\//);
+    const worktrees=run('git',['worktree','list','--porcelain'],{cwd:root,encoding:'utf8'}).split(/\r?\n\r?\n/);
+    const linked=worktrees.find(entry=>entry.includes('branch refs/heads/feat/')&&!entry.startsWith('worktree '+root+'\n')&&!entry.startsWith('worktree '+root+'\r\n'))?.match(/^worktree (.+)/)?.[1];
+    assert.ok(linked,'configured primary retains a real linked feature worktree for ownership verification');
+    assert.match(requireEnvironment(linked,run,'actual-PC','win32').branch,/^feat\//);
+    const currentCommon=execFileSync('git',['rev-parse','--path-format=absolute','--git-common-dir'],{cwd:process.cwd(),encoding:'utf8'}).trim().replaceAll('\\','/');
+    if(currentCommon!==PC_PRIMARY+'/.git')assert.throws(()=>requireEnvironment(process.cwd(),run,'actual-PC','win32'),/Wrong PC repository/,'an independent authorized game clone remains rejected for paid Ludo operations');
     for (const change of [args => args[0] === 'remote' ? 'foreign' : null,
       args => args[0] === 'branch' ? 'master' : null,
       args => args.includes('--git-common-dir') ? 'C:/wrong/.git' : null,

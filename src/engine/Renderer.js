@@ -816,6 +816,21 @@ export class Renderer {
 
   drawSceneRasterLayer(scene, layer) {
     if (this.ambientSceneId !== scene.id) { this.ambientSceneId = scene.id; this.ambientClocks = new Map(); }
+    const stateAnimation = layer.stateAnimation;
+    if (stateAnimation && this.game.state?.flags?.[stateAnimation.flag]) {
+      const animation = stateAnimation.animation;
+      const image = this.game.assets.getSceneImage(scene.id, animation.asset);
+      if (this.game.assets.isLoaded(image)) {
+        const key = layer.id + ':state';
+        const clock = ambientLayerClock(this.ambientClocks.get(key), this.game.lastTime || 0,
+          this.game.paused || this.game.menuOpen, true);
+        this.ambientClocks.set(key, clock);
+        const source = sceneLayerAnimationSourceRect(animation, sceneLayerAnimationFrame(animation, clock.elapsed));
+        const rect = this.sceneAnimationDrawRect(layer, animation, source);
+        this.ctx.drawImage(image, source.x, source.y, source.w, source.h, rect.x, rect.y, rect.w, rect.h);
+        return;
+      }
+    }
     const performance = this.game.sceneAction?.presentation(scene.id, layer.id);
     if (performance) {
       const image = this.game.assets.getSceneImage(scene.id, performance.asset);

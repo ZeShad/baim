@@ -322,7 +322,8 @@ export function sceneScale(scene, point) {
 }
 
 export function findTargetAt(scene, point, targetAvailable = () => true) {
-  const targets = [...scene.npcs, ...scene.interactables, ...scene.exits];
+  const targets = [...scene.npcs, ...scene.interactables, ...scene.exits]
+    .sort((a, b) => (Number(b.hitPriority) || 0) - (Number(a.hitPriority) || 0));
   return targets.find((target) => {
     if (!targetAvailable(target)) return false;
     if (target.polygon) return pointInPolygon(point, target.polygon);

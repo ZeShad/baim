@@ -1,4 +1,5 @@
 import { normalizeBottleSave } from "../content/chapter1/bottleSave.js";
+import { normalizePhotoQuestSave } from '../content/chapter1/photoQuest.js';
 import { DEFAULT_SAVE, SAVE_KEY } from "./ids.js";
 
 export class SaveSystem {
@@ -12,7 +13,8 @@ export class SaveSystem {
     const raw = this.storage.getItem(this.key);
     if (!raw) return structuredClone(DEFAULT_SAVE);
     try {
-      return migrateSave({ ...structuredClone(DEFAULT_SAVE), ...JSON.parse(raw) });
+      const parsed = JSON.parse(raw);
+      return migrateSave({ ...structuredClone(DEFAULT_SAVE), ...parsed }, parsed.photoQuestVersion !== 2);
     } catch {
       return structuredClone(DEFAULT_SAVE);
     }
@@ -29,7 +31,7 @@ export class SaveSystem {
   }
 }
 
-function migrateSave(save) {
+function migrateSave(save, legacy = false) {
   const normalized = {
     ...save,
     audioVolume: Number.isFinite(Number(save.audioVolume)) ? Math.max(0, Math.min(1, Number(save.audioVolume))) : 0.6,
@@ -41,6 +43,7 @@ function migrateSave(save) {
     expiredQuests: Array.isArray(save.expiredQuests) ? save.expiredQuests : []
   };
   normalizeBottleSave(normalized);
+  normalizePhotoQuestSave(normalized, legacy);
   // Preserve earned registration in old saves, including saves from before the
   // registration flags existed. Never reopen a resolved chapter.
   if (!normalized.chapter1Completed) {
